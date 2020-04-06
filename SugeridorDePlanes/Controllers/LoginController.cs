@@ -18,6 +18,7 @@ namespace SugeridorDePlanes.Controllers
         {
             return View();
         }
+        /*test*/
 
         [HttpPost]
         public ViewResult Login(string userName, string password)
