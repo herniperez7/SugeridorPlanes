@@ -1,20 +1,64 @@
 ﻿@{
-    var usuario = ViewData["Usuarios"] as SugeridorDePlanes.Models.Usuario;
+    var usuario = ViewData["Usuarios"] as SugeridorDePlanes.Models.Usuarios.Usuario;
 }
 
-
-<html>
+<html lang="en">
 <head>
-
+    <title>Login V6</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="img/icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="~/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Login/LoginStyles.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <form action="/Login/Login" method="post">
-        <label>UserName</label>
-        <input type="text" name="userName" />
-        <label>Password</label>
-        <input type="password" name="passWord" /><br/>
-        <input type="submit" value="Login" />
-    </form>
+
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100 p-b-20">
+                <form class="login100-form validate-form" action="/Login/Login" method="post">
+                    <span class="login100-form-title">
+                        Bienvenido
+                    </span>
+                    <div class="wrap-input100 validate-input m-t-30 m-b-35" data-validate="Ingrese nombre de usuario">
+                        <input class="input100" type="text" name="username">
+                        <span class="focus-input100" data-placeholder="Nombre de usuario"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-50" data-validate="Ingrese contraseña">
+                        <input class="input100" type="password" name="password">
+                        <span class="focus-input100" data-placeholder="Contraseña"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <input  class="login100-form-btn" value="Login" type="submit">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="dropDownSelect1"></div>
+
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="vendor/countdowntime/countdowntime.js"></script>
+    <script src="~/js/Login/LoginScript.js"></script>
+
 </body>
 </html>

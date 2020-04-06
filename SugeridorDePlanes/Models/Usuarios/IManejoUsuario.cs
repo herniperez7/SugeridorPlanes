@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SugeridorDePlanes.Models
+namespace SugeridorDePlanes.Models.Usuarios
 {
     public interface IManejoUsuario
     {

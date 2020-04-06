@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SugeridorDePlanes.Models;
+using SugeridorDePlanes.Models.Usuarios;
 
 
 namespace SugeridorDePlanes.Controllers
