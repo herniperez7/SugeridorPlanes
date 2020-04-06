@@ -1,0 +1,20 @@
+﻿@{
+    var usuario = ViewData["Usuarios"] as SugeridorDePlanes.Models.Usuario;
+}
+
+
+<html>
+<head>
+
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="/Login/Login" method="post">
+        <label>UserName</label>
+        <input type="text" name="userName" />
+        <label>Password</label>
+        <input type="password" name="passWord" /><br/>
+        <input type="submit" value="Login" />
+    </form>
+</body>
+</html>
