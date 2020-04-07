@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Telefonica.SugeridorDePlanes.DataAccess
+namespace Telefonica.SugeridorDePlanes.ServiceLogic
 {
-   public class BaseDataAccess
+    class ServiceLogic
     {
     }
 }

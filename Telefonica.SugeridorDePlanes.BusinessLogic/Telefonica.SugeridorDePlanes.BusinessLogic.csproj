@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Telefonica.SugeridorDePlanes.Interfaces\Telefonica.SugeridorDePlanes.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>
