@@ -1,14 +1,270 @@
 ﻿@{
-    var usuario = ViewData["UsuarioLogueado"] as SugeridorDePlanes.Models.Usuarios.Usuario;
+    //var usuario = ViewData["UsuarioLogueado"] as SugeridorDePlanes.Models.Usuarios.Usuario;
 
-
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <html>
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+    <style>
+
+
+        legend {
+            color: black;
+            font-size: 15px;
+            width: inherit;            
+            border-bottom: none;
+        }
+
+        fieldset {
+            border: 2px groove #ddd !important;
+            padding: 0 4px 4px 4px !important;
+            margin: 0 0 1em 0 !important;
+            box-shadow: 0px 0px 0px 0px #000;
+        }
+    </style>
 </head>
 <body>
-    <h1>@usuario.Nombre</h1>
+    @*<h1>@usuario.Nombre</h1>*@
+
+
+    <nav class="navbar navbar-light bg-light justify-content-between">
+     
+
+        <div class="input-group mb-3" style="width:30%">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Seleccionar Empresa</option>
+                <option value="1">Cocal cola</option>
+                <option value="2">Chevrolet</option>
+                <option value="3">Samsung</option>
+            </select>
+        </div>
+
+
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Rut" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+        </form>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="container" style="overflow:hidden; padding-top:20px; margin:0px">
+            <div class="float-left" style="padding-right:30px">
+                @*<div class="table-wrapper-scroll-y my-custom-scrollbar">*@
+                <div>
+
+                    <fieldset>
+                        <legend>Info actual de cliente</legend>
+                        <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                            <thead class="thead-dark">
+                                
+                                <tr>
+                                    <th scope="col">Linea</th>
+                                    <th scope="col">TMM</th>
+                                    <th scope="col">Prestac</th>
+                                    <th scope="col">Consumo X</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">094123456</th>
+                                    <td>200</td>
+                                    <td>PR5GA</td>
+                                    <td>xxx</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">094654789</th>
+                                    <td>300</td>
+                                    <td>NA</td>
+                                    <td>xxx</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">094666952</th>
+                                    <td>PR5GA</td>
+                                    <td>400</td>
+                                    <td>xxx </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
+
+            </div>
+
+            <div class="float-left" style="padding-right:30px">
+                <fieldset>
+                    <legend>Plan sugerido</legend>
+                    <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <thead class="thead-dark">
+                            
+                            <tr>
+                                <th scope="col">Plan</th>
+                                <th scope="col">tm</th>
+                                <th scope="col">campo</th>
+                                <th scope="col">campo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">PLL123</th>
+                                <td>400</td>
+                                <td>xxx</td>
+                                <td>yyy</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PLL45</th>
+                                <td>308</td>
+                                <td>xxx</td>
+                                <td>yyy</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PLL55</th>
+                                <td>550</td>
+                                <td>xxx</td>
+                                <td>yyy</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </fieldset>
+
+            </div>
+
+            <div class="float-left">
+
+                <fieldset >
+                    <legend>Plan definitivo</legend>
+                    <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <thead class="thead-dark">
+                            
+                            <tr>
+                                <th scope="col">Plan</th>
+                                <th scope="col">tm</th>
+                                <th scope="col">campo</th>
+                                <th scope="col">campo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">PLL45</th>
+                                <td>308</td>
+                                <td>xxx</td>
+                                <td>yyy</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PLL35</th>
+                                <td>450</td>
+                                <td>xxx</td>
+                                <td>yyy</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PLL55</th>
+                                <td>700</td>
+                                <td>xxx</td>
+                                <td>yyy</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="container" style="overflow:hidden; padding-top:5px; margin:0px">
+            <div class="float-left"  style="padding-right:30px">
+                <div>
+                    <fieldset>
+                        <legend>Terminales</legend>
+
+                        <div class="float-left" style="padding-right:10px">
+
+                            <div class="dropdown" style="padding :0px 60px 20px 10px; ">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 110%">
+                                    Equipos
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Samsung s10</a>
+                                    <a class="dropdown-item" href="#">Iphone 11 pro</a>
+                                    <a class="dropdown-item" href="#">Huawei p40</a>
+                                </div>
+                            </div>
+
+
+                            <p>
+                                C.Landed: 30000
+                            </p>
+
+                            <p>
+                                Stock: 10
+                            </p>
+
+                        </div>
+
+
+                        <div class="float-left">
+                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                                <thead class="table-secondary">
+
+                                    <tr>
+                                        <th scope="col">Equipo</th>
+                                        <th scope="col">Lande</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Iphone 8</th>
+                                        <td>30.000</td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Samsung s10</th>
+                                        <td>40.000</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <fieldset class="float-left">
+                <legend>Ver resumen de operaciones</legend>
+
+
+                <div class="input-group mb-3" style="width:60%">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Subsidio</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+
+                <div class="input-group mb-3" style="width:60%">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Payback</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+            </fieldset>
+        </div>
+        </div>
+
+
 </body>
 </html>

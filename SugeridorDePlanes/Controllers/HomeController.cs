@@ -20,6 +20,12 @@ namespace SugeridorDePlanes.Controllers
             usuario = usuarioInterface;
         }
 
-       
+
+        public ViewResult Index()
+        {
+            return View("../Home/Index");
+        }
+
+
     }
 }
