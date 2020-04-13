@@ -1,11 +1,10 @@
 ﻿@{
-    var usuario = ViewData["Usuarios"] as SugeridorDePlanes.Models.Usuarios.Usuario;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <html lang="en">
 <head>
-   
+    <link rel="stylesheet" type="text/css" href="~/css/Login/LoginStyles.css">
 </head>
 <body>
 
@@ -27,7 +26,7 @@
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <input  class="login100-form-btn" value="Login" type="submit">
+                        <input class="login100-form-btn" value="Login" type="submit">
                     </div>
 
                 </form>
@@ -35,10 +34,7 @@
         </div>
     </div>
 
-
-    <div id="dropDownSelect1"></div>
-
-    
+    <script src="~/js/Login/LoginScript.js"></script>
 
 </body>
 </html>

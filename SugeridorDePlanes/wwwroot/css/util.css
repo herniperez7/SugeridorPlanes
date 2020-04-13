@@ -2285,11 +2285,15 @@
 	display: -ms-flexbox;
 	display: flex;
 }
-
+.dis-grid{
+    display:grid;
+}
 /*[ Position ]
 -----------------------------------------------------------
 */
-.pos-relative {position: relative;}
+.pos-relative {
+    position: relative;
+}
 .pos-absolute {position: absolute;}
 .pos-fixed {position: fixed;}
 

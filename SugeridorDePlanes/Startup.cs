@@ -28,7 +28,7 @@ namespace SugeridorDePlanes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);

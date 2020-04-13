@@ -1,0 +1,47 @@
+﻿
+legend {
+    color: black;
+    font-size: 15px;
+    width: inherit;
+    border-bottom: none;
+}
+
+fieldset {
+    border: 2px groove #ddd !important;
+    padding: 0 4px 4px 4px !important;
+    margin: 0 0 1em 0 !important;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+
+
+.tableFixHeadDevices {
+    overflow-y: auto;
+    height: 150px;
+}
+
+.tableFixHead {
+    overflow-y: auto;
+    height: 150px;
+}
+
+    .tableFixHead thead th {
+        position: sticky;
+        top: 0;
+    }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px 16px;
+}
+
+th {
+    background: #eee;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #454d55;
+}

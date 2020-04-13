@@ -1,146 +1,114 @@
 ﻿@{
-    //var usuario = ViewData["UsuarioLogueado"] as SugeridorDePlanes.Models.Usuarios.Usuario;
+    var usuario = ViewData["UsuarioLogueado"] as SugeridorDePlanes.Models.Usuarios.Usuario;
 
-    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <html>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    
-    @*<link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">*@
-  
-    <script src="~/vendor/bootstrap/js/popper.min.js"></script>
-    <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
 
-    <style>
-
-
-        legend {
-            color: black;
-            font-size: 15px;
-            width: inherit;
-            border-bottom: none;
-        }
-
-        fieldset {
-            border: 2px groove #ddd !important;
-            padding: 0 4px 4px 4px !important;
-            margin: 0 0 1em 0 !important;
-            box-shadow: 0px 0px 0px 0px #000;
-        }
-
-
-        .tableFixHeadDevices {
-            overflow-y: auto;
-            height: 100px;
-        }
-
-        .tableFixHead {
-            overflow-y: auto;
-            height: 150px;
-        }
-
-            .tableFixHead thead th {
-                position: sticky;
-                top: 0;
-            }
-
-        /* Just common table stuff. Really. */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            padding: 8px 16px;
-        }
-
-        th {
-            background: #eee;
-        }
-    </style>
 </head>
 <body>
-    @*<h1>@usuario.Nombre</h1>*@
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
 
-
-    <nav class="navbar navbar-light bg-light justify-content-between">
-
-
-        <div class="input-group mb-3" style="width:30%">
+        <form class="form-inline input-group mb-0 w-auto" >
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
             </div>
             <select class="custom-select" id="inputGroupSelect01">
                 <option selected>Seleccionar Empresa</option>
-                <option value="1">Cocal cola</option>
+                <option value="1">Coca-Cola</option>
                 <option value="2">Chevrolet</option>
                 <option value="3">Samsung</option>
             </select>
-        </div>
+        </form>
+
+        <form class="form-inline input-group mb-0 w-auto">
+            <div class="input-group-prepend">
+                <label class="input-group-text">Nombre Usuario</label>
+            </div>
+        </form>
 
 
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Rut" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+        <form class="form-inline mb-0">
+            <div class="d-inline-flex align-items-center w-100">
+                <input class="form-control mr-2" type="search" placeholder="Buscar por Rut" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </div>
         </form>
     </nav>
 
-    <div class="container-fluid">
-        <div class="container" style="overflow:hidden; padding-top:20px; margin:0px">
-            <div class="float-left" style="padding-right: 30px">
-                @*<div class="table-wrapper-scroll-y my-custom-scrollbar">*@
-                <div>
+    <nav class="d-block d-md-none navbar-light bg-light">
+               
+        <form class="form-inline input-group mb-0">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Seleccionar Empresa</option>
+                <option value="1">Coca-Cola</option>
+                <option value="2">Chevrolet</option>
+                <option value="3">Samsung</option>
+            </select>
+        </form>
 
-                    <fieldset>
-                        <legend>Info actual de cliente</legend>
-                        <div class="tableFixHead">
-                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
-                                <thead class="thead-dark">
+        <form class="form-inline mb-0">
+            <div class="d-inline-flex align-items-center w-100">
+                <input class="form-control mr-2" type="search" placeholder="Buscar por Rut" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </div>
 
-                                    <tr>
-                                        <th scope="col">Linea</th>
-                                        <th scope="col">TMM</th>
-                                        <th scope="col">Prestac</th>
-                                        <th scope="col">Consumo X</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">094123456</th>
-                                        <td>200</td>
-                                        <td>PR5GA</td>
-                                        <td>xxx</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">094654789</th>
-                                        <td>300</td>
-                                        <td>NA</td>
-                                        <td>xxx</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">094666952</th>
-                                        <td>PR5GA</td>
-                                        <td>400</td>
-                                        <td>xxx </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </fieldset>
-                </div>
+        </form>
+    </nav>
+
+    <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
+        <div class="row">
+            <div class="col-lg-6 col-sm-12 col-md-12">
+                <fieldset>
+                    <legend>Info actual de cliente</legend>
+                    <div class="tableFixHead">
+                        <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Linea</th>
+                                    <th scope="col">TMM</th>
+                                    <th scope="col">Prestac</th>
+                                    <th scope="col">Consumo X</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">094123456</th>
+                                    <td>200</td>
+                                    <td>PR5GA</td>
+                                    <td>xxx</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">094654789</th>
+                                    <td>300</td>
+                                    <td>NA</td>
+                                    <td>xxx</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">094666952</th>
+                                    <td>PR5GA</td>
+                                    <td>400</td>
+                                    <td>xxx </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
 
             </div>
 
-            <div class="float-left" style="padding-right:30px">
+            <div class="col-lg-3 col-md-6 col-sm-12">
                 <fieldset>
                     <legend>Plan sugerido</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
-
                                 <tr>
                                     <th scope="col">Plan</th>
                                     <th scope="col">tm</th>
@@ -171,17 +139,14 @@
                         </table>
                     </div>
                 </fieldset>
-
             </div>
 
-            <div class="float-left">
-
+            <div class="col-lg-3 col-md-6 col-sm-12">
                 <fieldset>
                     <legend>Plan definitivo</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
-
                                 <tr>
                                     <th scope="col">Plan</th>
                                     <th scope="col">tm</th>
@@ -212,101 +177,105 @@
                         </table>
                     </div>
                 </fieldset>
-
-
-
             </div>
 
         </div>
-    </div>
+        <div class="row">
+            <div class="col-lg-5">
 
-    <div class="container-fluid">
-        <div class="container" style="overflow:hidden; padding-top:5px; margin:0px">
-            <div class="float-left" style="padding-right:30px">
-                <div>
                     <fieldset>
                         <legend>Terminales</legend>
-
-                        <div class="float-left" style="padding-right:10px">
-
-                            <div class="dropdown" style="padding :0px 60px 20px 10px; ">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 110%">
-                                    Equipos
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Samsung s10</a>
-                                    <a class="dropdown-item" href="#">Iphone 11 pro</a>
-                                    <a class="dropdown-item" href="#">Huawei p40</a>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="dropdown p-2 ml-2">
+                                    <select class="custom-select" id="selectEquipo">
+                                        <option value="1">Samsung S10</option>
+                                        <option value="3">Samsung Galaxy</option>
+                                        <option value="2">Iphone X</option>
+                                        <option value="2">Iphone 7</option>
+                                    </select>
+                                </div>
+                                <div id="valuesEquipos" class="p-2 ml-2">
+                                    <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue">30000</label><br/>
+                                    <label><b>Stock: </b></label><label class="ml-1" id="stockValue">10</label>
                                 </div>
                             </div>
 
 
-                            <p>
-                                C.Landed: 30000
-                            </p>
+                            <div class="col-lg-7">
+                                <div class="tableFixHeadDevices pr-2">
+                                    <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                                        <thead class="thead-dark">
 
-                            <p>
-                                Stock: 10
-                            </p>
+                                            <tr>
+                                                <th scope="col">Equipo</th>
+                                                <th scope="col">Lande</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Iphone 8</th>
+                                                <td>30.000</td>
+
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Samsung s10</th>
+                                                <td>40.000</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </fieldset>
+
+            </div>
+
+            <div class="col-lg-7">
+                <fieldset>
+                    <legend>Resumen</legend>
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <div class="ml-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Subsidio</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Payback</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
 
                         </div>
 
 
-                        <div class="float-left">
-                            <div class="tableFixHeadDevices">
-                                <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
-                                    <thead class="table-secondary">
-
-                                        <tr>
-                                            <th scope="col">Equipo</th>
-                                            <th scope="col">Lande</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Iphone 8</th>
-                                            <td>30.000</td>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Samsung s10</th>
-                                            <td>40.000</td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Ver resumen de operaciones</button>
+                            <div id="valuesResumen" class="p-2">
+                                <label><b>GAP: </b></label><label class="ml-1" id="gapValue">XXX</label><br />
+                                <label><b>Payback: </b></label><label class="ml-1" id="paybackValue">XXX</label><br />
+                                <label><b>Subsidio: </b></label><label class="ml-1" id="subsidioValue">XXX</label>
                             </div>
-                            </div>
-</fieldset>
-                </div>
+                        </div>
+
+                        <div class="col-lg-4  align-items-center d-flex justify-content-center">
+                            <button class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
+                        </div>
+
+                    </div>
+                </fieldset>
             </div>
 
-            <fieldset class="float-left">
-                <legend>Ver resumen de operaciones</legend>
-
-
-                <div class="input-group mb-3" style="width:60%">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Subsidio</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                </div>
-
-
-                <div class="input-group mb-3" style="width:60%">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Payback</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                </div>
-
-
-                
-
-            </fieldset>
         </div>
+
     </div>
+
+        
 
 
 </body>
