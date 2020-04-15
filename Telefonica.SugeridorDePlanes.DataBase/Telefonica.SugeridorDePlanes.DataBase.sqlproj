@@ -59,4 +59,7 @@
     <Folder Include="Scripts" />
     <Folder Include="dbo" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Scripts\SugeridorDePlanes.sql" />
+  </ItemGroup>
 </Project>

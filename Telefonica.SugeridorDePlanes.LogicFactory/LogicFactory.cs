@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
+using Telefonica.SugeridorDePlanes.DataAccess;
 using Telefonica.SugeridorDePlanes.Interfaces;
 
 namespace Telefonica.SugeridorDePlanes.LogicFactory
@@ -12,13 +13,15 @@ namespace Telefonica.SugeridorDePlanes.LogicFactory
    public static class LogicFactory
     {
 
+        private static readonly IClientRepository _clientRepository;
+        
         /// <summary>
-        /// Retorna el ISiteLogicProxy
+        /// Retorna la IClientService
         /// </summary>
         /// <returns></returns>
-        public static ISiteLogic GetISiteLogic()
+        public static IClientService GetIClientLogic()
         {
-            return new SiteLogic();
+            return new ClientService(_clientRepository);
         }
 
     }
