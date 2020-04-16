@@ -4,7 +4,12 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.ServiceLogic
 {
-    class ServiceLogic
+    public class ServiceLogic
     {
+
+
+
+
+
     }
 }
