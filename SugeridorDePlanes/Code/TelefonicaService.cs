@@ -45,6 +45,22 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        public async Task<List<RecomendadorB2b>> GetSuggestedPlansByRut(string rut)
+        {
+            try
+            {
+                var plans = await _client.PlansAsync(rut);
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
 
 
     }
