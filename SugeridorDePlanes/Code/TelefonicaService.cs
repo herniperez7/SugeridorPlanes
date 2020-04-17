@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Telefonica.SugeridorDePlanes.Code
 {
-    public class TelefonicaService
+    public class TelefonicaService: ITelefonicaService
     {
         private readonly IClient _client;
 

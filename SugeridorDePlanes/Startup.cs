@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes;
+using Telefonica.SugeridorDePlanes.Code;
 
 namespace SugeridorDePlanes
 {
@@ -35,7 +36,7 @@ namespace SugeridorDePlanes
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
             });
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
-
+            services.AddScoped<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client("https://localhost:44310/"));
 
 
