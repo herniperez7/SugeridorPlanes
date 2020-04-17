@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SugeridorDePlanes.Models.Usuarios;
+using Telefonica.SugeridorDePlanes;
 using Telefonica.SugeridorDePlanes.Code;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,7 +30,16 @@ namespace SugeridorDePlanes.Controllers
             return View("../Home/Index");
         }
 
+        [HttpPost]
+        public async Task<ViewResult> ShowPlans(string rut)
+        {
 
+            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(rut);
+
+            ViewData["PlanList"] = plansList;
+
+            return View();
+        }
 
     }
 }

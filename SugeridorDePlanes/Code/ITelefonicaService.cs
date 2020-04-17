@@ -11,5 +11,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         Task<List<RecomendadorB2b>> GetSuggestedPlans();
 
+        Task<List<RecomendadorB2b>> GetSuggestedPlansByRut(string rut);
+
     }
 }

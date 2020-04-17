@@ -20,8 +20,9 @@ namespace Telefonica.SugeridorDePlanes.Code
             try
             {
                 var clients = await _client.GetClientsAsync();
+                List<SugeridorClientes> clientList = clients.ToList();
 
-                return null;
+                return clientList;
             }
             catch (Exception ex)
             {
@@ -34,8 +35,9 @@ namespace Telefonica.SugeridorDePlanes.Code
             try
             {
                 var plans = await _client.GetPlansAsync();
+                List<RecomendadorB2b> planList = plans.ToList();
 
-                return  null;
+                return planList;
             }
             catch (Exception ex)
             {
@@ -49,9 +51,10 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                var plans = await _client.PlansAsync(rut);
+                var plans = await _client.GetPlansByRutAsync(rut);
+                List<RecomendadorB2b> planList= plans.ToList();
 
-                return null;
+                return planList;
             }
             catch (Exception ex)
             {
