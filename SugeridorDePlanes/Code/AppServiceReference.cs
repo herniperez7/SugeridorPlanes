@@ -19,30 +19,30 @@ namespace Telefonica.SugeridorDePlanes
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> ClientsAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> GetClientsAsync();
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> ClientsAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> GetClientsAsync(System.Threading.CancellationToken cancellationToken);
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAllAsync();
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAllAsync(System.Threading.CancellationToken cancellationToken);
-    
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAsync(string rut);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansAsync();
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAsync(string rut, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansAsync(System.Threading.CancellationToken cancellationToken);
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansByRutAsync(string rut);
+    
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansByRutAsync(string rut, System.Threading.CancellationToken cancellationToken);
     
     }
     
@@ -80,18 +80,18 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> ClientsAsync()
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> GetClientsAsync()
         {
-            return ClientsAsync(System.Threading.CancellationToken.None);
+            return GetClientsAsync(System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> ClientsAsync(System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SugeridorClientes>> GetClientsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Clients/clients");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Clients/getClients");
     
             var client_ = new System.Net.Http.HttpClient();
             try
@@ -149,18 +149,18 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAllAsync()
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansAsync()
         {
-            return PlansAllAsync(System.Threading.CancellationToken.None);
+            return GetPlansAsync(System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAllAsync(System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/plans");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getPlans");
     
             var client_ = new System.Net.Http.HttpClient();
             try
@@ -218,19 +218,23 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAsync(string rut)
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansByRutAsync(string rut)
         {
-            return PlansAsync(rut, System.Threading.CancellationToken.None);
+            return GetPlansByRutAsync(rut, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> PlansAsync(string rut, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RecomendadorB2b>> GetPlansByRutAsync(string rut, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/{rut}");
-            urlBuilder_.Replace("{rut}", System.Uri.EscapeDataString(ConvertToString(rut, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getPlansByRut?");
+            if (rut != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("rut") + "=").Append(System.Uri.EscapeDataString(ConvertToString(rut, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
     
             var client_ = new System.Net.Http.HttpClient();
             try

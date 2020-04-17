@@ -19,7 +19,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                var clients = await _client.ClientsAsync();
+                var clients = await _client.GetClientsAsync();
 
                 return null;
             }
@@ -33,7 +33,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                var plans =  await _client.PlansAllAsync();
+                var plans = await _client.GetPlansAsync();
 
                 return  null;
             }
