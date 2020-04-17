@@ -21,7 +21,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             _suggestorService = suggestorService;
         }
 
-        [HttpGet("plans")]
+        [HttpGet("getPlans")]
         public async Task<ActionResult<List<RecomendadorB2b>>> GetSuggestedPlans()
         {
             try
@@ -44,7 +44,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
-        [HttpGet("{rut}", Name = "plans")]
+        [HttpGet("getPlansByRut")]
         public async Task<ActionResult<List<RecomendadorB2b>>> GetSuggestedPlansByRut(string rut)
         {
             try

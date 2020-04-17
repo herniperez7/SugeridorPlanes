@@ -24,7 +24,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("clients")]
+        [HttpGet("getClients")]
         public async Task<ActionResult<List<SugeridorClientes>>> GetClients()
         {
             try
