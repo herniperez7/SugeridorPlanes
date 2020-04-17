@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes;
 using Telefonica.SugeridorDePlanes.Code;
+using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 namespace SugeridorDePlanes
 {
@@ -35,6 +37,11 @@ namespace SugeridorDePlanes
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
             });
+            services.AddAutoMapper(configuration =>
+            {
+                configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
+            }, typeof(Startup));
+
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
             services.AddScoped<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client("https://localhost:44310/"));
