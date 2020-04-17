@@ -33,7 +33,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                var plans =  await _client.PlansAsync();
+                var plans =  await _client.PlansAllAsync();
 
                 return  null;
             }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.DataAccess.Context;
@@ -30,5 +31,21 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
                 throw ex;
             }
         }
+
+        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
+        {
+            try
+            {
+                var plans = await _context.RecomendadorB2b.Where(x => x.Rut == rut).ToListAsync();
+
+                return plans;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

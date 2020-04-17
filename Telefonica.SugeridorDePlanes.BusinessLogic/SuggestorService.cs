@@ -27,5 +27,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
 				throw ex;
 			}
 }
-    }
+
+		public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
+		{
+			try
+			{
+				return await _suggestorRepository.GetSuggestedPlansByRut(rut);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+	}
 }

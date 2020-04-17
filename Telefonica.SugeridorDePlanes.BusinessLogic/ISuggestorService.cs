@@ -9,5 +9,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
     public interface ISuggestorService
     {
         Task<List<RecomendadorB2bDTO>> GetSuggestedPlans();
+
+        Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut);
     }
 }

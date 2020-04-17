@@ -43,5 +43,33 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet("{rut}", Name = "plans")]
+        public async Task<ActionResult<List<RecomendadorB2b>>> GetSuggestedPlansByRut(string rut)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(rut))
+                {
+                    return BadRequest();
+                }
+
+                var plansList = new List<RecomendadorB2b>();
+                var plansDto = await _suggestorService.GetSuggestedPlansByRut(rut);
+
+                foreach (var item in plansDto)
+                {
+                    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                    plansList.Add(planModel);
+                }
+
+                return plansList;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
