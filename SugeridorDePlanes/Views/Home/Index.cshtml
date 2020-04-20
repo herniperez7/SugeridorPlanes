@@ -1,8 +1,9 @@
 ﻿@{
-    var usuario = ViewData["UsuarioLogueado"] as SugeridorDePlanes.Models.Usuarios.Usuario;
-
+    var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Usuarios.Usuario;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@model List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
 
 <html>
 <head>
@@ -25,9 +26,15 @@
         </form>
 
 
-        <form class="form-inline mb-0" action="/Home/ShowPlans" method="post">
+        <form class="form-inline mb-0" action="/Home/showPlans" method="post">
             <div class="d-inline-flex align-items-center w-100">
-                <input class="form-control mr-2" type="search" name="rut" placeholder="Buscar por Rut" aria-label="Search">
+                @if (Model != null && Model.Count() > 0) {
+                    <input class="form-control mr-2" type="search" name="rut" value="@Model[0].Rut" aria-label="Search"> 
+                }
+                else
+                {
+                    <input class="form-control mr-2" type="search" name="rut" placeholder="Buscar por Rut"  aria-label="Search">
+                }
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </div>
         </form>
@@ -80,25 +87,36 @@
                                     <th scope="col">Consumo X</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <tr>
-                                    <th scope="row">094123456</th>
-                                    <td>200</td>
-                                    <td>PR5GA</td>
-                                    <td>xxx</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">094654789</th>
-                                    <td>300</td>
-                                    <td>NA</td>
-                                    <td>xxx</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">094666952</th>
-                                    <td>PR5GA</td>
-                                    <td>400</td>
-                                    <td>xxx </td>
-                                </tr>
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    foreach (var plan in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row">@plan.Movil</th>
+                                            <td>@plan.Tmm</td>
+                                            <td>@plan.Prestacion1</td>
+                                            <td>@plan.PrecioPrestacion1SinIva</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+
                             </tbody>
                         </table>
                     </div>
@@ -120,24 +138,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">PLL123</th>
-                                    <td>400</td>
-                                    <td>xxx</td>
-                                    <td>yyy</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">PLL45</th>
-                                    <td>308</td>
-                                    <td>xxx</td>
-                                    <td>yyy</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">PLL55</th>
-                                    <td>550</td>
-                                    <td>xxx</td>
-                                    <td>yyy</td>
-                                </tr>
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    foreach (var plan in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row">@plan.PlanSugerido</th>
+                                            <td>@plan.TmmPlanSugerido</td>
+                                            <td>XXX</td>
+                                            <td>XXX</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -158,24 +185,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">PLL45</th>
-                                    <td>308</td>
-                                    <td>xxx</td>
-                                    <td>yyy</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">PLL35</th>
-                                    <td>450</td>
-                                    <td>xxx</td>
-                                    <td>yyy</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">PLL55</th>
-                                    <td>700</td>
-                                    <td>xxx</td>
-                                    <td>yyy</td>
-                                </tr>
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    foreach (var plan in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row">@plan.PlanSugeridoRetencion</th>
+                                            <td>@plan.TmmPlanRetencion</td>
+                                            <td>XXX</td>
+                                            <td>XXX</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
