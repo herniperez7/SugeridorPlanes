@@ -1,6 +1,6 @@
-﻿using SugeridorDePlanes.Models.Usuarios.UsuariosRol;
+﻿using Telefonica.SugeridorDePlanes.Models.Usuarios.UsuariosRol;
 
-namespace SugeridorDePlanes.Models.Usuarios
+namespace Telefonica.SugeridorDePlanes.Models.Usuarios
 {
     public class Usuario
     {

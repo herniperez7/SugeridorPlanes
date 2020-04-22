@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 
-namespace SugeridorDePlanes.Models.Usuarios
+namespace Telefonica.SugeridorDePlanes.Models.Usuarios
 {
     public class ManejoUsuario: IManejoUsuario
     { 

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SugeridorDePlanes.Models.Usuarios;
+using Telefonica.SugeridorDePlanes.Models.Usuarios;
 
-
-namespace SugeridorDePlanes.Controllers
+namespace Telefonica.SugeridorDePlanes.Controllers
 {
     public class LoginController : Controller
     {

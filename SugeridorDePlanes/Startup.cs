@@ -1,23 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SugeridorDePlanes.Models.Usuarios;
-using Telefonica.SugeridorDePlanes;
 using Telefonica.SugeridorDePlanes.Code;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
+using Telefonica.SugeridorDePlanes.Models.Usuarios;
 
-namespace SugeridorDePlanes
+namespace Telefonica.SugeridorDePlanes
 {
     public class Startup
     {
@@ -62,15 +54,9 @@ namespace SugeridorDePlanes
                 app.UseDeveloperExceptionPage(d);
             }
 
-            
             app.UseStaticFiles();
             app.UseSession();
             app.UseMvcWithDefaultRoute();
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Entorno" + env.EnvironmentName);
-            });
-
             
         }
     }

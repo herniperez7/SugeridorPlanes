@@ -24,6 +24,9 @@ fieldset {
     height: 230px;
 }
 
+    .tableFixHead tr {
+        height:46px;
+    }
     .tableFixHead thead th {
         position: sticky;
         top: 0;
