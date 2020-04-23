@@ -32,6 +32,20 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
+        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
+        {
+            try
+            {
+                var plans = await _context.RecomendadorB2b.Where(x => x.CaNumber == clientNumber).ToListAsync();
+
+                return plans;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
         {
             try

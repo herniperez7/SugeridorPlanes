@@ -1,6 +1,14 @@
 ﻿@{
     var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Usuarios.Usuario;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
+    var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
+
 }
 
 @model List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
@@ -8,32 +16,26 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+   
 
 </head>
 <body>
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
 
-        <form class="form-inline input-group mb-0 w-auto">
+
+        <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
             <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
+                <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01">
-                <option value="1">URUGUAY SA</option>
-                <option value="2">Agustina Moledo</option>
-                <option value="3">MARIA ELENA RODRIGUEZ</option>
-            </select>
+            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select" })
+
         </form>
 
 
-        <form class="form-inline mb-0" action="/Home/showPlans" method="post">
+        <form class="form-inline mb-0" action="/Home/ShowPlans" method="post">
             <div class="d-inline-flex align-items-center w-100">
-                @if (Model != null && Model.Count() > 0) {
-                    <input class="form-control mr-2" type="search" name="rut" value="@Model[0].Rut" aria-label="Search"> 
-                }
-                else
-                {
-                    <input class="form-control mr-2" type="search" name="rut" placeholder="Buscar por Rut"  aria-label="Search">
-                }
+                <input class="form-control mr-2" type="search" name="rut" id="clientRutTxt1" placeholder="Buscar por Rut" aria-label="Search">
+
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </div>
         </form>
@@ -46,6 +48,7 @@
                 <label class="input-group-text">Cerrar sesion</label>
             </div>
         </form>
+
     </nav>
 
     <nav class="d-block d-md-none navbar-light bg-light">
@@ -54,17 +57,14 @@
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01">
-                <option selected>Seleccionar Empresa</option>
-                <option value="1">URUGUAY SA</option>
-                <option value="2">Agustina Moledo</option>
-                <option value="3">MARIA ELENA RODRIGUEZ</option>
-            </select>
+
+            @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
+
         </form>
 
         <form class="form-inline mb-0">
             <div class="d-inline-flex align-items-center w-100">
-                <input class="form-control mr-2" type="search" placeholder="Buscar por Rut" aria-label="Search">
+                <input class="form-control mr-2" type="search" id="clientRutTxt" placeholder="Buscar por Rut" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </div>
 
@@ -91,13 +91,14 @@
                             <tbody>
                                 @if (Model != null && Model.Count() > 0)
                                 {
-                                    foreach (var plan in Model)
+                                    foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
                                         <tr>
-                                            <th scope="row">@plan.Movil</th>
-                                            <td>@plan.Tmm</td>
-                                            <td>@plan.Prestacion1</td>
-                                            <td>@plan.PrecioPrestacion1SinIva</td>
+                                            <td>@plan.i</td>
+                                            <th scope="row">@plan.value.Movil</th>
+                                            <td>@plan.value.Tmm</td>
+                                            <td>@plan.value.Prestacion1</td>
+                                            <td>@plan.value.PrecioPrestacion1SinIva</td>
                                         </tr>
                                     }
                                 }
@@ -141,11 +142,12 @@
                             <tbody>
                                 @if (Model != null && Model.Count() > 0)
                                 {
-                                    foreach (var plan in Model)
+                                    foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
                                         <tr>
-                                            <th scope="row">@plan.PlanSugerido</th>
-                                            <td>@plan.TmmPlanSugerido</td>
+                                            <td>@plan.i</td>
+                                            <th scope="row">@plan.value.PlanSugerido</th>
+                                            <td>@plan.value.TmmPlanSugerido</td>
                                             <td>XXX</td>
                                             <td>XXX</td>
                                         </tr>
@@ -189,11 +191,12 @@
                             <tbody>
                                 @if (Model != null && Model.Count() > 0)
                                 {
-                                    foreach (var plan in Model)
+                                    foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
                                         <tr>
-                                            <th scope="row">@plan.PlanSugeridoRetencion</th>
-                                            <td>@plan.TmmPlanRetencion</td>
+                                            <td>@plan.i</td>
+                                            <th scope="row">@plan.value.PlanSugeridoRetencion</th>
+                                            <td>@plan.value.TmmPlanRetencion</td>
                                             <td>XXX</td>
                                             <td>XXX</td>
                                         </tr>
@@ -242,7 +245,7 @@
                                 <label><b>Stock: </b></label><label class="ml-1" id="stockValue">10</label>
 
                             </div>
-                     
+
                         </div>
                         <div class="col-lg-7">
                             <div class="tableFixHeadDevices pr-2">
@@ -275,14 +278,14 @@
                                 </table>
                             </div>
                         </div>
-                        <div  style="display:inline; padding-left: 20px">
+                        <div style="display:inline; padding-left: 20px">
                             <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="agregarEquipoBtn">Agregar</button>
                             <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="modificarEquipoBtn">Modificar</button>
 
                         </div>
-                        </div>
+                    </div>
 
-</fieldset>
+                </fieldset>
 
 
             </div>
@@ -327,7 +330,6 @@
         </div>
 
     </div>
-
 
 
 

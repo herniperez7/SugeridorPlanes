@@ -9,35 +9,47 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
     public class SuggestorService : ISuggestorService
     {
-		private readonly ISuggestorRepository _suggestorRepository;
+        private readonly ISuggestorRepository _suggestorRepository;
 
-		public SuggestorService(ISuggestorRepository suggestorRepository)
-		{
-			_suggestorRepository = suggestorRepository;
-		}
-
-		public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlans()
+        public SuggestorService(ISuggestorRepository suggestorRepository)
         {
-			try
-			{
-				return await _suggestorRepository.GetSuggestedPlans();
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-}
+            _suggestorRepository = suggestorRepository;
+        }
 
-		public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
-		{
-			try
-			{
-				return await _suggestorRepository.GetSuggestedPlansByRut(rut);
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-		}
-	}
+        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlans()
+        {
+            try
+            {
+                return await _suggestorRepository.GetSuggestedPlans();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
+        {
+            try
+            {
+                return await _suggestorRepository.GetSuggestedPlansByClientNumer(clientNumber);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
+        {
+            try
+            {
+                return await _suggestorRepository.GetSuggestedPlansByRut(rut);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
 }

@@ -47,6 +47,11 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        public Task<List<RecomendadorB2b>> GetSuggestedPlansByClientNumber(string clientNumber)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<RecomendadorB2b>> GetSuggestedPlansByRut(string rut)
         {
             try

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telefonica.SugeridorDePlanes.Code;
+using Telefonica.SugeridorDePlanes.Controllers;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
 
@@ -32,12 +33,13 @@ namespace Telefonica.SugeridorDePlanes
             services.AddAutoMapper(configuration =>
             {
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
+                configuration.CreateMap<SugeridorClientes, SugeridorClientesModel>().ReverseMap();
             }, typeof(Startup));
 
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
             services.AddScoped<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client("https://localhost:44310/"));
-
+           
 
 
         }

@@ -71,5 +71,34 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet("getPlansByClientNumber")]
+        public async Task<ActionResult<List<RecomendadorB2b>>> GetPlansByClientNumber(string clientNumber)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(clientNumber))
+                {
+                    return BadRequest();
+                }
+
+                var plansList = new List<RecomendadorB2b>();
+                var plansDto = await _suggestorService.GetSuggestedPlansByClientNumer(clientNumber);
+
+                foreach (var item in plansDto)
+                {
+                    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                    plansList.Add(planModel);
+                }
+
+                return plansList;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
