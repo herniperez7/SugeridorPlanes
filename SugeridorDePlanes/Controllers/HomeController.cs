@@ -39,7 +39,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _clientList = clientsModel;
             ViewData["clientList"] = clientsModel;       
 
-            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
+            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
 
             return View("../Home/Index", planMapped);

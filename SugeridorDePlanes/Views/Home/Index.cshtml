@@ -1,8 +1,13 @@
 ﻿@{
     var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Usuarios.Usuario;
+    var emptyPlans = true;
+    if (Model != null && Model.Count() > 0)
+    {
+        emptyPlans = false;
 
+    }
 
-     Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
@@ -16,10 +21,9 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-   
-
 </head>
 <body>
+
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
 
 
@@ -74,13 +78,13 @@
     <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
         <div class="row">
             <div class="col-lg-6 col-sm-12 col-md-12">
-                <fieldset>
+                <fieldset class="tableFieldset">
                     <legend>Info actual de cliente</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col">#Id</th>
                                     <th scope="col">Linea</th>
                                     <th scope="col">TMM</th>
                                     <th scope="col">Prestac</th>
@@ -89,13 +93,13 @@
                             </thead>
 
                             <tbody>
-                                @if (Model != null && Model.Count() > 0)
+                                @if (!emptyPlans)
                                 {
                                     foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
                                         <tr>
                                             <td>@plan.i</td>
-                                            <th scope="row">@plan.value.Movil</th>
+                                            <td>@plan.value.Movil</td>
                                             <td>@plan.value.Tmm</td>
                                             <td>@plan.value.Prestacion1</td>
                                             <td>@plan.value.PrecioPrestacion1SinIva</td>
@@ -105,13 +109,8 @@
                                 else
                                 {
                                     <tr>
-                                        <th scope="row"></th>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -126,43 +125,38 @@
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
-                <fieldset>
+                <fieldset class="tableFieldset">
                     <legend>Plan sugerido</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col">#Id</th>
                                     <th scope="col">Plan</th>
-                                    <th scope="col">tm</th>
+                                    <th scope="col">TMM</th>
                                     <th scope="col">campo</th>
                                     <th scope="col">campo</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null && Model.Count() > 0)
+                                @if (!emptyPlans)
                                 {
                                     foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
-                                        <tr>
+                                        <tr id="@plan.i+planSugerido">
                                             <td>@plan.i</td>
-                                            <th scope="row">@plan.value.PlanSugerido</th>
+                                            <td>@plan.value.PlanSugerido</td>
                                             <td>@plan.value.TmmPlanSugerido</td>
                                             <td>XXX</td>
-                                            <td>XXX</td>
+                                            <td class="editRow"><button class="btn btn-outline-success my-2 my-sm-0">Editar</button></td>
                                         </tr>
                                     }
                                 }
                                 else
                                 {
                                     <tr>
-                                        <th scope="row"></th>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -175,27 +169,27 @@
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
-                <fieldset>
+                <fieldset class="tableFieldset">
                     <legend>Plan definitivo</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col">#Id</th>
                                     <th scope="col">Plan</th>
-                                    <th scope="col">tm</th>
+                                    <th scope="col">TMM</th>
                                     <th scope="col">campo</th>
                                     <th scope="col">campo</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null && Model.Count() > 0)
+                                @if (!emptyPlans)
                                 {
                                     foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
                                         <tr>
                                             <td>@plan.i</td>
-                                            <th scope="row">@plan.value.PlanSugeridoRetencion</th>
+                                            <td>@plan.value.PlanSugeridoRetencion</td>
                                             <td>@plan.value.TmmPlanRetencion</td>
                                             <td>XXX</td>
                                             <td>XXX</td>
@@ -205,13 +199,8 @@
                                 else
                                 {
                                     <tr>
-                                        <th scope="row"></th>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -331,6 +320,12 @@
 
     </div>
 
+    @if (Model != null && Model.Count() > 4)
+    {
+        <script>
+            $(".tableFieldset .tableFixHead").css("height", "230px");
+        </script>
+    }
 
 
 </body>
