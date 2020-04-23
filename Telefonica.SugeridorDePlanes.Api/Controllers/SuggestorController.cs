@@ -11,7 +11,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SuggestorController: ControllerBase
+    public class SuggestorController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ISuggestorService _suggestorService;
@@ -93,6 +93,46 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
                 return plansList;
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("getActualPlans")]
+        public async Task<ActionResult<List<PlanesOfertaActual>>> GetActualPlans()
+        {
+            try
+            {
+                var plansList = new List<PlanesOfertaActual>();
+                var plansDto = await _suggestorService.GetActualPlans();
+
+                foreach (var item in plansDto)
+                {
+                    var planModel = _mapper.Map<PlanesOfertaActual>(item);
+                    plansList.Add(planModel);
+                }
+
+                return plansList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpGet("getPlanByCode")]
+        public async Task<ActionResult<PlanesOfertaActual>> GetPlanByCode(string planCode)
+        {
+            try
+            {
+                var plansDto = await _suggestorService.GetPlanByCode(planCode);
+
+                var planModel = _mapper.Map<PlanesOfertaActual>(plansDto);
+
+                return planModel;
             }
             catch (Exception ex)
             {

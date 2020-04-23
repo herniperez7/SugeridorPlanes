@@ -16,6 +16,32 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             _suggestorRepository = suggestorRepository;
         }
 
+        public async Task<List<PlanesOfertaActualDTO>> GetActualPlans()
+        {
+            try
+            {
+                return await _suggestorRepository.GetActualPlans();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode)
+        {
+            try
+            {
+                return await _suggestorRepository.GetPlanByCode(planCode);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlans()
         {
             try
