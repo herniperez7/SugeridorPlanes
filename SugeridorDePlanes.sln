@@ -31,7 +31,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telefonica.SugeridorDePlane
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telefonica.SugeridorDePlanes.Interfaces", "Telefonica.SugeridorDePlanes.Interfaces\Telefonica.SugeridorDePlanes.Interfaces.csproj", "{33E883FD-2094-450F-91AE-FC037C587F41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telefonica.SugeridorDePlanes.Resources", "Telefonica.SugeridorDePlanes.Resources\Telefonica.SugeridorDePlanes.Resources.csproj", "{438F0D52-8BEA-4AEC-832A-95A3A2226086}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telefonica.SugeridorDePlanes.Resources", "Telefonica.SugeridorDePlanes.Resources\Telefonica.SugeridorDePlanes.Resources.csproj", "{438F0D52-8BEA-4AEC-832A-95A3A2226086}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{17A194E3-947E-4EB6-AC4F-B14B355AEB30}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

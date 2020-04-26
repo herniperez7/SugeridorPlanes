@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Rotativa.AspNetCore;
 using Telefonica.SugeridorDePlanes.Code;
 using Telefonica.SugeridorDePlanes.Controllers;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
@@ -55,6 +56,7 @@ namespace Telefonica.SugeridorDePlanes
                 };
                 app.UseDeveloperExceptionPage(d);
             }
+           // RotativaConfiguration.Setup(env2);
 
             app.UseStaticFiles();
             app.UseSession();
