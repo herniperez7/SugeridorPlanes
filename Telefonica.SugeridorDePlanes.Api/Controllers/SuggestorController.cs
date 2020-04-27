@@ -32,7 +32,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 for (int i = 0; i < plansDto.Count; i++)
                 {
                     var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
-                    planModel.Id = i;
+                    planModel.Id = i.ToString();
                     plansList.Add(planModel);
                 }
 
@@ -67,7 +67,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 for (int i = 0; i < plansDto.Count; i++)
                 {
                     var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
-                    planModel.Id = i;
+                    planModel.Id = i.ToString();
                     plansList.Add(planModel);
                 }
 
@@ -103,7 +103,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 for (int i = 0; i < plansDto.Count; i++)
                 {
                     var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
-                    planModel.Id = i;
+                    planModel.Id = i.ToString();
                     plansList.Add(planModel);
                 }
 

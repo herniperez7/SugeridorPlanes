@@ -70,7 +70,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> UpdateSuggestedPlan([FromBody]UpdateSuggestedPlanModel updatePlan)
         {
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
-            RecomendadorB2b recomendador = plansList.Where(x => x.Id = updatePlan.PlanToEdit);
+            RecomendadorB2b recomendador = plansList.Where(x => x.Id == updatePlan.PlanToEdit.ToString()).FirstOrDefault();
             recomendador.BonoPlanSugerido = int.Parse(updatePlan.Bono);
             recomendador.RoamingPlanSugerido = updatePlan.Roaming;
             recomendador.TmmPlanSugerido = int.Parse(updatePlan.TMM);
