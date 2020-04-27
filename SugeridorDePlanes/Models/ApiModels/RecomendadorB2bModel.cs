@@ -7,6 +7,7 @@ namespace Telefonica.SugeridorDePlanes.Models.ApiModels
 {
     public class RecomendadorB2bModel
     {
+        public string Id { get; set; }
         public string Rut { get; set; }
         public string CaNumber { get; set; }
         public int? QLineasRut { get; set; }

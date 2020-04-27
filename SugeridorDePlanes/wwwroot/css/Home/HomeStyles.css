@@ -39,6 +39,11 @@ table {
 
 th, td {
     padding: 8px 16px;
+    height: 46px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .editRow {
@@ -53,4 +58,8 @@ th {
 
 .table-bordered td, .table-bordered th {
     border: 1px solid #454d55;
+}
+
+.selectedOfertPlan {
+    background-color: #28a745;
 }

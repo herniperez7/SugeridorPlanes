@@ -1,6 +1,7 @@
 ﻿@{
     var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Usuarios.Usuario;
     var emptyPlans = true;
+    
     if (Model != null && Model.Count() > 0)
     {
         emptyPlans = false;
@@ -12,6 +13,7 @@
 
 @{
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
+    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanesOfertaActualModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
 
 }
@@ -63,6 +65,7 @@
             </div>
 
             @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
+
 
         </form>
 
@@ -134,8 +137,8 @@
                                     <th scope="col">#Id</th>
                                     <th scope="col">Plan</th>
                                     <th scope="col">TMM</th>
-                                    <th scope="col">campo</th>
-                                    <th scope="col">campo</th>
+                                    <th scope="col">Bono</th>
+                                    <th scope="col">Roaming</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,14 +146,17 @@
                                 {
                                     foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
-                                        <tr id="@plan.i+planSugerido">
-                                            <td>@plan.i</td>
-                                            <td>@plan.value.PlanSugerido</td>
-                                            <td>@plan.value.TmmPlanSugerido</td>
-                                            <td>XXX</td>
-                                            <td class="editRow"><button class="btn btn-outline-success my-2 my-sm-0">Editar</button></td>
-                                        </tr>
+                                <tr id="@plan.i{planSugerido}">
+                                    <td>@plan.i</td>
+                                    <td>@plan.value.PlanSugerido</td>
+                                    <td>@plan.value.TmmPlanSugerido</td>
+                                    <td>@plan.value.BonoPlanSugerido</td>
+                                    <td>@plan.value.RoamingPlanSugerido</td>
+                                    <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString())" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
+                                </tr>
                                     }
+
+
                                 }
                                 else
                                 {
@@ -166,6 +172,8 @@
                         </table>
                     </div>
                 </fieldset>
+
+
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
@@ -178,8 +186,8 @@
                                     <th scope="col">#Id</th>
                                     <th scope="col">Plan</th>
                                     <th scope="col">TMM</th>
-                                    <th scope="col">campo</th>
-                                    <th scope="col">campo</th>
+                                    <th scope="col">Bono</th>
+                                    <th scope="col">Roaming</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,13 +195,13 @@
                                 {
                                     foreach (var plan in Model.Select((value, i) => new { i, value }))
                                     {
-                                        <tr>
-                                            <td>@plan.i</td>
-                                            <td>@plan.value.PlanSugeridoRetencion</td>
-                                            <td>@plan.value.TmmPlanRetencion</td>
-                                            <td>XXX</td>
-                                            <td>XXX</td>
-                                        </tr>
+                                    <tr>
+                                        <td>@plan.i</td>
+                                        <td>@plan.value.PlanSugeridoRetencion</td>
+                                        <td>@plan.value.TmmPlanRetencion</td>
+                                        <td>@plan.value.BonoPlanRetencion</td>
+                                        <td>@plan.value.RoamingPlanRetencion</td>
+                                    </tr>
                                     }
                                 }
                                 else
@@ -327,6 +335,49 @@
         </script>
     }
 
+    <div class="modal fade" id="plansModal" role="dialog">
+        <div class="modal-dialog">
 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccione un plan</h4>
+                </div>
+
+                <div class="modal-body">
+                    <table id="tablaPlanes">
+                        <thead>
+                            <tr>
+                                <th>Plan</th>
+                                <th>TMM</th>
+                                <th>Bono</th>
+                                <th>Roaming</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plan in planOfertList.Select((value) => new { value }))
+                            {
+                                <tr>
+                                    <td>@plan.value.Plan</td>
+                                    <td>@plan.value.TMM_iva_inc</td>
+                                    <td>@plan.value.Bono</td>
+                                    <td>@plan.value.Roaming</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
 </body>
 </html>

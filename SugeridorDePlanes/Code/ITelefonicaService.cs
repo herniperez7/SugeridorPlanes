@@ -15,5 +15,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         Task<List<RecomendadorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
 
+        Task<List<PlanesOfertaActual>> GetActualPlansAsync();
+
     }
 }

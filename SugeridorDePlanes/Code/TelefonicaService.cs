@@ -47,6 +47,23 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        public async Task<List<PlanesOfertaActual>> GetActualPlansAsync()
+        {
+            try
+            {
+                var plans = await _client.GetActualPlansAsync();
+                List<PlanesOfertaActual> planList = plans.ToList();
+
+                return planList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
         public async Task<List<RecomendadorB2b>> GetSuggestedPlansByClientNumber(string clientNumber)
         {
             try
