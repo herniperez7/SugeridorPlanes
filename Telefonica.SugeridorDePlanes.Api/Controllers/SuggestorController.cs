@@ -29,11 +29,18 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 var plansList = new List<RecomendadorB2b>();
                 var plansDto = await _suggestorService.GetSuggestedPlans();
 
-                foreach (var item in plansDto)
+                for (int i = 0; i < plansDto.Count; i++)
                 {
-                    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                    var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
+                    planModel.Id = i;
                     plansList.Add(planModel);
                 }
+
+                //foreach (var item in plansDto)
+                //{
+                //    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                //    plansList.Add(planModel);
+                //}
 
                 return plansList;
 
@@ -57,11 +64,19 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 var plansList = new List<RecomendadorB2b>();
                 var plansDto = await _suggestorService.GetSuggestedPlansByRut(rut);
 
-                foreach (var item in plansDto)
+                for (int i = 0; i < plansDto.Count; i++)
                 {
-                    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                    var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
+                    planModel.Id = i;
                     plansList.Add(planModel);
                 }
+
+                //foreach (var item in plansDto)
+                //{
+                //    var planModel = _mapper.Map<RecomendadorB2b>(item);
+
+                //    plansList.Add(planModel);
+                //}
 
                 return plansList;
 
@@ -85,11 +100,18 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 var plansList = new List<RecomendadorB2b>();
                 var plansDto = await _suggestorService.GetSuggestedPlansByClientNumer(clientNumber);
 
-                foreach (var item in plansDto)
+                for (int i = 0; i < plansDto.Count; i++)
                 {
-                    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                    var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
+                    planModel.Id = i;
                     plansList.Add(planModel);
                 }
+
+                //foreach (var item in plansDto)
+                //{
+                //    var planModel = _mapper.Map<RecomendadorB2b>(item);
+                //    plansList.Add(planModel);
+                //}
 
                 return plansList;
 

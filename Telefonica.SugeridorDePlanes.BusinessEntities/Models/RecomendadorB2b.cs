@@ -6,6 +6,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
     public class RecomendadorB2b
     {
+        public int Id { get; set; }
         public string Rut { get; set; }
         public string CaNumber { get; set; }
         public int? QLineasRut { get; set; }
