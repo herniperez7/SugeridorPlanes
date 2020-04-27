@@ -10,6 +10,7 @@ using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
+using Telefonica.SugeridorDePlanes.Models.Data;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,6 +22,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService telefonicaApi;
         private  List<SugeridorClientesModel> _clientList;
+        private List<PlanesOfertaActualModel> _planesOfertList;
 
         public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
         {
@@ -35,9 +37,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
 
            var clientList = await telefonicaApi.GetClientes();
+           
            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
             _clientList = clientsModel;
-            ViewData["clientList"] = clientsModel;       
+            ViewData["clientList"] = clientsModel;
+            var planOfert = await telefonicaApi.GetActualPlansAsync();
+            List<PlanesOfertaActualModel> planesOfertList= _mapper.Map<List<PlanesOfertaActual>, List<PlanesOfertaActualModel>>(planOfert);
+            _planesOfertList = planesOfertList;
+            ViewData["planOfertList"] = planesOfertList;
 
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
@@ -59,5 +66,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return View("../Home/Index", planMapped);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateSuggestedPlan([FromBody]UpdateSuggestedPlanModel updatePlan)
+        {
+            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
+            RecomendadorB2b recomendador = plansList.Where(x => x.Id = updatePlan.PlanToEdit);
+            recomendador.BonoPlanSugerido = int.Parse(updatePlan.Bono);
+            recomendador.RoamingPlanSugerido = updatePlan.Roaming;
+            recomendador.TmmPlanSugerido = int.Parse(updatePlan.TMM);
+            recomendador.PlanSugerido = updatePlan.Plan;
+            return View();
+        }
     }
 }

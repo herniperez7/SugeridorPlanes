@@ -34,6 +34,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesModel>().ReverseMap();
+                configuration.CreateMap<PlanesOfertaActual, PlanesOfertaActualModel>().ReverseMap();
             }, typeof(Startup));
 
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
