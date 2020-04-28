@@ -25,6 +25,9 @@
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
 </head>
 <body>
+    <script>
+        var gbUpdateSuggestedPlanUrl = "@Url.Action("UpdateSuggestedPlan")";
+    </script>
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
 
@@ -98,10 +101,10 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    foreach (var plan in Model.Select((value, i) => new { i, value }))
+                                    foreach (var plan in Model.Select((value) => new { value }))
                                     {
                                         <tr>
-                                            <td>@plan.i</td>
+                                            <td>@plan.value.Id</td>
                                             <td>@plan.value.Movil</td>
                                             <td>@plan.value.Tmm</td>
                                             <td>@plan.value.Prestacion1</td>
@@ -144,15 +147,15 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    foreach (var plan in Model.Select((value, i) => new { i, value }))
+                                    foreach (var plan in Model.Select((value) => new { value }))
                                     {
-                                <tr id="@plan.i{planSugerido}">
-                                    <td>@plan.i</td>
+                                <tr id="@plan.value.Id{planSugerido}">
+                                    <td>@plan.value.Id</td>
                                     <td>@plan.value.PlanSugerido</td>
                                     <td>@plan.value.TmmPlanSugerido</td>
                                     <td>@plan.value.BonoPlanSugerido</td>
                                     <td>@plan.value.RoamingPlanSugerido</td>
-                                    <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString())" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
+                                    <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.value.Id.ToString())" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                 </tr>
                                     }
 
@@ -193,10 +196,10 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    foreach (var plan in Model.Select((value, i) => new { i, value }))
+                                    foreach (var plan in Model.Select((value) => new {value }))
                                     {
                                     <tr>
-                                        <td>@plan.i</td>
+                                        <td>@plan.value.Id</td>
                                         <td>@plan.value.PlanSugeridoRetencion</td>
                                         <td>@plan.value.TmmPlanRetencion</td>
                                         <td>@plan.value.BonoPlanRetencion</td>
@@ -330,10 +333,11 @@
 
     @if (Model != null && Model.Count() > 4)
     {
-        <script>
+<script>
             $(".tableFieldset .tableFixHead").css("height", "230px");
-        </script>
+</script>
     }
+
 
     <div class="modal fade" id="plansModal" role="dialog">
         <div class="modal-dialog">

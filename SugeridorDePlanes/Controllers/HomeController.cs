@@ -60,6 +60,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
             ViewData["clientList"] = clientsModel;
 
+            var planOfert = await telefonicaApi.GetActualPlansAsync();
+            List<PlanesOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanesOfertaActualModel>>(planOfert);
+            _planesOfertList = planesOfertList;
+            ViewData["planOfertList"] = planesOfertList;
+
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(rut);
             var planMapped = _mapper.Map<List<RecomendadorB2b>,List<RecomendadorB2bModel>>(plansList);
             
@@ -67,14 +72,18 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSuggestedPlan([FromBody]UpdateSuggestedPlanModel updatePlan)
+        public async Task<IActionResult> UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
         {
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
             RecomendadorB2b recomendador = plansList.Where(x => x.Id == updatePlan.PlanToEdit.ToString()).FirstOrDefault();
-            recomendador.BonoPlanSugerido = int.Parse(updatePlan.Bono);
+            int bono = int.Parse(updatePlan.Bono);
+            recomendador.BonoPlanSugerido = bono;
             recomendador.RoamingPlanSugerido = updatePlan.Roaming;
-            recomendador.TmmPlanSugerido = int.Parse(updatePlan.TMM);
+            int tmm = int.Parse(updatePlan.TMM);
+            recomendador.TmmPlanSugerido = tmm;
             recomendador.PlanSugerido = updatePlan.Plan;
+
+
             return View();
         }
     }
