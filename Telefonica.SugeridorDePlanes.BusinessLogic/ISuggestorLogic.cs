@@ -6,7 +6,7 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public interface ISuggestorService
+    public interface ISuggestorLogic
     {
         Task<List<RecomendadorB2bDTO>> GetSuggestedPlans();
 

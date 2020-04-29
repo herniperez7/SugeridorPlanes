@@ -75,7 +75,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
         {
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
-            RecomendadorB2b recomendador = plansList.Where(x => x.Id == updatePlan.PlanToEdit.ToString()).FirstOrDefault();
+            RecomendadorB2b recomendador = plansList.Where(x => x.Id == updatePlan.PlanToEdit).FirstOrDefault();
             int bono = int.Parse(updatePlan.Bono);
             recomendador.BonoPlanSugerido = bono;
             recomendador.RoamingPlanSugerido = updatePlan.Roaming;

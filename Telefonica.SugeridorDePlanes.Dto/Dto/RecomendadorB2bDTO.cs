@@ -6,6 +6,7 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
 {
     public class RecomendadorB2bDTO
     {
+       
         public string Rut { get; set; }
         public string CaNumber { get; set; }
         public int? QLineasRut { get; set; }

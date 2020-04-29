@@ -6,7 +6,7 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public interface IClientService
+    public interface IClientLogic
     {
         Task<List<SugeridorClientesDTO>> GetClientes();
     }
