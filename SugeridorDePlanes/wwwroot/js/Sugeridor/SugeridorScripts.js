@@ -1,6 +1,8 @@
 ﻿var gbPlanToEdit;
-var gbPlanToEditRut="";
-        $(document).ready(function () {
+var gbPlanToEditRut = "";
+var defPlansList;
+$(document).ready(function () {
+
             $('#tablaPlanes tbody tr').on('click', function () {
                 selectPlan(this);
             });
@@ -43,6 +45,11 @@ var gbPlanToEditRut="";
         }
 
 function loadDefinitivePlans(planList) {
+
+    if (!defPlansList) {
+        defPlansList = planList;
+        console.log("undefined!");
+    }
     if (planList.length > 0) {
         $('#tablaPlanesDefi tbody').html("");
         for (var i = 0; i < planList.length; i++)
@@ -55,7 +62,7 @@ function loadDefinitivePlans(planList) {
             element += "<td>" + plan.tmM_s_iva + "</td>";
             element += "<td>" + plan.bono + "</td>";
             element += "<td>" + plan.roaming + "</td>";
-            element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + gbPlanToEdit + ', '+ gbPlanToEditRut+ ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
+            element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ', '+ gbPlanToEditRut+ ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
             element += "</tr>";
             $('#tablaPlanesDefi tbody').append(element);
         }

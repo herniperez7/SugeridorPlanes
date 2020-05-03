@@ -27,6 +27,8 @@
 </head>
 <body>
     <script>
+
+
         var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
     </script>
 
@@ -158,8 +160,6 @@
                                     <td>@plan.value.RoamingPlanSugerido</td>
                                 </tr>
                                     }
-
-
                                 }
                                 else
                                 {
@@ -197,7 +197,7 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    @foreach (var plan in planDefList.Select((value) => new { value }))
+                                    @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
                                     {
                                     <tr>
                                         <td>@plan.value.RecomendadorId</td>
@@ -205,7 +205,7 @@
                                         <td>@plan.value.TMM_s_iva</td>
                                         <td>@plan.value.Bono</td>
                                         <td>@plan.value.Roaming</td>
-                                        <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.value.RecomendadorId.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
+                                        <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                     </tr>
                                         }
                                    
