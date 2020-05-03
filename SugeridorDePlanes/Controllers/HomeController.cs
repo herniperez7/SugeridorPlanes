@@ -103,7 +103,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _planesDefList = new List<PlanDefinitivolModel>();
             foreach (RecomendadorB2b reco in planList)
             {
-                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = int.Parse(reco.Id), Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
+                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
                 _planesDefList.Add(planDef);
             }
 
