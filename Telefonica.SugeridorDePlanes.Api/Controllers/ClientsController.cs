@@ -15,10 +15,10 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly IClientService _clientService;
+        private readonly IClientLogic _clientService;
         private readonly IMapper _mapper;
 
-        public ClientsController(IClientService clientService, IMapper mapper)
+        public ClientsController(IClientLogic clientService, IMapper mapper)
         {
             _clientService = clientService;
             _mapper = mapper;

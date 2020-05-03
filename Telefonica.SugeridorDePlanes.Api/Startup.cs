@@ -47,8 +47,8 @@ namespace Telefonica.SugeridorDePlanes.Api
                     options.UseSqlServer(Configuration.GetConnectionString("TelefonicaConnectionString")));
 
             //Services
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<ISuggestorService, SuggestorService>();
+            services.AddScoped<IClientLogic, ClientLogic>();
+            services.AddScoped<ISuggestorLogic, SuggestorLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();

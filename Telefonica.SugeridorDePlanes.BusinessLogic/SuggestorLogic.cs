@@ -7,11 +7,11 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public class SuggestorService : ISuggestorService
+    public class SuggestorLogic : ISuggestorLogic
     {
         private readonly ISuggestorRepository _suggestorRepository;
 
-        public SuggestorService(ISuggestorRepository suggestorRepository)
+        public SuggestorLogic(ISuggestorRepository suggestorRepository)
         {
             _suggestorRepository = suggestorRepository;
         }
