@@ -13,7 +13,8 @@
 
 @{
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
-    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanesOfertaActualModel>;
+    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
+    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
 
 }
@@ -26,7 +27,7 @@
 </head>
 <body>
     <script>
-        var gbUpdateSuggestedPlanUrl = "@Url.Action("UpdateSuggestedPlan")";
+        var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
     </script>
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
@@ -155,7 +156,6 @@
                                     <td>@plan.value.TmmPlanSugerido</td>
                                     <td>@plan.value.BonoPlanSugerido</td>
                                     <td>@plan.value.RoamingPlanSugerido</td>
-                                    <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.value.Id.ToString())" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                 </tr>
                                     }
 
@@ -183,7 +183,7 @@
                 <fieldset class="tableFieldset">
                     <legend>Plan definitivo</legend>
                     <div class="tableFixHead">
-                        <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <table class="table table-bordered table-striped mb-0" id="tablaPlanesDefi" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">#Id</th>
@@ -191,21 +191,24 @@
                                     <th scope="col">TMM</th>
                                     <th scope="col">Bono</th>
                                     <th scope="col">Roaming</th>
+                                    <th scope="col">Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    foreach (var plan in Model.Select((value) => new {value }))
+                                    @foreach (var plan in planDefList.Select((value) => new { value }))
                                     {
                                     <tr>
-                                        <td>@plan.value.Id</td>
-                                        <td>@plan.value.PlanSugeridoRetencion</td>
-                                        <td>@plan.value.TmmPlanRetencion</td>
-                                        <td>@plan.value.BonoPlanRetencion</td>
-                                        <td>@plan.value.RoamingPlanRetencion</td>
+                                        <td>@plan.value.RecomendadorId</td>
+                                        <td>@plan.value.Plan</td>
+                                        <td>@plan.value.TMM_s_iva</td>
+                                        <td>@plan.value.Bono</td>
+                                        <td>@plan.value.Roaming</td>
+                                        <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.value.RecomendadorId.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                     </tr>
-                                    }
+                                        }
+                                   
                                 }
                                 else
                                 {
@@ -362,7 +365,7 @@
                             {
                                 <tr>
                                     <td>@plan.value.Plan</td>
-                                    <td>@plan.value.TMM_iva_inc</td>
+                                    <td>@plan.value.TMM_s_iva</td>
                                     <td>@plan.value.Bono</td>
                                     <td>@plan.value.Roaming</td>
                                 </tr>

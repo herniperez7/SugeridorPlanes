@@ -1,4 +1,5 @@
-﻿ var gbPlanToEdit;
+﻿var gbPlanToEdit;
+var gbPlanToEditRut="";
         $(document).ready(function () {
             $('#tablaPlanes tbody tr').on('click', function () {
                 selectPlan(this);
@@ -22,20 +23,42 @@
                     }
                     i++;
                 }
-                var planUpdate = { PlanToEdit: gbPlanToEdit, Plan: planSelected.cells[0].innerText, TMM: planSelected.cells[1].innerText, Bono: planSelected.cells[2].innerText, Roaming: planSelected.cells[3].innerText };
+                var planUpdate = { PlanToEditRut: gbPlanToEditRut, PlanToEdit: gbPlanToEdit, Plan: planSelected.cells[0].innerText, TMM: planSelected.cells[1].innerText, Bono: planSelected.cells[2].innerText, Roaming: planSelected.cells[3].innerText };
                 
                 $.ajax({
                     type: "POST",
-                    url: gbUpdateSuggestedPlanUrl,
+                    url: gbUpdateDefinitivePlanUrl,
                     contentType: "application/json",
                     data: JSON.stringify(planUpdate),
                     processData: true,
-                    success: function(recData) { alert('Success'); },
+                    success: function(recData) { loadDefinitivePlans(recData) },
                     error: function() { alert('A error'); }
                 });
             } 
         }
 
-        function establisPlanToEdit(planToEdit) {
+        function establisPlanToEdit(planToEdit,rut) {
             gbPlanToEdit = planToEdit;
+            gbPlanToEditRut = rut.toString();
         }
+
+function loadDefinitivePlans(planList) {
+    if (planList.length > 0) {
+        $('#tablaPlanesDefi tbody').html("");
+        for (var i = 0; i < planList.length; i++)
+        {
+            var plan = planList[i];
+            var element = "";
+            element += "<tr>";
+            element += "<td>" + plan.recomendadorId + "</td>";
+            element += "<td>" + plan.plan + "</td>";
+            element += "<td>" + plan.tmM_s_iva + "</td>";
+            element += "<td>" + plan.bono + "</td>";
+            element += "<td>" + plan.roaming + "</td>";
+            element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + gbPlanToEdit + ', '+ gbPlanToEditRut+ ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
+            element += "</tr>";
+            $('#tablaPlanesDefi tbody').append(element);
+        }
+    }
+}
+    

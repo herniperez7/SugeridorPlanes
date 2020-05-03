@@ -7,6 +7,7 @@ namespace Telefonica.SugeridorDePlanes.Models.Data
 {
     public class UpdateSuggestedPlanModel
     {
+        public string PlanToEditRut { get; set; }
         public int PlanToEdit { get; set; }
         public string Plan { get; set; }
         public string TMM { get; set; }

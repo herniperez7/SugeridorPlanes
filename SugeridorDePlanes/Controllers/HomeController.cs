@@ -22,7 +22,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService telefonicaApi;
         private  List<SugeridorClientesModel> _clientList;
-        private List<PlanesOfertaActualModel> _planesOfertList;
+        private List<PlanOfertaActualModel> _planesOfertList;
+        private List<PlanDefinitivolModel> _planesDefList;
 
         public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
         {
@@ -30,6 +31,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             telefonicaApi = telefonicaService;
             _mapper = mapper;
             _clientList = new List<SugeridorClientesModel>();
+            _planesDefList = new List<PlanDefinitivolModel>();
         }
 
 
@@ -42,12 +44,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _clientList = clientsModel;
             ViewData["clientList"] = clientsModel;
             var planOfert = await telefonicaApi.GetActualPlansAsync();
-            List<PlanesOfertaActualModel> planesOfertList= _mapper.Map<List<PlanesOfertaActual>, List<PlanesOfertaActualModel>>(planOfert);
+            List<PlanOfertaActualModel> planesOfertList= _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
             _planesOfertList = planesOfertList;
             ViewData["planOfertList"] = planesOfertList;
 
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            updateDefinitivePlanList(plansList);
+
+            ViewData["planDefList"] = _planesDefList;
 
             return View("../Home/Index", planMapped);
         }
@@ -61,30 +66,47 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["clientList"] = clientsModel;
 
             var planOfert = await telefonicaApi.GetActualPlansAsync();
-            List<PlanesOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanesOfertaActualModel>>(planOfert);
+            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
             _planesOfertList = planesOfertList;
             ViewData["planOfertList"] = planesOfertList;
 
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(rut);
             var planMapped = _mapper.Map<List<RecomendadorB2b>,List<RecomendadorB2bModel>>(plansList);
-            
+            updateDefinitivePlanList(plansList);
+
+            ViewData["planDefList"] = _planesDefList;
+            ViewData["selectedRut"] = rut;
+
             return View("../Home/Index", planMapped);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
+        public async Task<JsonResult> UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
         {
-            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
-            RecomendadorB2b recomendador = plansList.Where(x => x.Id == updatePlan.PlanToEdit.ToString()).FirstOrDefault();
-            int bono = int.Parse(updatePlan.Bono);
-            recomendador.BonoPlanSugerido = bono;
-            recomendador.RoamingPlanSugerido = updatePlan.Roaming;
-            int tmm = int.Parse(updatePlan.TMM);
-            recomendador.TmmPlanSugerido = tmm;
-            recomendador.PlanSugerido = updatePlan.Plan;
+            List<RecomendadorB2b> recomendadorList = await telefonicaApi.GetSuggestedPlansByRut(updatePlan.PlanToEditRut);
+            updateDefinitivePlanList(recomendadorList);
+            PlanDefinitivolModel planDef = _planesDefList.Where(x => x.RecomendadorId == updatePlan.PlanToEdit).FirstOrDefault();
+            if (planDef != null)
+            {
+                planDef.Plan = updatePlan.Plan;
+                planDef.Bono = long.Parse(updatePlan.Bono);
+                planDef.Roaming = updatePlan.Roaming;
+                planDef.TMM_s_iva = decimal.Parse(updatePlan.TMM);
+            }
+            
+            return new JsonResult(_planesDefList);
+        }
 
 
-            return View();
+        private void updateDefinitivePlanList(List<RecomendadorB2b> planList)
+        {
+            _planesDefList = new List<PlanDefinitivolModel>();
+            foreach (RecomendadorB2b reco in planList)
+            {
+                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = int.Parse(reco.Id), Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
+                _planesDefList.Add(planDef);
+            }
+
         }
     }
 }

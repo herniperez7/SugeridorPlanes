@@ -63,3 +63,7 @@ th {
 .selectedOfertPlan {
     background-color: #28a745;
 }
+
+#tablaPlanesDefi td.editRow a{
+    padding:5px;
+}
