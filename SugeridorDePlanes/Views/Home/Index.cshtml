@@ -13,9 +13,11 @@
 
 @{
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
+    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoMovil>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
+    var movileDevicesOptions = new SelectList(movileDevices, "Codigo", "Marca");
 
 }
 
@@ -24,6 +26,63 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+
+    <script>
+        function movileChange() {
+            var val = $("#movilesDdl").val();
+            if (val == "0") {
+                $("#addDeviceBtn").prop('disabled', true);
+            } else {
+                $("#addDeviceBtn").prop('disabled', false);
+            }       
+          
+                $.ajax({
+                    url: '@Url.Action("GetMovilInfo", "Home")?code=' + val,
+                    success: function (data) {
+                        if (data.status == "ok") {
+
+                            if (data.result) {
+                                $("#landedValue").html(data.result.precio);
+                                $("#stockValue").html(data.result.stock);
+                            } else {
+                                $("#landedValue").html("");
+                                $("#stockValue").html("");
+                            }                           
+                        }
+                    }
+                });
+        }
+
+        function AddDevice() {
+            var val = $("#movilesDdl").val();
+
+             $.ajax({
+                 url: '@Url.Action("GetMovilInfo", "Home")?code=' + val,
+                    success: function (data) {
+                        if (data.status == "ok") {
+
+                            var trashIcon = '<svg class="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">' +
+                                ' <path fill-rule="evenodd" d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" clip-rule="evenodd" />' +
+                                ' </svg>';
+
+                            var tr = "<tr id='row" + data.result.codigo + "' ><th scope='row'>" + data.result.marca + "</th><td>$" + data.result.precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
+                            $("#movilTableBody").append(tr);
+
+                        }
+                    }
+                });
+        }
+
+        function deleteRow(val) {
+           
+            var rowId = "row" + val;
+            $("#" + rowId ).remove();     
+
+        }
+
+
+    </script>
+
 </head>
 <body>
     <script>
@@ -232,20 +291,28 @@
 
                 <fieldset>
                     <legend>Terminales</legend>
-                    <div class="row" style="height: 200px">
+                    <div class="row" style="height: 250px">
                         <div class="col-lg-5">
-                            <div class="dropdown p-2 ml-2">
-                                <select class="custom-select" id="selectEquipo">
-                                    <option value="1">Samsung S10</option>
-                                    <option value="3">Samsung Galaxy</option>
-                                    <option value="2">Iphone X</option>
-                                    <option value="2">Iphone 8</option>
+
+                            <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
+
+                                @*  @Html.DropDownList("codigo", movileDevicesOptions, new { id = "movilesDdl", onChange = "movileChange(this.value)", @class = "custom-select" })*@
+
+                                <select id="movilesDdl" class="custom-select" onchange="movileChange()">
+                                    <option value="0">Seleccionar</option>
+                                    @foreach (var item in movileDevices)
+                                    {
+                                        <option value="@item.Codigo">@item.Marca</option>
+                                    }
+
                                 </select>
-                            </div>
+
+
+                            </form>
                             <div id="valuesEquipos" class="p-2 ml-2">
 
-                                <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue">30000</label><br />
-                                <label><b>Stock: </b></label><label class="ml-1" id="stockValue">10</label>
+                                <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue"></label><br />
+                                <label><b>Stock: </b></label><label class="ml-1" id="stockValue"></label>
 
                             </div>
 
@@ -258,31 +325,17 @@
                                         <tr>
                                             <th scope="col">Equipo</th>
                                             <th scope="col">Lande</th>
-
+                                             <th scope="col">Borrar</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Iphone 8</th>
-                                            <td>$ 30.000</td>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Samsung s10</th>
-                                            <td>$ 40.000</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">Iphone x</th>
-                                            <td>$ 45.000</td>
-                                        </tr>
+                                    <tbody id="movilTableBody">                                     
 
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div style="display:inline; padding-left: 20px">
-                            <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="agregarEquipoBtn">Agregar</button>
+                            <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice()" disabled>Agregar</button>
                             <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="modificarEquipoBtn">Modificar</button>
 
                         </div>
@@ -296,7 +349,7 @@
             <div class="col-lg-7">
                 <fieldset>
                     <legend>Resumen</legend>
-                    <div class="row" style="height: 200px">
+                    <div class="row" style="height: 250px">
 
                         <div class="col-lg-4">
                             <div class="ml-3">
@@ -306,6 +359,10 @@
                                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Payback</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Pago de equipos</span>
                                 </div>
                                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                             </div>

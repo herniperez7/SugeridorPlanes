@@ -10,7 +10,6 @@ using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
-using Telefonica.SugeridorDePlanes.Models.Data;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -27,6 +26,23 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             telefonicaApi = telefonicaService;
             _mapper = mapper;
             _clientList = new List<SugeridorClientesModel>();
+
+            //provisorio
+
+            PopulateMoviles();
+
+        }
+
+
+        private void PopulateMoviles()
+        {
+            _moviles = new List<EquipoMovil>();
+            _moviles.Add(new EquipoMovil() { Codigo = "123", Marca = "Iphone x", Precio = 45000, Stock = 100 });
+            _moviles.Add(new EquipoMovil() { Codigo = "109", Marca = "Samsung s10", Precio = 35000, Stock = 80 });
+            _moviles.Add(new EquipoMovil() { Codigo = "423", Marca = "Redmin Note 8", Precio = 20000, Stock = 200 });
+            _moviles.Add(new EquipoMovil() { Codigo = "1545", Marca = "Iphone 11", Precio = 55000 , Stock = 150  });
+            _moviles.Add(new EquipoMovil() { Codigo = "564", Marca = "Huawei P40", Precio = 58000 , Stock = 250 });
+
         }
 
 
@@ -40,6 +56,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["clientList"] = clientsModel;
             var planOfert = await telefonicaApi.GetActualPlansAsync();
             List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
+
+            ViewData["movileDevices"] = _moviles;
 
             ViewData["planOfertList"] = planesOfertList;
 
@@ -64,6 +82,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var clientList = await telefonicaApi.GetClientes();
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
             ViewData["clientList"] = clientsModel;
+            ViewData["movileDevices"] = _moviles;
 
             var planOfert = await telefonicaApi.GetActualPlansAsync();
             List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
@@ -82,6 +101,21 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             return View("../Home/Index", planMapped);
         }
+
+        [HttpPost]
+        private void AddMovile(string code)
+        {
+            HttpContext.Session.SetString("movilObj", code);
+        }
+
+        public JsonResult GetMovilInfo(string code)
+        {
+            var movil = _moviles.Where(x => x.Codigo == code).FirstOrDefault();
+            var data = new { status = "ok", result = movil };
+            return Json(data);
+
+        }
+
 
         [HttpPost]
         public JsonResult UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
