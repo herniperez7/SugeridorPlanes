@@ -25,7 +25,7 @@ fieldset {
 }
 
 .tableFixHead tr {
-    height:46px;
+    height:20px;
 }
 .tableFixHead thead th {
     position: sticky;
@@ -35,15 +35,26 @@ fieldset {
 table {
     border-collapse: collapse;
     width: 100%;
+
 }
 
 th, td {
     padding: 8px 16px;
-    height: 46px;
-    max-width: 100px;
+    
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 90%;
+}
+
+td{
+    text-align:right;
+    height: 5px;
+}
+th {
+    background: #eee;
+    height: 10px;
 }
 
 .editRow {
@@ -52,9 +63,7 @@ th, td {
     vertical-align: middle!important;
 }
 
-th {
-    background: #eee;
-}
+
 
 .table-bordered td, .table-bordered th {
     border: 1px solid #454d55;
@@ -69,7 +78,24 @@ th {
 }
 
 .total-column {
-    text-align: center;
+    text-align: right;
     font-weight: bold;
     background-color: #AAAAAA;
+}
+
+.total-billing-column {
+    text-align: left;
+    font-weight: bold;
+    background-color: #AAAAAA;
+}
+
+#movilTableBody td{
+    text-align: center;
+}
+
+.generateButtons{
+    padding: 10px;
+    width: 200px;
+   
+    
 }

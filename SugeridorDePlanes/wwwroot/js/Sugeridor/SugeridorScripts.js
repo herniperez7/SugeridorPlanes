@@ -4,6 +4,14 @@ var defPlansList;
 //var totalDefPlansTmm;
 $(document).ready(function () {
 
+    $("#clientRutBtn").prop('disabled', true);
+    $('#clientRutTxt1').keyup(function () {
+        if ($(this).val().length != 0)
+            $("#clientRutBtn").prop('disabled', false);
+        else
+            $("#clientRutBtn").prop('disabled', true);
+    })
+
     
     $('#tablaPlanes tbody tr').on('click', function () {
         selectPlan(this);
@@ -58,23 +66,34 @@ function loadDefinitivePlans(planList) {
         calculateGaps(gbPlanToEditRut);
 
         var totalTmm = 0;
+        var totalBono = 0;
+        var roamingCount = 0;
         $('#tablaPlanesDefi tbody').html("");
         for (var i = 0; i < planList.length; i++) {
             var plan = planList[i];
             totalTmm += plan.tmM_s_iva;
+            totalBono += plan.bono;
+
+            if (plan.roaming.toString().toLowerCase() !== "no") {
+                roamingCount++;
+            }          
+         
+
             var element = "";
             element += "<tr>";
             element += "<td>" + plan.recomendadorId + "</td>";
             element += "<td>" + plan.plan + "</td>";
-            element += "<td>" + plan.bono + "</td>";
-            element += "<td>" + plan.roaming + "</td>";
             element += "<td>" + plan.tmM_s_iva + "</td>";
+            element += "<td>" + plan.bono + " Gb</td>";
+            element += "<td>" + plan.roaming + "</td>";
+            
             element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ', ' + gbPlanToEditRut + ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
             element += "</tr>";
             $('#tablaPlanesDefi tbody').append(element);
         }
 
-        var totalRow = "<tr><td class='total-column' colspan='4'>Total</td> <td>" + totalTmm + "</td> </tr>";
+     
+        var totalRow = "<tr><td class='total-column' colspan='3'>" + totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
     }
@@ -130,7 +149,7 @@ function movileChange() {
             if (data.status == "ok") {
 
                 if (data.result) {
-                    var precio = formatNumber(data.result.precio);
+                    var precio = "$ " + formatNumber(data.result.precio);
                     $("#landedValue").html(precio);
                     $("#stockValue").html(data.result.stock);
                 } else {
@@ -155,7 +174,7 @@ function AddDevice() {
         success: function (data) {
             if (data.status == "ok") {
                 var precio = formatNumber(data.result.precio);
-                var trashIcon = '<svg class="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">' +
+                var trashIcon = '<svg  class="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">' +
                     ' <path fill-rule="evenodd" d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" clip-rule="evenodd" />' +
                     ' </svg>';
 
