@@ -36,5 +36,6 @@ namespace Telefonica.SugeridorDePlanes.Models.ApiModels
         public decimal? TmmPlanRetencion { get; set; }
         public string RoamingPlanSugerido { get; set; }
         public string RoamingPlanRetencion { get; set; }
+        public decimal? ArpuProm { get; set; }
     }
 }

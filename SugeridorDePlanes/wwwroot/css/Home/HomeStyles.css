@@ -67,3 +67,9 @@ th {
 #tablaPlanesDefi td.editRow a{
     padding:5px;
 }
+
+.total-column {
+    text-align: center;
+    font-weight: bold;
+    background-color: #AAAAAA;
+}
