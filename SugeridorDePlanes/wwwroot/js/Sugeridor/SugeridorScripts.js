@@ -96,6 +96,7 @@ function loadDefinitivePlans(planList) {
         var totalRow = "<tr><td class='total-column' colspan='3'>" + totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
+        calculatePayBack();
     }
 }
 
