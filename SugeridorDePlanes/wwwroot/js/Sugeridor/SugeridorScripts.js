@@ -68,11 +68,13 @@ function loadDefinitivePlans(planList) {
         var totalTmm = 0;
         var totalBono = 0;
         var roamingCount = 0;
+        var bono = 0;
         $('#tablaPlanesDefi tbody').html("");
         for (var i = 0; i < planList.length; i++) {
             var plan = planList[i];
             totalTmm += plan.tmM_s_iva;
             totalBono += plan.bono;
+          //  bono = plan.bono / 1024;
 
             if (plan.roaming.toString().toLowerCase() !== "no") {
                 roamingCount++;
@@ -83,7 +85,7 @@ function loadDefinitivePlans(planList) {
             element += "<tr>";
             element += "<td>" + plan.recomendadorId + "</td>";
             element += "<td>" + plan.plan + "</td>";
-            element += "<td>" + plan.tmM_s_iva + "</td>";
+            element += "<td>"+"$" + plan.tmM_s_iva + "</td>";
             element += "<td>" + plan.bono + " Gb</td>";
             element += "<td>" + plan.roaming + "</td>";
             
@@ -91,9 +93,9 @@ function loadDefinitivePlans(planList) {
             element += "</tr>";
             $('#tablaPlanesDefi tbody').append(element);
         }
-
+        
      
-        var totalRow = "<tr><td class='total-column' colspan='3'>" + totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
+        var totalRow = "<tr><td class='total-column' colspan='3'>" +"$ "+  totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
         calculatePayBack();

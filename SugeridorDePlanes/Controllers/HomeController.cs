@@ -205,6 +205,18 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var sessionPLansStr = HttpContext.Session.GetString("defPlansList");
             var defPlansList = JsonConvert.DeserializeObject<List<PlanDefinitivolModel>>(sessionPLansStr);
 
+            //provisorio, cambiar logica
+            defPlansList = defPlansList.Select(x =>
+            new PlanDefinitivolModel
+            {
+                Plan = x.Plan,
+                Bono = x.Bono / 1024,
+                Roaming = x.Roaming,
+                TMM_s_iva = x.TMM_s_iva
+            }).ToList();
+
+            //
+
             PlanDefinitivolModel planDef = defPlansList.Where(x => x.RecomendadorId == updatePlan.PlanToEdit).FirstOrDefault();
             if (planDef != null)
             {
