@@ -17,7 +17,7 @@
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
-    var gapModel = ViewData["gaps"] as Telefonica.SugeridorDePlanes.Models.ApiModels.GapModel;
+    var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
 
 
 }
@@ -35,7 +35,7 @@
         var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Home")";
         var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Home")";
         var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Home")";
-        var gbCalculateGap = "@Url.Action("CalculateGapResult", "Home")";
+        var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
         var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
 
     </script>
@@ -147,7 +147,7 @@
                                             @if (plan.value.Roamer.ToLower() == "roamer")
                                             {
                                                 <td style="text-align:center">
-                                                   
+
                                                     <svg class="bi bi-check" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
                                                     </svg>
@@ -155,13 +155,13 @@
                                             }
                                             else
                                             {
-                                        <td style="text-align:center">
-                                            <svg class="bi bi-x" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd" />
-                                                <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd" />
-                                            </svg>
+                                                <td style="text-align:center">
+                                                    <svg class="bi bi-x" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd" />
+                                                    </svg>
 
-                                        </td>
+                                                </td>
                                             }
                                         </tr>
                                     }
@@ -437,31 +437,54 @@
 
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
 
+                           
+                            <div id="divbillingStatus">
+                                @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
+                                {
+                                    <div class="superiorBillingMain">
+                                        <div class="superiorBillingChild" >
+                                            <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
+                                            
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (@indexModel.BillingStatus.ToString().Equals("Lower"))
+                                {
+                                    <div class="lowerBillingMain">
+                                        <div class="lowerBillingChild">
+                                            <div style="font-weight:bold; color:#FF0000">
+                                                <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @if (@indexModel.BillingStatus.ToString().Equals("Equal"))
+                                {
+                                    <div class="equalBillingMain">
+                                        <div class="equalBillingMainChild">
+                                            <div style="font-weight:bold; color:#FFD200">
+                                                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
                             <div id="valuesResumen" class="p-2">
-                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">@gapModel.FixedGap</label><br />
-                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">@gapModel.BillingGap</label><br />
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">@indexModel.FixedGap</label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">@indexModel.BillingGap</label><br />
                                 <label><b>Payback: </b></label><label class="ml-1" id="paybackValue">XXX</label><br />
                                 <label><b>Subsidio: </b></label><label class="ml-1" id="subsidioValue">XXX</label>
                             </div>
                         </div>
 
-                        
-
-                        <div class="col-lg-4">
-
-                            @* <svg class="bi bi-check" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
-
-            </svg>
-            <P>Prueba</P>
-        </div>*@
-
-                            <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
-                            <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn">Exportar Pdf</button>
+                            <div class="col-lg-4">
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn">Exportar Pdf</button>
+                            </div>
                         </div>
 
-
-                    </div>
                 </fieldset>
             </div>
 

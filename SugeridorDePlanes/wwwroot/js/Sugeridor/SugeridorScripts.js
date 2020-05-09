@@ -12,7 +12,7 @@ $(document).ready(function () {
             $("#clientRutBtn").prop('disabled', true);
     })
 
-    
+
     $('#tablaPlanes tbody tr').on('click', function () {
         selectPlan(this);
     });
@@ -58,7 +58,7 @@ function loadDefinitivePlans(planList) {
 
     if (!defPlansList) {
         defPlansList = planList;
-        
+
     }
     if (planList.length > 0) {
 
@@ -74,28 +74,28 @@ function loadDefinitivePlans(planList) {
             var plan = planList[i];
             totalTmm += plan.tmM_s_iva;
             totalBono += plan.bono;
-          //  bono = plan.bono / 1024;
+            //  bono = plan.bono / 1024;
 
             if (plan.roaming.toString().toLowerCase() !== "no") {
                 roamingCount++;
-            }          
-         
+            }
+
 
             var element = "";
             element += "<tr>";
             element += "<td>" + plan.recomendadorId + "</td>";
             element += "<td>" + plan.plan + "</td>";
-            element += "<td>"+"$" + plan.tmM_s_iva + "</td>";
+            element += "<td>" + "$" + plan.tmM_s_iva + "</td>";
             element += "<td>" + plan.bono + " Gb</td>";
             element += "<td>" + plan.roaming + "</td>";
-            
+
             element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ', ' + gbPlanToEditRut + ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
             element += "</tr>";
             $('#tablaPlanesDefi tbody').append(element);
         }
-        
-     
-        var totalRow = "<tr><td class='total-column' colspan='3'>" +"$ "+  totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
+
+
+        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
         calculatePayBack();
@@ -112,7 +112,7 @@ function getMovileList() {
         url: gbGetMovilListUrl,
         success: function (data) {
             if (data.status == "ok") {
-               //console.log(data.result);
+                //console.log(data.result);
                 return data.result;
             }
         }
@@ -127,7 +127,7 @@ function populateBenefitInput() {
         success: function (data) {
             if (data.status == "ok") {
                 $.each(data.result, function (key, value) {
-                    total += value.precio;                   
+                    total += value.precio;
                 });
                 $("#subsidioTxt").val(formatNumber(total));
             }
@@ -166,7 +166,7 @@ function movileChange() {
 
 function AddDevice() {
 
-   
+
 
     var val = $("#movilesDdl").val();
     var subsidio = parseInt($("#subsidioTxt").val());
@@ -223,7 +223,7 @@ function calculatePayBack() {
     $.ajax({
         url: gbCalculatePayBack,
         success: function (data) {
-            if (data.status == "ok") {               
+            if (data.status == "ok") {
                 $("#paybackTxt").val(data.result);
             }
         }
@@ -243,10 +243,29 @@ function calculateGaps(val) {
         url: gbCalculateGap + '?rut=' + val,
         success: function (data) {
             if (data.status == "ok") {
-
+               
                 $("#gapValue").html(data.result.fixedGap);
                 $("#gapBilingValue").html(data.result.billingGap);
-            } 
+
+                $("#divbillingStatus").html("");
+
+                var superiorBillingDiv = "<div class='superiorBillingMain'><div class='superiorBillingChild'><i class='fa fa-check-circle fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación superior </span></i></div></div>";
+                var lowerBillingDiv = "<div class='lowerBillingMain'><div class='lowerBillingChild' ><div style='font-weight:bold; color:#FF0000'><i class='fa fa-times fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación inferior </span></i></div></div></div>";        
+                var equalBillingDiv = "<div class='equalBillingMain'><div class='equalBillingMainChild'><div style='font-weight:bold; color:#FFD200'><i class='fa fa-exclamation-circle fa-lg' aria-hidden='true'><span class='spanSatus'> Misma facturación </span></i></div></div></div>";
+
+                switch (data.result.billingStatus.toString()) {
+                    case "0":                       
+                        $("#divbillingStatus").append(superiorBillingDiv);
+                        break;
+                    case "1":                        
+                        $("#divbillingStatus").append(equalBillingDiv);
+                        break;
+                    case "2":                       
+                        $("#divbillingStatus").append(lowerBillingDiv);    
+                        break;
+                }
+              //  <span class='spanSatus'> Facturación superior </span>
+            }
         }
     });
 }

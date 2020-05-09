@@ -11,6 +11,7 @@ using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes.Models.Data;
+using Telefonica.SugeridorDePlanes.Resources.Enums;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -68,8 +69,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             var jsonPlasList = JsonConvert.SerializeObject(defPlansList);
             HttpContext.Session.SetString("defPlansList", jsonPlasList);
-            var gaps = await CalculateGap(clientsModel[0].Documento);
-            ViewData["gaps"] = gaps;
+            var gaps = await CalculateIndexes(clientsModel[0].Documento);
+            ViewData["Indexes"] = gaps;
 
 
             return View("../Home/Index", planMapped);
@@ -100,8 +101,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["planDefList"] = defPlansList;
             ViewData["selectedRut"] = rut;
 
-            var gaps = await CalculateGap(rut);
-            ViewData["gaps"] = gaps;
+            var gaps = await CalculateIndexes(rut);
+            ViewData["Indexes"] = gaps;
 
             return View("../Home/Index", planMapped);
         }        
@@ -229,9 +230,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return new JsonResult(defPlansList);
         }        
 
-        public async Task<JsonResult> CalculateGapResult(string rut)
+        public async Task<JsonResult> CalculateIndexesResult(string rut)
         {
-            var gapModel = await CalculateGap(rut);
+            var gapModel = await CalculateIndexes(rut);
             var data = new { status = "ok", result = gapModel };
             return new JsonResult(data);
         }
@@ -247,23 +248,33 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return planDefList;
         }
 
-        private async Task<GapModel> CalculateGap(string rut)
+
+        /// <summary>
+        /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        private async Task<IndexModel> CalculateIndexes(string rut)
         {
             List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(rut);
             var defPlansSessionList = HttpContext.Session.GetString("defPlansList");
             var defPlansList = new List<PlanDefinitivolModel>();
             defPlansList = JsonConvert.DeserializeObject<List<PlanDefinitivolModel>>(defPlansSessionList);
+            BillingStatus billingStatus = BillingStatus.None;
 
             decimal fixedGap = 0; //Gap fijo
             decimal billingGap = 0; //Gap de facturacion
             decimal arpuProm = 0; // ARPUPROM
             decimal tmmSumatory = 0; // TMM+Prestacion
             decimal defTmmSumatory = 0;  //TMM de planes sugeridos
+            decimal tmmSinIva = 0; //TMM sin iva info actual
+            decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
 
             foreach (var plan in plansList)
             {
                 arpuProm += plan.ArpuProm != null ? (decimal)plan.ArpuProm : 0;
                 tmmSumatory += plan.TmmPrestacion != null ? (decimal)plan.TmmPrestacion : 0;
+                tmmSinIva += plan.TmmSinIva != null ? (decimal)plan.TmmSinIva : 0;
             }
 
             foreach (var defPlan in defPlansList)
@@ -271,11 +282,28 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 defTmmSumatory += defPlan.TMM_s_iva;
             }
 
+            billingDifference = tmmSinIva - defTmmSumatory;
+
+            if (billingDifference > 0)
+            {
+                billingStatus = BillingStatus.Lower;
+            }
+            if (billingDifference < 0)
+            {
+                billingStatus = BillingStatus.Higher;
+            } 
+            if(billingDifference == 0)
+            {
+                billingStatus = BillingStatus.Equal;
+            }
+
             billingGap = defTmmSumatory - arpuProm;
             fixedGap = defTmmSumatory - tmmSumatory;
 
-            var gapModel = new GapModel { BillingGap = billingGap, FixedGap = fixedGap };
+            var gapModel = new IndexModel { BillingGap = billingGap, FixedGap = fixedGap, BillingStatus = billingStatus };
             return gapModel;
         }
+        
+
     }
 }
