@@ -2,7 +2,8 @@
 var gbPlanToEditRut = "";
 var defPlansList;
 //var totalDefPlansTmm;
-$(document).ready(function () {
+$(document).ready(function () { 
+
 
     $("#clientRutBtn").prop('disabled', true);
     $('#clientRutTxt1').keyup(function () {
@@ -74,19 +75,19 @@ function loadDefinitivePlans(planList) {
             var plan = planList[i];
             totalTmm += plan.tmM_s_iva;
             totalBono += plan.bono;
-            //  bono = plan.bono / 1024;
+              bono = plan.bono / 1024;
 
             if (plan.roaming.toString().toLowerCase() !== "no") {
                 roamingCount++;
-            }
+            }           
 
 
             var element = "";
             element += "<tr>";
             element += "<td>" + plan.recomendadorId + "</td>";
             element += "<td>" + plan.plan + "</td>";
-            element += "<td>" + "$" + plan.tmM_s_iva + "</td>";
-            element += "<td>" + plan.bono + " Gb</td>";
+            element += "<td>" + "$" + plan.tmmString + "</td>";
+            element += "<td>" + bono + " Gb</td>";
             element += "<td>" + plan.roaming + "</td>";
 
             element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ', ' + gbPlanToEditRut + ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
@@ -95,7 +96,8 @@ function loadDefinitivePlans(planList) {
         }
 
 
-        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + totalTmm + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
+
+        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + formatNumberStr(totalTmm)  + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
         calculatePayBack();
@@ -230,11 +232,6 @@ function calculatePayBack() {
     });
 }
 
-function formatNumber(n) {
-    n = String(n).replace(/\D/g, "");
-    return n === '' ? n : Number(n).toLocaleString();
-}
-
 //logica gaps
 
 function calculateGaps(val) {
@@ -264,9 +261,34 @@ function calculateGaps(val) {
                         $("#divbillingStatus").append(lowerBillingDiv);    
                         break;
                 }
-              //  <span class='spanSatus'> Facturación superior </span>
+              
             }
         }
     });
 }
 
+
+function formatNumber(n) {
+    n = String(n).replace(/\D/g, "");
+    return n === '' ? n : Number(n).toLocaleString();
+}
+
+
+
+function formatDecimals(n) {
+    n = String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.');
+    return n;
+}
+
+
+function formatNumberStr(nStr) {
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? ',' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+    }
+    return x1 + x2;
+}

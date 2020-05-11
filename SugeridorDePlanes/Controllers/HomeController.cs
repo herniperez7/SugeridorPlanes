@@ -19,16 +19,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     {
         private IManejoUsuario usuario;
         private readonly IMapper _mapper;
-        private ITelefonicaService telefonicaApi;
-        private List<SugeridorClientesModel> _clientList;
-        private List<EquipoMovil> _moviles;
+        private ITelefonicaService _telefonicaApi;     
+        private List<EquipoMovil> _moviles;       
 
         public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
         {
             usuario = usuarioInterface;
-            telefonicaApi = telefonicaService;
-            _mapper = mapper;
-            _clientList = new List<SugeridorClientesModel>();
+            _telefonicaApi = telefonicaService;
+            _mapper = mapper;                 
 
             //provisorio
             PopulateMoviles();
@@ -49,29 +47,24 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var clientList = await telefonicaApi.GetClientes();
+            var clientList = await _telefonicaApi.GetClientes();
 
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
-            _clientList = clientsModel;
+     
             ViewData["clientList"] = clientsModel;
-            var planOfert = await telefonicaApi.GetActualPlansAsync();
+            var planOfert = await _telefonicaApi.GetActualPlansAsync();
             List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
-
+      
             ViewData["movileDevices"] = _moviles;
             HttpContext.Session.SetString("movilList", string.Empty);
             ViewData["planOfertList"] = planesOfertList;
 
-            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-            var defPlansList = UpdateDefinitivePlanList(plansList);
-            ViewData["planDefList"] = defPlansList;
-
-
-            var jsonPlasList = JsonConvert.SerializeObject(defPlansList);
-            HttpContext.Session.SetString("defPlansList", jsonPlasList);
-            var gaps = await CalculateIndexes(clientsModel[0].Documento);
-            ViewData["Indexes"] = gaps;
-
+            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
+            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);            
+            ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
+          
+            var indexes =  CalculateIndexes(clientsModel[0].Documento);
+            ViewData["Indexes"] = indexes;
 
             return View("../Home/Index", planMapped);
         }
@@ -79,40 +72,30 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowPlans(string rut)
         {
+            var clientList = await _telefonicaApi.GetClientes();
+            var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
+            var planOfert = await _telefonicaApi.GetActualPlansAsync();
+            HttpContext.Session.SetString("movilList", string.Empty);
+            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);               
+            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);        
 
-            var clientList = await telefonicaApi.GetClientes();
-            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
+            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            var indexes = CalculateIndexes(rut);
+            ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
+            ViewData["selectedRut"] = rut;
+            ViewData["planOfertList"] = planesOfertList;            
+            ViewData["Indexes"] = indexes;
             ViewData["clientList"] = clientsModel;
             ViewData["movileDevices"] = _moviles;
-            HttpContext.Session.SetString("movilList", string.Empty);
-
-            var planOfert = await telefonicaApi.GetActualPlansAsync();
-            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
-            ViewData["planOfertList"] = planesOfertList;
-
-            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(rut);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-            var defPlansList = UpdateDefinitivePlanList(plansList);
-
-            //Se guarda en sesion la lista planes definitivos para reutilizarla e ir actualizandola a medida que se cambian los planes
-            var jsonPlasList = JsonConvert.SerializeObject(defPlansList);
-            HttpContext.Session.SetString("defPlansList", jsonPlasList);
-
-            ViewData["planDefList"] = defPlansList;
-            ViewData["selectedRut"] = rut;
-
-            var gaps = await CalculateIndexes(rut);
-            ViewData["Indexes"] = gaps;
 
             return View("../Home/Index", planMapped);
         }        
 
         public JsonResult CalculatePayback()
         {
-            var movilSessionList = HttpContext.Session.GetString("movilList");
-            var defPlansSessionList = HttpContext.Session.GetString("defPlansList");
+            var movilSessionList = HttpContext.Session.GetString("movilList");            
             var movilDeviceList = new List<EquipoMovil>();
-            var defPlansList = new List<PlanDefinitivolModel>();
+            var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
             decimal payback = 0;
             decimal totalTmm = 0;
             decimal subsidio = 0;
@@ -125,18 +108,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     subsidio += movil.Precio;
                 }
             }
-            if(defPlansSessionList != null)
-            {
-                defPlansList = JsonConvert.DeserializeObject<List<PlanDefinitivolModel>>(defPlansSessionList);
+            
                 foreach (var plan in defPlansList)
                 {
                     totalTmm += plan.TMM_s_iva;
                 }
 
                 payback = subsidio / totalTmm;
-                payback = decimal.Round(payback);
-            }          
-            
+                payback = decimal.Round(payback);          
 
             var data = new { status = "ok", result = payback };
             return Json(data);
@@ -159,7 +138,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             if (!string.IsNullOrEmpty(movilSessionList))
             {
                 movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-
             }
            
             var data = new { status = "ok", result = movilList };
@@ -202,18 +180,19 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         [HttpPost]
         public JsonResult UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
-        {
-            var sessionPLansStr = HttpContext.Session.GetString("defPlansList");
-            var defPlansList = JsonConvert.DeserializeObject<List<PlanDefinitivolModel>>(sessionPLansStr);
+        {           
+            var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
 
             //provisorio, cambiar logica
             defPlansList = defPlansList.Select(x =>
             new PlanDefinitivolModel
             {
+                RecomendadorId = x.RecomendadorId,
                 Plan = x.Plan,
-                Bono = x.Bono / 1024,
+                Bono = x.Bono ,
                 Roaming = x.Roaming,
-                TMM_s_iva = x.TMM_s_iva
+                TMM_s_iva = x.TMM_s_iva,
+                TmmString = x.TMM_s_iva.ToString("n")
             }).ToList();
 
             //
@@ -225,41 +204,30 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 planDef.Bono = long.Parse(updatePlan.Bono);
                 planDef.Roaming = updatePlan.Roaming;
                 planDef.TMM_s_iva = decimal.Parse(updatePlan.TMM);
+                planDef.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
             }
-            HttpContext.Session.SetString("defPlansList", JsonConvert.SerializeObject(defPlansList));
+
+            _telefonicaApi.UpdateCurrentDefinitivePlans(defPlansList);  
             return new JsonResult(defPlansList);
         }        
 
-        public async Task<JsonResult> CalculateIndexesResult(string rut)
+        public JsonResult CalculateIndexesResult(string rut)
         {
-            var gapModel = await CalculateIndexes(rut);
+            var gapModel =  CalculateIndexes(rut);
             var data = new { status = "ok", result = gapModel };
             return new JsonResult(data);
         }
-
-        private List<PlanDefinitivolModel> UpdateDefinitivePlanList(List<RecomendadorB2b> planList)
-        {
-            var planDefList = new List<PlanDefinitivolModel>();
-            foreach (RecomendadorB2b reco in planList)
-            {
-                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
-                planDefList.Add(planDef);
-            }
-            return planDefList;
-        }
-
 
         /// <summary>
         /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
         /// </summary>
         /// <param name="rut"></param>
         /// <returns></returns>
-        private async Task<IndexModel> CalculateIndexes(string rut)
-        {
-            List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlansByRut(rut);
-            var defPlansSessionList = HttpContext.Session.GetString("defPlansList");
-            var defPlansList = new List<PlanDefinitivolModel>();
-            defPlansList = JsonConvert.DeserializeObject<List<PlanDefinitivolModel>>(defPlansSessionList);
+        private IndexModel CalculateIndexes(string rut)
+        {          
+
+            List<RecomendadorB2b> plansList = _telefonicaApi.GetCurrentPlans();          
+            var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
             BillingStatus billingStatus = BillingStatus.None;
 
             decimal fixedGap = 0; //Gap fijo

@@ -99,14 +99,14 @@
                     <legend>Info actual de cliente</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
-                            <thead class="thead-dark">
-                                <tr>
+                            <thead class="thead-dark" >
+                                <tr style="height:60px;">
                                     <th scope="col">#</th>
                                     <th scope="col">Número</th>
                                     <th scope="col">Plan</th>
                                     <th scope="col">TMM (sin iva)</th>
                                     <th scope="col">Prestación codigo</th>
-                                    <th scope="col">TMM Prestación (sin iva)</th>
+                                    <th style="word-wrap: break-word" >TMM Prestación (sin iva)</th>
                                     <th scope="col">Promedio facturado</th>
                                     <th scope="col">Consumo promedio de datos</th>
                                     <th scope="col">MOU OFFNET</th>
@@ -257,7 +257,7 @@
                                     }
                                     <tr>
                                         <td class="total-column" colspan="3">
-                                            $ @totalTmm
+                                            $ @totalTmm.ToString("n")
                                         </td>
                                         <td class="total-column">
                                             @totalBono Gb
@@ -319,7 +319,7 @@
                                         <tr>
                                             <td>@plan.value.RecomendadorId</td>
                                             <td>@plan.value.Plan</td>
-                                            <td>@plan.value.TMM_s_iva.ToString("n")</td>
+                                            <td>$ @plan.value.TMM_s_iva.ToString("n")</td>
                                             <td>@bonoGb Gb</td>
                                             <td>@plan.value.Roaming</td>
                                             <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
@@ -327,7 +327,7 @@
                                     }
                                     <tr>
                                         <td class="total-column" colspan="3">
-                                            $ @totalTmm
+                                            $ @totalTmm.ToString("n")
                                         </td>
                                         <td class="total-column">
                                             @totalBono Gb
@@ -437,14 +437,14 @@
 
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
 
-                           
+
                             <div id="divbillingStatus">
                                 @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
                                 {
                                     <div class="superiorBillingMain">
-                                        <div class="superiorBillingChild" >
+                                        <div class="superiorBillingChild">
                                             <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
-                                            
+
                                         </div>
                                     </div>
                                 }
@@ -454,7 +454,7 @@
                                     <div class="lowerBillingMain">
                                         <div class="lowerBillingChild">
                                             <div style="font-weight:bold; color:#FF0000">
-                                                <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>                                                
+                                                <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
                                             </div>
                                         </div>
                                     </div>
@@ -464,7 +464,7 @@
                                     <div class="equalBillingMain">
                                         <div class="equalBillingMainChild">
                                             <div style="font-weight:bold; color:#FFD200">
-                                                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>                                               
+                                                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
                                             </div>
                                         </div>
                                     </div>
@@ -479,13 +479,23 @@
                             </div>
                         </div>
 
-                            <div class="col-lg-4">
+
+
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+                       
+                            <div style="display: table-cell;vertical-align: middle;text-align: center;">
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn">Exportar Pdf</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn">Exportar Propuesta</button>
                             </div>
+
+               
+
                         </div>
 
-                </fieldset>
+                        
+                    </div>
+
+</fieldset>
             </div>
 
         </div>

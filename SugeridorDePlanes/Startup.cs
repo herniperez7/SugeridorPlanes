@@ -38,7 +38,7 @@ namespace Telefonica.SugeridorDePlanes
             }, typeof(Startup));
 
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
-            services.AddScoped<ITelefonicaService, TelefonicaService>();
+            services.AddSingleton<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client(Configuration["ClientId"]));
 
             services.AddSession();

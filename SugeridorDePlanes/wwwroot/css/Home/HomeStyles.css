@@ -35,12 +35,12 @@ fieldset {
 
 table {
     border-collapse: collapse;
-    width: 100%;
+   table-layout: auto;
 }
 
 th, td {
     padding: 8px 16px;
-    max-width: 180px;
+   
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
