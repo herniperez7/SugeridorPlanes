@@ -75,7 +75,7 @@ function loadDefinitivePlans(planList) {
             var plan = planList[i];
             totalTmm += plan.tmM_s_iva;
             totalBono += plan.bono;
-              bono = plan.bono / 1024;
+              bono = plan.bono;
 
             if (plan.roaming.toString().toLowerCase() !== "no") {
                 roamingCount++;

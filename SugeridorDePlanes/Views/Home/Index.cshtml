@@ -121,12 +121,15 @@
                                     decimal totalConsumo = 0;
                                     decimal mouOffNet = 0;
                                     int roamerCount = 0;
+                                    decimal bonoGbPlan = 0;
                                     foreach (var plan in Model.Select((value) => new { value }))
                                     {
                                         totalTmm += (decimal)plan.value.TmmSinIva;
                                         totalApruProm += (decimal)plan.value.ArpuProm;
-                                        totalConsumo += (decimal)@plan.value.MbTotalProm;
+
                                         mouOffNet += (decimal)@plan.value.MinutosVozOffProm;
+                                        bonoGbPlan = (decimal)@plan.value.MbTotalProm / 1024;
+                                        totalConsumo += bonoGbPlan;
 
                                         if (plan.value.Roamer.ToLower() == "roamer")
                                         {
@@ -141,7 +144,7 @@
                                             <td>@plan.value.Prestacion1</td>
                                             <td>$ @plan.value.TmmPrestacionSinIva?.ToString("n")</td>
                                             <td>$ @plan.value.ArpuProm?.ToString("n")</td>
-                                            <td>@plan.value.MbTotalProm Gb</td>
+                                            <td>@Decimal.Round(@bonoGbPlan) Gb</td>
                                             <td>@plan.value.MinutosVozOffProm?.ToString("n")</td>
 
                                             @if (plan.value.Roamer.ToLower() == "roamer")
@@ -177,7 +180,7 @@
                                             $ @totalApruProm.ToString("n")
                                         </td>
                                         <td class="total-column">
-                                            @totalConsumo Gb
+                                            @Decimal.Round(@totalConsumo) Gb
                                         </td>
                                         <td class="total-column">
                                             @mouOffNet.ToString("n")
@@ -308,8 +311,8 @@
                                     @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
                                     {
                                         totalTmm += (decimal)plan.value.TMM_s_iva;
-                                        totalBono += (decimal)plan.value.Bono / 1024;
-                                        var bonoGb = plan.value.Bono / 1024;
+                                        totalBono += (decimal)plan.value.Bono ;
+                                        var bonoGb = plan.value.Bono ;
 
                                         if (plan.value.Roaming.ToLower() != "no")
                                         {

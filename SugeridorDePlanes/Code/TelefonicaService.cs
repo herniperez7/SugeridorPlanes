@@ -119,7 +119,9 @@ namespace Telefonica.SugeridorDePlanes.Code
             _curretDefinitvePlans = new List<PlanDefinitivolModel>();
             foreach (RecomendadorB2b reco in planList)
             {
-                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
+                var bono1024 = Convert.ToInt64(reco.BonoPlanSugerido) / 1024;
+
+                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = bono1024, Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
                 _curretDefinitvePlans.Add(planDef);
             }            
         }
@@ -130,6 +132,8 @@ namespace Telefonica.SugeridorDePlanes.Code
             _curretDefinitvePlans = new List<PlanDefinitivolModel>();
             foreach (RecomendadorB2b reco in planList)
             {
+                //var bono1024 = Convert.ToInt64(reco.BonoPlanSugerido) / 1024;
+
                 PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
                 _curretDefinitvePlans.Add(planDef);
             }
