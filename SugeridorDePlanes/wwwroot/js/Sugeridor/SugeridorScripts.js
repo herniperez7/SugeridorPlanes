@@ -1,9 +1,17 @@
 ﻿var gbPlanToEdit;
 var gbPlanToEditRut = "";
 var defPlansList;
-//var totalDefPlansTmm;
-$(document).ready(function () { 
+var devicesAmount = 0;
+var currentDeviceAmount = 0;
+var devicesCount = 0;
+var billingGap = 0;
 
+$(document).ready(function () {
+
+    $("#calculateSubsidyTxt").mask("#.##0", { reverse: true });
+    $("#calculateIncomeTxt").mask("#.##0", { reverse: true });
+    //unfocusInput();
+    //focusInput();
 
     $("#clientRutBtn").prop('disabled', true);
     $('#clientRutTxt1').keyup(function () {
@@ -75,11 +83,11 @@ function loadDefinitivePlans(planList) {
             var plan = planList[i];
             totalTmm += plan.tmM_s_iva;
             totalBono += plan.bono;
-              bono = plan.bono;
+            bono = plan.bono;
 
             if (plan.roaming.toString().toLowerCase() !== "no") {
                 roamingCount++;
-            }           
+            }
 
 
             var element = "";
@@ -97,9 +105,10 @@ function loadDefinitivePlans(planList) {
 
 
 
-        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + formatNumberStr(totalTmm)  + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
+        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + formatNumberStr(totalTmm) + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
+        $("#incomeDivValue").html(totalTmm);
         calculatePayBack();
     }
 }
@@ -122,7 +131,7 @@ function getMovileList() {
 }
 
 
-function populateBenefitInput() {
+function confirmDevices() {
     var total = 0;
     $.ajax({
         url: gbGetMovilListUrl,
@@ -131,11 +140,13 @@ function populateBenefitInput() {
                 $.each(data.result, function (key, value) {
                     total += value.precio;
                 });
-                $("#subsidioTxt").val(formatNumber(total));
+                currentDeviceAmount = total;
+                var inputValue = "$ " + formatNumber(total);
+                $("#subsidioTxt").val(inputValue);
+                calculatePayBack();
             }
         }
-    });
-
+    });    
 }
 
 
@@ -168,50 +179,54 @@ function movileChange() {
 
 function AddDevice() {
 
-
-
-    var val = $("#movilesDdl").val();
-    var subsidio = parseInt($("#subsidioTxt").val());
+    var val = $("#movilesDdl").val();     
 
     $.ajax({
         type: "POST",
         url: gbAddMovilDecivesUrl + '?code=' + val,
         success: function (data) {
             if (data.status == "ok") {
-                var precio = formatNumber(data.result.precio);
-                var trashIcon = '<svg  class="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">' +
-                    ' <path fill-rule="evenodd" d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" clip-rule="evenodd" />' +
-                    ' </svg>';
-
+                $("#movilTableBody tr:last").remove();
+                devicesCount++;
+                devicesAmount += data.result.precio;
+                var precio = formatNumber(data.result.precio);               
+                var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
                 var tr = "<tr id='row" + data.result.codigo + "' ><th scope='row'>" + data.result.marca + "</th><td>$" + precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
                 $("#movilTableBody").append(tr);
 
-                //se agrega el calculo del payback
-                calculatePayBack();
-                populateBenefitInput();
+                
+
+                var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumber(devicesAmount) +"</b><td></td> </tr>"
+                $("#movilTableBody").append(totalRow);
+             
             }
         }
     });
 }
 
-function deleteRow(val) {
 
-    var subsidio = parseInt($("#subsidioTxt").val());
+
+function deleteRow(val) {    
 
     $.ajax({
         url: gbDeleteMovilUrl + '?code=' + val,
         success: function (data) {
             if (data.status == "ok") {
-                if (data.result) {
-                    var total = subsidio - parseInt(data.result.precio);
-                    $("#subsidioTxt").val(total);
+                $("#movilTableBody tr:last").remove();
+                if (data.result) {                 
                     var rowId = "row" + val;
                     $("#" + rowId).remove();
-                }
+                    devicesCount--;
+                    devicesAmount -= data.result.precio;
+                    var totalRow = "<tr id='totalRow'><td>" + devicesCount + "</td><td>$ " + formatNumber(devicesAmount) + "</td><td></td> </tr>"
+                    $("#movilTableBody").append(totalRow);
 
-                //se agrega el calculo del payback
-                calculatePayBack();
-                populateBenefitInput();
+                    if (devicesCount == 0) {
+                        $("#movilTableBody tr").remove();
+                    }
+                }
+                
+                
             }
         }
     });
@@ -240,28 +255,29 @@ function calculateGaps(val) {
         url: gbCalculateGap + '?rut=' + val,
         success: function (data) {
             if (data.status == "ok") {
-               
-                $("#gapValue").html(data.result.fixedGap);
+
+                $("#gapValue").html(data.result.fixedGap);                
                 $("#gapBilingValue").html(data.result.billingGap);
+                billingGap = data.result.billingGap;
 
                 $("#divbillingStatus").html("");
 
                 var superiorBillingDiv = "<div class='superiorBillingMain'><div class='superiorBillingChild'><i class='fa fa-check-circle fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación superior </span></i></div></div>";
-                var lowerBillingDiv = "<div class='lowerBillingMain'><div class='lowerBillingChild' ><div style='font-weight:bold; color:#FF0000'><i class='fa fa-times fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación inferior </span></i></div></div></div>";        
+                var lowerBillingDiv = "<div class='lowerBillingMain'><div class='lowerBillingChild' ><div style='font-weight:bold; color:#FF0000'><i class='fa fa-times fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación inferior </span></i></div></div></div>";
                 var equalBillingDiv = "<div class='equalBillingMain'><div class='equalBillingMainChild'><div style='font-weight:bold; color:#FFD200'><i class='fa fa-exclamation-circle fa-lg' aria-hidden='true'><span class='spanSatus'> Misma facturación </span></i></div></div></div>";
 
                 switch (data.result.billingStatus.toString()) {
-                    case "0":                       
+                    case "0":
                         $("#divbillingStatus").append(superiorBillingDiv);
                         break;
-                    case "1":                        
+                    case "1":
                         $("#divbillingStatus").append(equalBillingDiv);
                         break;
-                    case "2":                       
-                        $("#divbillingStatus").append(lowerBillingDiv);    
+                    case "2":
+                        $("#divbillingStatus").append(lowerBillingDiv);
                         break;
                 }
-              
+
             }
         }
     });
@@ -275,10 +291,6 @@ function formatNumber(n) {
 
 
 
-function formatDecimals(n) {
-    n = String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.');
-    return n;
-}
 
 
 function formatNumberStr(nStr) {
@@ -292,3 +304,137 @@ function formatNumberStr(nStr) {
     }
     return x1 + x2;
 }
+
+
+function alternateBugdetFields(val) {
+    if (val == 1) {
+        $("#IndexesDiv").hide();
+        $("#calculateDiv").show();
+    } else {
+        $("#IndexesDiv").show();
+        $("#calculateDiv").hide();
+    }
+
+}
+
+function calculateIndexes(val) {
+    
+    var $subsidy = $("#calculateSubsidyTxt");
+    var $payback = $("#calculatePaybackTxt");
+    var $income = $("#calculateIncomeTxt");
+
+    var subsidyValue = cleanFormat($subsidy.val());
+    var paybackValue = $payback.val();
+    var incomeValue = cleanFormat($income.val());
+
+    if (val == 1) {
+        var subsidy = correctFormatInverse(incomeValue) / correctFormatInverse(paybackValue);
+        subsidy = correctFormat(subsidy.toFixed(1));
+        $subsidy.val(formatNumberStr(subsidy));
+
+    } else if (val == 2) {
+        var payback = correctFormatInverse(subsidyValue) / correctFormatInverse(incomeValue);
+        payback = correctFormat(payback.toFixed(2));
+        $payback.val(payback);
+    } else {
+        var income = correctFormatInverse(subsidyValue) / correctFormatInverse(paybackValue);
+        income = correctFormat(income.toFixed(1));
+        $income.val(formatNumberStr(income));  
+        calculateStatus(income);
+    }
+
+    $("#calulatedSubsidy").html("$ " + $subsidy.val());
+    $("#calulatedPayBack").html($payback.val());
+    $("#calulatedIncome").html("$ " + $income.val());
+}
+
+//metodo para inportar los valores actuales a los inputs de calculos
+async function importValues() {
+    var $incomes = $("#incomeDivValue").text();
+    var $subsidy = currentDeviceAmount;
+    var $payback = $("#paybackTxt").val();
+    var incomeInt = parseInt($incomes);   
+    var regex = /[.\s]/g;
+
+    $("#calculateSubsidyTxt").val(formatNumber($subsidy));
+    $("#calculatePaybackTxt").val($payback.replace(regex, ''));
+    //$("#calculateIncomeTxt").val($incomes.replace(regex, ''));
+    $("#calculateIncomeTxt").val(formatNumberStr($incomes));
+}
+
+function resetValues() { 
+
+    $("#calculateSubsidyTxt").val("");
+    $("#calculatePaybackTxt").val("");
+    $("#calculateIncomeTxt").val("");
+
+}
+
+function unfocusInput() {
+    $("#calculateSubsidyTxt").focusout(function () {
+        var $subsidyVal = $("#calculateSubsidyTxt").val();
+        $subsidyVal = formatNumberStr($subsidyVal);       
+        $("#calculateSubsidyTxt").val($subsidyVal);
+    });
+}
+
+function focusInput() {
+    $("#calculateSubsidyTxt").focus(function () {
+        var $subsidyVal = $("#calculateSubsidyTxt").val();
+        var regex = /[.\s]/g;
+        $subsidyVal = $subsidyVal.replace(regex, '');    
+        $("#calculateSubsidyTxt").val($subsidyVal);
+    });
+}
+
+function cleanFormat(val) {
+    var regex = /[.\s]/g;   
+    val = val.replace(regex, '');
+    return val;
+}
+
+
+//funcion para cambiar el punto por coma
+function correctFormat(val) {
+    var regex = /[.\s]/g;
+    val = val.replace(regex, ',');
+    return val;
+}
+
+//funcion para cambiar una compa por un punto
+function correctFormatInverse(val) {
+    var regex = /[,\s]/g;
+    val = val.replace(regex, '.');
+    return val;
+}
+
+
+//setea el status del fieldet de calculo de indices
+function calculateStatus(val) {    
+
+    var billingAmout = $("#billingDivValue").text();
+    var billingGap = parseInt(val) - parseInt(billingAmout);
+   
+
+    var $divSatus = $("#divClaculatedBillingStatus");
+    $divSatus.html("");
+    var superiorBillingDiv = "<div class='superiorBillingMain'><div class='superiorBillingChild'><i class='fa fa-check-circle fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación superior </span></i></div></div>";
+    var lowerBillingDiv = "<div class='lowerBillingMain'><div class='lowerBillingChild' ><div style='font-weight:bold; color:#FF0000'><i class='fa fa-times fa-lg' aria-hidden='true'><span class='spanSatus'> Facturación inferior </span></i></div></div></div>";
+    var equalBillingDiv = "<div class='equalBillingMain'><div class='equalBillingMainChild'><div style='font-weight:bold; color:#FFD200'><i class='fa fa-exclamation-circle fa-lg' aria-hidden='true'><span class='spanSatus'> Misma facturación </span></i></div></div></div>";
+
+    switch (true) {
+        case billingGap > 0:
+            $("#divClaculatedBillingStatus").append(superiorBillingDiv);
+            break;
+        case billingGap == 0:
+            $("#divClaculatedBillingStatus").append(equalBillingDiv);
+            break;
+        case billingGap < 0:
+            $("#divClaculatedBillingStatus").append(lowerBillingDiv);
+            break;
+    }
+
+}
+
+
+

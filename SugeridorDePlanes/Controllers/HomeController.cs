@@ -217,6 +217,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var data = new { status = "ok", result = gapModel };
             return new JsonResult(data);
         }
+       
 
         /// <summary>
         /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
@@ -236,7 +237,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             decimal tmmSumatory = 0; // TMM+Prestacion
             decimal defTmmSumatory = 0;  //TMM de planes sugeridos
             decimal tmmSinIva = 0; //TMM sin iva info actual
-            decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
+         //   decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
 
             foreach (var plan in plansList)
             {
@@ -250,23 +251,23 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 defTmmSumatory += defPlan.TMM_s_iva;
             }
 
-            billingDifference = tmmSinIva - defTmmSumatory;
-
-            if (billingDifference > 0)
-            {
-                billingStatus = BillingStatus.Lower;
-            }
-            if (billingDifference < 0)
-            {
-                billingStatus = BillingStatus.Higher;
-            } 
-            if(billingDifference == 0)
-            {
-                billingStatus = BillingStatus.Equal;
-            }
+           // billingDifference = arpuProm - tmmSinIva;
 
             billingGap = defTmmSumatory - arpuProm;
             fixedGap = defTmmSumatory - tmmSumatory;
+
+            if (billingGap > 0)
+            {
+                billingStatus = BillingStatus.Higher;
+            }
+            if (billingGap < 0)
+            {
+                billingStatus = BillingStatus.Lower;
+            } 
+            if(billingGap == 0)
+            {
+                billingStatus = BillingStatus.Equal;
+            }           
 
             var gapModel = new IndexModel { BillingGap = billingGap, FixedGap = fixedGap, BillingStatus = billingStatus };
             return gapModel;

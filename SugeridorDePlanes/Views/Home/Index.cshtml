@@ -18,7 +18,8 @@
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
     var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
-
+    decimal incomeAmount = 0;
+    decimal billingAmount = 0;
 
 }
 
@@ -27,6 +28,8 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
 </head>
 <body>
     <script>
@@ -37,6 +40,8 @@
         var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Home")";
         var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
         var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
+        var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
+        
 
     </script>
 
@@ -99,14 +104,14 @@
                     <legend>Info actual de cliente</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
-                            <thead class="thead-dark" >
+                            <thead class="thead-dark">
                                 <tr style="height:60px;">
                                     <th scope="col">#</th>
                                     <th scope="col">Número</th>
                                     <th scope="col">Plan</th>
                                     <th scope="col">TMM (sin iva)</th>
                                     <th scope="col">Prestación codigo</th>
-                                    <th style="word-wrap: break-word" >TMM Prestación (sin iva)</th>
+                                    <th style="word-wrap: break-word">TMM Prestación (sin iva)</th>
                                     <th scope="col">Promedio facturado</th>
                                     <th scope="col">Consumo promedio de datos</th>
                                     <th scope="col">MOU OFFNET</th>
@@ -116,8 +121,7 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    decimal totalTmm = 0;
-                                    decimal totalApruProm = 0;
+                                    decimal totalTmm = 0;                                  
                                     decimal totalConsumo = 0;
                                     decimal mouOffNet = 0;
                                     int roamerCount = 0;
@@ -125,7 +129,7 @@
                                     foreach (var plan in Model.Select((value) => new { value }))
                                     {
                                         totalTmm += (decimal)plan.value.TmmSinIva;
-                                        totalApruProm += (decimal)plan.value.ArpuProm;
+                                        billingAmount += (decimal)plan.value.ArpuProm;
 
                                         mouOffNet += (decimal)@plan.value.MinutosVozOffProm;
                                         bonoGbPlan = (decimal)@plan.value.MbTotalProm / 1024;
@@ -177,7 +181,7 @@
                                         </td>
                                         <td class="total-column" colspan="2"></td>
                                         <td class="total-column">
-                                            $ @totalApruProm.ToString("n")
+                                            $ @billingAmount.ToString("n")
                                         </td>
                                         <td class="total-column">
                                             @Decimal.Round(@totalConsumo) Gb
@@ -305,14 +309,14 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    decimal totalTmm = 0;
+                                   
                                     decimal totalBono = 0;
                                     int roamingCount = 0;
                                     @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
-                                    {
-                                        totalTmm += (decimal)plan.value.TMM_s_iva;
-                                        totalBono += (decimal)plan.value.Bono ;
-                                        var bonoGb = plan.value.Bono ;
+                                    {                                       
+                                        incomeAmount += (decimal)plan.value.TMM_s_iva;
+                                        totalBono += (decimal)plan.value.Bono;
+                                        var bonoGb = plan.value.Bono;
 
                                         if (plan.value.Roaming.ToLower() != "no")
                                         {
@@ -329,8 +333,8 @@
                                         </tr>
                                     }
                                     <tr>
-                                        <td class="total-column" colspan="3">
-                                            $ @totalTmm.ToString("n")
+                                        <td id="defPlanIncomeTr" class="total-column" colspan="3">
+                                            $ @incomeAmount.ToString("n")
                                         </td>
                                         <td class="total-column">
                                             @totalBono Gb
@@ -367,7 +371,7 @@
 
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
-                                <select id="movilesDdl" class="custom-select" onchange="movileChange()">
+                                <select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}"   onblur="this.size=0;">
                                     <option value="0">Seleccionar</option>
                                     @foreach (var item in movileDevices)
                                     {
@@ -397,14 +401,15 @@
                                             <th scope="col">Borrar</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="movilTableBody">
+                                    <tbody id="movilTableBody" style="overflow-y:auto; height:150px" >
+                                        
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div style="display:inline; padding-left: 20px">
                             <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice()" disabled>Agregar</button>
-                            <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="modificarEquipoBtn">Modificar</button>
+                            <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="confirmDeviceBtn" onclick="confirmDevices()" >Confirmar</button>
 
                         </div>
                     </div>
@@ -414,7 +419,7 @@
 
             </div>
 
-            <div class="col-lg-7">
+            <div class="col-lg-7" style="display:block" id="IndexesDiv">
                 <fieldset>
                     <legend>Resumen</legend>
                     <div class="row" style="height: 250px">
@@ -428,7 +433,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Payback</span>
                                 </div>
-                                <input type="text" id="paybackTxt" class="form-control" disabled aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" id="paybackTxt" class="form-control" disabled value="0" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Pago de equipos</span>
                                 </div>
@@ -477,33 +482,121 @@
                             <div id="valuesResumen" class="p-2">
                                 <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">@indexModel.FixedGap</label><br />
                                 <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">@indexModel.BillingGap</label><br />
-                                <label><b>Payback: </b></label><label class="ml-1" id="paybackValue">XXX</label><br />
-                                <label><b>Subsidio: </b></label><label class="ml-1" id="subsidioValue">XXX</label>
+                               
+                                <label><b>Subsidio: </b></label><label class="ml-1" id="calulatedSubsidy"></label><br />
+                                <label><b>Payback: </b></label><label class="ml-1" id="calulatedPayBack"></label><br />
+                                <label><b>Ingreso: </b></label><label class="ml-1" id="calulatedIncome"></label><br />
+
                             </div>
                         </div>
 
 
 
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
-                       
+
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn">Exportar Propuesta</button>
                             </div>
 
-               
+
 
                         </div>
 
-                        
-                    </div>
 
-</fieldset>
+                    </div>
+                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
+                        <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
+                    </button>
+                </fieldset>
+
+            </div>
+
+            <div class="col-lg-7" style="display:none" id="calculateDiv">
+                <fieldset>
+                    <legend> Calcular Indices </legend>
+                    <div class="row" style="height: 250px">
+
+                        <div class="col-lg-4">
+                            <div class="ml-3">
+                                <div class="input-group-prepend ">
+                                    <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(1)">Subsidio</button>
+                                </div>
+                                <input type="text" id="calculateSubsidyTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(2)">Payback</button>
+                                </div>
+                                <input type="text" id="calculatePaybackTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(3)">Ingreso</button>
+                                </div>
+                                <input type="text" id="calculateIncomeTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+
+                            <div id="divClaculatedBillingStatus">
+                                @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
+                                {
+                                    <div class="superiorBillingMain">
+                                        <div class="superiorBillingChild">
+                                            <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
+
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (@indexModel.BillingStatus.ToString().Equals("Lower"))
+                                {
+                                    <div class="lowerBillingMain">
+                                        <div class="lowerBillingChild">
+                                            <div style="font-weight:bold; color:#FF0000">
+                                                <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @if (@indexModel.BillingStatus.ToString().Equals("Equal"))
+                                {
+                                    <div class="equalBillingMain">
+                                        <div class="equalBillingMainChild">
+                                            <div style="font-weight:bold; color:#FFD200">
+                                                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div id="valuesResumen" class="p-2">
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">@indexModel.FixedGap</label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">@indexModel.BillingGap</label><br />
+
+                                <div id="incomeDivValue" style="display:none">@incomeAmount</div>
+                                <div id="billingDivValue" style="display:none">@billingAmount</div>
+                            </div>
+                        </div>                      
+
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+                            <div style="display: table-cell;vertical-align: middle;text-align: center;">
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="importValuesBtn" onclick="importValues()">Importar valores</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="resetValuesBtn" onclick="resetValues()">Resetear valores</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(2)">
+                        <img src="@Url.Content("~/img/icons/budgetIcon32x.png")" />
+                    </button>
+                </fieldset>
             </div>
 
         </div>
 
-    </div>
 
     @if (Model != null && Model.Count() > 4)
     {

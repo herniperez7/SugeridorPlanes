@@ -16,8 +16,10 @@ fieldset {
 
 .tableFixHeadDevices {
     overflow-y: auto;
-    height: 150px;
+    height: 200px;
 }
+
+
 
 .tableFixHead {
     overflow-y: auto;
@@ -152,4 +154,9 @@ th {
 
 .spanSatus {
    font-family:Calibri
+}
+
+.calculateButtons{
+    width: 85px;
+    height: 37px;
 }
