@@ -99,16 +99,16 @@
                     <legend>Info actual de cliente</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
-                            <thead class="thead-dark" >
+                            <thead class="thead-dark">
                                 <tr style="height:60px;">
                                     <th scope="col">#</th>
                                     <th scope="col">Número</th>
                                     <th scope="col">Plan</th>
                                     <th scope="col">TMM (sin iva)</th>
                                     <th scope="col">Prestación codigo</th>
-                                    <th style="word-wrap: break-word" >TMM Prestación (sin iva)</th>
+                                    <th class="long-column" >TMM Prestación (sin iva)</th>
                                     <th scope="col">Promedio facturado</th>
-                                    <th scope="col">Consumo promedio de datos</th>
+                                    <th class="long-column" scope="col">Consumo promedio de datos</th>
                                     <th scope="col">MOU OFFNET</th>
                                     <th scope="col">ROAMER</th>
                                 </tr>
@@ -170,7 +170,7 @@
                                     }
 
                                     <tr>
-                                        <td class="total-column" colspan="3"></td>
+                                        <td class="total-column" colspan="3" style="text-align:left;">Totales</td>
 
                                         <td class="total-column">
                                             $ @totalTmm.ToString("n")
@@ -190,13 +190,6 @@
                                         </td>
 
                                     </tr>
-                                    <tr>
-                                        <td class="total-billing-column" colspan="10">
-                                            Facturación máxima: $@Model[0].ArpuRutMax?.ToString("n") (Fecha: @Model[0].FechaArpuRutMax)
-
-                                        </td>
-
-                                    </tr>
 
                                 }
                                 else
@@ -212,9 +205,18 @@
 
                             </tbody>
                         </table>
-                    </div>
-                </fieldset>
 
+                    </div>
+                    @if (!emptyPlans)
+                    {
+                    <p class="total-billing-column">
+                            Facturación máxima: $@Model[0].ArpuRutMax?.ToString("n") (Fecha: @Model[0].FechaArpuRutMax)
+
+                     </p>
+                    }
+                    </fieldset>
+                
+                
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
@@ -225,9 +227,9 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Plan sugerido</th>
-                                    <th scope="col">TMM (sin iva)</th>
-                                    <th scope="col">Datos del bono</th>
+                                    <th class="long-column" scope="col">Plan sugerido</th>
+                                    <th class="long-column" scope="col">TMM (sin iva)</th>
+                                    <th class="long-column" scope="col">Datos del bono</th>
                                     <th scope="col">Roaming</th>
 
 
@@ -258,17 +260,18 @@
                                             <td>@plan.value.RoamingPlanSugerido</td>
                                         </tr>
                                     }
-                                    <tr>
-                                        <td class="total-column" colspan="3">
-                                            $ @totalTmm.ToString("n")
-                                        </td>
-                                        <td class="total-column">
-                                            @totalBono Gb
-                                        </td>
-                                        <td class="total-column">
-                                            @roamingCount
-                                        </td>
-                                    </tr>
+                            <tr>
+                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                <td class="total-column">
+                                    $ @totalTmm.ToString("n")
+                                </td>
+                                <td class="total-column">
+                                    @totalBono Gb
+                                </td>
+                                <td class="total-column">
+                                    @roamingCount
+                                </td>
+                            </tr>
                                 }
                                 else
                                 {
@@ -294,9 +297,9 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Plan sugerido</th>
-                                    <th scope="col">TMM (sin iva)</th>
-                                    <th scope="col">Datos del bono</th>
+                                    <th class="long-column" scope="col">Plan sugerido</th>
+                                    <th class="long-column" scope="col">TMM (sin iva)</th>
+                                    <th class="long-column" scope="col">Datos del bono</th>
                                     <th scope="col">Roaming</th>
                                     <th scope="col">Editar</th>
 
@@ -328,17 +331,21 @@
                                             <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                         </tr>
                                     }
-                                    <tr>
-                                        <td class="total-column" colspan="3">
-                                            $ @totalTmm.ToString("n")
-                                        </td>
-                                        <td class="total-column">
-                                            @totalBono Gb
-                                        </td>
-                                        <td class="total-column">
-                                            @roamingCount
-                                        </td>
-                                    </tr>
+                            <tr>
+                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                <td class="total-column">
+                                    $ @totalTmm.ToString("n")
+                                </td>
+                                <td class="total-column">
+                                    @totalBono Gb
+                                </td>
+                                <td class="total-column">
+                                    @roamingCount
+                                </td>
+                                <td class="total-column">
+
+                                </td>
+                            </tr>
 
                                 }
                                 else
