@@ -1,5 +1,35 @@
 ﻿
-legend {
+nav .input-group-text {
+    background-color: #e9ecef;
+}
+
+.input-group-text {
+   background-color: rgba(0, 169, 224, 0.3);
+}
+
+.table .thead-dark th {
+    border-bottom: 1px solid #454d55;
+    color: #fff;
+    background-color: #00a9e0;
+    vertical-align: middle;
+}
+
+.btn-outline-success:hover {
+    color: #fff;
+    background-color: #5bc500;
+    border-color: #5bc500;
+}
+
+
+.btn-outline-success {
+    color: #5bc500;
+    border-color: #5bc500;
+}
+
+.btn.disabled, .btn:disabled {
+    cursor: not-allowed;
+}
+    legend {
     color: black;
     font-size: 15px;
     width: inherit;
@@ -33,6 +63,7 @@ fieldset {
     .tableFixHead thead th {
         position: sticky;
         top: 0;
+        height: 85px;
     }
 
 table {
@@ -42,7 +73,6 @@ table {
 
 th, td {
     padding: 8px 16px;
-   
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -79,18 +109,33 @@ th {
     padding: 5px;
 }
 
+
+
+#tablaPlanesDefi .thead-dark th {
+    background-color: #5bc500;
+}
+
+#tablaPlanesDefi .total-column {
+    background-color: rgba(91, 197, 0, 0.3);
+}
+
 .total-column {
     text-align: right;
     font-weight: bold;
-    background-color: #AAAAAA;
+    background-color: rgba(0, 169, 224, 0.3);
 }
 
 .total-billing-column {
     text-align: left;
     font-weight: bold;
-    background-color: #AAAAAA;
+    margin: 7px 5px;
 }
 
+.long-column{
+    max-width:110px;
+    text-overflow:unset;
+    white-space:unset;
+}
 #movilTableBody td {
     text-align: center;
 }
