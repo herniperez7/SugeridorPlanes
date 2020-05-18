@@ -20,14 +20,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     {
         private IManejoUsuario usuario;
         private readonly IMapper _mapper;
-        private ITelefonicaService _telefonicaApi;     
-        private List<EquipoMovil> _moviles;       
+        private ITelefonicaService _telefonicaApi;
+        private List<EquipoMovil> _moviles;
 
         public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
         {
             usuario = usuarioInterface;
             _telefonicaApi = telefonicaService;
-            _mapper = mapper;                 
+            _mapper = mapper;
 
             //provisorio
             PopulateMoviles();
@@ -47,24 +47,24 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-            
+
             var clientList = await _telefonicaApi.GetClientes();
 
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
-     
+
             ViewData["clientList"] = clientsModel;
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
             List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
-      
+
             ViewData["movileDevices"] = _moviles;
             HttpContext.Session.SetString("movilList", string.Empty);
             ViewData["planOfertList"] = planesOfertList;
 
             List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);            
+            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-          
-            var indexes =  CalculateIndexes(clientsModel[0].Documento);
+
+            var indexes = CalculateIndexes(clientsModel[0].Documento);
             ViewData["Indexes"] = indexes;
 
             return View("../Home/Index", planMapped);
@@ -73,36 +73,36 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowPlans(string rut)
         {
-            
+
             var clientList = await _telefonicaApi.GetClientes();
             var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
             HttpContext.Session.SetString("movilList", string.Empty);
-            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);               
-            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);        
+            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
+            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOfertaActual>, List<PlanOfertaActualModel>>(planOfert);
 
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
             var indexes = CalculateIndexes(rut);
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
             ViewData["selectedRut"] = rut;
-            ViewData["planOfertList"] = planesOfertList;            
+            ViewData["planOfertList"] = planesOfertList;
             ViewData["Indexes"] = indexes;
             ViewData["clientList"] = clientsModel;
             ViewData["movileDevices"] = _moviles;
 
             return View("../Home/Index", planMapped);
-        }        
+        }
 
         public JsonResult CalculatePayback()
         {
-            var movilSessionList = HttpContext.Session.GetString("movilList");            
+            var movilSessionList = HttpContext.Session.GetString("movilList");
             var movilDeviceList = new List<EquipoMovil>();
             var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
             decimal payback = 0;
             decimal totalTmm = 0;
             decimal subsidio = 0;
 
-            if(!string.IsNullOrEmpty(movilSessionList))
+            if (!string.IsNullOrEmpty(movilSessionList))
             {
                 movilDeviceList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
                 foreach (var movil in movilDeviceList)
@@ -110,23 +110,23 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     subsidio += movil.Precio;
                 }
             }
-            
-                foreach (var plan in defPlansList)
-                {
-                    totalTmm += plan.TMM_s_iva;
-                }
 
-                payback = subsidio / totalTmm;
-                payback = decimal.Round(payback);          
+            foreach (var plan in defPlansList)
+            {
+                totalTmm += plan.TMM_s_iva;
+            }
+
+            payback = subsidio / totalTmm;
+            payback = decimal.Round(payback);
 
             var data = new { status = "ok", result = payback };
             return Json(data);
         }
 
 
-        
+
         public JsonResult GetMovilInfo(string code)
-        {           
+        {
             var movil = _moviles.Where(x => x.Codigo == code).FirstOrDefault();
             var data = new { status = "ok", result = movil };
             return Json(data);
@@ -141,7 +141,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             {
                 movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
             }
-           
+
             var data = new { status = "ok", result = movilList };
             return Json(data);
         }
@@ -167,13 +167,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return Json(data);
         }
 
-     
+
         public JsonResult DeleteMovilFromList(string code)
-        {    
+        {
             var movil = _moviles.Where(x => x.Codigo == code).FirstOrDefault();
             var movilSessionList = HttpContext.Session.GetString("movilList");
             List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-            movilList.RemoveAll(x => x.Codigo == code); 
+            movilList.RemoveAll(x => x.Codigo == code);
             HttpContext.Session.SetString("movilList", JsonConvert.SerializeObject(movilList));
 
             var data = new { status = "ok", result = movil };
@@ -182,7 +182,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         [HttpPost]
         public JsonResult UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
-        {           
+        {
             var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
 
             //provisorio, cambiar logica
@@ -191,7 +191,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             {
                 RecomendadorId = x.RecomendadorId,
                 Plan = x.Plan,
-                Bono = x.Bono ,
+                Bono = x.Bono,
                 Roaming = x.Roaming,
                 TMM_s_iva = x.TMM_s_iva,
                 TmmString = x.TMM_s_iva.ToString("n")
@@ -209,17 +209,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 planDef.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
             }
 
-            _telefonicaApi.UpdateCurrentDefinitivePlans(defPlansList);  
+            _telefonicaApi.UpdateCurrentDefinitivePlans(defPlansList);
             return new JsonResult(defPlansList);
-        }        
+        }
 
         public JsonResult CalculateIndexesResult(string rut)
         {
-            var gapModel =  CalculateIndexes(rut);
+            var gapModel = CalculateIndexes(rut);
             var data = new { status = "ok", result = gapModel };
             return new JsonResult(data);
         }
-       
+
 
         /// <summary>
         /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
@@ -227,9 +227,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         /// <param name="rut"></param>
         /// <returns></returns>
         private IndexModel CalculateIndexes(string rut)
-        {          
+        {
 
-            List<RecomendadorB2b> plansList = _telefonicaApi.GetCurrentPlans();          
+            List<RecomendadorB2b> plansList = _telefonicaApi.GetCurrentPlans();
             var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
             BillingStatus billingStatus = BillingStatus.None;
 
@@ -239,7 +239,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             decimal tmmSumatory = 0; // TMM+Prestacion
             decimal defTmmSumatory = 0;  //TMM de planes sugeridos
             decimal tmmSinIva = 0; //TMM sin iva info actual
-         //   decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
+                                   //   decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
 
             foreach (var plan in plansList)
             {
@@ -251,7 +251,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             foreach (var defPlan in defPlansList)
             {
                 defTmmSumatory += defPlan.TMM_s_iva;
-            }           
+            }
 
             billingGap = defTmmSumatory - arpuProm;
             fixedGap = defTmmSumatory - tmmSumatory;
@@ -271,9 +271,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     billingStatus = BillingStatus.Equal;
                 }
             }
-            
-            
-            var gapModel = new IndexModel { BillingGap = billingGap, FixedGap = fixedGap, BillingStatus = billingStatus };
+
+
+            var gapModel = new IndexModel
+            {
+                BillingGap = billingGap,
+                FixedGap = fixedGap,
+                BillingStatus = billingStatus,
+                TmmPrestacion = tmmSumatory
+            };
             return gapModel;
         }
 

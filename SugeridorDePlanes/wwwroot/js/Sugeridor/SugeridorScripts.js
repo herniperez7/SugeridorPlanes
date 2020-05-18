@@ -346,6 +346,27 @@ function calculateIndexes(val) {
     $("#calulatedSubsidy").html("$ " + $subsidy.val());
     $("#calulatedPayBack").html($payback.val());
     $("#calulatedIncome").html("$ " + $income.val());
+
+
+    calculateGaps();
+    
+
+}
+
+//se calculan los gaps ubicados en el fieldset de calculo de indices (herramienta de calculo)
+function calculateGaps() {
+    var billingAmout = $("#billingDivValue").text();
+    var tmmPrestasion = $("#tmmPrestasionDivValue").text();
+    var incomeAmount = cleanFormat($("#calculateIncomeTxt").val());
+    var billingGapValue = parseFloat(incomeAmount) - parseFloat(billingAmout);
+    billingGapValue = "$ " + formatNumberStr(billingGapValue);
+
+    var fixedGapValue = parseFloat(incomeAmount) - parseFloat(tmmPrestasion);
+    fixedGapValue = "$ " + formatNumberStr(fixedGapValue);
+
+
+    $("#gapBilingCalculatedValue").html(billingGapValue);
+    $("#gapCalculatedValue").html(fixedGapValue);
 }
 
 //metodo para inportar los valores actuales a los inputs de calculos
@@ -360,8 +381,9 @@ async function importValues() {
     $("#calculatePaybackTxt").val($payback.replace(regex, ''));
     $("#calculateIncomeTxt").val(formatNumberStr($incomes));
 
-    calculateStatus($incomes);
-
+    calculateGaps();
+    calculateStatus(incomeInt);
+    
 }
 
 function resetValues() { 

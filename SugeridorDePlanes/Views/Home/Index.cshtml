@@ -290,7 +290,6 @@
                     </div>
                 </fieldset>
 
-
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
@@ -311,8 +310,7 @@
                             </thead>
                             <tbody>
                                 @if (!emptyPlans)
-                                {
-                                    decimal totalTmm = 0;
+                                {                                    
                                     decimal totalBono = 0;
                                     int roamingCount = 0;
                                     @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
@@ -565,11 +563,12 @@
    
 
                             <div id="valuesResumen" class="p-2">
-                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @indexModel.FixedGap.ToString("n")</label><br />
-                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @indexModel.BillingGap.ToString("n")</label><br />
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapCalculatedValue">Sin calcular </label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingCalculatedValue">Sin calcular</label><br />
 
                                 <div id="incomeDivValue" style="display:none">@incomeAmount</div>
                                 <div id="billingDivValue" style="display:none">@billingAmount</div>
+                                <div id="tmmPrestasionDivValue" style="display:none"> @indexModel.TmmPrestacion</div>
                             </div>
                         </div>
 

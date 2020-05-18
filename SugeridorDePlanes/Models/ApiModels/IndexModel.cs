@@ -17,5 +17,7 @@ namespace Telefonica.SugeridorDePlanes.Models.ApiModels
         public decimal BillingGap { get; set; }
 
         public BillingStatus BillingStatus { get; set; }
+
+        public decimal TmmPrestacion { get; set; }
     }
 }
