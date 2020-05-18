@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     $("#calculateSubsidyTxt").mask("#.##0", { reverse: true });
     $("#calculateIncomeTxt").mask("#.##0", { reverse: true });
-    //unfocusInput();
+    unfocusInput();
     //focusInput();
 
     $("#clientRutBtn").prop('disabled', true);
@@ -191,7 +191,7 @@ function AddDevice() {
                 devicesAmount += data.result.precio;
                 var precio = formatNumber(data.result.precio);               
                 var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                var tr = "<tr id='row" + data.result.codigo + "' ><th scope='row'>" + data.result.marca + "</th><td>$" + precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
+                var tr = "<tr id='row" + data.result.codigo + "' ><td scope='row'>" + data.result.marca + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
                 $("#movilTableBody").append(tr);
 
                 
@@ -328,7 +328,7 @@ function calculateIndexes(val) {
     var incomeValue = cleanFormat($income.val());
 
     if (val == 1) {
-        var subsidy = correctFormatInverse(incomeValue) / correctFormatInverse(paybackValue);
+        var subsidy = correctFormatInverse(incomeValue) * correctFormatInverse(paybackValue);
         subsidy = correctFormat(subsidy.toFixed(1));
         $subsidy.val(formatNumberStr(subsidy));
 
@@ -358,24 +358,31 @@ async function importValues() {
 
     $("#calculateSubsidyTxt").val(formatNumber($subsidy));
     $("#calculatePaybackTxt").val($payback.replace(regex, ''));
-    //$("#calculateIncomeTxt").val($incomes.replace(regex, ''));
     $("#calculateIncomeTxt").val(formatNumberStr($incomes));
+
+    calculateStatus($incomes);
+
 }
 
 function resetValues() { 
-
+    var emptyBillingDiv = "<div class='emptyBillingDataMain'><div class='emptyBillingDataChild'><div style='font-weight:bold; color:#666666'>Sin datos</div></div></div>";
+    var $divSatus = $("#divClaculatedBillingStatus");
+    $divSatus.html("");
+    $("#divClaculatedBillingStatus").append(emptyBillingDiv);
     $("#calculateSubsidyTxt").val("");
     $("#calculatePaybackTxt").val("");
     $("#calculateIncomeTxt").val("");
 
 }
 
+//esta funcion se activa cuando se cliquea fuera del input de los ingresos en la herramienta de calculo
 function unfocusInput() {
-    $("#calculateSubsidyTxt").focusout(function () {
-        var $subsidyVal = $("#calculateSubsidyTxt").val();
-        $subsidyVal = formatNumberStr($subsidyVal);       
-        $("#calculateSubsidyTxt").val($subsidyVal);
+    
+    $("#calculateIncomeTxt").focusout(function () {
+        var incomeAmount = $("#calculateIncomeTxt").val();
+        calculateStatus(incomeAmount);
     });
+    
 }
 
 function focusInput() {
@@ -412,6 +419,7 @@ function correctFormatInverse(val) {
 //setea el status del fieldet de calculo de indices
 function calculateStatus(val) {    
 
+    val = cleanFormat(val);
     var billingAmout = $("#billingDivValue").text();
     var billingGap = parseInt(val) - parseInt(billingAmout);
    

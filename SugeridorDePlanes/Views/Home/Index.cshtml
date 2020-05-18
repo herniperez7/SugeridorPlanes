@@ -41,7 +41,7 @@
         var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
         var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
         var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
-        
+
 
     </script>
 
@@ -121,7 +121,7 @@
                             <tbody>
                                 @if (!emptyPlans)
                                 {
-                                    decimal totalTmm = 0;                                  
+                                    decimal totalTmm = 0;
                                     decimal totalConsumo = 0;
                                     decimal mouOffNet = 0;
                                     int roamerCount = 0;
@@ -213,14 +213,14 @@
                     </div>
                     @if (!emptyPlans)
                     {
-                    <p class="total-billing-column">
-                            Facturación máxima: $@Model[0].ArpuRutMax?.ToString("n") (Fecha: @Model[0].FechaArpuRutMax)
+                        <p class="total-billing-column">
+                            Facturación máxima: $@Model[0].ArpuRutMax?.ToString("n") (Fecha: @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatDate(@Model[0].FechaArpuRutMax))
 
-                     </p>
+                        </p>
                     }
-                    </fieldset>
-                
-                
+                </fieldset>
+
+
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
@@ -264,18 +264,18 @@
                                             <td>@plan.value.RoamingPlanSugerido</td>
                                         </tr>
                                     }
-                            <tr>
-                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
-                                <td class="total-column">
-                                    $ @totalTmm.ToString("n")
-                                </td>
-                                <td class="total-column">
-                                    @totalBono Gb
-                                </td>
-                                <td class="total-column">
-                                    @roamingCount
-                                </td>
-                            </tr>
+                                    <tr>
+                                        <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                        <td class="total-column">
+                                            $ @totalTmm.ToString("n")
+                                        </td>
+                                        <td class="total-column">
+                                            @totalBono Gb
+                                        </td>
+                                        <td class="total-column">
+                                            @roamingCount
+                                        </td>
+                                    </tr>
                                 }
                                 else
                                 {
@@ -316,7 +316,7 @@
                                     decimal totalBono = 0;
                                     int roamingCount = 0;
                                     @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
-                                    {                                       
+                                    {
                                         incomeAmount += (decimal)plan.value.TMM_s_iva;
                                         totalBono += (decimal)plan.value.Bono;
                                         var bonoGb = plan.value.Bono;
@@ -374,7 +374,7 @@
 
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
-                                <select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}"   onblur="this.size=0;">
+                                <select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}" onblur="this.size=0;">
                                     <option value="0">Seleccionar</option>
                                     @foreach (var item in movileDevices)
                                     {
@@ -404,15 +404,14 @@
                                             <th scope="col">Borrar</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="movilTableBody" style="overflow-y:auto; height:150px" >
-                                        
+                                    <tbody id="movilTableBody" style="overflow-y:auto; height:150px">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div style="display:inline; padding-left: 20px">
                             <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice()" disabled>Agregar</button>
-                            <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="confirmDeviceBtn" onclick="confirmDevices()" >Confirmar</button>
+                            <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="confirmDeviceBtn" onclick="confirmDevices()">Confirmar</button>
 
                         </div>
                     </div>
@@ -460,7 +459,7 @@
                                     </div>
                                 }
 
-                                @if (@indexModel.BillingStatus.ToString().Equals("Lower"))
+                                else if (@indexModel.BillingStatus.ToString().Equals("Lower"))
                                 {
                                     <div class="lowerBillingMain">
                                         <div class="lowerBillingChild">
@@ -470,7 +469,7 @@
                                         </div>
                                     </div>
                                 }
-                                @if (@indexModel.BillingStatus.ToString().Equals("Equal"))
+                                else if (@indexModel.BillingStatus.ToString().Equals("Equal"))
                                 {
                                     <div class="equalBillingMain">
                                         <div class="equalBillingMainChild">
@@ -480,12 +479,24 @@
                                         </div>
                                     </div>
                                 }
+                                else {
+
+                                <div id="divClaculatedBillingStatus">
+                                    <div class="emptyBillingDataMain">
+                                        <div class="emptyBillingDataChild">
+                                            <div style="font-weight:bold; color:#666666">
+                                                Sin datos
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
                             </div>
 
                             <div id="valuesResumen" class="p-2">
-                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">@indexModel.FixedGap</label><br />
-                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">@indexModel.BillingGap</label><br />
-                               
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @indexModel.FixedGap.ToString("n")</label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @indexModel.BillingGap.ToString("n")</label><br />
+
                                 <label><b>Subsidio: </b></label><label class="ml-1" id="calulatedSubsidy"></label><br />
                                 <label><b>Payback: </b></label><label class="ml-1" id="calulatedPayBack"></label><br />
                                 <label><b>Ingreso: </b></label><label class="ml-1" id="calulatedIncome"></label><br />
@@ -543,46 +554,24 @@
 
 
                             <div id="divClaculatedBillingStatus">
-                                @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
-                                {
-                                    <div class="superiorBillingMain">
-                                        <div class="superiorBillingChild">
-                                            <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
-
+                                <div class="emptyBillingDataMain">
+                                    <div class="emptyBillingDataChild">
+                                        <div style="font-weight:bold; color:#666666">
+                                            Sin datos
                                         </div>
                                     </div>
-                                }
-
-                                @if (@indexModel.BillingStatus.ToString().Equals("Lower"))
-                                {
-                                    <div class="lowerBillingMain">
-                                        <div class="lowerBillingChild">
-                                            <div style="font-weight:bold; color:#FF0000">
-                                                <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                @if (@indexModel.BillingStatus.ToString().Equals("Equal"))
-                                {
-                                    <div class="equalBillingMain">
-                                        <div class="equalBillingMainChild">
-                                            <div style="font-weight:bold; color:#FFD200">
-                                                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                                </div>
                             </div>
+   
 
                             <div id="valuesResumen" class="p-2">
-                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">@indexModel.FixedGap</label><br />
-                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">@indexModel.BillingGap</label><br />
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @indexModel.FixedGap.ToString("n")</label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @indexModel.BillingGap.ToString("n")</label><br />
 
                                 <div id="incomeDivValue" style="display:none">@incomeAmount</div>
                                 <div id="billingDivValue" style="display:none">@billingAmount</div>
                             </div>
-                        </div>                      
+                        </div>
 
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
 
@@ -601,58 +590,58 @@
         </div>
 
 
-    @if (Model != null && Model.Count() > 4)
-    {
-        <script>
-            $(".tableFieldset .tableFixHead").css("height", "230px");
-        </script>
-    }
+        @if (Model != null && Model.Count() > 4)
+        {
+            <script>
+                $(".tableFieldset .tableFixHead").css("height", "230px");
+            </script>
+        }
 
 
-    <div class="modal fade" id="plansModal" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal fade" id="plansModal" role="dialog">
+            <div class="modal-dialog">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Seleccione un plan</h4>
-                </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Seleccione un plan</h4>
+                    </div>
 
-                <div class="modal-body">
-                    <table id="tablaPlanes">
-                        <thead>
-                            <tr>
-                                <th>Plan</th>
-                                <th>TMM</th>
-                                <th>Bono</th>
-                                <th>Roaming</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var plan in planOfertList.Select((value) => new { value }))
-                            {
-                                var bono = @plan.value.Bono_ / 1024;
+                    <div class="modal-body">
+                        <table id="tablaPlanes">
+                            <thead>
                                 <tr>
-                                    <td>@plan.value.Plan</td>
-                                    <td>@plan.value.TMM_s_iva</td>
-                                    <td>@bono</td>
-                                    <td>@plan.value.Roaming</td>
+                                    <th>Plan</th>
+                                    <th>TMM</th>
+                                    <th>Bono</th>
+                                    <th>Roaming</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var plan in planOfertList.Select((value) => new { value }))
+                                {
+                                    var bono = @plan.value.Bono_ / 1024;
+                                    <tr>
+                                        <td>@plan.value.Plan</td>
+                                        <td>@plan.value.TMM_s_iva</td>
+                                        <td>@bono</td>
+                                        <td>@plan.value.Roaming</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
+                    </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
-                </div>
             </div>
-
         </div>
-    </div>
 
 
 
 
-    <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
+        <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
 </body>
 </html>
