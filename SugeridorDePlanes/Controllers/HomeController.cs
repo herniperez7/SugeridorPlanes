@@ -13,6 +13,8 @@ using Telefonica.SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
+using Telefonica.SugeridorDePlanes.BusinessLogic; //quitar esta referencia despues, pasar por la web api
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -22,12 +24,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
         private List<EquipoMovil> _moviles;
+        private IPdfLogic _pdfLogic;
 
-        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
+        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService, IPdfLogic pdfLogic)
         {
             usuario = usuarioInterface;
             _telefonicaApi = telefonicaService;
             _mapper = mapper;
+            _pdfLogic = pdfLogic;
 
             //provisorio
             PopulateMoviles();
@@ -45,9 +49,28 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
 
+        public IActionResult GeneratePdf()
+        {
+            var movileDevices = new List<MovilDevice>();
+            movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
+
+            var files = _pdfLogic.GeneratePdfFromHtml(movileDevices);
+            return files;
+            //  return File(files, "application/pdf");
+
+
+
+            ///////
+
+        }
+
+
         public async Task<IActionResult> Index()
         {
 
+            GeneratePdf();
+
+            ///
             var clientList = await _telefonicaApi.GetClientes();
 
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);

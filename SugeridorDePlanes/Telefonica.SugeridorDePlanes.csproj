@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Telefonica.SugeridorDePlanes.BusinessLogic\Telefonica.SugeridorDePlanes.BusinessLogic.csproj" />
     <ProjectReference Include="..\Telefonica.SugeridorDePlanes.Resources\Telefonica.SugeridorDePlanes.Resources.csproj" />
   </ItemGroup>
 
