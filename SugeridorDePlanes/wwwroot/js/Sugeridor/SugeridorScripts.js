@@ -348,13 +348,13 @@ function calculateIndexes(val) {
     $("#calulatedIncome").html("$ " + $income.val());
 
 
-    calculateGaps();
+    calculateSecondGaps();
     
 
 }
 
 //se calculan los gaps ubicados en el fieldset de calculo de indices (herramienta de calculo)
-function calculateGaps() {
+function calculateSecondGaps() {
     var billingAmout = $("#billingDivValue").text();
     var tmmPrestasion = $("#tmmPrestasionDivValue").text();
     var incomeAmount = cleanFormat($("#calculateIncomeTxt").val());
@@ -381,7 +381,7 @@ async function importValues() {
     $("#calculatePaybackTxt").val($payback.replace(regex, ''));
     $("#calculateIncomeTxt").val(formatNumberStr($incomes));
 
-    calculateGaps();
+    calculateSecondGaps();
     calculateStatus(incomeInt);
     
 }
@@ -441,7 +441,7 @@ function correctFormatInverse(val) {
 //setea el status del fieldet de calculo de indices
 function calculateStatus(val) {    
 
-    val = cleanFormat(val);
+    val = cleanFormat(val.toString()); //le saco el punto de miles en caso de que venga con ese formato
     var billingAmout = $("#billingDivValue").text();
     var billingGap = parseInt(val) - parseInt(billingAmout);
    

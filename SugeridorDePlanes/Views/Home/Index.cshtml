@@ -333,17 +333,18 @@
                                             <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                         </tr>
                                     }
-                                    <tr>
-                                        <td id="defPlanIncomeTr" class="total-column" colspan="3">
-                                            $ @incomeAmount.ToString("n")
-                                        </td>
-                                        <td class="total-column">
-                                            @totalBono Gb
-                                        </td>
-                                        <td class="total-column">
-                                            @roamingCount
-                                        </td>
-                                    </tr>
+                            <tr>
+                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                <td id="defPlanIncomeTr" class="total-column" >
+                                    $ @incomeAmount.ToString("n")
+                                </td>
+                                <td class="total-column">
+                                    @totalBono Gb
+                                </td>
+                                <td class="total-column">
+                                    @roamingCount
+                                </td>
+                            </tr>
 
                                 }
                                 else
