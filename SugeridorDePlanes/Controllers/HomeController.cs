@@ -55,7 +55,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
 
             var files = _pdfLogic.GeneratePdfFromHtml(movileDevices);
-            return files;
+            return File(files, "application/pdf");
             //  return File(files, "application/pdf");
 
 
