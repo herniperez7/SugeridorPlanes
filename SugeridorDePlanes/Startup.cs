@@ -41,7 +41,7 @@ namespace Telefonica.SugeridorDePlanes
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
             services.AddScoped<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client("https://localhost:44310/"));
-          //  services.AddWkhtmltopdf(@"C:\Git\Sugeridor\SugeridorDePlanes\wwwroot\Wkhtmltopdf\windows");
+          
 
 
         }

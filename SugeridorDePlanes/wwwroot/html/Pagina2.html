@@ -1,0 +1,166 @@
+<html>
+    <head>
+        <style>
+            #fondoPagina{
+                background-image: url("fondoPagina2.png");
+                height: 385px;
+                background-repeat: no-repeat;
+                background-size: 100%;
+            }
+            body{
+                margin:0px;
+            }
+            #titulo{
+                text-align: center;
+                margin-top: 70px;
+            }
+            #titulo label{
+                font-family: sans-serif;
+                font-style: normal;
+                font-weight: 700;
+                font-size: 30px;
+                color: #404040;
+            }
+            #titulo :nth-child(2){
+                border-bottom: 1px solid #404040;
+                padding: 0px 190px;
+                margin-left: 20px;
+            }
+            #fechas{
+                display: flex;
+                justify-content: space-between;
+                margin: 60px 80px;
+            }
+            #fechas label{
+                font-family: sans-serif;
+                font-style: normal;
+                font-size: 25px;
+                color: #404040;
+            }
+            #planes1{
+               display: flex;
+               justify-content: center;
+            }
+            #planes2{
+               display: flex;
+               justify-content: center;
+            }
+            .rectangulo {
+                width: 400px;
+                height: 125px;
+                margin: 5px;
+                background: #d9d9d9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .rectangulo p{
+                font-size: 25px;
+                font-family: sans-serif;
+                font-style: normal;
+                color: #404040;
+                margin: 5px;
+            }
+            #costos{
+                display: flex;
+                margin-top: 60px;
+                justify-content: center;
+            }
+            #costos :nth-child(1).oval{
+                margin-right: -25px;
+                opacity: 0.8;
+            }
+            .oval {
+                width: 350px;
+                height: 210px;
+                -moz-border-radius: 50%;
+                -webkit-border-radius: 50%;
+                border-radius: 45%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .oval p{
+                font-size: 25px;
+                font-family: sans-serif;
+                font-weight: bold;
+                color: #fff;
+                margin: 10px;
+                
+            }
+            .oval div :nth-child(2){
+                font-size: 45px;
+            }
+            #footer{
+                background-image: url(footerPagina2.png);
+                height: 265px;
+                background-repeat: no-repeat;
+                background-size: 100%;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="fondoPagina">
+
+        </div>
+        <div id="titulo">
+            <label>Oferta especial para:</label>
+            <label>Empresa</label>
+        </div>
+        <div id="fechas">
+            <label>Fecha:</label>
+            <label>Válido por 15 días.</label>
+        </div>
+        <div id="planes1">
+            <div class="rectangulo">
+                <div style="text-align: center;">
+                    <p>2 lineas 100GB</p>
+                    <p>Plan celular</p>
+                </div>
+            </div>
+            <div class="rectangulo">
+                <div style="text-align: center;">
+                <p>16 lineas 30GB</p>
+                <p>Plan celular</p>
+                </div>
+            </div>
+        </div>
+        <div id="planes2">
+            <div class="rectangulo">
+                <div style="text-align: center;">
+                <p>15 lineas 20GB</p>
+                <p>Plan celular</p>
+                </div>
+            </div>
+            <div class="rectangulo">
+                <div style="text-align: center;">
+                <p>80 lineas 7GB</p>
+                <p>Plan celular</p>
+                </div>
+            </div>
+        </div>
+        <div id="costos">
+            <div class="oval" style="background-color: #40b7e0;">
+                <div style="text-align: center;">
+                    <p>COSTO DE EQUIPOS</p>
+                    <p>$XXX</p>
+                    <p>+IVA</p>
+                </div>
+            </div>
+            <div class="oval" style="background-color: #a879a9;">
+                <div style="text-align: center;">
+                    <p>TARIFA MENSUAL</p>
+                    <p>$XXX</p>
+                    <p>+IVA</p>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+
+        </div>
+
+    </body>
+</html>

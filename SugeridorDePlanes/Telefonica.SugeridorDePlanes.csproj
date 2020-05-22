@@ -6,18 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\Wkhtmltopdf\windows\wkhtmltopdf.exe" />
+    <Compile Remove="wwwroot\Wkhtmltopdf\**" />
+    <Content Remove="wwwroot\Wkhtmltopdf\**" />
+    <EmbeddedResource Remove="wwwroot\Wkhtmltopdf\**" />
+    <None Remove="wwwroot\Wkhtmltopdf\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\img\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\Wkhtmltopdf\windows\wkhtmltopdf.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
