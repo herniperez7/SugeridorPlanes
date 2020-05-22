@@ -30,7 +30,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public IActionResult ReturnPdf()
         {
 
-            var urlHtml = Path.Combine(_env.ContentRootPath, @"wwwroot\html\Pagina1.html");
+            // var urlHtml = Path.Combine(_env.ContentRootPath, @"wwwroot\html\Pagina1.html");
+            var urlHtml = Path.Combine(_env.ContentRootPath, @"wwwroot\html\Pagina2.html");
 
             HtmlToPdfConverter converter = new HtmlToPdfConverter();
             WebKitConverterSettings settings = new WebKitConverterSettings();
