@@ -45,7 +45,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             document.Close(true);
             ms.Position = 0;
             FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
-            fileStreamResult.FileDownloadName = "prueba.pdf";
+            fileStreamResult.FileDownloadName = Path.GetRandomFileName() + ".pdf";
 
 
             return fileStreamResult;
