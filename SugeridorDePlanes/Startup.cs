@@ -10,6 +10,7 @@ using Telefonica.SugeridorDePlanes.Code;
 using Telefonica.SugeridorDePlanes.Controllers;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
+using Wkhtmltopdf.NetCore;
 
 namespace Telefonica.SugeridorDePlanes
 {
@@ -40,7 +41,7 @@ namespace Telefonica.SugeridorDePlanes
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
             services.AddScoped<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client("https://localhost:44310/"));
-           
+          //  services.AddWkhtmltopdf(@"C:\Git\Sugeridor\SugeridorDePlanes\wwwroot\Wkhtmltopdf\windows");
 
 
         }

@@ -17,6 +17,8 @@ using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
 using Microsoft.AspNetCore.Hosting;
 using System.Text.RegularExpressions;
+using Wkhtmltopdf.NetCore;
+using Rotativa;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -30,68 +32,27 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private ITelefonicaService telefonicaApi;
         private List<SugeridorClientesModel> _clientList;
         private readonly IWebHostEnvironment _env;
+        readonly IGeneratePdf _generatePdf;
 
-        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService, IWebHostEnvironment env)
+        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface,
+            ITelefonicaService telefonicaService, IWebHostEnvironment env, IGeneratePdf generatePdf)
         {
             usuario = usuarioInterface;
             telefonicaApi = telefonicaService;
             _mapper = mapper;
             _clientList = new List<SugeridorClientesModel>();
             _env = env;
+            _generatePdf = generatePdf;
         }
 
 
+
+       
+
         public async Task<IActionResult> Index()
         {
-            return ReturnPdf();
-            //string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            //Directory.CreateDirectory(tempDirectory);
-
-
-            // codigo para copiar archivos
-            /*  string fileName = "HTML.html";
-              string tempName = Path.GetRandomFileName() + ".html";
-              string sourcePath = @"C:\Users\Usuario\Desktop\Proyecto\pdf";
-              string targetPath = @"C:\Users\Usuario\Desktop\Proyecto\pdf\temp";          
-
-
-              string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
-              string destFile = System.IO.Path.Combine(targetPath, tempName);
-              System.IO.Directory.CreateDirectory(targetPath);
-              System.IO.File.Copy(sourceFile, destFile, true);
-
-
-              ////replace
-
-              StreamReader objReader = new StreamReader(destFile);
-              string content = objReader.ReadToEnd();
-              objReader.Close();
-              content = Regex.Replace(content, "{change}", "cambio");
-
-              StreamWriter writer = new StreamWriter(destFile);
-              writer.Write(content);
-              writer.Close();
-
-              ////*/
-
-
-
-            return View("../Home/Detalles");
-
-
-
-            // return GetPdf();
-
-
-            //var clientList = await telefonicaApi.GetClientes();
-            //List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
-            //_clientList = clientsModel;
-            //ViewData["clientList"] = clientsModel;
-
-            //List<RecomendadorB2b> plansList = await telefonicaApi.GetSuggestedPlans();
-            //var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-
-            //return View("../Home/Index");
+            var test = await _generatePdf.GetPdf("Views/Home/pdf.cshtml", "Hello World");
+            return View();
         }
 
         public IActionResult Get()

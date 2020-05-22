@@ -19,6 +19,7 @@
     <PackageReference Include="NSwag.Core" Version="13.3.0" />
     <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0-beta" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.1" />
+    <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

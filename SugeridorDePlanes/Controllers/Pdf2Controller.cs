@@ -14,9 +14,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     {
         public IActionResult Index()
         {
-           GetHtml();           
-          
-           return View();
+            //GetHtml();        
+            var folderName = @"C:\Users\Usuario\Desktop\html\PDFSugeridor";
+            var htmlName = "Pagina2.html";
+              ReturnPdf(folderName, htmlName);
+
+            return View();
+
         }
 
         public void GetHtml()
@@ -46,12 +50,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             ////
             ReturnPdf(tempDirectory, tempName);
-        }       
+        }
 
 
-        public void ReturnPdf(string htmlFolder, string htmlName)
+        public FileStream ReturnPdf(string htmlFolder, string htmlName)
         {
-            var urlproyect = @"C:\Git\Sugeridor\SugeridorDePlanes";
+            var urlproyect = @"C:\Users\Usuario\Desktop\Proyecto";
 
             //var urlHtml = @"C:\Users\Usuario\Desktop\Proyecto\pdf\HTML.html";
             var urlHtml = Path.Combine(htmlFolder, htmlName);
@@ -75,15 +79,19 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             //// codigo para copiar el pdf a una carpeta
 
-          
-            //var destTempPdf = @"C:\Users\Usuario\Desktop\Proyecto\pdf\destPdf\prueba.pdf";
-            var destTempPdf = Path.Combine(htmlFolder, "firtsPage.pdf");
+
+            var destTempPdf = @"C:\Users\Usuario\Desktop\Proyecto\pdf\outPDFFiles";
+            destTempPdf = Path.Combine(destTempPdf, Path.GetRandomFileName() + ".html");
 
             using var fileStream = new FileStream(destTempPdf, FileMode.Create, FileAccess.Write);
+
+           // return File(fileStream, "application/pdf");
             fileStreamResult.FileStream.CopyTo(fileStream);
             fileStream.Close();
-            MergeMultipleDocuments(destTempPdf);
-             //return fileStreamResult;
+
+            return fileStream;
+            // MergeMultipleDocuments(destTempPdf);
+            //return fileStreamResult;
         }
 
         public static void MergeMultipleDocuments(string urlPdf)
@@ -93,7 +101,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             List<string> supportedFiles = new List<string>();
             // var file1 = @"C:\Users\Usuario\Desktop\Proyecto\pdf\destPdf\prueba.pdf";
-            var firstpartPdf = @"C:\Users\Usuario\Desktop\Proyecto\pdf\PrimerPagina.pdf";           
+            var firstpartPdf = @"C:\Users\Usuario\Desktop\Proyecto\pdf\PrimerPagina.pdf";
 
             supportedFiles.Add(firstpartPdf);
             supportedFiles.Add(urlPdf);

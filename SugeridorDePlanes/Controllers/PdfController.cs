@@ -8,7 +8,8 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Spire.Pdf;
-
+using IronPdf;
+using jsreport.Types;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -16,6 +17,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     {
         public IActionResult Index()
         {
+
+            test230();
+
             var randomName = Path.GetRandomFileName() + ".pdf";
             var pdfOutfiles = @"C:\Users\Usuario\Desktop\Proyecto\pdf\outPDFFiles\" + randomName;
             var file1 = @"C:\Users\Usuario\Desktop\Proyecto\pdf\destPdf\prueba.pdf";
@@ -125,5 +129,47 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 return matches.Count;
             }
         }
+
+
+        public static void test230()
+        {
+            // Render any HTML fragment or document to HTML
+            var Renderer = new IronPdf.HtmlToPdf();
+            var htmlUrl = @"C:\Users\Usuario\Desktop\Proyecto\pdf\html\PDFSugeridor\Pagina2.html";
+
+            StreamReader objReader = new StreamReader(htmlUrl);
+            string content = objReader.ReadToEnd();
+            objReader.Close();
+
+            var PDF = Renderer.RenderHtmlAsPdf(content);
+
+            
+
+          //  var PDF = IronPdf.HtmlToPdf.StaticRenderHTMLFileAsPdf(htmlUrl);
+
+            var OutputPath = @"C:\Users\Usuario\Desktop\Proyecto\pdf\outPDFFiles\example.pdf";
+            PDF.SaveAs(OutputPath);
+
+
+        }
+
+        protected async Task<IActionResult> RenderPDFAsync(string content)
+        {
+            var rs = new LocalReporting().UseBinary(JsReportBinary.GetBinary()).AsUtility().Create();
+
+            var report = await rs.RenderAsync(new RenderRequest()
+            {
+                Template = new Template()
+                {
+                    Recipe = Recipe.ChromePdf,
+                    Engine = Engine.None,
+                    Content = content
+                }
+            });
+
+            return new FileStreamResult(report.Content, new Microsoft.Net.Http.Headers.MediaTypeHeaderValue("application/pdf"));
+        }
+
+
     }
 }
