@@ -227,10 +227,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return new JsonResult(data);
         }
 
+        [HttpGet]
         public IActionResult GeneratePdf(string companyName)
         {
+
+
             var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
-            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices);
+            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, "Empresa", 200);
 
           
             var bytesAsString = Encoding.UTF8.GetString(pdfByteArray);
@@ -241,7 +244,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             //string fileName = "testFile.pdf";
 
 
-            //return File(pdfByteArray, "application/pdf", fileName);
+            return File(pdfByteArray, "application/pdf");
 
 
             var data = new { status = "ok", result = pdfByteArray };         

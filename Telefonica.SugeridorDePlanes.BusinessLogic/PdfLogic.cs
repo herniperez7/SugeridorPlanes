@@ -24,14 +24,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             _env = env;
         }
 
-        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices)
+        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
         {            
             //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(tempDirectory);
 
             CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
-            GenerateHtml(tempDirectory, movilDevices); //modifico las copias generadas
+            GenerateHtml(tempDirectory, movilDevices, companyName, monthlyFee); //modifico las copias generadas
             ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
             var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
             return bytesArrayPdf;
@@ -61,7 +61,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         /// <summary>
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
-        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices)
+        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
         {    
                           
             var firstHtmlsourcePath = Path.Combine(directoryUrl, "Pagina1.html");
@@ -72,10 +72,13 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             content = objReader.ReadToEnd();
             objReader.Close();
             var contetnTr = string.Empty;
+            decimal devicesCost = 0;
 
             foreach (var movil in movilDevices)
             {
                 contetnTr += "<tr><td>"+movil.Codigo+"</td><td>"+movil.Marca+"</td><td>"+movil.Stock+"</td></tr>";
+                devicesCost += movil.Precio;
+
             }
 
             content = Regex.Replace(content, "{devices}", contetnTr);
@@ -93,9 +96,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
            // DateTime dt = DateTime.ParseExact(today.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
             string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
             content = Regex.Replace(content, "{date}", formatDate)
-                           .Replace("{company}", "Empresa")
-                           .Replace("{devicesCost}", "200")
-                           .Replace("{monthlyFee}", "1000");
+                           .Replace("{company}", companyName)
+                           .Replace("{devicesCost}", devicesCost.ToString())
+                           .Replace("{monthlyFee}", monthlyFee.ToString());
 
             writer = new StreamWriter(secondHtmlsourcePath);
             writer.Write(content);
