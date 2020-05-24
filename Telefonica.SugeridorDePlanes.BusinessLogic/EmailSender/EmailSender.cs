@@ -25,8 +25,16 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential("perez.hernan1996@gmail.com", "4986585-1h");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            
+
+            try
+            {
                 smtp.Send(message);
+            }
+            catch (Exception)
+            {
+
+            }
+                
             
                            
             

@@ -14,6 +14,9 @@ using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
 using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
+using Telefonica.SugeridorDePlanes.BusinessLogic;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -51,7 +54,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> Index()
         {
 
-           // EmailSender.Email("entro");
+            EmailSender.Email("entro");
             var clientList = await _telefonicaApi.GetClientes();
 
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
@@ -244,10 +247,10 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return File(pdfByteArray, "application/pdf");
 
 
-            var data = new { status = "ok", result = pdfByteArray };         
+            //var data = new { status = "ok", result = pdfByteArray };         
 
 
-               return new JsonResult(data);
+            //   return new JsonResult(data);
 
         }
 
