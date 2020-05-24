@@ -2,70 +2,23 @@
 
 <head>
     <style>
-        #fondoPagina {
+        #backgroundPage {
             background-image: url("fondoPagina2.png");
-            height: 385px;
+            height: 400px;
             background-repeat: no-repeat;
             background-size: 100%;
+            /* margin-bottom: 30px; */
         }
         
-        body {
-            margin: 0px;
-        }
-        
-        #titulo {
-            text-align: center;
-            margin-top: 70px;
-        }
-        
-        #titulo label {
-            font-family: sans-serif;
-            font-style: normal;
-            font-weight: 700;
-            font-size: 30px;
-            color: #404040;
-        }
-        
-        #titulo :nth-child(2) {
-            border-bottom: 1px solid #404040;
-            padding: 0px 190px;
-            margin-left: 20px;
-        }
-        
-        #fechas {
-            display: flex;
-            justify-content: space-between;
-            margin: 60px 80px;
-        }
-        
-        #fechas label {
-            font-family: sans-serif;
-            font-style: normal;
-            font-size: 25px;
-            color: #404040;
-        }
-        
-        #planes1 {
-            display: flex;
-            justify-content: center;
-        }
-        
-        #planes2 {
-            display: flex;
-            justify-content: center;
-        }
-        
-        .rectangulo {
-            width: 400px;
+        .wrapper {
+            width: 800px;
             height: 125px;
-            margin: 5px;
-            background: #d9d9d9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
         }
         
-        .rectangulo p {
+        .wrapper p {
             font-size: 25px;
             font-family: sans-serif;
             font-style: normal;
@@ -73,115 +26,224 @@
             margin: 5px;
         }
         
-        #costos {
-            display: flex;
-            margin-top: 60px;
-            justify-content: center;
+        #first {
+            width: 385px;
+            height: 125px;
+            float: left;
+            background: #d9d9d9;
+            margin: 15px;
         }
         
-        #costos :nth-child(1).oval {
-            margin-right: -25px;
-            opacity: 0.8;
+        #second {
+            height: 125px;
+            overflow: hidden;
+            background: #d9d9d9;
+            margin: 15px;
         }
         
-        .oval {
-            width: 350px;
-            height: 210px;
-            -moz-border-radius: 50%;
-            -webkit-border-radius: 50%;
-            border-radius: 45%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .wrapperContainer {
+            margin-top: 25px;
         }
         
-        .oval p {
+        .ovalWrapper {
+            width: 590px;
+            height: 400px;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .ovalWrapper p {
             font-size: 25px;
             font-family: sans-serif;
-            font-weight: bold;
-            color: #fff;
-            margin: 10px;
+            font-style: normal;
+            margin: 5px;
         }
         
-        .oval div :nth-child(2) {
-            font-size: 45px;
+        #firstOval {
+            width: 300px;
+            height: 200px;
+            float: left;
+            background: #d9d9d9;
+            border-radius: 80%;
+            margin: 5px;
+            background-color: #40b7e0;
+            margin-right: -25px;
+            opacity: 0.9;
+        }
+        
+        #secondOval {
+            height: 200px;
+            overflow: hidden;
+            background: #d9d9d9;
+            margin: 5px;
+            background-color: #a879a9;
+            border-radius: 80%;
+        }
+        
+        .ovalWrapperContainer {
+            margin-top: 50px;
+        }
+        
+        .ovalWrapperContainer p {
+            color: white;
         }
         
         #footer {
-            background-image: url(footerPagina1.png);
-            height: 265px;
+            background-image: url(footerPagina2.png);
+            height: 250px;
             background-repeat: no-repeat;
             background-size: 100%;
-            position: absolute;
+            /* position: absolute; */
             width: 100%;
             bottom: 0;
         }
+        /*Titulo*/
+        
+        .wrapperTitle {
+            width: 800px;
+            height: 50px;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+        
+        .wrapperTitle p {
+            font-size: 25px;
+            font-family: sans-serif;
+            font-style: normal;
+            margin: 5px;
+        }
+        
+        #firstTitle {
+            width: 300px;
+            height: 125px;
+            float: left;
+            margin: 10px;
+        }
+        
+        #secondTitle {
+            height: 125px;
+            overflow: hidden;
+            margin: 10px;
+        }
+        /* Fecha */
+        
+        .wrapperDate {
+            width: 800px;
+            height: 50px;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+        
+        .wrapperDate p {
+            font-size: 25px;
+            font-family: sans-serif;
+            font-style: normal;
+            margin: 5px;
+        }
+        
+        #dateDiv {
+            width: 300px;
+            height: 125px;
+            float: left;
+            margin-left: -10px;
+        }
+        
+        #validDiv {
+            height: 125px;
+            overflow: hidden;
+            text-align: right;
+        }
     </style>
 </head>
+<header>
+    <div id="backgroundPage">
+
+    </div>
+</header>
 
 <body>
-    <div id="fondoPagina">
+
+
+    <!-- Oferta -->
+    <div class="wrapperTitle">
+        <div id="firstTitle">
+            <p> <b> Oferta especial para: </b></p>
+        </div>
+        <div id="secondTitle">
+            <p>{company}</p>
+            <p style="margin-top: -30px;">____________________________________________</p>
+        </div>
+    </div>
+
+    <!-- Fecha -->
+    <div class="wrapperDate">
+        <div id="dateDiv">
+            <p> Fecha: {date} </p>
+        </div>
+        <div id="validDiv">
+            <p>Valido por 15 dias.</p>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div id="first">
+            <div class="wrapperContainer">
+                <p>2 lineas <b>100GB</b></p>
+                <p>Plan celular</p>
+            </div>
+
+        </div>
+        <div id="second">
+            <div class="wrapperContainer">
+                <p>16 lineas <b>30GB</b></p>
+                <p>Plan celular</p>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div id="first">
+            <div class="wrapperContainer">
+                <p>15 lineas <b>20GB</b></p>
+                <p>Plan celular</p>
+            </div>
+        </div>
+        <div id="second">
+            <div class="wrapperContainer">
+                <p>80 lineas <b>7GB</b></p>
+                <p>Plan celular</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 50px;">
+        <div class="ovalWrapper">
+            <div id="firstOval">
+                <div class="ovalWrapperContainer">
+                    <p>COSTO DE EQUIPOS</p>
+                    <p style="font-weight: bold;">$ {devicesCost}</p>
+                    <p>+IVA</p>
+                </div>
+
+            </div>
+            <div id="secondOval">
+                <div class="ovalWrapperContainer">
+                    <p>TARIFA MENSUAL</p>
+                    <p style="font-weight: bold;">$ {monthlyFee}</p>
+                    <p>+IVA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer" style="margin-top: -90px;">
 
     </div>
-    <div id="titulo">
-        <label>Oferta especial para:</label>
-        <label>Empresa</label>
-    </div>
-    <div id="fechas">
-        <label>Fecha:</label>
-        <label>Válido por 15 días.</label>
-    </div>
-    <div id="planes1">
-        <div class="rectangulo">
-            <div style="text-align: center;">
-                <p>2 lineas 100GB</p>
-                <p>Plan celular</p>
-            </div>
-        </div>
-        <div class="rectangulo">
-            <div style="text-align: center;">
-                <p>16 lineas 30GB</p>
-                <p>Plan celular</p>
-            </div>
-        </div>
-    </div>
-    <div id="planes2">
-        <div class="rectangulo">
-            <div style="text-align: center;">
-                <p>15 lineas 20GB</p>
-                <p>Plan celular</p>
-            </div>
-        </div>
-        <div class="rectangulo">
-            <div style="text-align: center;">
-                <p>80 lineas 7GB</p>
-                <p>Plan celular</p>
-            </div>
-        </div>
-    </div>
-    <div id="costos">
-        <div class="oval" style="background-color: #40b7e0;">
-            <div style="text-align: center;">
-                <p>COSTO DE EQUIPOS</p>
-                <p>$XXX</p>
-                <p>+IVA</p>
-            </div>
-        </div>
-        <div class="oval" style="background-color: #a879a9;">
-            <div style="text-align: center;">
-                <p>TARIFA MENSUAL</p>
-                <p>$XXX</p>
-                <p>+IVA</p>
-            </div>
-        </div>
-    </div>
-    <!-- <div id="footer">
-            
-        </div> -->
-    <footer>
 
-        <a href="C:\Users\Usuario\Desktop\Proyecto\pdf\html\PDFSugeridor\footerPagina2.png"></a>
-    </footer>
 </body>
 
 </html>

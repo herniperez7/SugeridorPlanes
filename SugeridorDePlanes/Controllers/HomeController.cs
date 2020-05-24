@@ -15,6 +15,8 @@ using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
 using Telefonica.SugeridorDePlanes.BusinessLogic; //quitar esta referencia despues, pasar por la web api
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -46,31 +48,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _moviles.Add(new EquipoMovil() { Codigo = "1545", Marca = "Iphone 11", Precio = 55000, Stock = 150 });
             _moviles.Add(new EquipoMovil() { Codigo = "564", Marca = "Huawei P40", Precio = 58000, Stock = 250 });
 
-        }
-
-
-        public IActionResult GeneratePdf()
-        {
-            var movileDevices = new List<MovilDevice>();
-            movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
-
-            var files = _pdfLogic.GeneratePdfFromHtml(movileDevices);
-            return File(files, "application/pdf");
-            //  return File(files, "application/pdf");
-
-
-
-            ///////
-
-        }
+        }        
 
 
         public async Task<IActionResult> Index()
         {
 
-            GeneratePdf();
 
-            ///
             var clientList = await _telefonicaApi.GetClientes();
 
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
@@ -241,6 +225,30 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var gapModel = CalculateIndexes(rut);
             var data = new { status = "ok", result = gapModel };
             return new JsonResult(data);
+        }
+
+        public IActionResult GeneratePdf(string companyName)
+        {
+            var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
+            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices);
+
+          
+            var bytesAsString = Encoding.UTF8.GetString(pdfByteArray);
+            var jsonObj = Convert.ToBase64String(pdfByteArray);
+
+
+
+            //string fileName = "testFile.pdf";
+
+
+            //return File(pdfByteArray, "application/pdf", fileName);
+
+
+            var data = new { status = "ok", result = pdfByteArray };         
+
+
+               return new JsonResult(data);
+
         }
 
 
