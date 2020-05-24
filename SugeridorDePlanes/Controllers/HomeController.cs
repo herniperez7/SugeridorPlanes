@@ -13,6 +13,7 @@ using Telefonica.SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
+using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -48,6 +49,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> Index()
         {
 
+           // EmailSender.Email("entro");
             var clientList = await _telefonicaApi.GetClientes();
 
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
