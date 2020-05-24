@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $("#clientRutBtn").prop('disabled', true);
     $('#clientRutTxt1').keyup(function () {
-        if ($(this).val().length != 0)
+        if ($(this).val().length !== 0)
             $("#clientRutBtn").prop('disabled', false);
         else
             $("#clientRutBtn").prop('disabled', true);
@@ -33,11 +33,11 @@ function selectPlan(selectedPlan) {
 }
 
 function confirmSelectPlan() {
-    if (gbPlanToEdit != undefined) {
+    if (gbPlanToEdit !== undefined) {
         var rows = $('#tablaPlanes tbody tr');
         var planSelected;
         var i = 0
-        while (i < rows.length && planSelected == undefined) {
+        while (i < rows.length && planSelected === undefined) {
             var element = rows[i];
             if (element.classList.contains("selectedOfertPlan")) {
                 planSelected = element;
@@ -122,8 +122,7 @@ function getMovileList() {
     $.ajax({
         url: gbGetMovilListUrl,
         success: function (data) {
-            if (data.status == "ok") {
-                //console.log(data.result);
+            if (data.status === "ok") {                
                 return data.result;
             }
         }
@@ -136,7 +135,7 @@ function confirmDevices() {
     $.ajax({
         url: gbGetMovilListUrl,
         success: function (data) {
-            if (data.status == "ok") {
+            if (data.status === "ok") {
                 $.each(data.result, function (key, value) {
                     total += value.precio;
                 });
@@ -152,7 +151,7 @@ function confirmDevices() {
 
 function movileChange() {
     var val = $("#movilesDdl").val();
-    if (val == "0") {
+    if (val === "0") {
         $("#addDeviceBtn").prop('disabled', true);
     } else {
         $("#addDeviceBtn").prop('disabled', false);
@@ -162,7 +161,7 @@ function movileChange() {
 
         url: gbGetMovilInfoUrl + '?code=' + val,
         success: function (data) {
-            if (data.status == "ok") {
+            if (data.status === "ok") {
 
                 if (data.result) {
                     var precio = "$ " + formatNumber(data.result.precio);
@@ -185,7 +184,7 @@ function AddDevice() {
         type: "POST",
         url: gbAddMovilDecivesUrl + '?code=' + val,
         success: function (data) {
-            if (data.status == "ok") {
+            if (data.status === "ok") {
                 $("#movilTableBody tr:last").remove();
                 devicesCount++;
                 devicesAmount += data.result.precio;
@@ -211,7 +210,7 @@ function deleteRow(val) {
     $.ajax({
         url: gbDeleteMovilUrl + '?code=' + val,
         success: function (data) {
-            if (data.status == "ok") {
+            if (data.status === "ok") {
                 $("#movilTableBody tr:last").remove();
                 if (data.result) {                 
                     var rowId = "row" + val;
@@ -221,7 +220,7 @@ function deleteRow(val) {
                     var totalRow = "<tr id='totalRow'><td>" + devicesCount + "</td><td>$ " + formatNumber(devicesAmount) + "</td><td></td> </tr>"
                     $("#movilTableBody").append(totalRow);
 
-                    if (devicesCount == 0) {
+                    if (devicesCount === 0) {
                         $("#movilTableBody tr").remove();
                     }
                 }
@@ -240,7 +239,7 @@ function calculatePayBack() {
     $.ajax({
         url: gbCalculatePayBack,
         success: function (data) {
-            if (data.status == "ok") {
+            if (data.status === "ok") {
                 $("#paybackTxt").val(data.result);
             }
         }
@@ -254,7 +253,7 @@ function calculateGaps(val) {
     $.ajax({
         url: gbCalculateGap + '?rut=' + val,
         success: function (data) {
-            if (data.status == "ok") {
+            if (data.status === "ok") {
 
                 $("#gapValue").html(data.result.fixedGap);                
                 $("#gapBilingValue").html(data.result.billingGap);
@@ -307,7 +306,7 @@ function formatNumberStr(nStr) {
 
 
 function alternateBugdetFields(val) {
-    if (val == 1) {
+    if (val === 1) {
         $("#IndexesDiv").hide();
         $("#calculateDiv").show();
     } else {
@@ -327,12 +326,12 @@ function calculateIndexes(val) {
     var paybackValue = $payback.val();
     var incomeValue = cleanFormat($income.val());
 
-    if (val == 1) {
+    if (val === 1) {
         var subsidy = correctFormatInverse(incomeValue) * correctFormatInverse(paybackValue);
         subsidy = correctFormat(subsidy.toFixed(1));
         $subsidy.val(formatNumberStr(subsidy));
 
-    } else if (val == 2) {
+    } else if (val === 2) {
         var payback = correctFormatInverse(subsidyValue) / correctFormatInverse(incomeValue);
         payback = correctFormat(payback.toFixed(2));
         $payback.val(payback);
@@ -348,13 +347,13 @@ function calculateIndexes(val) {
     $("#calulatedIncome").html("$ " + $income.val());
 
 
-    calculateGaps();
+    calculateSecondGaps();
     
 
 }
 
 //se calculan los gaps ubicados en el fieldset de calculo de indices (herramienta de calculo)
-function calculateGaps() {
+function calculateSecondGaps() {
     var billingAmout = $("#billingDivValue").text();
     var tmmPrestasion = $("#tmmPrestasionDivValue").text();
     var incomeAmount = cleanFormat($("#calculateIncomeTxt").val());
@@ -381,7 +380,7 @@ async function importValues() {
     $("#calculatePaybackTxt").val($payback.replace(regex, ''));
     $("#calculateIncomeTxt").val(formatNumberStr($incomes));
 
-    calculateGaps();
+    calculateSecondGaps();
     calculateStatus(incomeInt);
     
 }
@@ -441,7 +440,7 @@ function correctFormatInverse(val) {
 //setea el status del fieldet de calculo de indices
 function calculateStatus(val) {    
 
-    val = cleanFormat(val);
+    val = cleanFormat(val.toString()); //le saco el punto de miles en caso de que venga con ese formato
     var billingAmout = $("#billingDivValue").text();
     var billingGap = parseInt(val) - parseInt(billingAmout);
    
@@ -456,7 +455,7 @@ function calculateStatus(val) {
         case billingGap > 0:
             $("#divClaculatedBillingStatus").append(superiorBillingDiv);
             break;
-        case billingGap == 0:
+        case billingGap === 0:
             $("#divClaculatedBillingStatus").append(equalBillingDiv);
             break;
         case billingGap < 0:
@@ -466,5 +465,37 @@ function calculateStatus(val) {
 
 }
 
+
+function exportPdf() {
+
+    $.ajax({
+        url: gbExportPdf + '?companyName=' + "asd",
+        success: function (data) {
+            if (data.status === "ok") {
+                var byteArray = getByteArray(data.result);
+                console.log(data.result);
+                var array = [].slice.call(byteArray);
+
+                
+                var file = new Blob(array, { type: 'application/pdf' });
+                var fileURL = URL.createObjectURL(file);
+                window.open(fileURL);
+            }            
+        }
+    });
+}
+
+
+function getByteArray(str) {
+    var decoded = atob(str);
+    var i, il = decoded.length;
+    var array = new Uint8Array(il);
+
+    for (i = 0; i < il; ++i) {
+        array[i] = decoded.charCodeAt(i);
+    }
+
+    return array;
+}
 
 

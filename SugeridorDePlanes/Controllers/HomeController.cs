@@ -23,12 +23,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
         private List<EquipoMovil> _moviles;
+        private IPdfLogic _pdfLogic;
 
-        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
+        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService, IPdfLogic pdfLogic)
         {
             usuario = usuarioInterface;
             _telefonicaApi = telefonicaService;
             _mapper = mapper;
+            _pdfLogic = pdfLogic;
 
             //provisorio
             PopulateMoviles();
@@ -43,7 +45,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _moviles.Add(new EquipoMovil() { Codigo = "1545", Marca = "Iphone 11", Precio = 55000, Stock = 150 });
             _moviles.Add(new EquipoMovil() { Codigo = "564", Marca = "Huawei P40", Precio = 58000, Stock = 250 });
 
-        }
+        }        
 
 
         public async Task<IActionResult> Index()
@@ -220,6 +222,33 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var gapModel = CalculateIndexes(rut);
             var data = new { status = "ok", result = gapModel };
             return new JsonResult(data);
+        }
+
+        [HttpGet]
+        public IActionResult GeneratePdf(string companyName)
+        {
+
+
+            var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
+            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, "Empresa", 200);
+
+          
+            var bytesAsString = Encoding.UTF8.GetString(pdfByteArray);
+            var jsonObj = Convert.ToBase64String(pdfByteArray);
+
+
+
+            //string fileName = "testFile.pdf";
+
+
+            return File(pdfByteArray, "application/pdf");
+
+
+            var data = new { status = "ok", result = pdfByteArray };         
+
+
+               return new JsonResult(data);
+
         }
 
 

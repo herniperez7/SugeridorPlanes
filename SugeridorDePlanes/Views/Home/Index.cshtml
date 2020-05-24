@@ -41,6 +41,7 @@
         var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
         var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
         var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
+        var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
 
 
     </script>
@@ -333,17 +334,18 @@
                                             <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                         </tr>
                                     }
-                                    <tr>
-                                        <td id="defPlanIncomeTr" class="total-column" colspan="3">
-                                            $ @incomeAmount.ToString("n")
-                                        </td>
-                                        <td class="total-column">
-                                            @totalBono Gb
-                                        </td>
-                                        <td class="total-column">
-                                            @roamingCount
-                                        </td>
-                                    </tr>
+                            <tr>
+                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                <td id="defPlanIncomeTr" class="total-column" >
+                                    $ @incomeAmount.ToString("n")
+                                </td>
+                                <td class="total-column">
+                                    @totalBono Gb
+                                </td>
+                                <td class="total-column">
+                                    @roamingCount
+                                </td>
+                            </tr>
 
                                 }
                                 else
@@ -508,7 +510,7 @@
 
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn">Exportar Propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn"  onclick="exportPdf()">Exportar Propuesta</button>
                             </div>
 
 
