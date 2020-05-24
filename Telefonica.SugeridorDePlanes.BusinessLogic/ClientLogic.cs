@@ -7,11 +7,11 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public class ClientService : IClientService
+    public class ClientLogic : IClientLogic
     {
         private readonly IClientRepository _clientRepository;
 
-        public ClientService(IClientRepository clientRepository)
+        public ClientLogic(IClientRepository clientRepository)
         {
             _clientRepository = clientRepository;
         }

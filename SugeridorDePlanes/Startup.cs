@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.Code;
+using Telefonica.SugeridorDePlanes.Controllers;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
 
@@ -32,12 +35,17 @@ namespace Telefonica.SugeridorDePlanes
             services.AddAutoMapper(configuration =>
             {
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
+                configuration.CreateMap<SugeridorClientes, SugeridorClientesModel>().ReverseMap();
+                configuration.CreateMap<PlanesOfertaActual, PlanOfertaActualModel>().ReverseMap();
+                configuration.CreateMap<EquipoMovil, MovilDevice>().ReverseMap(); //cambiar este map
             }, typeof(Startup));
 
             services.AddScoped<IManejoUsuario, ManejoUsuario>();
-            services.AddScoped<ITelefonicaService, TelefonicaService>();
-            services.AddSingleton<IClient>(_ => new Client("https://localhost:44310/"));
+            services.AddScoped<IPdfLogic, PdfLogic>(); // eliminar este scope
+            services.AddSingleton<ITelefonicaService, TelefonicaService>();
+            services.AddSingleton<IClient>(_ => new Client(Configuration["ClientId"]));
 
+            services.AddSession();
 
 
         }

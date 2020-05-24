@@ -18,11 +18,56 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             _context = context;
         }
 
+        public async Task<List<PlanesOfertaActualDTO>> GetActualPlans()
+        {
+            try
+            {
+                var plans = await _context.PlanesOfertaActual.ToListAsync();
+
+                return plans;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode)
+        {
+            try
+            {
+                var plan = await _context.PlanesOfertaActual.Where(x => x.Plan == planCode).FirstOrDefaultAsync() ;
+
+                return plan;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlans()
         {
             try
             {
                 var plans =  await _context.RecomendadorB2b.ToListAsync();
+
+                return plans;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
+        {
+            try
+            {
+                var plans = await _context.RecomendadorB2b.Where(x => x.CaNumber == clientNumber).ToListAsync();
 
                 return plans;
             }
@@ -45,6 +90,9 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
                 throw ex;
             }
         }
+
+
+
 
 
     }

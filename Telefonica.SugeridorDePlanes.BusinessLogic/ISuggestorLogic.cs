@@ -6,10 +6,16 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public interface ISuggestorService
+    public interface ISuggestorLogic
     {
         Task<List<RecomendadorB2bDTO>> GetSuggestedPlans();
 
         Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut);
+
+        Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber);
+
+        Task<List<PlanesOfertaActualDTO>> GetActualPlans();
+
+        Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode);
     }
 }

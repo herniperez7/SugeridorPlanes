@@ -7,12 +7,14 @@ namespace Telefonica.SugeridorDePlanes.Models.ApiModels
 {
     public class RecomendadorB2bModel
     {
+        public int Id { get; set; }
         public string Rut { get; set; }
         public string CaNumber { get; set; }
         public int? QLineasRut { get; set; }
         public int? Movil { get; set; }
         public string CodPlan { get; set; }
         public decimal? Tmm { get; set; }
+        public decimal? TmmSinIva { get; set; }
         public int? CantidadPasaportes { get; set; }
         public string Prestacion1 { get; set; }
         public decimal? PrecioPrestacion1SinIva { get; set; }
@@ -35,5 +37,9 @@ namespace Telefonica.SugeridorDePlanes.Models.ApiModels
         public decimal? TmmPlanRetencion { get; set; }
         public string RoamingPlanSugerido { get; set; }
         public string RoamingPlanRetencion { get; set; }
+        public decimal? ArpuProm { get; set; }
+        public decimal? MinutosVozOffProm { get; set; }
+        public decimal? ArpuRutMax { get; set; }
+        public string FechaArpuRutMax { get; set; }
     }
 }

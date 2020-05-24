@@ -40,14 +40,15 @@ namespace Telefonica.SugeridorDePlanes.Api
             {
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
+                configuration.CreateMap<PlanesOfertaActual, PlanesOfertaActualDTO>().ReverseMap();
             }, typeof(Startup));
 
             services.AddDbContext<TelefonicaSugeridorDePlanesContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("TelefonicaConnectionString")));
 
             //Services
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<ISuggestorService, SuggestorService>();
+            services.AddScoped<IClientLogic, ClientLogic>();
+            services.AddScoped<ISuggestorLogic, SuggestorLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();

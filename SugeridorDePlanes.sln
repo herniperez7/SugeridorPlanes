@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Api", "2.Api", "{8523E84D-C1E5-489A-9971-9BE0DA01F6F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Logic", "3.Logic", "{466C564D-D5C9-4ACC-B07C-D02D0BC4915A}"
+	ProjectSection(SolutionItems) = preProject
+		SugeridorDePlanes\Program.cs = SugeridorDePlanes\Program.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.DataAccess", "4.DataAccess", "{A28409C8-37C1-4D1C-AC00-201E6D98E337}"
 EndProject
@@ -31,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telefonica.SugeridorDePlane
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telefonica.SugeridorDePlanes.Interfaces", "Telefonica.SugeridorDePlanes.Interfaces\Telefonica.SugeridorDePlanes.Interfaces.csproj", "{33E883FD-2094-450F-91AE-FC037C587F41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telefonica.SugeridorDePlanes.Resources", "Telefonica.SugeridorDePlanes.Resources\Telefonica.SugeridorDePlanes.Resources.csproj", "{438F0D52-8BEA-4AEC-832A-95A3A2226086}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telefonica.SugeridorDePlanes.Resources", "Telefonica.SugeridorDePlanes.Resources\Telefonica.SugeridorDePlanes.Resources.csproj", "{438F0D52-8BEA-4AEC-832A-95A3A2226086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

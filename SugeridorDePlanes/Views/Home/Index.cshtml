@@ -1,6 +1,26 @@
 ﻿@{
     var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Usuarios.Usuario;
+    var emptyPlans = true;
+
+    if (Model != null && Model.Count() > 0)
+    {
+        emptyPlans = false;
+
+    }
+
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
+    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoMovil>;
+    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
+    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
+    var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
+    var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
+    decimal incomeAmount = 0;
+    decimal billingAmount = 0;
+
 }
 
 @model List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
@@ -8,33 +28,41 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
 </head>
 <body>
+    <script>
+        var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
+        var gbGetMovilInfoUrl = "@Url.Action("GetMovilInfo", "Home")";
+        var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Home")";
+        var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Home")";
+        var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Home")";
+        var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
+        var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
+        var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
+        var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
+
+
+    </script>
+
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
 
-        <form class="form-inline input-group mb-0 w-auto">
+
+        <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
             <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
+                <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01">
-                <option value="1">URUGUAY SA</option>
-                <option value="2">Agustina Moledo</option>
-                <option value="3">MARIA ELENA RODRIGUEZ</option>
-            </select>
+            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select" })
+
         </form>
 
 
-        <form class="form-inline mb-0" action="/Home/showPlans" method="post">
+        <form class="form-inline mb-0" action="/Home/ShowPlans" method="post">
             <div class="d-inline-flex align-items-center w-100">
-                @if (Model != null && Model.Count() > 0) {
-                    <input class="form-control mr-2" type="search" name="rut" value="@Model[0].Rut" aria-label="Search"> 
-                }
-                else
-                {
-                    <input class="form-control mr-2" type="search" name="rut" placeholder="Buscar por Rut"  aria-label="Search">
-                }
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+                <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por Rut" aria-label="Search">
+
+                <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
             </div>
         </form>
 
@@ -46,6 +74,7 @@
                 <label class="input-group-text">Cerrar sesion</label>
             </div>
         </form>
+
     </nav>
 
     <nav class="d-block d-md-none navbar-light bg-light">
@@ -54,17 +83,15 @@
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01">
-                <option selected>Seleccionar Empresa</option>
-                <option value="1">URUGUAY SA</option>
-                <option value="2">Agustina Moledo</option>
-                <option value="3">MARIA ELENA RODRIGUEZ</option>
-            </select>
+
+            @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
+
+
         </form>
 
         <form class="form-inline mb-0">
             <div class="d-inline-flex align-items-center w-100">
-                <input class="form-control mr-2" type="search" placeholder="Buscar por Rut" aria-label="Search">
+                <input class="form-control mr-2" type="search" id="clientRutTxt" placeholder="Buscar por Rut" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </div>
 
@@ -74,144 +101,260 @@
     <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
         <div class="row">
             <div class="col-lg-6 col-sm-12 col-md-12">
-                <fieldset>
+                <fieldset class="tableFieldset">
                     <legend>Info actual de cliente</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
-                                <tr>
+                                <tr style="height:60px;">
                                     <th scope="col">#</th>
-                                    <th scope="col">Linea</th>
-                                    <th scope="col">TMM</th>
-                                    <th scope="col">Prestac</th>
-                                    <th scope="col">Consumo X</th>
+                                    <th scope="col">Número</th>
+                                    <th scope="col">Plan</th>
+                                    <th scope="col">TMM (sin iva)</th>
+                                    <th scope="col">Prestación codigo</th>
+                                    <th style="word-wrap: break-word">TMM Prestación (sin iva)</th>
+                                    <th scope="col">Promedio facturado</th>
+                                    <th class="long-column" scope="col">Consumo promedio de datos</th>
+                                    <th scope="col">MOU OFFNET</th>
+                                    <th scope="col">ROAMER</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-                                @if (Model != null && Model.Count() > 0)
+                                @if (!emptyPlans)
                                 {
-                                    foreach (var plan in Model)
+                                    decimal totalTmm = 0;
+                                    decimal totalConsumo = 0;
+                                    decimal mouOffNet = 0;
+                                    int roamerCount = 0;
+                                    decimal bonoGbPlan = 0;
+                                    foreach (var plan in Model.Select((value) => new { value }))
                                     {
+                                        totalTmm += (decimal)plan.value.TmmSinIva;
+                                        billingAmount += (decimal)plan.value.ArpuProm;
+
+                                        mouOffNet += (decimal)@plan.value.MinutosVozOffProm;
+                                        bonoGbPlan = (decimal)@plan.value.MbTotalProm / 1024;
+                                        totalConsumo += bonoGbPlan;
+
+                                        if (plan.value.Roamer.ToLower() == "roamer")
+                                        {
+                                            roamerCount++;
+                                        }
+
                                         <tr>
-                                            <th scope="row">@plan.Movil</th>
-                                            <td>@plan.Tmm</td>
-                                            <td>@plan.Prestacion1</td>
-                                            <td>@plan.PrecioPrestacion1SinIva</td>
+                                            <td>@plan.value.Id</td>
+                                            <td>@plan.value.Movil</td>
+                                            <td>@plan.value.CodPlan</td>
+                                            <td>$ @plan.value.TmmSinIva?.ToString("n")</td>
+                                            <td>@plan.value.Prestacion1</td>
+                                            <td>$ @plan.value.TmmPrestacionSinIva?.ToString("n")</td>
+                                            <td>$ @plan.value.ArpuProm?.ToString("n")</td>
+                                            <td>@Decimal.Round(@bonoGbPlan) Gb</td>
+                                            <td>@plan.value.MinutosVozOffProm?.ToString("n")</td>
+
+                                            @if (plan.value.Roamer.ToLower() == "roamer")
+                                            {
+                                                <td style="text-align:center">
+
+                                                    <svg class="bi bi-check" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center">
+                                                    <svg class="bi bi-x" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd" />
+                                                    </svg>
+
+                                                </td>
+                                            }
                                         </tr>
                                     }
+
+                                    <tr>
+                                        <td class="total-column" colspan="3" style="text-align:left;">Totales</td>
+
+                                        <td class="total-column">
+                                            $ @totalTmm.ToString("n")
+                                        </td>
+                                        <td class="total-column" colspan="2"></td>
+                                        <td class="total-column">
+                                            $ @billingAmount.ToString("n")
+                                        </td>
+                                        <td class="total-column">
+                                            @Decimal.Round(@totalConsumo) Gb
+                                        </td>
+                                        <td class="total-column">
+                                            @mouOffNet.ToString("n")
+                                        </td>
+                                        <td class="total-column">
+                                            @roamerCount
+                                        </td>
+
+                                    </tr>
+
                                 }
                                 else
                                 {
                                     <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="total-column" colspan="10">
+                                            Sin datos
+                                        </td>
+
                                     </tr>
                                 }
 
+
                             </tbody>
                         </table>
+
                     </div>
+                    @if (!emptyPlans)
+                    {
+                        <p class="total-billing-column">
+                            Facturación máxima: $@Model[0].ArpuRutMax?.ToString("n") (Fecha: @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatDate(@Model[0].FechaArpuRutMax))
+
+                        </p>
+                    }
                 </fieldset>
+
 
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
-                <fieldset>
+                <fieldset class="tableFieldset">
                     <legend>Plan sugerido</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Plan</th>
-                                    <th scope="col">tm</th>
-                                    <th scope="col">campo</th>
-                                    <th scope="col">campo</th>
+                                    <th class="long-column" scope="col">Plan sugerido</th>
+                                    <th class="long-column" scope="col">TMM (sin iva)</th>
+                                    <th class="long-column" scope="col">Datos del bono</th>
+                                    <th scope="col">Roaming</th>
+
+
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null && Model.Count() > 0)
+                                @if (!emptyPlans)
                                 {
-                                    foreach (var plan in Model)
+                                    decimal totalTmm = 0;
+                                    decimal totalBono = 0;
+                                    int roamingCount = 0;
+                                    foreach (var plan in Model.Select((value) => new { value }))
                                     {
-                                        <tr>
-                                            <th scope="row">@plan.PlanSugerido</th>
-                                            <td>@plan.TmmPlanSugerido</td>
-                                            <td>XXX</td>
-                                            <td>XXX</td>
+                                        totalTmm += (decimal)plan.value.TmmPlanSugerido;
+                                        totalBono += (decimal)plan.value.BonoPlanSugerido / 1024;
+                                        var bonoGb = plan.value.BonoPlanSugerido / 1024;
+
+                                        if (plan.value.RoamingPlanSugerido.ToLower() != "no")
+                                        {
+                                            roamingCount++;
+                                        }
+
+                                        <tr id="@plan.value.Id{planSugerido}">
+                                            <td>@plan.value.Id</td>
+                                            <td>@plan.value.PlanSugerido</td>
+                                            <td>$ @plan.value.TmmPlanSugerido?.ToString("n")</td>
+                                            <td>@bonoGb Gb</td>
+                                            <td>@plan.value.RoamingPlanSugerido</td>
                                         </tr>
                                     }
+                                    <tr>
+                                        <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                        <td class="total-column">
+                                            $ @totalTmm.ToString("n")
+                                        </td>
+                                        <td class="total-column">
+                                            @totalBono Gb
+                                        </td>
+                                        <td class="total-column">
+                                            @roamingCount
+                                        </td>
+                                    </tr>
                                 }
                                 else
                                 {
                                     <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="total-column" colspan="5">
+                                            Sin datos
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
                 </fieldset>
+
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-12">
-                <fieldset>
+                <fieldset class="tableFieldset">
                     <legend>Plan definitivo</legend>
                     <div class="tableFixHead">
-                        <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <table class="table table-bordered table-striped mb-0" id="tablaPlanesDefi" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Plan</th>
-                                    <th scope="col">tm</th>
-                                    <th scope="col">campo</th>
-                                    <th scope="col">campo</th>
+                                    <th class="long-column" scope="col">Plan sugerido</th>
+                                    <th class="long-column" scope="col">TMM (sin iva)</th>
+                                    <th class="long-column" scope="col">Datos del bono</th>
+                                    <th scope="col">Roaming</th>
+                                    <th scope="col">Editar</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null && Model.Count() > 0)
-                                {
-                                    foreach (var plan in Model)
+                                @if (!emptyPlans)
+                                {                                    
+                                    decimal totalBono = 0;
+                                    int roamingCount = 0;
+                                    @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
                                     {
+                                        incomeAmount += (decimal)plan.value.TMM_s_iva;
+                                        totalBono += (decimal)plan.value.Bono;
+                                        var bonoGb = plan.value.Bono;
+
+                                        if (plan.value.Roaming.ToLower() != "no")
+                                        {
+                                            roamingCount++;
+                                        }
+
                                         <tr>
-                                            <th scope="row">@plan.PlanSugeridoRetencion</th>
-                                            <td>@plan.TmmPlanRetencion</td>
-                                            <td>XXX</td>
-                                            <td>XXX</td>
+                                            <td>@plan.value.RecomendadorId</td>
+                                            <td>@plan.value.Plan</td>
+                                            <td>$ @plan.value.TMM_s_iva.ToString("n")</td>
+                                            <td>@bonoGb Gb</td>
+                                            <td>@plan.value.Roaming</td>
+                                            <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                         </tr>
                                     }
+                            <tr>
+                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                <td id="defPlanIncomeTr" class="total-column" >
+                                    $ @incomeAmount.ToString("n")
+                                </td>
+                                <td class="total-column">
+                                    @totalBono Gb
+                                </td>
+                                <td class="total-column">
+                                    @roamingCount
+                                </td>
+                            </tr>
+
                                 }
                                 else
                                 {
                                     <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="total-column" colspan="6">
+                                            Sin datos
+                                        </td>
+
                                     </tr>
                                 }
                             </tbody>
@@ -226,23 +369,29 @@
 
                 <fieldset>
                     <legend>Terminales</legend>
-                    <div class="row" style="height: 200px">
+                    <div class="row" style="height: 250px">
                         <div class="col-lg-5">
-                            <div class="dropdown p-2 ml-2">
-                                <select class="custom-select" id="selectEquipo">
-                                    <option value="1">Samsung S10</option>
-                                    <option value="3">Samsung Galaxy</option>
-                                    <option value="2">Iphone X</option>
-                                    <option value="2">Iphone 8</option>
+
+                            <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
+
+                                <select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}" onblur="this.size=0;">
+                                    <option value="0">Seleccionar</option>
+                                    @foreach (var item in movileDevices)
+                                    {
+                                        <option value="@item.Codigo">@item.Marca</option>
+                                    }
+
                                 </select>
-                            </div>
+
+
+                            </form>
                             <div id="valuesEquipos" class="p-2 ml-2">
 
-                                <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue">30000</label><br />
-                                <label><b>Stock: </b></label><label class="ml-1" id="stockValue">10</label>
+                                <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue"></label><br />
+                                <label><b>Stock: </b></label><label class="ml-1" id="stockValue"></label>
 
                             </div>
-                     
+
                         </div>
                         <div class="col-lg-7">
                             <div class="tableFixHeadDevices pr-2">
@@ -252,54 +401,43 @@
                                         <tr>
                                             <th scope="col">Equipo</th>
                                             <th scope="col">Lande</th>
-
+                                            <th scope="col">Borrar</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Iphone 8</th>
-                                            <td>$ 30.000</td>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Samsung s10</th>
-                                            <td>$ 40.000</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">Iphone x</th>
-                                            <td>$ 45.000</td>
-                                        </tr>
-
+                                    <tbody id="movilTableBody" style="overflow-y:auto; height:150px">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div  style="display:inline; padding-left: 20px">
-                            <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="agregarEquipoBtn">Agregar</button>
-                            <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="modificarEquipoBtn">Modificar</button>
+                        <div style="display:inline; padding-left: 20px">
+                            <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice()" disabled>Agregar</button>
+                            <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="confirmDeviceBtn" onclick="confirmDevices()">Confirmar</button>
 
                         </div>
-                        </div>
+                    </div>
 
-</fieldset>
+                </fieldset>
 
 
             </div>
 
-            <div class="col-lg-7">
+            <div class="col-lg-7" style="display:block" id="IndexesDiv">
                 <fieldset>
                     <legend>Resumen</legend>
-                    <div class="row" style="height: 200px">
+                    <div class="row" style="height: 250px">
 
                         <div class="col-lg-4">
                             <div class="ml-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Subsidio</span>
                                 </div>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" id="subsidioTxt" disabled value="0" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Payback</span>
+                                </div>
+                                <input type="text" id="paybackTxt" class="form-control" disabled value="0" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Pago de equipos</span>
                                 </div>
                                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                             </div>
@@ -308,28 +446,203 @@
 
 
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Ver resumen de operaciones</button>
+
+
+                            <div id="divbillingStatus">
+                                @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
+                                {
+                                    <div class="superiorBillingMain">
+                                        <div class="superiorBillingChild">
+                                            <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
+
+                                        </div>
+                                    </div>
+                                }
+
+                                else if (@indexModel.BillingStatus.ToString().Equals("Lower"))
+                                {
+                                    <div class="lowerBillingMain">
+                                        <div class="lowerBillingChild">
+                                            <div style="font-weight:bold; color:#FF0000">
+                                                <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (@indexModel.BillingStatus.ToString().Equals("Equal"))
+                                {
+                                    <div class="equalBillingMain">
+                                        <div class="equalBillingMainChild">
+                                            <div style="font-weight:bold; color:#FFD200">
+                                                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else {
+
+                                <div id="divClaculatedBillingStatus">
+                                    <div class="emptyBillingDataMain">
+                                        <div class="emptyBillingDataChild">
+                                            <div style="font-weight:bold; color:#666666">
+                                                Sin datos
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+
                             <div id="valuesResumen" class="p-2">
-                                <label><b>GAP: </b></label><label class="ml-1" id="gapValue">XXX</label><br />
-                                <label><b>Payback: </b></label><label class="ml-1" id="paybackValue">XXX</label><br />
-                                <label><b>Subsidio: </b></label><label class="ml-1" id="subsidioValue">XXX</label>
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @indexModel.FixedGap.ToString("n")</label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @indexModel.BillingGap.ToString("n")</label><br />
+
+                                <label><b>Subsidio: </b></label><label class="ml-1" id="calulatedSubsidy"></label><br />
+                                <label><b>Payback: </b></label><label class="ml-1" id="calulatedPayBack"></label><br />
+                                <label><b>Ingreso: </b></label><label class="ml-1" id="calulatedIncome"></label><br />
+
                             </div>
                         </div>
 
-                        <div class="col-lg-4  align-items-center d-flex justify-content-center">
-                            <button class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
+
+
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+                            <div style="display: table-cell;vertical-align: middle;text-align: center;">
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn"  onclick="exportPdf()">Exportar Propuesta</button>
+                            </div>
+
+
+
                         </div>
 
+
                     </div>
+                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
+                        <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
+                    </button>
+                </fieldset>
+
+            </div>
+
+            <div class="col-lg-7" style="display:none" id="calculateDiv">
+                <fieldset>
+                    <legend> Calcular Indices </legend>
+                    <div class="row" style="height: 250px">
+
+                        <div class="col-lg-4">
+                            <div class="ml-3">
+                                <div class="input-group-prepend ">
+                                    <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(1)">Subsidio</button>
+                                </div>
+                                <input type="text" id="calculateSubsidyTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(2)">Payback</button>
+                                </div>
+                                <input type="text" id="calculatePaybackTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(3)">Ingreso</button>
+                                </div>
+                                <input type="text" id="calculateIncomeTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+
+                            <div id="divClaculatedBillingStatus">
+                                <div class="emptyBillingDataMain">
+                                    <div class="emptyBillingDataChild">
+                                        <div style="font-weight:bold; color:#666666">
+                                            Sin datos
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+   
+
+                            <div id="valuesResumen" class="p-2">
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapCalculatedValue">Sin calcular </label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingCalculatedValue">Sin calcular</label><br />
+
+                                <div id="incomeDivValue" style="display:none">@incomeAmount</div>
+                                <div id="billingDivValue" style="display:none">@billingAmount</div>
+                                <div id="tmmPrestasionDivValue" style="display:none"> @indexModel.TmmPrestacion</div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+                            <div style="display: table-cell;vertical-align: middle;text-align: center;">
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="importValuesBtn" onclick="importValues()">Importar valores</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="resetValuesBtn" onclick="resetValues()">Resetear valores</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(2)">
+                        <img src="@Url.Content("~/img/icons/budgetIcon32x.png")" />
+                    </button>
                 </fieldset>
             </div>
 
         </div>
 
-    </div>
+
+        @if (Model != null && Model.Count() > 4)
+        {
+            <script>
+                $(".tableFieldset .tableFixHead").css("height", "230px");
+            </script>
+        }
+
+
+        <div class="modal fade" id="plansModal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Seleccione un plan</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <table id="tablaPlanes">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>TMM</th>
+                                    <th>Bono</th>
+                                    <th>Roaming</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var plan in planOfertList.Select((value) => new { value }))
+                                {
+                                    var bono = @plan.value.Bono_ / 1024;
+                                    <tr>
+                                        <td>@plan.value.Plan</td>
+                                        <td>@plan.value.TMM_s_iva</td>
+                                        <td>@bono</td>
+                                        <td>@plan.value.Roaming</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
 
 
 
+        <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
 </body>
 </html>
