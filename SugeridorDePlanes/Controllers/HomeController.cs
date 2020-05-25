@@ -229,24 +229,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpGet]
         public JsonResult GeneratePdf(string companyName, string monthlyFee)
         {
-
-
-
-          
-            var bytesAsString = Encoding.UTF8.GetString(pdfByteArray);
-            var jsonObj = Convert.ToBase64String(pdfByteArray);
-
-
-
-            //string fileName = "testFile.pdf";
-
-
-            return File(pdfByteArray, "application/pdf");
-
-
-            var data = new { status = "ok", result = pdfByteArray };         
-
-
+   
+            var movilSessionList = HttpContext.Session.GetString("movilList");
+            List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
             var monthlyfeeDecimal = Convert.ToInt32(monthlyFee);
             var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
             byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, companyName, monthlyfeeDecimal);
