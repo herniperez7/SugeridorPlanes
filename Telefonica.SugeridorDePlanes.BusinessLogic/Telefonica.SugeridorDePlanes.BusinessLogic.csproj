@@ -25,6 +25,7 @@
     <ProjectReference Include="..\Telefonica.SugeridorDePlanes.BusinessEntities\Telefonica.SugeridorDePlanes.BusinessEntities.csproj" />
     <ProjectReference Include="..\Telefonica.SugeridorDePlanes.DataAccess\Telefonica.SugeridorDePlanes.DataAccess.csproj" />
     <ProjectReference Include="..\Telefonica.SugeridorDePlanes.Interfaces\Telefonica.SugeridorDePlanes.Interfaces.csproj" />
+    <ProjectReference Include="..\Telefonica.SugeridorDePlanes.Resources\Telefonica.SugeridorDePlanes.Resources.csproj" />
   </ItemGroup>
 
 </Project>

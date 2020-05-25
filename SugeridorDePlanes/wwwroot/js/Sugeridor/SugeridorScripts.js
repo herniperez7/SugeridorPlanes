@@ -140,7 +140,7 @@ function confirmDevices() {
                     total += value.precio;
                 });
                 currentDeviceAmount = total;
-                var inputValue = "$ " + formatNumber(total);
+                var inputValue = "$ " + formatNumberStr(total);
                 $("#subsidioTxt").val(inputValue);
                 calculatePayBack();
             }
@@ -164,7 +164,7 @@ function movileChange() {
             if (data.status === "ok") {
 
                 if (data.result) {
-                    var precio = "$ " + formatNumber(data.result.precio);
+                    var precio = "$ " + formatNumberStr(data.result.precio);
                     $("#landedValue").html(precio);
                     $("#stockValue").html(data.result.stock);
                 } else {
@@ -188,14 +188,14 @@ function AddDevice() {
                 $("#movilTableBody tr:last").remove();
                 devicesCount++;
                 devicesAmount += data.result.precio;
-                var precio = formatNumber(data.result.precio);               
+                var precio = formatNumberStr(data.result.precio);               
                 var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                var tr = "<tr id='row" + data.result.codigo + "' ><td scope='row'>" + data.result.marca + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
+                var tr = "<tr id='row" + data.result.codigo + "' ><td scope='row'>" + data.result.marca + " " + data.result.modelo + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
                 $("#movilTableBody").append(tr);
 
                 
 
-                var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumber(devicesAmount) +"</b><td></td> </tr>"
+                var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumberStr(devicesAmount) +"</b><td></td> </tr>"
                 $("#movilTableBody").append(totalRow);
              
             }
@@ -467,35 +467,46 @@ function calculateStatus(val) {
 
 
 function exportPdf() {
+   
+    var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
+    var exportText = "Exportar Propuesta";
+    $("#pdfExportBtn").html(loading);
+    $("#pdfExportBtn").prop("disabled", true);
 
+    var companyName = $("#clientSelect option:selected").text();
     $.ajax({
-        url: gbExportPdf + '?companyName=' + "asd",
+        type: "GET",
+        url: gbExportPdf + '?companyName=' + companyName + '&monthlyFee=' + $("#incomeDivValue").text().toString(),
         success: function (data) {
             if (data.status === "ok") {
-                var byteArray = getByteArray(data.result);
-                console.log(data.result);
-                var array = [].slice.call(byteArray);
 
-                
-                var file = new Blob(array, { type: 'application/pdf' });
-                var fileURL = URL.createObjectURL(file);
-                window.open(fileURL);
+                var pdfBase64 = base64ToArrayBuffer(data.result);
+                saveByteArray("presupuesto-" + companyName, pdfBase64);
+                $("#pdfExportBtn").html(exportText);
+                $("#pdfExportBtn").prop("disabled", false);
             }            
         }
     });
 }
 
 
-function getByteArray(str) {
-    var decoded = atob(str);
-    var i, il = decoded.length;
-    var array = new Uint8Array(il);
-
-    for (i = 0; i < il; ++i) {
-        array[i] = decoded.charCodeAt(i);
+function base64ToArrayBuffer(base64) {
+    var binaryString = window.atob(base64);
+    var binaryLen = binaryString.length;
+    var bytes = new Uint8Array(binaryLen);
+    for (var i = 0; i < binaryLen; i++) {
+        var ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
     }
-
-    return array;
+    return bytes;
 }
 
+function saveByteArray(reportName, byte) {
+    var blob = new Blob([byte], { type: "application/pdf" });
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    var fileName = reportName;
+    link.download = fileName;
+    link.click();
+}
 

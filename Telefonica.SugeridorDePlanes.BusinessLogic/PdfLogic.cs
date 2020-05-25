@@ -12,6 +12,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.Linq;
 using System.Globalization;
+using Telefonica.SugeridorDePlanes.Resources.helpers;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
@@ -25,7 +26,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         }
 
         public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
-        {            
+        {          
             //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(tempDirectory);
@@ -74,11 +75,16 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             var contetnTr = string.Empty;
             decimal devicesCost = 0;
 
+            var movilPdfList = GroupedMovilList(movilDevices);
+
             foreach (var movil in movilDevices)
             {
-                contetnTr += "<tr><td>"+movil.Codigo+"</td><td>"+movil.Marca+"</td><td>"+movil.Stock+"</td></tr>";
                 devicesCost += movil.Precio;
+            }
 
+            foreach (var movil in movilPdfList)
+            {
+                contetnTr += "<tr><td>"+movil.Marca+"</td><td>"+movil.Modelo+"</td><td>"+movil.Cantidad+"</td></tr>"; 
             }
 
             content = Regex.Replace(content, "{devices}", contetnTr);
@@ -86,25 +92,43 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             StreamWriter writer = new StreamWriter(firstHtmlsourcePath);
             writer.Write(content);
             writer.Close();
-
+            
 
             objReader = new StreamReader(secondHtmlsourcePath);
             content = objReader.ReadToEnd();
             objReader.Close();
 
             var today = DateTime.Today;
-           // DateTime dt = DateTime.ParseExact(today.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
             string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
             content = Regex.Replace(content, "{date}", formatDate)
                            .Replace("{company}", companyName)
-                           .Replace("{devicesCost}", devicesCost.ToString())
-                           .Replace("{monthlyFee}", monthlyFee.ToString());
+                           .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
+                           .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureNumber(monthlyFee));
 
             writer = new StreamWriter(secondHtmlsourcePath);
             writer.Write(content);
             writer.Close();
 
         }        
+
+
+        private List<MovilPdf> GroupedMovilList(List<MovilDevice> movilDevices)
+        {
+            var movilPdfList = new List<MovilPdf>();
+
+            movilPdfList = movilDevices
+            .GroupBy(m => m.Codigo)
+            .Select(m => new MovilPdf
+            {
+                Codigo = m.First().Codigo,
+                Marca = m.First().Marca,
+                Modelo = m.First().Modelo,
+                Cantidad = m.Count()
+            }
+            ).ToList();          
+
+            return movilPdfList;
+        }
 
         private void ConvertHtmlToPdf(string directoryPath)
         {
@@ -128,7 +152,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                         document.Close(true);
                          ms.Position = 0;
                         FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
-                        // fileStreamResult.FileDownloadName = info.Name;
+                        
 
                         var fileName = info.Name.Split(".")[0] + ".pdf";
                         var destSource = Path.Combine(directoryPath, fileName);

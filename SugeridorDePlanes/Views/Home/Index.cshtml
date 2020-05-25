@@ -11,7 +11,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+@functions {
+
+    public static string FormatCultureNumber(decimal? value)
+    {
+        return @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatCultureNumber(value);
+    }
+}
+
 @{
+
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
     var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoMovil>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
@@ -53,7 +63,7 @@
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
             </div>
-            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select" })
+            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
 
         </form>
 
@@ -110,18 +120,21 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Número</th>
                                     <th scope="col">Plan</th>
-                                    <th scope="col">TMM (sin iva)</th>
-                                    <th scope="col">Prestación codigo</th>
-                                    <th style="word-wrap: break-word">TMM Prestación (sin iva)</th>
-                                    <th scope="col">Promedio facturado</th>
+                                    <th class="long-column" scope="col">TMM (sin iva)</th>
+                                    <th class="long-column" scope="col">Prestación codigo</th>
+                                    <th class="long-column" scope="col">TMM Prestación (sin iva)</th>
+                                    <th class="long-column" scope="col">Promedio facturado</th>
                                     <th class="long-column" scope="col">Consumo promedio de datos</th>
-                                    <th scope="col">MOU OFFNET</th>
+                                    <th class="long-column" scope="col">MOU OFFNET</th>
                                     <th scope="col">ROAMER</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if (!emptyPlans)
                                 {
+
+
+
                                     decimal totalTmm = 0;
                                     decimal totalConsumo = 0;
                                     decimal mouOffNet = 0;
@@ -136,21 +149,26 @@
                                         bonoGbPlan = (decimal)@plan.value.MbTotalProm / 1024;
                                         totalConsumo += bonoGbPlan;
 
+                                        var format = new System.Globalization.CultureInfo("es-AR").NumberFormat;
+                                        format.NumberDecimalSeparator = ",";
+                                        format.CurrencyGroupSeparator = ".";
+
                                         if (plan.value.Roamer.ToLower() == "roamer")
                                         {
                                             roamerCount++;
                                         }
 
+
                                         <tr>
                                             <td>@plan.value.Id</td>
                                             <td>@plan.value.Movil</td>
                                             <td>@plan.value.CodPlan</td>
-                                            <td>$ @plan.value.TmmSinIva?.ToString("n")</td>
+                                            <td>$ @FormatCultureNumber(plan.value.TmmSinIva)</td>
                                             <td>@plan.value.Prestacion1</td>
-                                            <td>$ @plan.value.TmmPrestacionSinIva?.ToString("n")</td>
-                                            <td>$ @plan.value.ArpuProm?.ToString("n")</td>
+                                            <td>$ @FormatCultureNumber(plan.value.TmmPrestacionSinIva)</td>
+                                            <td>$ @FormatCultureNumber(plan.value.ArpuProm)</td>
                                             <td>@Decimal.Round(@bonoGbPlan) Gb</td>
-                                            <td>@plan.value.MinutosVozOffProm?.ToString("n")</td>
+                                            <td>@FormatCultureNumber(plan.value.MinutosVozOffProm)</td>
 
                                             @if (plan.value.Roamer.ToLower() == "roamer")
                                             {
@@ -178,24 +196,24 @@
                                         <td class="total-column" colspan="3" style="text-align:left;">Totales</td>
 
                                         <td class="total-column">
-                                            $ @totalTmm.ToString("n")
+                                            $ @FormatCultureNumber(totalTmm)
                                         </td>
                                         <td class="total-column" colspan="2"></td>
                                         <td class="total-column">
-                                            $ @billingAmount.ToString("n")
+                                            $ @FormatCultureNumber(billingAmount)
                                         </td>
                                         <td class="total-column">
                                             @Decimal.Round(@totalConsumo) Gb
                                         </td>
                                         <td class="total-column">
-                                            @mouOffNet.ToString("n")
+                                            @FormatCultureNumber(mouOffNet)
                                         </td>
                                         <td class="total-column">
                                             @roamerCount
                                         </td>
 
                                     </tr>
-
+                                    
                                 }
                                 else
                                 {
@@ -214,10 +232,10 @@
                     </div>
                     @if (!emptyPlans)
                     {
-                        <p class="total-billing-column">
-                            Facturación máxima: $@Model[0].ArpuRutMax?.ToString("n") (Fecha: @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatDate(@Model[0].FechaArpuRutMax))
+                <p class="total-billing-column">
+                    Facturación máxima: $@FormatCultureNumber(Model[0].ArpuRutMax) (Fecha: @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatDate(@Model[0].FechaArpuRutMax))
 
-                        </p>
+                </p>
                     }
                 </fieldset>
 
@@ -260,7 +278,7 @@
                                         <tr id="@plan.value.Id{planSugerido}">
                                             <td>@plan.value.Id</td>
                                             <td>@plan.value.PlanSugerido</td>
-                                            <td>$ @plan.value.TmmPlanSugerido?.ToString("n")</td>
+                                            <td>$ @FormatCultureNumber(plan.value.TmmPlanSugerido)</td>
                                             <td>@bonoGb Gb</td>
                                             <td>@plan.value.RoamingPlanSugerido</td>
                                         </tr>
@@ -268,7 +286,7 @@
                                     <tr>
                                         <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
                                         <td class="total-column">
-                                            $ @totalTmm.ToString("n")
+                                            $ @FormatCultureNumber(totalTmm)
                                         </td>
                                         <td class="total-column">
                                             @totalBono Gb
@@ -280,12 +298,12 @@
                                 }
                                 else
                                 {
-                                    <tr>
-                                        <td class="total-column" colspan="5">
-                                            Sin datos
-                                        </td>
-                                    </tr>
-                                }
+                                <tr>
+                                    <td class="total-column" colspan="5">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -311,7 +329,7 @@
                             </thead>
                             <tbody>
                                 @if (!emptyPlans)
-                                {                                    
+                                {
                                     decimal totalBono = 0;
                                     int roamingCount = 0;
                                     @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
@@ -328,25 +346,25 @@
                                         <tr>
                                             <td>@plan.value.RecomendadorId</td>
                                             <td>@plan.value.Plan</td>
-                                            <td>$ @plan.value.TMM_s_iva.ToString("n")</td>
+                                            <td>$ @FormatCultureNumber(plan.value.TMM_s_iva)</td>
                                             <td>@bonoGb Gb</td>
                                             <td>@plan.value.Roaming</td>
                                             <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                         </tr>
                                     }
-                            <tr>
-                                <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
-                                <td id="defPlanIncomeTr" class="total-column" >
-                                    $ @incomeAmount.ToString("n")
-                                </td>
-                                <td class="total-column">
-                                    @totalBono Gb
-                                </td>
-                                <td class="total-column">
-                                    @roamingCount
-                                </td>
-                            </tr>
-
+                                    <tr>
+                                        <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                        <td id="defPlanIncomeTr" class="total-column">
+                                            $ @FormatCultureNumber(incomeAmount)
+                                        </td>
+                                        <td class="total-column">
+                                            @totalBono Gb
+                                        </td>
+                                        <td class="total-column">
+                                            @roamingCount
+                                        </td>
+                                    </tr>
+                                    
                                 }
                                 else
                                 {
@@ -378,7 +396,7 @@
                                     <option value="0">Seleccionar</option>
                                     @foreach (var item in movileDevices)
                                     {
-                                        <option value="@item.Codigo">@item.Marca</option>
+                                        <option value="@item.Codigo">@item.Marca @item.Modelo</option>
                                     }
 
                                 </select>
@@ -479,23 +497,24 @@
                                         </div>
                                     </div>
                                 }
-                                else {
+                                else
+                                {
 
-                                <div id="divClaculatedBillingStatus">
-                                    <div class="emptyBillingDataMain">
-                                        <div class="emptyBillingDataChild">
-                                            <div style="font-weight:bold; color:#666666">
-                                                Sin datos
+                                    <div id="divClaculatedBillingStatus">
+                                        <div class="emptyBillingDataMain">
+                                            <div class="emptyBillingDataChild">
+                                                <div style="font-weight:bold; color:#666666">
+                                                    Sin datos
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 }
                             </div>
-
+                            
                             <div id="valuesResumen" class="p-2">
-                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @indexModel.FixedGap.ToString("n")</label><br />
-                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @indexModel.BillingGap.ToString("n")</label><br />
+                                <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @FormatCultureNumber(indexModel.FixedGap)</label><br />
+                                <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @FormatCultureNumber(indexModel.BillingGap)</label><br />
 
                                 <label><b>Subsidio: </b></label><label class="ml-1" id="calulatedSubsidy"></label><br />
                                 <label><b>Payback: </b></label><label class="ml-1" id="calulatedPayBack"></label><br />
@@ -510,11 +529,13 @@
 
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn"  onclick="exportPdf()">Exportar Propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
+                                    Exportar Propuesta
+                                </button>                               
                             </div>
 
 
-
+                            
                         </div>
 
 
@@ -562,13 +583,13 @@
                                     </div>
                                 </div>
                             </div>
-   
+
 
                             <div id="valuesResumen" class="p-2">
                                 <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapCalculatedValue">Sin calcular </label><br />
                                 <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingCalculatedValue">Sin calcular</label><br />
 
-                                <div id="incomeDivValue" style="display:none">@incomeAmount</div>
+                                <div id="incomeDivValue" style="display:block">@incomeAmount</div>
                                 <div id="billingDivValue" style="display:none">@billingAmount</div>
                                 <div id="tmmPrestasionDivValue" style="display:none"> @indexModel.TmmPrestacion</div>
                             </div>

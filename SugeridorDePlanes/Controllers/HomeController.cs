@@ -16,7 +16,7 @@ using Telefonica.SugeridorDePlanes.Resources.helpers;
 using Telefonica.SugeridorDePlanes.BusinessLogic; //quitar esta referencia despues, pasar por la web api
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using System.Text;
-using Newtonsoft.Json.Linq;
+
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -42,18 +42,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private void PopulateMoviles()
         {
             _moviles = new List<EquipoMovil>();
-            _moviles.Add(new EquipoMovil() { Codigo = "123", Marca = "Iphone x", Precio = 45000, Stock = 100 });
-            _moviles.Add(new EquipoMovil() { Codigo = "109", Marca = "Samsung s10", Precio = 35000, Stock = 80 });
-            _moviles.Add(new EquipoMovil() { Codigo = "423", Marca = "Redmi Note 8", Precio = 20000, Stock = 200 });
-            _moviles.Add(new EquipoMovil() { Codigo = "1545", Marca = "Iphone 11", Precio = 55000, Stock = 150 });
-            _moviles.Add(new EquipoMovil() { Codigo = "564", Marca = "Huawei P40", Precio = 58000, Stock = 250 });
+            _moviles.Add(new EquipoMovil() { Codigo = "123", Marca = "Iphone", Modelo = "x", Precio = 45000, Stock = 100 });
+            _moviles.Add(new EquipoMovil() { Codigo = "109", Marca = "Samsung", Modelo = "s10", Precio = 35000, Stock = 80 });
+            _moviles.Add(new EquipoMovil() { Codigo = "423", Marca = "Redmi", Modelo = "Note 8", Precio = 20000, Stock = 200 });
+            _moviles.Add(new EquipoMovil() { Codigo = "1545", Marca = "Iphone", Modelo = "11", Precio = 55000, Stock = 150 });
+            _moviles.Add(new EquipoMovil() { Codigo = "564", Marca = "Huawei", Modelo = "P40", Precio = 58000, Stock = 250 });
 
-        }        
-
+        }
 
         public async Task<IActionResult> Index()
         {
-
 
             var clientList = await _telefonicaApi.GetClientes();
 
@@ -228,32 +226,26 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpGet]
-        public IActionResult GeneratePdf(string companyName)
+        public JsonResult GeneratePdf(string companyName, string monthlyFee)
         {
 
 
-            var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(_moviles);
-            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, "Empresa", 200);
 
-          
-            var bytesAsString = Encoding.UTF8.GetString(pdfByteArray);
-            var jsonObj = Convert.ToBase64String(pdfByteArray);
+            List<EquipoMovil> movilList = new List<EquipoMovil>();
+            var movilSessionList = HttpContext.Session.GetString("movilList");
 
+            if (!string.IsNullOrEmpty(movilSessionList))
+            {
+                movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
+            }
 
-
-            //string fileName = "testFile.pdf";
-
-
-            return File(pdfByteArray, "application/pdf");
-
-
-            var data = new { status = "ok", result = pdfByteArray };         
-
-
-               return new JsonResult(data);
-
+            var monthlyfeeDecimal = Convert.ToInt32(monthlyFee);
+            var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
+            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, companyName, monthlyfeeDecimal);
+            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+            var data = new { status = "ok", result = base64String };
+            return new JsonResult(data);
         }
-
 
         /// <summary>
         /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
