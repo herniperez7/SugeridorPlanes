@@ -13,7 +13,8 @@ using Telefonica.SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
-using Telefonica.SugeridorDePlanes.BusinessLogic; //quitar esta referencia despues, pasar por la web api
+using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
+using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using System.Text;
 
@@ -231,13 +232,20 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
 
 
-            List<EquipoMovil> movilList = new List<EquipoMovil>();
-            var movilSessionList = HttpContext.Session.GetString("movilList");
+          
+            var bytesAsString = Encoding.UTF8.GetString(pdfByteArray);
+            var jsonObj = Convert.ToBase64String(pdfByteArray);
 
-            if (!string.IsNullOrEmpty(movilSessionList))
-            {
-                movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-            }
+
+
+            //string fileName = "testFile.pdf";
+
+
+            return File(pdfByteArray, "application/pdf");
+
+
+            var data = new { status = "ok", result = pdfByteArray };         
+
 
             var monthlyfeeDecimal = Convert.ToInt32(monthlyFee);
             var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
