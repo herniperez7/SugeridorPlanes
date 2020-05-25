@@ -229,10 +229,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpGet]
         public JsonResult GeneratePdf(string companyName, string monthlyFee)
         {
-   
+
+            monthlyFee = monthlyFee.Replace('.', ',');
             var movilSessionList = HttpContext.Session.GetString("movilList");
             List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-            var monthlyfeeDecimal = Convert.ToInt32(monthlyFee);
+            var monthlyfeeDecimal = Convert.ToDecimal(monthlyFee);
             var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
             byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, companyName, monthlyfeeDecimal);
             string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
