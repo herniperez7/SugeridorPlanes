@@ -4,13 +4,13 @@ nav .input-group-text {
 }
 
 .input-group-text {
-   background-color: rgba(0, 169, 224, 0.3);
+    background-color: rgba(0, 169, 224, 0.3);
 }
 
 .table .thead-dark th {
     border-bottom: 1px solid #454d55;
     color: #fff;
-    background-color: #0c5463;
+    background-color: #00a9e0;
     vertical-align: middle;
 }
 
@@ -29,7 +29,8 @@ nav .input-group-text {
 .btn.disabled, .btn:disabled {
     cursor: not-allowed;
 }
-    legend {
+
+legend {
     color: black;
     font-size: 15px;
     width: inherit;
@@ -68,7 +69,7 @@ fieldset {
 
 table {
     border-collapse: collapse;
-   table-layout: auto;
+    table-layout: auto;
 }
 
 th, td {
@@ -85,7 +86,7 @@ td {
 }
 
 th {
-    background: #046407;
+    background: #eee;
     height: 10px;
 }
 
@@ -112,7 +113,7 @@ th {
 
 
 #tablaPlanesDefi .thead-dark th {
-    background-color: #046407;
+    background-color: #5bc500;
 }
 
 #tablaPlanesDefi .total-column {
@@ -131,11 +132,12 @@ th {
     margin: 7px 5px;
 }
 
-.long-column{
-    max-width:110px;
-    text-overflow:unset;
-    white-space:unset;
+.long-column {
+    max-width: 110px;
+    text-overflow: unset;
+    white-space: unset;
 }
+
 #movilTableBody td {
     text-align: center;
 }
@@ -193,9 +195,8 @@ th {
 .lowerBillingChild {
     display: table-cell;
     vertical-align: middle;
-    text-align: center;    
+    text-align: center;
 }
-
 .emptyBillingDataMain {
     border: 1.3px solid #666666;
     display: table;
