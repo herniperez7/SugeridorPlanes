@@ -30,7 +30,6 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans);
 
-        Task SendMail(string fromDisplayName, string fromEmailAddress, string toName,
-             string toEmailAddress, string subject, string message, byte[] array);
+        Task SendMail(Email emailData);
     }
 }

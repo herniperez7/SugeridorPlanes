@@ -13,7 +13,7 @@ using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -246,8 +246,19 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public async void SendMail()
         {
+            Email emailData = new Email
+            {
+                FromDisplayName = "Gonzalo",
+                FromEmailAddress = "gjulean1991@hotmail.com",
+                ToName = "jose",
+                ToEmailAddress = "gjulean1991@gmail.com",
+                Subject = "asunto",
+                Message = "mensaje",
+                Array = null
+            };
+
            // byte[] pdfByteArray = await GenerateByteArrayPdf("prueba", "200");
-            await _telefonicaApi.SendMail("Gonzalo","Desde@desde.com", "jose", "gjulean1991@gmail.com", "asunto","mensaje", null);
+            await _telefonicaApi.SendMail(emailData);
         }
 
 

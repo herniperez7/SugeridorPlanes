@@ -2,55 +2,39 @@
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender
 {
     public class EmailSender : IEmailSender
     {
-        private readonly IWebHostEnvironment _env;
-        public IConfiguration _configuration { get; }
-        public EmailSender(IWebHostEnvironment env, IConfiguration configuration)
+        private readonly IWebHostEnvironment _env; 
+        public EmailSender(IWebHostEnvironment env)
         {
-            _env = env;
-            _configuration = configuration;
+            _env = env;          
         }
 
-        public async Task SendEmailAsync(string fromDisplayName, string fromEmailAddress, string toName,
-            string toEmailAddress, string subject, string message, byte[] array)
+        public async Task SendEmailAsync(Email emailData, SmtpConfig config)
         {
             try
             {
-    
-               // var test = _configuration.GetSection("JsonTest").GetSection("NestedJson").Value;
-
-                var userName = _configuration.GetSection("EmailConfiguration").GetSection("UserName").Value;
-                var password = _configuration.GetSection("EmailConfiguration").GetSection("Password").Value;
-                var smtpHost = _configuration.GetSection("EmailConfiguration").GetSection("SmtpHost").Value;
-                var portTest = _configuration.GetSection("EmailConfiguration").GetSection("Port").Value;
-                // var port = int.Parse(_configuration.GetSection("EmailConfiguration").GetSection("Port").Value);
-                var port = 587;
-
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot", "html");
                 var email = new MimeMessage();
-                email.From.Add(new MailboxAddress(fromDisplayName, fromEmailAddress));
-                email.To.Add(new MailboxAddress(toName, toEmailAddress));
-                email.Subject = subject;
+                email.From.Add(new MailboxAddress(emailData.FromDisplayName, emailData.FromEmailAddress));
+                email.To.Add(new MailboxAddress(emailData.ToName, emailData.ToEmailAddress));
+                email.Subject = emailData.Subject;
 
                 var body = new BodyBuilder
                 {
-                    HtmlBody = message
+                    HtmlBody = emailData.Message
                 };
 
-                if (array != null)
+                if (emailData.Array != null)
                 {
-                    body.Attachments.Add("Propuesta comercial", array, new ContentType("application", "pdf"));
-                }                
+                    body.Attachments.Add("Propuesta comercial", emailData.Array, new ContentType("application", "pdf"));
+                }
 
                 email.Body = body.ToMessageBody();
 
@@ -60,8 +44,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
 
                     // Start of provider specific settings
-                    await client.ConnectAsync(smtpHost, port, false).ConfigureAwait(false);
-                    await client.AuthenticateAsync(userName, password).ConfigureAwait(false);
+                    await client.ConnectAsync(config.SmtpHost, config.Port, false).ConfigureAwait(false);
+                    await client.AuthenticateAsync(config.UserName, config.Password).ConfigureAwait(false);
                     // End of provider specific settings
 
                     await client.SendAsync(email).ConfigureAwait(false);

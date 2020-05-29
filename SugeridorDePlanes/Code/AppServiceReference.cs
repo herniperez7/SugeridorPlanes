@@ -73,12 +73,12 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body);
+        System.Threading.Tasks.Task SendMailAsync(Email body);
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task SendMailAsync(Email body, System.Threading.CancellationToken cancellationToken);
     
     }
     
@@ -545,43 +545,18 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body)
+        public System.Threading.Tasks.Task SendMailAsync(Email body)
         {
-            return SendMailAsync(fromDisplayName, fromEmailAddress, toName, toEmailAddress, subject, message, body, System.Threading.CancellationToken.None);
+            return SendMailAsync(body, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task SendMailAsync(Email body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Utilities/sendMail?");
-            if (fromDisplayName != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("fromDisplayName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(fromDisplayName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (fromEmailAddress != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("fromEmailAddress") + "=").Append(System.Uri.EscapeDataString(ConvertToString(fromEmailAddress, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (toName != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("toName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(toName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (toEmailAddress != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("toEmailAddress") + "=").Append(System.Uri.EscapeDataString(ConvertToString(toEmailAddress, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (subject != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("subject") + "=").Append(System.Uri.EscapeDataString(ConvertToString(subject, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (message != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("message") + "=").Append(System.Uri.EscapeDataString(ConvertToString(message, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Utilities/sendMail");
     
             var client_ = new System.Net.Http.HttpClient();
             try
@@ -947,6 +922,42 @@ namespace Telefonica.SugeridorDePlanes
     
         [Newtonsoft.Json.JsonProperty("tmM_s_iva", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double TmM_s_iva { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Email 
+    {
+        [Newtonsoft.Json.JsonProperty("fromDisplayName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FromDisplayName { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("fromEmailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FromEmailAddress { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("toName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ToName { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("toEmailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ToEmailAddress { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("subject", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Subject { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Message { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("array", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public byte[] Array { get; set; }
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     

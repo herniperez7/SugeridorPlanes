@@ -140,13 +140,11 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _curretDefinitvePlans;
         }
 
-        public async Task SendMail(string fromDisplayName, string fromEmailAddress, string toName,
-            string toEmailAddress, string subject, string message, byte[] array)
+        public async Task SendMail(Email emailData)
         {
             try
             {
-                await _client.SendMailAsync(fromDisplayName, fromEmailAddress, toName,
-                    toEmailAddress, subject, message, array);
+                await _client.SendMailAsync(emailData);
             }
             catch (Exception ex)
             {

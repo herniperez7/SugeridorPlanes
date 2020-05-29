@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
 
 namespace Telefonica.SugeridorDePlanes.Api.Controllers
@@ -12,19 +14,27 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     public class UtilitiesController : ControllerBase
     {
         private readonly IEmailSender _emailSender;
-        public UtilitiesController(IEmailSender emailSender)
+        public IConfiguration _configuration { get; }
+        public UtilitiesController(IEmailSender emailSender, IConfiguration configuration)
         {
             _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         [HttpPost("sendMail")]
-        public async Task<ActionResult> SendEmailAsync(string fromDisplayName, string fromEmailAddress, string toName,
-            string toEmailAddress, string subject, string message)
+        public async Task<ActionResult> SendEmailAsync(Email emailData)
         {
             try
             {
-                await _emailSender.SendEmailAsync(fromDisplayName, fromEmailAddress, toName,
-                    toEmailAddress, subject, message, null);
+                var smtpConfig = new SmtpConfig
+                {
+                    UserName = _configuration.GetSection("EmailConfiguration").GetSection("UserName").Value,
+                    Password = _configuration.GetSection("EmailConfiguration").GetSection("Password").Value,
+                    SmtpHost = _configuration.GetSection("EmailConfiguration").GetSection("SmtpHost").Value,
+                    Port = int.Parse(_configuration.GetSection("EmailConfiguration").GetSection("Port").Value)
+                };
+
+                await _emailSender.SendEmailAsync(emailData, smtpConfig);
                 return Ok();
             }
             catch (Exception ex)
@@ -35,11 +45,5 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
 
         }
-
-
-
-
-
-
     }
 }
