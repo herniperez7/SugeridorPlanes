@@ -16,7 +16,7 @@ using Telefonica.SugeridorDePlanes.Resources.helpers;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-   public  class PdfLogic: IPdfLogic
+    public class PdfLogic : IPdfLogic
     {
         private readonly IWebHostEnvironment _env;
 
@@ -26,16 +26,24 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         }
 
         public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
-        {          
-            //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(tempDirectory);
+        {
+            try
+            {
+                //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
+                string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                Directory.CreateDirectory(tempDirectory);
 
-            CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
-            GenerateHtml(tempDirectory, movilDevices, companyName, monthlyFee); //modifico las copias generadas
-            ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
-            var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
-            return bytesArrayPdf;
+                CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
+                GenerateHtml(tempDirectory, movilDevices, companyName, monthlyFee); //modifico las copias generadas
+                ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
+                var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
+                return bytesArrayPdf;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
 
@@ -45,17 +53,24 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         /// <param name="directoryPath"></param>
         private void CopyFiles(string directoryPath)
         {
-            var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot", "html");
-            string[] filePaths = Directory.GetFiles(mainUrl);
-
-            foreach (string file in filePaths)
+            try
             {
-                FileInfo info = new FileInfo(file);
-                if (File.Exists(info.FullName))
+                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot", "html");
+                string[] filePaths = Directory.GetFiles(mainUrl);
+
+                foreach (string file in filePaths)
                 {
-                    var destPath = Path.Combine(directoryPath, info.Name);
-                    File.Copy(info.FullName, destPath);
+                    FileInfo info = new FileInfo(file);
+                    if (File.Exists(info.FullName))
+                    {
+                        var destPath = Path.Combine(directoryPath, info.Name);
+                        File.Copy(info.FullName, destPath);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -63,133 +78,153 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
         private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
-        {    
-                          
-            var firstHtmlsourcePath = Path.Combine(directoryUrl, "Pagina1.html");
-            var secondHtmlsourcePath = Path.Combine(directoryUrl, "Pagina2.html");
-            string content = string.Empty;
-
-            StreamReader objReader = new StreamReader(firstHtmlsourcePath);
-            content = objReader.ReadToEnd();
-            objReader.Close();
-            var contetnTr = string.Empty;
-            decimal devicesCost = 0;
-
-            var movilPdfList = GroupedMovilList(movilDevices);
-
-            foreach (var movil in movilDevices)
+        {
+            try
             {
-                devicesCost += movil.Precio;
-            }
+                var firstHtmlsourcePath = Path.Combine(directoryUrl, "Pagina1.html");
+                var secondHtmlsourcePath = Path.Combine(directoryUrl, "Pagina2.html");
+                string content = string.Empty;
 
-            foreach (var movil in movilPdfList)
+                StreamReader objReader = new StreamReader(firstHtmlsourcePath);
+                content = objReader.ReadToEnd();
+                objReader.Close();
+                var contetnTr = string.Empty;
+                decimal devicesCost = 0;
+
+                var movilPdfList = GroupedMovilList(movilDevices);
+
+                foreach (var movil in movilDevices)
+                {
+                    devicesCost += movil.Precio;
+                }
+
+                foreach (var movil in movilPdfList)
+                {
+                    contetnTr += "<tr><td>" + movil.Marca + "</td><td>" + movil.Modelo + "</td><td>" + movil.Cantidad + "</td></tr>";
+                }
+
+                content = Regex.Replace(content, "{devices}", contetnTr);
+
+                StreamWriter writer = new StreamWriter(firstHtmlsourcePath);
+                writer.Write(content);
+                writer.Close();
+
+                objReader = new StreamReader(secondHtmlsourcePath);
+                content = objReader.ReadToEnd();
+                objReader.Close();
+
+                var today = DateTime.Today;
+                string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+                content = Regex.Replace(content, "{date}", formatDate)
+                               .Replace("{company}", companyName)
+                               .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
+                               .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureNumber(monthlyFee));
+
+                writer = new StreamWriter(secondHtmlsourcePath);
+                writer.Write(content);
+                writer.Close();
+            }
+            catch (Exception ex)
             {
-                contetnTr += "<tr><td>"+movil.Marca+"</td><td>"+movil.Modelo+"</td><td>"+movil.Cantidad+"</td></tr>"; 
+
+                throw ex;
             }
-
-            content = Regex.Replace(content, "{devices}", contetnTr);
-
-            StreamWriter writer = new StreamWriter(firstHtmlsourcePath);
-            writer.Write(content);
-            writer.Close();
-            
-
-            objReader = new StreamReader(secondHtmlsourcePath);
-            content = objReader.ReadToEnd();
-            objReader.Close();
-
-            var today = DateTime.Today;
-            string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
-            content = Regex.Replace(content, "{date}", formatDate)
-                           .Replace("{company}", companyName)
-                           .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
-                           .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureNumber(monthlyFee));
-
-            writer = new StreamWriter(secondHtmlsourcePath);
-            writer.Write(content);
-            writer.Close();
-
-        }        
+        }
 
 
         private List<MovilPdf> GroupedMovilList(List<MovilDevice> movilDevices)
         {
-            var movilPdfList = new List<MovilPdf>();
-
-            movilPdfList = movilDevices
-            .GroupBy(m => m.Codigo)
-            .Select(m => new MovilPdf
+            try
             {
-                Codigo = m.First().Codigo,
-                Marca = m.First().Marca,
-                Modelo = m.First().Modelo,
-                Cantidad = m.Count()
-            }
-            ).ToList();          
+                var movilPdfList = new List<MovilPdf>();
 
-            return movilPdfList;
+                movilPdfList = movilDevices
+                .GroupBy(m => m.Codigo)
+                .Select(m => new MovilPdf
+                {
+                    Codigo = m.First().Codigo,
+                    Marca = m.First().Marca,
+                    Modelo = m.First().Modelo,
+                    Cantidad = m.Count()
+                }
+                ).ToList();
+
+                return movilPdfList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private void ConvertHtmlToPdf(string directoryPath)
         {
-            var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-            HtmlToPdfConverter converter = new HtmlToPdfConverter();
-            WebKitConverterSettings settings = new WebKitConverterSettings();
-            settings.WebKitPath = Path.Combine(mainUrl, "QtBinariesWindows");
-            converter.ConverterSettings = settings;
-            string[] filePaths = Directory.GetFiles(directoryPath);
-
-            foreach (string file in filePaths)
+            try
             {
-                FileInfo info = new FileInfo(file);
-                if (File.Exists(info.FullName))
-                {
-                    if (info.Extension.Equals(".html"))
-                    {
-                        Syncfusion.Pdf.PdfDocument document = converter.Convert(info.FullName);
-                        MemoryStream ms = new MemoryStream();                   
-                        document.Save(ms);
-                        document.Close(true);
-                         ms.Position = 0;
-                        FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
-                        
+                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
+                HtmlToPdfConverter converter = new HtmlToPdfConverter();
+                WebKitConverterSettings settings = new WebKitConverterSettings();
+                settings.WebKitPath = Path.Combine(mainUrl, "QtBinariesWindows");
+                converter.ConverterSettings = settings;
+                string[] filePaths = Directory.GetFiles(directoryPath);
 
-                        var fileName = info.Name.Split(".")[0] + ".pdf";
-                        var destSource = Path.Combine(directoryPath, fileName);
-                        var fileStream = new FileStream(destSource, FileMode.Create, FileAccess.Write);
-                        fileStreamResult.FileStream.CopyTo(fileStream);
-                        fileStream.Close();
+                foreach (string file in filePaths)
+                {
+                    FileInfo info = new FileInfo(file);
+                    if (File.Exists(info.FullName))
+                    {
+                        if (info.Extension.Equals(".html"))
+                        {
+                            Syncfusion.Pdf.PdfDocument document = converter.Convert(info.FullName);
+                            MemoryStream ms = new MemoryStream();
+                            document.Save(ms);
+                            document.Close(true);
+                            ms.Position = 0;
+                            FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
+
+
+                            var fileName = info.Name.Split(".")[0] + ".pdf";
+                            var destSource = Path.Combine(directoryPath, fileName);
+                            var fileStream = new FileStream(destSource, FileMode.Create, FileAccess.Write);
+                            fileStreamResult.FileStream.CopyTo(fileStream);
+                            fileStream.Close();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
         private byte[] MergePdf(string directoryPath)
         {
-            Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
-            var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-            var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
-            string[] lstFiles = new string[3];
-            lstFiles[0] = mainPdf;
-            lstFiles[1] = Path.Combine(directoryPath, "pagina1.pdf");
-            lstFiles[2] = Path.Combine(directoryPath, "pagina2.pdf");
-            
-            PdfReader reader = null;
-            Document sourceDocument = null;
-            PdfCopy pdfCopyProvider = null;
-            PdfImportedPage importedPage;            
-            string outputPdfPath = Path.Combine(directoryPath, "Presupuesto.pdf");
-            sourceDocument = new Document();
-            FileStream fs = new FileStream(outputPdfPath, System.IO.FileMode.OpenOrCreate);            
-            pdfCopyProvider = new PdfCopy(sourceDocument, fs);
-            
-            //Open the output file
-            sourceDocument.Open();
-
             try
-            {      
+            {
+                Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
+                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
+                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
+                string[] lstFiles = new string[3];
+                lstFiles[0] = mainPdf;
+                lstFiles[1] = Path.Combine(directoryPath, "pagina1.pdf");
+                lstFiles[2] = Path.Combine(directoryPath, "pagina2.pdf");
+
+                PdfReader reader = null;
+                Document sourceDocument = null;
+                PdfCopy pdfCopyProvider = null;
+                PdfImportedPage importedPage;
+                string outputPdfPath = Path.Combine(directoryPath, "Presupuesto.pdf");
+                sourceDocument = new Document();
+                FileStream fs = new FileStream(outputPdfPath, System.IO.FileMode.OpenOrCreate);
+                pdfCopyProvider = new PdfCopy(sourceDocument, fs);
+
+                //Open the output file
+                sourceDocument.Open();
+
+
                 foreach (var item in lstFiles)
-                {                   
+                {
                     document.LoadFromFile(item);
                     int pages = document.Pages.Count;
 
@@ -206,8 +241,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
 
                 sourceDocument.Close();
                 pdfCopyProvider.Close();
-                document.Dispose();               
-                fs.Close();                
+                document.Dispose();
+                fs.Close();
                 string pdfFilePath = outputPdfPath;
                 byte[] bytes = File.ReadAllBytes(pdfFilePath);
 
