@@ -13,22 +13,24 @@ using iTextSharp.text;
 using System.Linq;
 using System.Globalization;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
     public class PdfLogic : IPdfLogic
     {
-        private readonly IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _env;       
 
         public PdfLogic(IWebHostEnvironment env)
         {
-            _env = env;
+            _env = env;           
         }
 
-        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
+        public async Task<byte[]> GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
         {
             try
-            {
+            {            
                 //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
                 string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
                 Directory.CreateDirectory(tempDirectory);
@@ -36,7 +38,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
                 GenerateHtml(tempDirectory, movilDevices, companyName, monthlyFee); //modifico las copias generadas
                 ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
-                var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
+                var bytesArrayPdf = await MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
                 return bytesArrayPdf;
             }
             catch (Exception ex)
@@ -77,7 +79,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         /// <summary>
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
-        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
+        private async void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
         {
             try
             {
@@ -86,7 +88,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 string content = string.Empty;
 
                 StreamReader objReader = new StreamReader(firstHtmlsourcePath);
-                content = objReader.ReadToEnd();
+                content = await objReader.ReadToEndAsync();
                 objReader.Close();
                 var contetnTr = string.Empty;
                 decimal devicesCost = 0;
@@ -157,7 +159,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        private void ConvertHtmlToPdf(string directoryPath)
+        private async void ConvertHtmlToPdf(string directoryPath)
         {
             try
             {
@@ -186,7 +188,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                             var fileName = info.Name.Split(".")[0] + ".pdf";
                             var destSource = Path.Combine(directoryPath, fileName);
                             var fileStream = new FileStream(destSource, FileMode.Create, FileAccess.Write);
-                            fileStreamResult.FileStream.CopyTo(fileStream);
+                            await fileStreamResult.FileStream.CopyToAsync(fileStream);
                             fileStream.Close();
                         }
                     }
@@ -198,7 +200,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        private byte[] MergePdf(string directoryPath)
+        private async Task<byte[]> MergePdf(string directoryPath)
         {
             try
             {
@@ -232,7 +234,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                     //Add pages of current file
                     for (int i = 1; i <= pages; i++)
                     {
-                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                        importedPage =  pdfCopyProvider.GetImportedPage(reader, i);
                         pdfCopyProvider.AddPage(importedPage);
 
                     }
@@ -244,7 +246,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 document.Dispose();
                 fs.Close();
                 string pdfFilePath = outputPdfPath;
-                byte[] bytes = File.ReadAllBytes(pdfFilePath);
+                byte[] bytes = await File.ReadAllBytesAsync(pdfFilePath);
 
                 //elimino el directorio temporal
                 Directory.Delete(directoryPath, true);

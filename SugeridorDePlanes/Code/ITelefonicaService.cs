@@ -29,5 +29,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         List<PlanDefinitivolModel> GetCurrentDefinitivePlans();
 
         void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans);
+
+        Task SendMail(string fromDisplayName, string fromEmailAddress, string toName,
+             string toEmailAddress, string subject, string message, byte[] array);
     }
 }

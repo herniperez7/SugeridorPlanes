@@ -18,6 +18,7 @@ using AutoMapper;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 using Microsoft.OpenApi.Models;
+using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
 
 namespace Telefonica.SugeridorDePlanes.Api
 {
@@ -49,6 +50,7 @@ namespace Telefonica.SugeridorDePlanes.Api
             //Services
             services.AddScoped<IClientLogic, ClientLogic>();
             services.AddScoped<ISuggestorLogic, SuggestorLogic>();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();

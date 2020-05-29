@@ -5,18 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Telefonica.SugeridorDePlanes;
 using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
-using Telefonica.SugeridorDePlanes.Resources.helpers;
-using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-using System.Text;
 
 
 namespace Telefonica.SugeridorDePlanes.Controllers
@@ -34,7 +30,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             usuario = usuarioInterface;
             _telefonicaApi = telefonicaService;
             _mapper = mapper;
-            _pdfLogic = pdfLogic;
+            _pdfLogic = pdfLogic; 
 
             //provisorio
             PopulateMoviles();
@@ -53,6 +49,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
+          
 
             var clientList = await _telefonicaApi.GetClientes();
 
@@ -227,19 +224,32 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpGet]
-        public JsonResult GeneratePdf(string companyName, string monthlyFee)
+        public async Task<JsonResult> GeneratePdf(string companyName, string monthlyFee)
         {
-
+            byte[] pdfByteArray =  await GenerateByteArrayPdf(companyName, monthlyFee);
+            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+            var data = new { status = "ok", result = base64String };
+            return new JsonResult(data);
+        }
+        
+        private async Task<byte[]> GenerateByteArrayPdf(string companyName, string monthlyFee)
+        {
             monthlyFee = monthlyFee.Replace('.', ',');
             var movilSessionList = HttpContext.Session.GetString("movilList");
             List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
             var monthlyfeeDecimal = Convert.ToDecimal(monthlyFee);
             var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
-            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, companyName, monthlyfeeDecimal);
-            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
-            var data = new { status = "ok", result = base64String };
-            return new JsonResult(data);
+            byte[] pdfByteArray = await _pdfLogic.GeneratePdfFromHtml(movileDevices, companyName, monthlyfeeDecimal);
+            return pdfByteArray;
         }
+
+        [HttpPost]
+        public async void SendMail()
+        {
+           // byte[] pdfByteArray = await GenerateByteArrayPdf("prueba", "200");
+            await _telefonicaApi.SendMail("Gonzalo","Desde@desde.com", "jose", "gjulean1991@gmail.com", "asunto","mensaje", null);
+        }
+
 
         /// <summary>
         /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual

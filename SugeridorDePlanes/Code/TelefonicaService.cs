@@ -19,7 +19,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         }
 
         public async Task<List<SugeridorClientes>> GetClientes()
-        {
+        {            
             try
             {
                 var clients = await _client.GetClientsAsync();
@@ -138,6 +138,21 @@ namespace Telefonica.SugeridorDePlanes.Code
                 _curretDefinitvePlans.Add(planDef);
             }
             return _curretDefinitvePlans;
+        }
+
+        public async Task SendMail(string fromDisplayName, string fromEmailAddress, string toName,
+            string toEmailAddress, string subject, string message, byte[] array)
+        {
+            try
+            {
+                await _client.SendMailAsync(fromDisplayName, fromEmailAddress, toName,
+                    toEmailAddress, subject, message, array);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
     }

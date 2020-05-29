@@ -71,6 +71,15 @@ namespace Telefonica.SugeridorDePlanes
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PlanesOfertaActual> GetPlanByCodeAsync(string planCode, System.Threading.CancellationToken cancellationToken);
     
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body);
+    
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body, System.Threading.CancellationToken cancellationToken);
+    
     }
     
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.2.0 (NJsonSchema v10.1.4.0 (Newtonsoft.Json v12.0.0.0))")]
@@ -519,6 +528,99 @@ namespace Telefonica.SugeridorDePlanes
                         }
             
                         return default(PlanesOfertaActual);
+                    }
+                    finally
+                    {
+                        if (response_ != null)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (client_ != null)
+                    client_.Dispose();
+            }
+        }
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body)
+        {
+            return SendMailAsync(fromDisplayName, fromEmailAddress, toName, toEmailAddress, subject, message, body, System.Threading.CancellationToken.None);
+        }
+    
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public async System.Threading.Tasks.Task SendMailAsync(string fromDisplayName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string message, byte[] body, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Utilities/sendMail?");
+            if (fromDisplayName != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("fromDisplayName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(fromDisplayName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (fromEmailAddress != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("fromEmailAddress") + "=").Append(System.Uri.EscapeDataString(ConvertToString(fromEmailAddress, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (toName != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("toName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(toName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (toEmailAddress != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("toEmailAddress") + "=").Append(System.Uri.EscapeDataString(ConvertToString(toEmailAddress, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (subject != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("subject") + "=").Append(System.Uri.EscapeDataString(ConvertToString(subject, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (message != null) 
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("message") + "=").Append(System.Uri.EscapeDataString(ConvertToString(message, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
+    
+            var client_ = new System.Net.Http.HttpClient();
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+    
+                    PrepareRequest(client_, request_, urlBuilder_);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+                    PrepareRequest(client_, request_, url_);
+    
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+    
+                        ProcessResponse(client_, response_);
+    
+                        var status_ = ((int)response_.StatusCode).ToString();
+                        if (status_ == "200") 
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ != "200" && status_ != "204")
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
+                        }
                     }
                     finally
                     {

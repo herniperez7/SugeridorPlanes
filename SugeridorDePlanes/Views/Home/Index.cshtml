@@ -52,6 +52,7 @@
         var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
         var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
         var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
+        var gbSendMail = "@Url.Action("SendMail", "Home")";
 
 
     </script>
@@ -528,7 +529,7 @@
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
 
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn" onclick="SendMail()">Generar propuesta</button>
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
                                     Exportar Propuesta
                                 </button>                               

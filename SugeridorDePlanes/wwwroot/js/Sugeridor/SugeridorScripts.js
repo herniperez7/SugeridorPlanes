@@ -116,20 +116,6 @@ function loadDefinitivePlans(planList) {
 
 //Logica moviles
 
-//sin uso actualmente
-function getMovileList() {
-
-    $.ajax({
-        url: gbGetMovilListUrl,
-        success: function (data) {
-            if (data.status === "ok") {                
-                return data.result;
-            }
-        }
-    });
-}
-
-
 function confirmDevices() {
     var total = 0;
     $.ajax({
@@ -487,6 +473,17 @@ function exportPdf() {
             }            
         }
     });
+}
+
+function SendMail() {
+    $.ajax({
+        type: "POST",
+        url: gbSendMail,
+        success: function (data) {
+            
+        }
+    });
+
 }
 
 

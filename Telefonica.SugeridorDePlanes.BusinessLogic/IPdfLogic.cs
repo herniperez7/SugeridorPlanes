@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
     public interface IPdfLogic
     {
-        byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee);
+        Task<byte[]> GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee);
 
     }
 }
