@@ -226,7 +226,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpGet]
         public JsonResult GeneratePdf(string companyName, string monthlyFee)
         {
-   
+
+            monthlyFee = monthlyFee.Replace('.', ',');
             var movilSessionList = HttpContext.Session.GetString("movilList");
             var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
             List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
