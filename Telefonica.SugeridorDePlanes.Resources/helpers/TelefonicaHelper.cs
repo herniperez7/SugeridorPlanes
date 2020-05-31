@@ -35,6 +35,24 @@ namespace Telefonica.SugeridorDePlanes.Resources.helpers
 
             format.CurrencyGroupSeparator = ".";
             format.NumberDecimalSeparator = ",";
+            var valueDecimal = Convert.ToDecimal(value);
+            valueDecimal = (Math.Round(valueDecimal, 2));
+            numberFormatted = valueDecimal.ToString("N", format);
+            // .ToString("C", formato) --> currency
+
+            return numberFormatted;
+        }
+
+        
+
+        public static string FormatCultureDouble(double? value)
+        {
+            string numberFormatted = string.Empty;
+
+            System.Globalization.NumberFormatInfo format = new System.Globalization.CultureInfo("es-AR").NumberFormat;
+
+            format.CurrencyGroupSeparator = ".";
+            format.NumberDecimalSeparator = ",";
 
             numberFormatted = value?.ToString("N", format);
             // .ToString("C", formato) --> currency

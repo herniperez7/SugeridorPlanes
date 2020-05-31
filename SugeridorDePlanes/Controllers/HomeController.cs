@@ -224,32 +224,37 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpGet]
-        public JsonResult GeneratePdf(string companyName, string monthlyFee)
+        public JsonResult GeneratePdf(string companyName, string subsidio, string payback, string devicePayment)
         {
+            if(subsidio!=null && payback != null && devicePayment != null)
+            {
+                if (subsidio.Contains("$"))
+                {
+                    subsidio = subsidio.Replace("$ ","");
+                }                    
+                var movilSessionList = HttpContext.Session.GetString("movilList");
+                var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
+                List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
+                var subsidioDouble = Convert.ToDouble(subsidio);
+                var paybackDouble = Convert.ToDouble(payback);
+                var devicePaymentDouble = Convert.ToDouble(devicePayment);
+                var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
 
-            monthlyFee = monthlyFee.Replace('.', ',');
-            var movilSessionList = HttpContext.Session.GetString("movilList");
-            var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
-            List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-            var check = Convert.ToDouble(monthlyFee);
-            String y = monthlyFee.Replace(".", "");
-            int value1 = Convert.ToInt32(y);
-            var monthlyfeeDecimal = Convert.ToDecimal(monthlyFee);
-            var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
+                var planesDef = _mapper.Map<List<PlanDefinitivolModel>, List<PlanesOferta>>(planesDefList);
 
-            var planesDef = _mapper.Map<List<PlanDefinitivolModel>, List<PlanesOferta>>(planesDefList);
+                byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, planesDef, companyName, subsidioDouble, paybackDouble, devicePaymentDouble);
+                string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+                var data = new { status = "ok", result = base64String };
+                return new JsonResult(data);
+            }
+            else
+            {
+                var data = new { status = "error"};
+                return new JsonResult(data);
+            }
 
-            byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, planesDef, companyName, monthlyfeeDecimal);
-            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
-            var data = new { status = "ok", result = base64String };
-            return new JsonResult(data);
+            
         }
-
-        /// <summary>
-        /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
-        /// </summary>
-        /// <param name="rut"></param>
-        /// <returns></returns>
         private IndexModel CalculateIndexes(string rut)
         {
 

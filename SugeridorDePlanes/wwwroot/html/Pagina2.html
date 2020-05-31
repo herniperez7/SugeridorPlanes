@@ -9,38 +9,10 @@
             background-size: 100%;
             /* margin-bottom: 30px; */
         }
-        
-        /*.wrapper {
-            width: 800px;
-            height: 125px;
-            overflow: hidden;
-            text-align: center;
-            margin: 0 auto;
+        body{
+            margin: 0px;
         }
         
-        .wrapper p {
-            font-size: 25px;
-            font-family: sans-serif;
-            font-style: normal;
-            color: #404040;
-            margin: 5px;
-        }
-        
-        #first {
-            width: 385px;
-            height: 125px;
-            float: left;
-            background: #d9d9d9;
-            margin: 15px;
-        }
-        
-        #second {
-            height: 125px;
-            overflow: hidden;
-            background: #d9d9d9;
-            margin: 15px;
-        }*/
-
         #tabla {
             text-align: center;
             margin-top: 30px;
@@ -93,7 +65,7 @@
         }
         
         .ovalWrapper {
-            width: 590px;
+            width: 100%;
             height: 400px;
             overflow: hidden;
             text-align: center;
@@ -114,18 +86,32 @@
             background: #d9d9d9;
             border-radius: 80%;
             margin: 5px;
-            background-color: #40b7e0;
+            background-color: #00a9e0;
             margin-right: -25px;
             opacity: 0.9;
         }
         
+
         #secondOval {
+            width: 300px;
+            height: 200px;
+            float: left;
+            background: #d9d9d9;
+            margin: 5px;
+            margin-right: -25px;
+            background-color: #a879a9;
+            border-radius: 80%;
+        }
+
+        #thirdOval {
+            width: 300px;
             height: 200px;
             overflow: hidden;
             background: #d9d9d9;
             margin: 5px;
-            background-color: #a879a9;
+            background-color: #5bc500;
             border-radius: 80%;
+            opacity: 0.9;
         }
         
         .ovalWrapperContainer {
@@ -254,12 +240,12 @@
         </table>
     </div>
 
-    <div style="margin-top: 50px;">
+    <div style="margin-top: 50px;margin-left: 85px;">
         <div class="ovalWrapper">
             <div id="firstOval">
                 <div class="ovalWrapperContainer">
                     <p>COSTO DE EQUIPOS</p>
-                    <p style="font-weight: bold;">$ {devicesCost}</p>
+                    <p style="font-weight: bold;">$ {subsidio}</p>
                     <p>+IVA</p>
                 </div>
 
@@ -267,7 +253,14 @@
             <div id="secondOval">
                 <div class="ovalWrapperContainer">
                     <p>TARIFA MENSUAL</p>
-                    <p style="font-weight: bold;">$ {monthlyFee}</p>
+                    <p style="font-weight: bold;">$ {payback}</p>
+                    <p>+IVA</p>
+                </div>
+            </div>
+            <div id="thirdOval">
+                <div class="ovalWrapperContainer">
+                    <p>PAGO DE EQUIPOS</p>
+                    <p style="font-weight: bold;">$ {devicePayment}</p>
                     <p>+IVA</p>
                 </div>
             </div>

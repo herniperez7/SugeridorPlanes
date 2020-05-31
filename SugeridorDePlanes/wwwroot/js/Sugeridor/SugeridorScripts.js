@@ -472,11 +472,13 @@ function exportPdf() {
     var exportText = "Exportar Propuesta";
     $("#pdfExportBtn").html(loading);
     $("#pdfExportBtn").prop("disabled", true);
+    var devicePayment = $("#pagoEquiposTxt").val();
+    if (devicePayment == "") devicePayment = "0";
 
     var companyName = $("#clientSelect option:selected").text();
     $.ajax({
         type: "GET",
-        url: gbExportPdf + '?companyName=' + companyName + '&monthlyFee=' + $("#incomeDivValue").text().toString(),
+        url: gbExportPdf + '?companyName=' + companyName + '&subsidio=' + $("#subsidioTxt").val() + '&payback=' + $("#paybackTxt").val() + '&devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
 
