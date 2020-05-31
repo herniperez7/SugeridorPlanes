@@ -105,7 +105,7 @@ function loadDefinitivePlans(planList) {
 
 
 
-        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + formatNumberStr(totalTmm) + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
+        var totalRow = "<tr><td class='total-column' colspan='2' style='text-align: left;'>Totales</td><td class='total-column'>" + "$ " + formatNumberStr(totalTmm) + "</td>  <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
         $("#incomeDivValue").html(totalTmm);

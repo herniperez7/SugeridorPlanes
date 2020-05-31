@@ -10,7 +10,7 @@
             /* margin-bottom: 30px; */
         }
         
-        .wrapper {
+        /*.wrapper {
             width: 800px;
             height: 125px;
             overflow: hidden;
@@ -39,6 +39,53 @@
             overflow: hidden;
             background: #d9d9d9;
             margin: 15px;
+        }*/
+
+        #tabla {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        table {
+            display: inline-block;
+        }
+        
+        table thead tr th {
+            padding: 20px;
+            color: #fff;
+            font-size: 25px;
+            font-weight: 600;
+            font-family: monospace;
+            width: 200px;
+        }
+        
+        table tbody tr {
+            height: 60px;
+            font-family: monospace;
+            text-align: center;
+        }
+        
+        table tbody tr td {
+            border: 3px solid #fff;
+            background-color: #d9d9d9;
+            font-family: sans-serif;
+        }
+        
+        td p {
+            margin: 5px;
+        }
+
+        .centerTd{
+            background-color: #fff;
+        }
+        
+        .centerTd div{
+            background-color: #d9d9d9;
+            margin-left: 125px;
+            width: 225px;
+            height: 55px;
+            align-items: center;
+            display: grid;
         }
         
         .wrapperContainer {
@@ -158,6 +205,8 @@
             overflow: hidden;
             text-align: right;
         }
+
+
     </style>
 </head>
 <header>
@@ -190,34 +239,19 @@
         </div>
     </div>
 
-    <div class="wrapper">
-        <div id="first">
-            <div class="wrapperContainer">
-                <p>2 lineas <b>100GB</b></p>
-                <p>Plan celular</p>
-            </div>
 
-        </div>
-        <div id="second">
-            <div class="wrapperContainer">
-                <p>16 lineas <b>30GB</b></p>
-                <p>Plan celular</p>
-            </div>
-        </div>
-    </div>
-    <div class="wrapper">
-        <div id="first">
-            <div class="wrapperContainer">
-                <p>15 lineas <b>20GB</b></p>
-                <p>Plan celular</p>
-            </div>
-        </div>
-        <div id="second">
-            <div class="wrapperContainer">
-                <p>80 lineas <b>7GB</b></p>
-                <p>Plan celular</p>
-            </div>
-        </div>
+    <div id="tabla">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {plans}
+            </tbody>
+        </table>
     </div>
 
     <div style="margin-top: 50px;">

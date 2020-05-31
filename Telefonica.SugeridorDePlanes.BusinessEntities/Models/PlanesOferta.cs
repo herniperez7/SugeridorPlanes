@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
-    public class PlanesOfertaActual
+    public class PlanesOferta
     {
         public string Plan { get; set; }
         public long Bono { get; set; }
