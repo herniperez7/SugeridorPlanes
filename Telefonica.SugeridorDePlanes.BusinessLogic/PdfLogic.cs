@@ -27,24 +27,18 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             _env = env;           
         }
 
-        public async Task<byte[]> GeneratePdfFromHtml(List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
-        {
-            try
-            {            
-                //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
-                string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                Directory.CreateDirectory(tempDirectory);
+        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double subsidio,double payback, double devicePayment)
+        {          
+            //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDirectory);
 
-                CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
-                GenerateHtml(tempDirectory, movilDevices, companyName, monthlyFee); //modifico las copias generadas
-                ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
-                var bytesArrayPdf = await MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
-                return bytesArrayPdf;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
+            GenerateHtml(tempDirectory, movilDevices, planList, companyName, subsidio, payback ,devicePayment); //modifico las copias generadas
+            ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
+            var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
+            return bytesArrayPdf;
+        }
 
         }
 
@@ -79,33 +73,25 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         /// <summary>
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
-        private async void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, string companyName, decimal monthlyFee)
-        {
-            try
-            {
-                var firstHtmlsourcePath = Path.Combine(directoryUrl, "Pagina1.html");
-                var secondHtmlsourcePath = Path.Combine(directoryUrl, "Pagina2.html");
-                string content = string.Empty;
+        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double subsidio, double payback , double devicePayment)
+        {    
+                          
+            var firstHtmlsourcePath = Path.Combine(directoryUrl, "Pagina1.html");
+            var secondHtmlsourcePath = Path.Combine(directoryUrl, "Pagina2.html");
+            string content = string.Empty;
 
-                StreamReader objReader = new StreamReader(firstHtmlsourcePath);
-                content = await objReader.ReadToEndAsync();
-                objReader.Close();
-                var contetnTr = string.Empty;
-                decimal devicesCost = 0;
+            StreamReader objReader = new StreamReader(firstHtmlsourcePath);
+            content = objReader.ReadToEnd();
+            objReader.Close();
+            
+            decimal devicesCost = getDevicesCost(movilDevices);
 
-                var movilPdfList = GroupedMovilList(movilDevices);
+            var contentMoviles = getContentMoviles(movilDevices);
 
-                foreach (var movil in movilDevices)
-                {
-                    devicesCost += movil.Precio;
-                }
+            var contentPlans = getContentPlans(planList);
 
-                foreach (var movil in movilPdfList)
-                {
-                    contetnTr += "<tr><td>" + movil.Marca + "</td><td>" + movil.Modelo + "</td><td>" + movil.Cantidad + "</td></tr>";
-                }
 
-                content = Regex.Replace(content, "{devices}", contetnTr);
+            content = Regex.Replace(content, "{devices}", contentMoviles);
 
                 StreamWriter writer = new StreamWriter(firstHtmlsourcePath);
                 writer.Write(content);
@@ -115,12 +101,15 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 content = objReader.ReadToEnd();
                 objReader.Close();
 
-                var today = DateTime.Today;
-                string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
-                content = Regex.Replace(content, "{date}", formatDate)
-                               .Replace("{company}", companyName)
-                               .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
-                               .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureNumber(monthlyFee));
+            var today = DateTime.Today;
+            string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            content = Regex.Replace(content, "{date}", formatDate)
+                           .Replace("{company}", companyName)
+                           .Replace("{plans}", contentPlans)
+                           .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
+                           .Replace("{subsidio}", TelefonicaHelper.FormatCultureDouble(subsidio))
+                           .Replace("{payback}", TelefonicaHelper.FormatCultureDouble(payback))
+                           .Replace("{devicePayment}", TelefonicaHelper.FormatCultureDouble(devicePayment));
 
                 writer = new StreamWriter(secondHtmlsourcePath);
                 writer.Write(content);
@@ -129,11 +118,79 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             catch (Exception ex)
             {
 
-                throw ex;
+        }        
+
+        private decimal getDevicesCost(List<MovilDevice> movilDevices)
+        {
+            decimal devicesCost = 0;
+
+            foreach (var movil in movilDevices)
+            {
+                devicesCost += movil.Precio;
             }
+
+            return devicesCost;
         }
 
+        private string getContentMoviles(List<MovilDevice> movilDevices)
+        {
+            var movilPdfList = GroupedMovilList(movilDevices);
+            string content = string.Empty;
 
+            foreach (var movil in movilPdfList)
+            {
+                content += "<tr><td>" + movil.Marca + "</td><td>" + movil.Modelo + "</td><td>" + movil.Cantidad + "</td></tr>";
+            }
+            return content;
+        }
+
+        private string getContentPlans(List<PlanesOferta> planList)
+        {
+            var planPdfList = GroupedPlanList(planList);
+            var contentPlans = string.Empty;
+            var countPLans = planPdfList.Count;
+            var isPair = false;
+            if (planList.Count % 2 == 00) isPair = true;
+
+            if (isPair)
+            {
+                for (var i = 0; i < countPLans-1; i = i + 2)
+                {
+                    contentPlans += "<tr>";
+                    contentPlans += "<td><p>" + planPdfList[i].Cantidad + " lineas <b>" + planPdfList[i].Bono + "GB <b/></p><p>Plan celular</p></td>";
+                    contentPlans += "<td><p>" + planPdfList[i+1].Cantidad + " lineas <b>" + planPdfList[i+1].Bono + "GB <b/></p><p>Plan celular</p></td>";
+                    contentPlans += "</tr>";
+
+                }
+            }
+            else
+            {
+                if (countPLans > 1)
+                {
+                    for (var i = 0; i < countPLans - 2; i = i + 2)
+                    {
+                        contentPlans += "<tr>";
+                        contentPlans += "<td><p>" + planPdfList[i].Cantidad + " lineas <b>" + planPdfList[i].Bono + "GB <b/></p><p>Plan celular</p></td>";
+                        contentPlans += "<td><p>" + planPdfList[i + 1].Cantidad + " lineas <b>" + planPdfList[i + 1].Bono + "GB <b/></p><p>Plan celular</p></td>";
+                        contentPlans += "</tr>";
+
+                    }
+                    contentPlans += "<tr>";
+                    contentPlans += "<td colspan=\"2\" class=\"centerTd\"><div><p>" + planPdfList[countPLans-1].Cantidad + " lineas <b>" + planPdfList[countPLans-1].Bono + "GB <b/></p><p>Plan celular</p></div></td>";
+                    contentPlans += "</tr>";
+                }
+                else
+                {
+                    contentPlans += "<tr>";
+                    contentPlans += "<td colspan=\"2\" class=\"centerTd\"><div><p>" + planPdfList[countPLans-1].Cantidad + " lineas <b>" + planPdfList[countPLans-1].Bono + "GB <b/></p><p>Plan celular</p></div></td>";
+                    contentPlans += "</tr>";
+                }
+                
+
+            }
+            
+            return contentPlans;
+        }
         private List<MovilPdf> GroupedMovilList(List<MovilDevice> movilDevices)
         {
             try
@@ -159,16 +216,31 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        private async void ConvertHtmlToPdf(string directoryPath)
+        private List<PlanPdf> GroupedPlanList(List<PlanesOferta> planList)
         {
-            try
+            var planPdfList = new List<PlanPdf>();
+
+            planPdfList = planList
+            .GroupBy(m => m.Plan)
+            .Select(m => new PlanPdf
             {
-                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-                HtmlToPdfConverter converter = new HtmlToPdfConverter();
-                WebKitConverterSettings settings = new WebKitConverterSettings();
-                settings.WebKitPath = Path.Combine(mainUrl, "QtBinariesWindows");
-                converter.ConverterSettings = settings;
-                string[] filePaths = Directory.GetFiles(directoryPath);
+                Plan = m.First().Plan,
+                Bono = m.First().Bono,
+                Cantidad = m.Count()
+            }
+            ).ToList();
+
+            return planPdfList;
+        }
+
+        private void ConvertHtmlToPdf(string directoryPath)
+        {
+            var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
+            HtmlToPdfConverter converter = new HtmlToPdfConverter();
+            WebKitConverterSettings settings = new WebKitConverterSettings();
+            settings.WebKitPath = Path.Combine(mainUrl, "QtBinariesWindows");
+            converter.ConverterSettings = settings;
+            string[] filePaths = Directory.GetFiles(directoryPath);
 
                 foreach (string file in filePaths)
                 {

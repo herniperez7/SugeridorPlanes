@@ -13,7 +13,6 @@ using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -23,6 +22,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
         private List<EquipoMovil> _moviles;
+        private List<PlanDefinitivolModel> _planesDef;
         private IPdfLogic _pdfLogic;
 
         public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService, IPdfLogic pdfLogic)
@@ -224,49 +224,37 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GeneratePdf(string companyName, string monthlyFee)
+        public JsonResult GeneratePdf(string companyName, string subsidio, string payback, string devicePayment)
         {
-            byte[] pdfByteArray =  await GenerateByteArrayPdf(companyName, monthlyFee);
-            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
-            var data = new { status = "ok", result = base64String };
-            return new JsonResult(data);
-        }
-        
-        private async Task<byte[]> GenerateByteArrayPdf(string companyName, string monthlyFee)
-        {
-            monthlyFee = monthlyFee.Replace('.', ',');
-            var movilSessionList = HttpContext.Session.GetString("movilList");
-            List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-            var monthlyfeeDecimal = Convert.ToDecimal(monthlyFee);
-            var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
-            byte[] pdfByteArray = await _pdfLogic.GeneratePdfFromHtml(movileDevices, companyName, monthlyfeeDecimal);
-            return pdfByteArray;
-        }
-
-        [HttpPost]
-        public async void SendMail()
-        {
-            Email emailData = new Email
+            if(subsidio!=null && payback != null && devicePayment != null)
             {
-                FromDisplayName = "Gonzalo",
-                FromEmailAddress = "gjulean1991@hotmail.com",
-                ToName = "jose",
-                ToEmailAddress = "gjulean1991@gmail.com",
-                Subject = "asunto",
-                Message = "mensaje",
-                Array = null
-            };
+                if (subsidio.Contains("$"))
+                {
+                    subsidio = subsidio.Replace("$ ","");
+                }                    
+                var movilSessionList = HttpContext.Session.GetString("movilList");
+                var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
+                List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
+                var subsidioDouble = Convert.ToDouble(subsidio);
+                var paybackDouble = Convert.ToDouble(payback);
+                var devicePaymentDouble = Convert.ToDouble(devicePayment);
+                var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
 
-           // byte[] pdfByteArray = await GenerateByteArrayPdf("prueba", "200");
-            await _telefonicaApi.SendMail(emailData);
+                var planesDef = _mapper.Map<List<PlanDefinitivolModel>, List<PlanesOferta>>(planesDefList);
+
+                byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, planesDef, companyName, subsidioDouble, paybackDouble, devicePaymentDouble);
+                string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+                var data = new { status = "ok", result = base64String };
+                return new JsonResult(data);
+            }
+            else
+            {
+                var data = new { status = "error"};
+                return new JsonResult(data);
+            }
+
+            
         }
-
-
-        /// <summary>
-        /// Metodo que devuelve Los distintos Gaps y el estatus de la facturacion actual
-        /// </summary>
-        /// <param name="rut"></param>
-        /// <returns></returns>
         private IndexModel CalculateIndexes(string rut)
         {
 

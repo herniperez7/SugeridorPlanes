@@ -41,7 +41,7 @@ namespace Telefonica.SugeridorDePlanes.Api
             {
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
-                configuration.CreateMap<PlanesOfertaActual, PlanesOfertaActualDTO>().ReverseMap();
+                configuration.CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
             }, typeof(Startup));
 
             services.AddDbContext<TelefonicaSugeridorDePlanesContext>(options =>

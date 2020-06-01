@@ -105,7 +105,7 @@ function loadDefinitivePlans(planList) {
 
 
 
-        var totalRow = "<tr><td class='total-column' colspan='3'>" + "$ " + formatNumberStr(totalTmm) + "</td> <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
+        var totalRow = "<tr><td class='total-column' colspan='2' style='text-align: left;'>Totales</td><td class='total-column'>" + "$ " + formatNumberStr(totalTmm) + "</td>  <td class='total-column'>" + totalBono + " Gb</td> <td class='total-column'>" + roamingCount + "</td> </tr>";
 
         $('#tablaPlanesDefi tbody').append(totalRow);
         $("#incomeDivValue").html(totalTmm);
@@ -458,11 +458,13 @@ function exportPdf() {
     var exportText = "Exportar Propuesta";
     $("#pdfExportBtn").html(loading);
     $("#pdfExportBtn").prop("disabled", true);
+    var devicePayment = $("#pagoEquiposTxt").val();
+    if (devicePayment == "") devicePayment = "0";
 
     var companyName = $("#clientSelect option:selected").text();
     $.ajax({
         type: "GET",
-        url: gbExportPdf + '?companyName=' + companyName + '&monthlyFee=' + $("#incomeDivValue").text().toString(),
+        url: gbExportPdf + '?companyName=' + companyName + '&subsidio=' + $("#subsidioTxt").val() + '&payback=' + $("#paybackTxt").val() + '&devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
 

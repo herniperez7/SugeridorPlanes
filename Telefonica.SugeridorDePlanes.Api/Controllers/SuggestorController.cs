@@ -106,16 +106,16 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getActualPlans")]
-        public async Task<ActionResult<List<PlanesOfertaActual>>> GetActualPlans()
+        public async Task<ActionResult<List<PlanesOferta>>> GetActualPlans()
         {
             try
             {
-                var plansList = new List<PlanesOfertaActual>();
+                var plansList = new List<PlanesOferta>();
                 var plansDto = await _suggestorService.GetActualPlans();
 
                 foreach (var item in plansDto)
                 {
-                    var planModel = _mapper.Map<PlanesOfertaActual>(item);
+                    var planModel = _mapper.Map<PlanesOferta>(item);
                     plansList.Add(planModel);
                 }
 
@@ -129,13 +129,13 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
 
         [HttpGet("getPlanByCode")]
-        public async Task<ActionResult<PlanesOfertaActual>> GetPlanByCode(string planCode)
+        public async Task<ActionResult<PlanesOferta>> GetPlanByCode(string planCode)
         {
             try
             {
                 var plansDto = await _suggestorService.GetPlanByCode(planCode);
 
-                var planModel = _mapper.Map<PlanesOfertaActual>(plansDto);
+                var planModel = _mapper.Map<PlanesOferta>(plansDto);
 
                 return planModel;
             }

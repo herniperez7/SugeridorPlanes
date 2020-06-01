@@ -37,6 +37,7 @@ namespace Telefonica.SugeridorDePlanes
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesModel>().ReverseMap();
                 configuration.CreateMap<PlanesOfertaActual, PlanOfertaActualModel>().ReverseMap();
+                configuration.CreateMap<PlanDefinitivolModel, PlanesOferta>().ReverseMap();
                 configuration.CreateMap<EquipoMovil, MovilDevice>().ReverseMap(); //cambiar este map
             }, typeof(Startup));
 
