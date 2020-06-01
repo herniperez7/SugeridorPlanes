@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Hosting;
-using Syncfusion.HtmlConverter;
-using Microsoft.AspNetCore.Mvc;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-using Spire.Pdf;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using iTextSharp.text;
-using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Syncfusion.HtmlConverter;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
@@ -85,12 +81,15 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 content = objReader.ReadToEnd();
                 objReader.Close();
 
-                decimal devicesCost = getDevicesCost(movilDevices);
+                decimal devicesCost = GetDevicesCost(movilDevices);
 
-                var contentMoviles = getContentMoviles(movilDevices);
+                var contentMoviles = GetContentMoviles(movilDevices);
 
-                var contentPlans = getContentPlans(planList);
+                var contentPlans = GetContentPlans(planList);
 
+                var monthyFee = GetMothlyFee(planList);
+
+                subsidio -= devicePayment;
 
                 content = Regex.Replace(content, "{devices}", contentMoviles);
 
@@ -109,7 +108,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                                .Replace("{plans}", contentPlans)
                                .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
                                .Replace("{subsidio}", TelefonicaHelper.FormatCultureDouble(subsidio))
-                               .Replace("{payback}", TelefonicaHelper.FormatCultureDouble(payback))
+                               .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureDouble((double)monthyFee))
                                .Replace("{devicePayment}", TelefonicaHelper.FormatCultureDouble(devicePayment));
 
                 writer = new StreamWriter(secondHtmlsourcePath);
@@ -123,7 +122,19 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        private decimal getDevicesCost(List<MovilDevice> movilDevices)
+        private decimal GetMothlyFee(List<PlanesOferta> planList)
+        {
+            decimal monthlyFee = 0;
+
+            foreach (var plan in planList)
+            {
+                monthlyFee += plan.TMM_s_iva;
+            }
+
+            return monthlyFee;
+        }
+
+        private decimal GetDevicesCost(List<MovilDevice> movilDevices)
         {
             decimal devicesCost = 0;
 
@@ -135,7 +146,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             return devicesCost;
         }
 
-        private string getContentMoviles(List<MovilDevice> movilDevices)
+        private string GetContentMoviles(List<MovilDevice> movilDevices)
         {
             var movilPdfList = GroupedMovilList(movilDevices);
             string content = string.Empty;
@@ -147,13 +158,13 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             return content;
         }
 
-        private string getContentPlans(List<PlanesOferta> planList)
+        private string GetContentPlans(List<PlanesOferta> planList)
         {
             var planPdfList = GroupedPlanList(planList);
             var contentPlans = string.Empty;
             var countPLans = planPdfList.Count;
             var isPair = false;
-            if (planList.Count % 2 == 00) isPair = true;
+            if (planPdfList.Count % 2 == 00) isPair = true;
 
             if (isPair)
             {
@@ -265,7 +276,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                             var fileName = info.Name.Split(".")[0] + ".pdf";
                             var destSource = Path.Combine(directoryPath, fileName);
                             var fileStream = new FileStream(destSource, FileMode.Create, FileAccess.Write);
-                            fileStreamResult.FileStream.CopyToAsync(fileStream);
+                            fileStreamResult.FileStream.CopyTo(fileStream);
                             fileStream.Close();
                         }
                     }
