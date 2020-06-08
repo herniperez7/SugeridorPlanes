@@ -1,0 +1,274 @@
+<html>
+
+<head>
+    <style>
+        #backgroundPage {
+            background-image: url("fondoPagina2.png");
+            height: 400px;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            /* margin-bottom: 30px; */
+        }
+        
+        body {
+            margin: 0px;
+        }
+        
+        #tabla {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        table {
+            display: inline-block;
+        }
+        
+        table thead tr th {
+            padding: 20px;
+            color: #fff;
+            font-size: 25px;
+            font-weight: 600;
+            font-family: monospace;
+            width: 200px;
+        }
+        
+        table tbody tr {
+            height: 60px;
+            font-family: monospace;
+            text-align: center;
+        }
+        
+        table tbody tr td {
+            border: 3px solid #fff;
+            background-color: #d9d9d9;
+            font-family: sans-serif;
+        }
+        
+        td p {
+            margin: 5px;
+        }
+        
+        .centerTd {
+            background-color: #fff;
+        }
+        
+        .centerTd div {
+            background-color: #d9d9d9;
+            margin-left: 125px;
+            width: 225px;
+            height: 55px;
+            align-items: center;
+            display: grid;
+        }
+        
+        .wrapperContainer {
+            margin-top: 25px;
+        }
+        
+        .ovalWrapper {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .ovalWrapper p {
+            font-size: 25px;
+            font-family: sans-serif;
+            font-style: normal;
+            margin: 5px;
+        }
+        
+        #firstOval {
+            width: 300px;
+            height: 200px;
+            float: left;
+            background: #d9d9d9;
+            border-radius: 80%;
+            margin: 5px;
+            background-color: #00a9e0;
+            margin-right: -25px;
+            opacity: 0.9;
+        }
+        
+        #secondOval {
+            width: 300px;
+            height: 200px;
+            float: left;
+            background: #d9d9d9;
+            margin: 5px;
+            margin-right: -25px;
+            background-color: #a879a9;
+            border-radius: 80%;
+        }
+        
+        #thirdOval {
+            width: 300px;
+            height: 200px;
+            overflow: hidden;
+            background: #d9d9d9;
+            margin: 5px;
+            background-color: #5bc500;
+            border-radius: 80%;
+            opacity: 0.9;
+        }
+        
+        .ovalWrapperContainer {
+            margin-top: 50px;
+        }
+        
+        .ovalWrapperContainer p {
+            color: white;
+        }
+        
+        #footer {
+            background-image: url(footerPagina2.png);
+            height: 250px;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            /* position: absolute; */
+            width: 100%;
+            bottom: 0;
+        }
+        /*Titulo*/
+        
+        .wrapperTitle {
+            width: 800px;
+            height: 50px;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+        
+        .wrapperTitle p {
+            font-size: 25px;
+            font-family: sans-serif;
+            font-style: normal;
+            margin: 5px;
+        }
+        
+        #firstTitle {
+            width: 300px;
+            height: 125px;
+            float: left;
+            margin: 10px;
+        }
+        
+        #secondTitle {
+            height: 125px;
+            overflow: hidden;
+            margin: 10px;
+        }
+        /* Fecha */
+        
+        .wrapperDate {
+            width: 800px;
+            height: 50px;
+            overflow: hidden;
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+        
+        .wrapperDate p {
+            font-size: 25px;
+            font-family: sans-serif;
+            font-style: normal;
+            margin: 5px;
+        }
+        
+        #dateDiv {
+            width: 300px;
+            height: 125px;
+            float: left;
+            margin-left: -10px;
+        }
+        
+        #validDiv {
+            height: 125px;
+            overflow: hidden;
+            text-align: right;
+        }
+    </style>
+</head>
+<header>
+    <div id="backgroundPage">
+
+    </div>
+</header>
+
+<body>
+
+
+    <!-- Oferta -->
+    <div class="wrapperTitle">
+        <div id="firstTitle">
+            <p> <b> Oferta especial para: </b></p>
+        </div>
+        <div id="secondTitle">
+            <p>{company}</p>
+            <p style="margin-top: -30px;">____________________________________________</p>
+        </div>
+    </div>
+
+    <!-- Fecha -->
+    <div class="wrapperDate">
+        <div id="dateDiv">
+            <p> Fecha: {date} </p>
+        </div>
+        <div id="validDiv">
+            <p>Valido por 15 dias.</p>
+        </div>
+    </div>
+
+
+    <div id="tabla">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {plans}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 50px;margin-left: 85px;">
+        <div class="ovalWrapper">
+            <div id="firstOval">
+                <div class="ovalWrapperContainer">
+                    <p>SUBSIDIO DE EQUIPOS</p>
+                    <p style="font-weight: bold;">$ {subsidio}</p>
+                    <p>+IVA</p>
+                </div>
+
+            </div>
+            <div id="secondOval">
+                <div class="ovalWrapperContainer">
+                    <p>TARIFA MENSUAL</p>
+                    <p style="font-weight: bold;">$ {monthlyFee}</p>
+                    <p>+IVA</p>
+                </div>
+            </div>
+            <div id="thirdOval">
+                <div class="ovalWrapperContainer">
+                    <p>PAGO DE EQUIPOS</p>
+                    <p style="font-weight: bold;">$ {devicePayment}</p>
+                    <p>+IVA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer" style="margin-top: -100px;">
+
+    </div>
+
+</body>
+
+</html>

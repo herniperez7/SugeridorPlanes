@@ -13,6 +13,6 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber);
         Task<List<PlanesOfertaActualDTO>> GetActualPlans();
         Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode);
-
+        Task<List<EquipoPymesDTO>> GetEquiposPymes();
     }
 }

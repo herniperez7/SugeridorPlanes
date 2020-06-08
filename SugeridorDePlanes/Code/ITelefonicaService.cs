@@ -31,5 +31,13 @@ namespace Telefonica.SugeridorDePlanes.Code
         void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans);
 
         Task SendMail(Email emailData);
+
+        void UpdateCurrentClient(string document);
+
+        decimal GetDefinitivePlansIncome();
+
+        SugeridorClientes GetCurrentClient();
+
+        List<SugeridorClientes> GetCurrentClients();
     }
 }

@@ -91,9 +91,22 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
+        /// <summary>
+        /// Retorna la lista de los equipos moviles
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<EquipoPymesDTO>> GetEquiposPymes()
+        {
+            try
+            {
+                var mobileDevices = await _context.EquipoPymes.ToListAsync();
 
-
-
-
+                return mobileDevices;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

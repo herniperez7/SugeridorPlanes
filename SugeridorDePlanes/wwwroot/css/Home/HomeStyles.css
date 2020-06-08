@@ -223,3 +223,12 @@ th {
     width: 85px;
     height: 37px;
 }
+
+#emailModal{
+    margin-top: 150px
+}
+
+
+.inputError {
+    background-color: pink;
+}

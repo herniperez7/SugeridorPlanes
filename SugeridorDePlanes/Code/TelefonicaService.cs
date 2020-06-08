@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
+
 namespace Telefonica.SugeridorDePlanes.Code
 {
     public class TelefonicaService: ITelefonicaService
@@ -11,6 +12,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         private readonly IClient _client;
         private  List<RecomendadorB2b> _currentPlans;
         private List<PlanDefinitivolModel> _curretDefinitvePlans;
+        private SugeridorClientes _currentClient;
+        private List<SugeridorClientes> _currentClients;
 
         public TelefonicaService(IClient client)
         {
@@ -24,6 +27,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 var clients = await _client.GetClientsAsync();
                 List<SugeridorClientes> clientList = clients.ToList();
+                _currentClients = clientList;
 
                 return clientList;
             }
@@ -31,6 +35,22 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 throw ex;
             }
+        }
+
+        public List<SugeridorClientes> GetCurrentClients()
+        {
+            return _currentClients;
+        }
+
+        public SugeridorClientes GetCurrentClient()
+        {
+            return _currentClient;
+        }
+
+        public void UpdateCurrentClient(string document)
+        {
+            var currentClient = _currentClients.Where(x => x.Documento == document).FirstOrDefault();
+            _currentClient = currentClient;
         }
 
         public async Task<List<RecomendadorB2b>> GetSuggestedPlans()
@@ -124,6 +144,22 @@ namespace Telefonica.SugeridorDePlanes.Code
                 PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = bono1024, Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
                 _curretDefinitvePlans.Add(planDef);
             }            
+        }
+
+        /// <summary>
+        /// retorna la suma del total de los tmm sin iva de los planes definitivos
+        /// </summary>
+        /// <returns></returns>
+        public decimal GetDefinitivePlansIncome()
+        {
+            decimal income = 0;
+
+            foreach (var plan in _curretDefinitvePlans)
+            {
+                income += plan.TMM_s_iva;
+            }
+
+            return income;
         }
 
 

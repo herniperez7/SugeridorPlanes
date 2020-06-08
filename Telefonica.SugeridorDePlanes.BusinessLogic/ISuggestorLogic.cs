@@ -17,5 +17,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         Task<List<PlanesOfertaActualDTO>> GetActualPlans();
 
         Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode);
+
+        Task<List<EquipoPymesDTO>> GetEquiposPymes();
     }
 }

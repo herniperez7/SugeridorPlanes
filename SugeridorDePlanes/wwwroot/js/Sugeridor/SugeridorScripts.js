@@ -464,7 +464,7 @@ function exportPdf() {
     var companyName = $("#clientSelect option:selected").text();
     $.ajax({
         type: "GET",
-        url: gbExportPdf + '?companyName=' + companyName + '&subsidio=' + $("#subsidioTxt").val() + '&payback=' + $("#paybackTxt").val() + '&devicePayment=' + devicePayment,
+        url: gbExportPdf + '?devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
 
@@ -477,11 +477,26 @@ function exportPdf() {
     });
 }
 
-function SendMail() {
+function sendMail() {
+
+    var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';    
+    $("#sendMailBtn").html(loading);
+    $("#sendMailBtn").prop("disabled", true);
+    var buttontext = "Enviar mail";
+    
+    var toText = $("#toTxt").val();
+    var subjectText = $("#subjectTxt").val();
+    var bodyText = $("#bodytxt").val();
+    var devicePayment = $("#pagoEquiposTxt").val();
+
     $.ajax({
         type: "POST",
-        url: gbSendMail,
+        url: gbSendMail + '?to=' + toText + '&subject=' + subjectText + '&bodytext=' + bodyText + '&devicePayment=' + devicePayment,
         success: function (data) {
+            if (data.status === "ok") {
+                $("#sendMailBtn").html(buttontext);
+                $("#sendMailBtn").prop("disabled", false);
+            }
             
         }
     });

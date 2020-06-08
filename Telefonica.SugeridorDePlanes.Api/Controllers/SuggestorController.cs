@@ -145,5 +145,26 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
+        [HttpGet("getMobileDevices")]
+        public async Task<ActionResult<List<EquipoPymes>>> GetEquiposPymes()
+        {
+            try
+            {
+                var mobileDevicesDto = await _suggestorService.GetEquiposPymes();
+
+                var mobileDevicesModel = _mapper.Map<List<EquipoPymes>>(mobileDevicesDto);
+
+                return mobileDevicesModel;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
+
     }
 }

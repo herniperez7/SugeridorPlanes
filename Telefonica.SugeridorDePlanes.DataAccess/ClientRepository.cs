@@ -21,7 +21,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         {
             try
             {
-                var clients = await _context.SugeridorClientes.ToListAsync();
+                var clients = await _context.SugeridorClientes.ToListAsync();                
 
                 return clients;
             }

@@ -20,7 +20,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
         public virtual DbSet<RecomendadorB2bDTO> RecomendadorB2b { get; set; }
         public virtual DbSet<SugeridorClientesDTO> SugeridorClientes { get; set; }
-        public virtual DbSet<PlanesOfertaActualDTO> PlanesOfertaActual { get; set; }       
+        public virtual DbSet<PlanesOfertaActualDTO> PlanesOfertaActual { get; set; }
+        public virtual DbSet<EquipoPymesDTO> EquipoPymes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -283,9 +284,29 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
                 entity.Property(e => e.TMM_s_iva)
                     .HasColumnName("TMM_s_iva");
-            });       
+            });
 
 
+
+            ///
+
+            modelBuilder.Entity<EquipoPymesDTO>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Equipo_Pymes");
+
+                entity.Property(e => e.Reconc_ID)
+                    .HasColumnName("reconc_ID");
+
+                entity.Property(e => e.OFF_NAME)
+                    .HasColumnName("OFF_NAME");
+
+                entity.Property(e => e.OFF_PRICE)
+                    .HasColumnName("OFF_PRICE");                
+            });
+
+            //
 
             OnModelCreatingPartial(modelBuilder);
         }

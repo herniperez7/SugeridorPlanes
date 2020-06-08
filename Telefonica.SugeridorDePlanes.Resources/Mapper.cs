@@ -14,6 +14,7 @@ namespace Telefonica.SugeridorDePlanes.Resources
             CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
             CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
             CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
+            CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();
         }
     }
 }

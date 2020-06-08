@@ -29,6 +29,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
+
         public async Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode)
         {
             try
@@ -71,6 +72,18 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             try
             {
                 return await _suggestorRepository.GetSuggestedPlansByRut(rut);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<EquipoPymesDTO>> GetEquiposPymes()
+        {
+            try
+            {
+                return await _suggestorRepository.GetEquiposPymes();
             }
             catch (Exception ex)
             {
