@@ -42,7 +42,7 @@ namespace Telefonica.SugeridorDePlanes.Api
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
                 configuration.CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
-                configuration.CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();
+                configuration.CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();                
             }, typeof(Startup));
 
             services.AddDbContext<TelefonicaSugeridorDePlanesContext>(options =>

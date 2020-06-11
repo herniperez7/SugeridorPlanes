@@ -23,7 +23,7 @@
 @{
 
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
-    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoMovil>;
+    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoPymesModel>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
@@ -38,8 +38,16 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
+
+
 </head>
 <body>
     <script>
@@ -394,22 +402,21 @@
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
                                 @*<select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}" onblur="this.size=0;">
-                                    <option value="0">Seleccionar</option>
-                                    @foreach (var item in movileDevices)
-                                    {
-                                        <option value="@item.Codigo">@item.Marca @item.Modelo</option>
-                                    }
+            <option value="0">Seleccionar</option>
+            @foreach (var item in movileDevices)
+            {
+                <option value="@item.Codigo">@item.Marca @item.Modelo</option>
+            }
 
-                                </select>*@
+        </select>*@
                                 <select id="movilesDdl" class="custom-select" onchange="movileChange()">
                                     <option value="0">Seleccionar</option>
                                     @foreach (var item in movileDevices)
                                     {
-                                        <option value="@item.Codigo">@item.Marca @item.Modelo</option>
+                                        <option value="@item.Reconc_ID">@item.OFF_NAME</option>
                                     }
 
-                                </select>
-
+                                </select>                             
 
                             </form>
                             <div id="valuesEquipos" class="p-2 ml-2">
@@ -541,8 +548,8 @@
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
                                     Exportar Propuesta
                                 </button>
-                                <button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn" >Enviar mail</button>
-                                
+                                <button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>
+
                             </div>
 
 

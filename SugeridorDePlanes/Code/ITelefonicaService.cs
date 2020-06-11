@@ -16,7 +16,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         Task<List<RecomendadorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
 
-        Task<List<PlanesOfertaActual>> GetActualPlansAsync();
+        Task<List<PlanesOferta>> GetActualPlansAsync();
 
         /// <summary>
         /// Retorna los planes del cliente actual
@@ -39,5 +39,11 @@ namespace Telefonica.SugeridorDePlanes.Code
         SugeridorClientes GetCurrentClient();
 
         List<SugeridorClientes> GetCurrentClients();
+
+        List<EquipoPymesModel> GetEquiposPymesList();
+
+        List<EquipoPymesModel> GetCurrentEquiposPymesList();
+
+        void UpdateCurrentEquiposPymesList(int code, bool delete);
     }
 }
