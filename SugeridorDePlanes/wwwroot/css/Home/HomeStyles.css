@@ -1,4 +1,12 @@
 ﻿
+body {
+    background-color: #fcf7fa;
+}
+
+fieldset{
+    background-color: white;
+}
+
 nav .input-group-text {
     background-color: #e9ecef;
 }

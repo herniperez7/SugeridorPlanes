@@ -9,6 +9,10 @@ var billingGap = 0;
 $(document).ready(function () {
 
     //$("#movilesDdl").chosen();
+    $("#movilesDdl").select2({
+        placeholder: "Seleccionar un equipo"
+    });
+
     $("#calculateSubsidyTxt").mask("#.##0", { reverse: true });
     $("#calculateIncomeTxt").mask("#.##0", { reverse: true });
     unfocusInput();
@@ -203,8 +207,8 @@ function deleteRow(val) {
                     var rowId = "row" + val;
                     $("#" + rowId).remove();
                     devicesCount--;
-                    devicesAmount -= data.result.precio;
-                    var totalRow = "<tr id='totalRow'><td>" + devicesCount + "</td><td>$ " + formatNumber(devicesAmount) + "</td><td></td> </tr>"
+                    devicesAmount -= data.result.ofF_PRICE;
+                    var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b></td><td><b>$ " + formatNumber(devicesAmount) + "</b></td><td></td> </tr>"
                     $("#movilTableBody").append(totalRow);
 
                     if (devicesCount === 0) {

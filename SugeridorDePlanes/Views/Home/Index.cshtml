@@ -38,14 +38,17 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
+
+    @* <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+            <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
 
 
 </head>
@@ -401,16 +404,9 @@
 
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
-                                @*<select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}" onblur="this.size=0;">
-            <option value="0">Seleccionar</option>
-            @foreach (var item in movileDevices)
-            {
-                <option value="@item.Codigo">@item.Marca @item.Modelo</option>
-            }
-
-        </select>*@
                                 <select id="movilesDdl" class="custom-select" onchange="movileChange()">
-                                    <option value="0">Seleccionar</option>
+                                  
+                                    <option> </option>
                                     @foreach (var item in movileDevices)
                                     {
                                         <option value="@item.Reconc_ID">@item.OFF_NAME</option>

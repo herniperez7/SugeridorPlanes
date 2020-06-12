@@ -99,7 +99,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         {
             try
             {
-                var mobileDevices = await _context.EquipoPymes.Take(10).ToListAsync();
+                var mobileDevices = await _context.EquipoPymes.ToListAsync();
 
                 return mobileDevices;
             }
