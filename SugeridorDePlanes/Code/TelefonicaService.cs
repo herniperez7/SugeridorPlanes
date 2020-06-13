@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 
@@ -85,10 +86,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             try
             {
                 var plans = await _client.GetActualPlansAsync();
-                List<PlanesOferta> planList = plans.ToList();
+                //List<PlanesOferta> planList = plans.ToList();
                 PopulateEquiposPymesList();
 
-                return planList;
+                return null;
             }
             catch (Exception ex)
             {
@@ -203,7 +204,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                var mobileDevices = await _client.GetMobileDevicesAsync();
+                //var mobileDevices = await _client.GetMobileDevicesAsync();
+                var mobileDevices = new List<EquipoPymesModel>();
                 _equiposPymes = _mapper.Map<List<EquipoPymesModel>>(mobileDevices);                
             }
             catch (Exception ex)
