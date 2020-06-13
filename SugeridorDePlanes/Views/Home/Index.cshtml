@@ -23,7 +23,7 @@
 @{
 
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
-    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoMovil>;
+    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoPymesModel>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
@@ -38,8 +38,19 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+
+    @* <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+            <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
+
+
 </head>
 <body>
     <script>
@@ -393,23 +404,15 @@
 
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
-                                @*<select id="movilesDdl" class="custom-select" onchange="movileChange()" onmousedown="if(this.options.length>4){this.size=4;}" onblur="this.size=0;">
-                                        <option value="0">Seleccionar</option>
-                                        @foreach (var item in movileDevices)
-                                        {
-                                            <option value="@item.Codigo">@item.Marca @item.Modelo</option>
-                                        }
-
-                                    </select>*@
                                 <select id="movilesDdl" class="custom-select" onchange="movileChange()">
-                                    <option value="0">Seleccionar</option>
+                                  
+                                    <option> </option>
                                     @foreach (var item in movileDevices)
                                     {
-                                        <option value="@item.Codigo">@item.Marca @item.Modelo</option>
+                                        <option value="@item.Reconc_ID">@item.OFF_NAME</option>
                                     }
 
-                                </select>
-
+                                </select>                             
 
                             </form>
                             <div id="valuesEquipos" class="p-2 ml-2">
@@ -537,10 +540,12 @@
                         <div class="col-lg-4 align-items-center dis-grid justify-content-center">
 
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn" onclick="SendMail()">Generar propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn">Generar propuesta</button>
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
                                     Exportar Propuesta
                                 </button>
+                                <button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>
+
                             </div>
 
 
@@ -558,7 +563,7 @@
 
             <div class="col-lg-7" style="display:none" id="calculateDiv">
                 <fieldset>
-                    <legend> Somulación </legend>
+                    <legend> Simulación </legend>
                     <div class="row" style="height: 250px">
 
                         <div class="col-lg-4">
@@ -671,6 +676,38 @@
         </div>
 
 
+        <div class="modal fade" id="emailModal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Enviar mail</h4>
+                    </div>
+
+                    <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
+                        <label for="toTxt">Para</label>
+                        <input type="email" class="form-control" id="toTxt" placeholder="nombre@dominio.com">
+                        <span style="display:none" class="text-danger">Email requerido</span>
+                    </div>
+
+                    <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
+                        <label for="subjectTxt">Asunto</label>
+                        <input type="email" class="form-control" id="subjectTxt">
+                        <span style="display:none" class="text-danger">Asunto requerido</span>
+                    </div>
+
+                    <div class="form-group" style="padding:10px">
+                        <label for="bodytxt">Mensaje</label>
+                        <textarea class="form-control" id="bodytxt" rows="3"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal">Enviar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
 
         <script src="~/js/Sugeridor/SugeridorScripts.js"></script>

@@ -23,14 +23,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             _env = env;
         }
 
-        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double subsidio, double payback, double devicePayment)
+        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
         {
             //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(tempDirectory);
 
             CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
-            GenerateHtml(tempDirectory, movilDevices, planList, companyName, subsidio, payback, devicePayment); //modifico las copias generadas
+            GenerateHtml(tempDirectory, movilDevices, planList, companyName, devicePayment); //modifico las copias generadas
             ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
             var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
             return bytesArrayPdf;
@@ -69,7 +69,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         /// <summary>
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
-        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double subsidio, double payback, double devicePayment)
+        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
 
                 var monthyFee = GetMothlyFee(planList);
 
-                subsidio -= devicePayment;
+                var subsidio = (double)devicesCost - devicePayment;
 
                 content = Regex.Replace(content, "{devices}", contentMoviles);
 
@@ -306,7 +306,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 PdfImportedPage importedPage;
                 string outputPdfPath = Path.Combine(directoryPath, "Presupuesto.pdf");
                 sourceDocument = new Document();
-                FileStream fs = new FileStream(outputPdfPath, System.IO.FileMode.OpenOrCreate);
+                FileStream fs = new FileStream(outputPdfPath, FileMode.OpenOrCreate);
                 pdfCopyProvider = new PdfCopy(sourceDocument, fs);
 
                 //Open the output file

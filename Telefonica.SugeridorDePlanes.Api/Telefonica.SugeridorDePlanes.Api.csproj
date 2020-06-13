@@ -25,5 +25,9 @@
     <ProjectReference Include="..\Telefonica.SugeridorDePlanes.DataAccess\Telefonica.SugeridorDePlanes.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 
 </Project>

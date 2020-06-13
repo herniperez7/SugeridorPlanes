@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 
@@ -20,20 +21,29 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender
         {
             try
             {
-                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot", "html");
+                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
                 var email = new MimeMessage();
                 email.From.Add(new MailboxAddress(emailData.FromDisplayName, emailData.FromEmailAddress));
                 email.To.Add(new MailboxAddress(emailData.ToName, emailData.ToEmailAddress));
                 email.Subject = emailData.Subject;
+                var content = string.Empty;
+
+                var urlMail = Path.Combine(mainUrl, "emailResources", "emailTemplate.html");
+               
+                var objReader = new StreamReader(urlMail);
+                content = objReader.ReadToEnd();
+                objReader.Close();
+
+                content = Regex.Replace(content, "{BoydText}", emailData.Message);
 
                 var body = new BodyBuilder
                 {
-                    HtmlBody = emailData.Message
+                    HtmlBody = content
                 };
 
                 if (emailData.Array != null)
                 {
-                    body.Attachments.Add("Propuesta comercial", emailData.Array, new ContentType("application", "pdf"));
+                    body.Attachments.Add("Propuesta.pdf", emailData.Array, new ContentType("application", "pdf"));
                 }
 
                 email.Body = body.ToMessageBody();

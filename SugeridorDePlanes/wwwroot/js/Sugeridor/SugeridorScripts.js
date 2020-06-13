@@ -8,6 +8,11 @@ var billingGap = 0;
 
 $(document).ready(function () {
 
+    //$("#movilesDdl").chosen();
+    $("#movilesDdl").select2({
+        placeholder: "Seleccionar un equipo"
+    });
+
     $("#calculateSubsidyTxt").mask("#.##0", { reverse: true });
     $("#calculateIncomeTxt").mask("#.##0", { reverse: true });
     unfocusInput();
@@ -123,8 +128,10 @@ function confirmDevices() {
         success: function (data) {
             if (data.status === "ok") {
                 $.each(data.result, function (key, value) {
-                    total += value.precio;
+                    total += value.ofF_PRICE;
                 });
+
+                //console.log()
                 currentDeviceAmount = total;
                 var inputValue = "$ " + formatNumberStr(total);
                 $("#subsidioTxt").val(inputValue);
@@ -150,9 +157,9 @@ function movileChange() {
             if (data.status === "ok") {
 
                 if (data.result) {
-                    var precio = "$ " + formatNumberStr(data.result.precio);
+                    var precio = "$ " + formatNumberStr(data.result.ofF_PRICE);
                     $("#landedValue").html(precio);
-                    $("#stockValue").html(data.result.stock);
+                    $("#stockValue").html("");
                 } else {
                     $("#landedValue").html("");
                     $("#stockValue").html("");
@@ -170,20 +177,17 @@ function AddDevice() {
         type: "POST",
         url: gbAddMovilDecivesUrl + '?code=' + val,
         success: function (data) {
-            if (data.status === "ok") {
+            if (data.status === "ok") {               
+
                 $("#movilTableBody tr:last").remove();
                 devicesCount++;
-                devicesAmount += data.result.precio;
-                var precio = formatNumberStr(data.result.precio);               
+                devicesAmount += data.result.ofF_PRICE;                
+                var precio = formatNumberStr(data.result.ofF_PRICE);               
                 var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                var tr = "<tr id='row" + data.result.codigo + "' ><td scope='row'>" + data.result.marca + " " + data.result.modelo + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.codigo + "' onclick='deleteRow(" + data.result.codigo + ")'>" + trashIcon + "</td></tr>";
-                $("#movilTableBody").append(tr);
-
-                
-
+                var tr = "<tr id='row" + data.result.reconc_ID + "' ><td scope='row'>" + data.result.ofF_NAME + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.reconc_ID + "' onclick='deleteRow(" + data.result.reconc_ID + ")'>" + trashIcon + "</td></tr>";
+                $("#movilTableBody").append(tr);      
                 var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumberStr(devicesAmount) +"</b><td></td> </tr>"
-                $("#movilTableBody").append(totalRow);
-             
+                $("#movilTableBody").append(totalRow);             
             }
         }
     });
@@ -194,6 +198,7 @@ function AddDevice() {
 function deleteRow(val) {    
 
     $.ajax({
+        type: "POST",
         url: gbDeleteMovilUrl + '?code=' + val,
         success: function (data) {
             if (data.status === "ok") {
@@ -202,8 +207,8 @@ function deleteRow(val) {
                     var rowId = "row" + val;
                     $("#" + rowId).remove();
                     devicesCount--;
-                    devicesAmount -= data.result.precio;
-                    var totalRow = "<tr id='totalRow'><td>" + devicesCount + "</td><td>$ " + formatNumber(devicesAmount) + "</td><td></td> </tr>"
+                    devicesAmount -= data.result.ofF_PRICE;
+                    var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b></td><td><b>$ " + formatNumber(devicesAmount) + "</b></td><td></td> </tr>"
                     $("#movilTableBody").append(totalRow);
 
                     if (devicesCount === 0) {
@@ -464,7 +469,7 @@ function exportPdf() {
     var companyName = $("#clientSelect option:selected").text();
     $.ajax({
         type: "GET",
-        url: gbExportPdf + '?companyName=' + companyName + '&subsidio=' + $("#subsidioTxt").val() + '&payback=' + $("#paybackTxt").val() + '&devicePayment=' + devicePayment,
+        url: gbExportPdf + '?devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
 
@@ -477,11 +482,26 @@ function exportPdf() {
     });
 }
 
-function SendMail() {
+function sendMail() {
+
+    var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';    
+    $("#sendMailBtn").html(loading);
+    $("#sendMailBtn").prop("disabled", true);
+    var buttontext = "Enviar mail";
+    
+    var toText = $("#toTxt").val();
+    var subjectText = $("#subjectTxt").val();
+    var bodyText = $("#bodytxt").val();
+    var devicePayment = $("#pagoEquiposTxt").val();
+
     $.ajax({
         type: "POST",
-        url: gbSendMail,
+        url: gbSendMail + '?to=' + toText + '&subject=' + subjectText + '&bodytext=' + bodyText + '&devicePayment=' + devicePayment,
         success: function (data) {
+            if (data.status === "ok") {
+                $("#sendMailBtn").html(buttontext);
+                $("#sendMailBtn").prop("disabled", false);
+            }
             
         }
     });
@@ -508,4 +528,7 @@ function saveByteArray(reportName, byte) {
     link.download = fileName;
     link.click();
 }
+
+///////////////////////////
+
 
