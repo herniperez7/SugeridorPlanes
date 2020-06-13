@@ -32,6 +32,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             _currentEquiposPymes = new List<EquipoPymesModel>();
         }
 
+
         public async Task<List<SugeridorClientes>> GetClientes()
         {
             try
