@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 
@@ -182,7 +183,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 //var bono1024 = Convert.ToInt64(reco.BonoPlanSugerido) / 1024;
 
-                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (Decimal)reco.TmmPlanSugerido };
+                PlanDefinitivolModel planDef = new PlanDefinitivolModel() { RecomendadorId = reco.Id, Plan = reco.PlanSugerido, Bono = Convert.ToInt64(reco.BonoPlanSugerido), Roaming = reco.RoamingPlanSugerido, TMM_s_iva = (decimal)reco.TmmPlanSugerido };
                 _curretDefinitvePlans.Add(planDef);
             }
             return _curretDefinitvePlans;
@@ -204,8 +205,16 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
+                var id = 1;
                 var mobileDevices = await _client.GetMobileDevicesAsync();
-                _equiposPymes = _mapper.Map<List<EquipoPymesModel>>(mobileDevices);                
+                _equiposPymes = _mapper.Map<List<EquipoPymesModel>>(mobileDevices);
+
+                foreach (var mobile in _equiposPymes)
+                {
+                    mobile.Id = id.ToString();
+                    id++;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -226,10 +235,10 @@ namespace Telefonica.SugeridorDePlanes.Code
         /// <summary>
         /// Actualiza la lista actual de moviles de la prupuesta
         /// </summary>
-        public void UpdateCurrentEquiposPymesList(int code, bool delete)
+        public void UpdateCurrentEquiposPymesList(string code, bool delete)
         {
             EquipoPymesModel mobile = null;
-            mobile = _equiposPymes.Where(x => x.Reconc_ID == code).FirstOrDefault();
+            mobile = _equiposPymes.Where(x => x.CodigoEquipo == code).FirstOrDefault();
             if (delete)
             {
                 if(mobile != null)
@@ -246,5 +255,18 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        public  byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf)
+        {
+            try
+            {
+               var pdfByteArray =  _client.GeneratePdfAsync(proposalPdf).Result;
+
+                return pdfByteArray;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

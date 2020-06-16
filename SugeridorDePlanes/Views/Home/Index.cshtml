@@ -409,7 +409,10 @@
                                     <option> </option>
                                     @foreach (var item in movileDevices)
                                     {
-                                        <option value="@item.Reconc_ID">@item.OFF_NAME</option>
+                                        var marcaEquipo = string.IsNullOrEmpty(item.Marca) ? "" : item.Marca;
+                                        var nombreEquipo = string.IsNullOrEmpty(item.Nombre) ? "" : item.Nombre;
+
+                                <option value="@item.Id">@marcaEquipo @nombreEquipo</option>
                                     }
 
                                 </select>                             

@@ -22,54 +22,56 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
 
-        private IPdfLogic _pdfLogic;
 
-        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService, IPdfLogic pdfLogic)
+        public HomeController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
         {
             usuario = usuarioInterface;
             _telefonicaApi = telefonicaService;
             _mapper = mapper;
-            _pdfLogic = pdfLogic;
+         
         }
 
         public async Task<IActionResult> Index()
         {
-            var clientList = await _telefonicaApi.GetClientes();
-            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
-            ViewData["clientList"] = clientsModel;
-            var planOfert = await _telefonicaApi.GetActualPlansAsync();
-            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOferta>, List<PlanOfertaActualModel>>(planOfert);
-            ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();           
-            ViewData["planOfertList"] = planesOfertList;
-            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
-            _telefonicaApi.UpdateCurrentClient(clientsModel[0].Documento);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-            ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-            var indexes = CalculateIndexes(clientsModel[0].Documento);
-            ViewData["Indexes"] = indexes;
+             var clientList = await _telefonicaApi.GetClientes();
+              List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
+              ViewData["clientList"] = clientsModel;
+              var planOfert = await _telefonicaApi.GetActualPlansAsync();
+              List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOferta>, List<PlanOfertaActualModel>>(planOfert);
+              ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
 
-            return View("../Home/Index", planMapped);
+              var equipos = ViewData["movileDevices"];
+
+              ViewData["planOfertList"] = planesOfertList;
+              List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
+              _telefonicaApi.UpdateCurrentClient(clientsModel[0].Documento);
+              var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+              ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
+              var indexes = CalculateIndexes(clientsModel[0].Documento);
+              ViewData["Indexes"] = indexes;
+
+              return View("../Home/Index", planMapped);
         }
 
         [HttpPost]
         public async Task<IActionResult> ShowPlans(string rut)
         {
-            var clientList = await _telefonicaApi.GetClientes();
-            _telefonicaApi.UpdateCurrentClient(rut);
-            var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
-            var planOfert = await _telefonicaApi.GetActualPlansAsync();            
-            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
-            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOferta>, List<PlanOfertaActualModel>>(planOfert);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-            var indexes = CalculateIndexes(rut);
-            ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-            ViewData["selectedRut"] = rut;
-            ViewData["planOfertList"] = planesOfertList;
-            ViewData["Indexes"] = indexes;
-            ViewData["clientList"] = clientsModel;
-            ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
+              var clientList = await _telefonicaApi.GetClientes();
+              _telefonicaApi.UpdateCurrentClient(rut);
+              var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
+              var planOfert = await _telefonicaApi.GetActualPlansAsync();            
+              List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
+              List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOferta>, List<PlanOfertaActualModel>>(planOfert);
+              var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+              var indexes = CalculateIndexes(rut);
+              ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
+              ViewData["selectedRut"] = rut;
+              ViewData["planOfertList"] = planesOfertList;
+              ViewData["Indexes"] = indexes;
+              ViewData["clientList"] = clientsModel;
+              ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
 
-            return View("../Home/Index", planMapped);
+              return View("../Home/Index", planMapped);
         }
 
         public JsonResult CalculatePayback()
@@ -82,7 +84,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             foreach (var movil in mobileList)
             {
-                subsidio += movil.OFF_PRICE;
+                subsidio += movil.PrecioSinIva;
             }
 
             foreach (var plan in defPlansList)
@@ -98,11 +100,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         public JsonResult GetMovilInfo(string code)
-        {
-            var intCode = int.Parse(code);
-            var mobileList = _telefonicaApi.GetEquiposPymesList();
-            //var movil = _moviles.Where(x => x.Codigo == code).FirstOrDefault();
-            var mobile = mobileList.Where(x => x.Reconc_ID == intCode).FirstOrDefault();
+        {           
+            var mobileList = _telefonicaApi.GetEquiposPymesList();    
+            var mobile = mobileList.Where(x => x.Id == code).FirstOrDefault();
             var data = new { status = "ok", result = mobile };
             return Json(data);
         }
@@ -121,13 +121,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         [HttpPost]
         public JsonResult AddMovilDevice(string code)
-        {
-            var intCode = int.Parse(code);
+        {           
             var mobileList = _telefonicaApi.GetEquiposPymesList();
-            var mobile = mobileList.Where(x => x.Reconc_ID == intCode).FirstOrDefault();
+            var mobile = mobileList.Where(x => x.Id == code).FirstOrDefault();
             if (mobile != null)
             {
-                _telefonicaApi.UpdateCurrentEquiposPymesList(intCode, false);
+                _telefonicaApi.UpdateCurrentEquiposPymesList(mobile.CodigoEquipo, false);
                 var data = new { status = "ok", result = mobile };
                 return Json(data);
             }
@@ -141,12 +140,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public JsonResult DeleteMovilFromList(string code)
         {
-            var intCode = int.Parse(code);
             var mobileList = _telefonicaApi.GetEquiposPymesList();
-            var mobile = mobileList.Where(x => x.Reconc_ID == intCode).FirstOrDefault();
+            var mobile = mobileList.Where(x => x.Id == code).FirstOrDefault();
             if (mobile != null)
             {
-                _telefonicaApi.UpdateCurrentEquiposPymesList(intCode, true);
+                _telefonicaApi.UpdateCurrentEquiposPymesList(mobile.CodigoEquipo, true);
                 var data = new { status = "ok", result = mobile };
                 return Json(data);
             }
@@ -207,20 +205,27 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
 
-        private byte[] GenerateByteArrayPdf(string devicePayment)
+        private  byte[] GenerateByteArrayPdf(string devicePayment)
         {
             try
             {
+                
                 var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
+                var client = _telefonicaApi.GetCurrentClient();                
+                var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();                
+                var devicePaymentDouble = Convert.ToDouble(devicePayment);                
+                var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
+                var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
 
-                var client = _telefonicaApi.GetCurrentClient();
-                var movilSessionList = HttpContext.Session.GetString("movilList");
-                var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
-                List<EquipoMovil> movilList = JsonConvert.DeserializeObject<List<EquipoMovil>>(movilSessionList);
-                var devicePaymentDouble = Convert.ToDouble(devicePayment);
-                var movileDevices = _mapper.Map<List<EquipoMovil>, List<MovilDevice>>(movilList);
-                var planesDef = _mapper.Map<List<PlanDefinitivolModel>, List<BusinessEntities.Models.PlanesOferta>>(planesDefList);
-                byte[] pdfByteArray = _pdfLogic.GeneratePdfFromHtml(movileDevices, planesDef, client.Titular, devicePaymentDouble);
+                var proposalPdf = new ProposalPdf
+                {
+                    MobileList = mobileDevicesList,
+                    PlanList = planesDef,
+                    CompanyName = client.Titular,
+                    DevicePayment = devicePaymentDouble
+                };
+
+                byte[] pdfByteArray =  _telefonicaApi.GeneratePdfFromHtml(proposalPdf);
 
                 return pdfByteArray;
             }

@@ -11,6 +11,5 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 
         public decimal BillingGap { get; set; }
 
-       // public BillingStatus BillingStatus { get; set; }
     }
 }

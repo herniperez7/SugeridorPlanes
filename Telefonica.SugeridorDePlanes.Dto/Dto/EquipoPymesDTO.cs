@@ -6,8 +6,10 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
 {
     public class EquipoPymesDTO
     {
-        public int Reconc_ID { get; set; }
-        public string OFF_NAME { get; set; }
-        public decimal OFF_PRICE { get; set; }
+        public string CodigoEquipo { get; set; }
+        public string Marca { get; set; }
+        public string Nombre { get; set; }
+        public decimal PrecioSinIva { get; set; }
+        public int Stock { get; set; }
     }
 }
