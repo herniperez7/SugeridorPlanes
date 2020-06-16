@@ -49,6 +49,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         [HttpGet("getPlansByRut")]
         public async Task<ActionResult<List<RecomendadorB2b>>> GetSuggestedPlansByRut(string rut)
         {
+            /*test*/
             try
             {
                 if (string.IsNullOrEmpty(rut))
