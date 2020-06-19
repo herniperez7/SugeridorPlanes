@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
-using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
+using Telefonica.SugeridorDePlanes.BusinessLogic;
+using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
 
 namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
@@ -13,12 +16,14 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     [ApiController]
     public class UtilitiesController : ControllerBase
     {
-        private readonly IEmailSenderLogic _emailSender;
+        private readonly IEmailSender _emailSender;
+        private readonly IPdfLogic _pdfLogic;
         public IConfiguration _configuration { get; }
-        public UtilitiesController(IEmailSenderLogic emailSender, IConfiguration configuration)
+        public UtilitiesController(IEmailSender emailSender, IConfiguration configuration, IPdfLogic pdfLogic)
         {
             _emailSender = emailSender;
             _configuration = configuration;
+            _pdfLogic = pdfLogic;
         }
 
         [HttpPost("sendMail")]
@@ -39,11 +44,25 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
-                //throw ex;
+                return BadRequest();               
             }
-
-
         }
+
+        [HttpPost("generatePdf")]
+        public byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf)
+        {
+            try
+            {
+                var pdfByteArray = _pdfLogic.GeneratePdfFromHtml(proposalPdf.MobileList, proposalPdf.PlanList, 
+                    proposalPdf.CompanyName, proposalPdf.DevicePayment);
+
+                return pdfByteArray;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }       
+
     }
 }

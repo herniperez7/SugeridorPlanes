@@ -8,9 +8,9 @@ var billingGap = 0;
 
 $(document).ready(function () {
 
-    //$("#movilesDdl").chosen();
+  
     $("#movilesDdl").select2({
-        placeholder: "Seleccionar un equipo"
+       placeholder: "Seleccionar un equipo"
     });
 
     $("#calculateSubsidyTxt").mask("#.##0", { reverse: true });
@@ -128,10 +128,9 @@ function confirmDevices() {
         success: function (data) {
             if (data.status === "ok") {
                 $.each(data.result, function (key, value) {
-                    total += value.ofF_PRICE;
+                    total += value.precioSinIva;
                 });
 
-                //console.log()
                 currentDeviceAmount = total;
                 var inputValue = "$ " + formatNumberStr(total);
                 $("#subsidioTxt").val(inputValue);
@@ -157,9 +156,9 @@ function movileChange() {
             if (data.status === "ok") {
 
                 if (data.result) {
-                    var precio = "$ " + formatNumberStr(data.result.ofF_PRICE);
+                    var precio = "$ " + formatNumberStr(data.result.precioSinIva);
                     $("#landedValue").html(precio);
-                    $("#stockValue").html("");
+                    $("#stockValue").html(data.result.stock);
                 } else {
                     $("#landedValue").html("");
                     $("#stockValue").html("");
@@ -177,14 +176,21 @@ function AddDevice() {
         type: "POST",
         url: gbAddMovilDecivesUrl + '?code=' + val,
         success: function (data) {
-            if (data.status === "ok") {               
+            if (data.status === "ok") {           
+
+                var brand = data.result.marca !== null ? data.result.marca : "";
+                var model = data.result.nombre !== null ? data.result.nombre : "";
+                var labelName = brand + " " + model;
+
 
                 $("#movilTableBody tr:last").remove();
                 devicesCount++;
-                devicesAmount += data.result.ofF_PRICE;                
-                var precio = formatNumberStr(data.result.ofF_PRICE);               
+                devicesAmount += data.result.precioSinIva;                
+                var precio = formatNumberStr(data.result.precioSinIva);               
                 var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                var tr = "<tr id='row" + data.result.reconc_ID + "' ><td scope='row'>" + data.result.ofF_NAME + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.reconc_ID + "' onclick='deleteRow(" + data.result.reconc_ID + ")'>" + trashIcon + "</td></tr>";
+                var tr = "<tr id='row" + data.result.id + "' ><td scope='row'>" + labelName + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.id + "' onclick='deleteRow(" + data.result.id + ")'>" + trashIcon + "</td></tr>";
+
+               
                 $("#movilTableBody").append(tr);      
                 var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumberStr(devicesAmount) +"</b><td></td> </tr>"
                 $("#movilTableBody").append(totalRow);             
@@ -195,8 +201,9 @@ function AddDevice() {
 
 
 
-function deleteRow(val) {    
+function deleteRow(val) {
 
+    
     $.ajax({
         type: "POST",
         url: gbDeleteMovilUrl + '?code=' + val,
@@ -207,7 +214,7 @@ function deleteRow(val) {
                     var rowId = "row" + val;
                     $("#" + rowId).remove();
                     devicesCount--;
-                    devicesAmount -= data.result.ofF_PRICE;
+                    devicesAmount -= data.result.precioSinIva;
                     var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b></td><td><b>$ " + formatNumber(devicesAmount) + "</b></td><td></td> </tr>"
                     $("#movilTableBody").append(totalRow);
 

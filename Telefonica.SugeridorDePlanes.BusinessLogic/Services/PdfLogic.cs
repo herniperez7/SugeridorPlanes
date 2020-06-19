@@ -24,17 +24,25 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             _env = env;
         }
 
-        public byte[] GeneratePdfFromHtml(List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
+        public byte[] GeneratePdfFromHtml(List<EquipoPymes> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
         {
-            //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(tempDirectory);
+            try
+            {
+                //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
+                string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                Directory.CreateDirectory(tempDirectory);
 
-            CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
-            GenerateHtml(tempDirectory, movilDevices, planList, companyName, devicePayment); //modifico las copias generadas
-            ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
-            var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
-            return bytesArrayPdf;
+                CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
+                GenerateHtml(tempDirectory, movilDevices, planList, companyName, devicePayment); //modifico las copias generadas
+                ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
+                var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
+                return bytesArrayPdf;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
 
@@ -70,7 +78,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
         /// <summary>
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
-        private void GenerateHtml(string directoryUrl, List<MovilDevice> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
+        private void GenerateHtml(string directoryUrl, List<EquipoPymes> mobileDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
         {
             try
             {
@@ -82,9 +90,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 content = objReader.ReadToEnd();
                 objReader.Close();
 
-                decimal devicesCost = GetDevicesCost(movilDevices);
+                decimal devicesCost = GetDevicesCost(mobileDevices);
 
-                var contentMoviles = GetContentMoviles(movilDevices);
+                var contentMoviles = GetContentMoviles(mobileDevices);
 
                 var contentPlans = GetContentPlans(planList);
 
@@ -135,21 +143,21 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             return monthlyFee;
         }
 
-        private decimal GetDevicesCost(List<MovilDevice> movilDevices)
+        private decimal GetDevicesCost(List<EquipoPymes> movilDevices)
         {
             decimal devicesCost = 0;
 
             foreach (var movil in movilDevices)
             {
-                devicesCost += movil.Precio;
+                devicesCost += movil.PrecioSinIva;
             }
 
             return devicesCost;
         }
 
-        private string GetContentMoviles(List<MovilDevice> movilDevices)
+        private string GetContentMoviles(List<EquipoPymes> mobileDevices)
         {
-            var movilPdfList = GroupedMovilList(movilDevices);
+            var movilPdfList = GroupedMovilList(mobileDevices);
             string content = string.Empty;
 
             foreach (var movil in movilPdfList)
@@ -206,19 +214,19 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 
             return contentPlans;
         }
-        private List<MovilPdf> GroupedMovilList(List<MovilDevice> movilDevices)
+        private List<MovilPdf> GroupedMovilList(List<EquipoPymes> mobileDevices)
         {
             try
             {
                 var movilPdfList = new List<MovilPdf>();
 
-                movilPdfList = movilDevices
-                .GroupBy(m => m.Codigo)
+                movilPdfList = mobileDevices
+                .GroupBy(m => m.CodigoEquipo)
                 .Select(m => new MovilPdf
                 {
-                    Codigo = m.First().Codigo,
+                    Codigo = m.First().CodigoEquipo,
                     Marca = m.First().Marca,
-                    Modelo = m.First().Modelo,
+                    Modelo = m.First().Nombre,
                     Cantidad = m.Count()
                 }
                 ).ToList();

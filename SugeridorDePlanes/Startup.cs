@@ -10,7 +10,6 @@ using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Services;
 using Telefonica.SugeridorDePlanes.Code;
-using Telefonica.SugeridorDePlanes.Controllers;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Usuarios;
 
@@ -39,13 +38,11 @@ namespace Telefonica.SugeridorDePlanes
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesModel>().ReverseMap();
                 configuration.CreateMap<PlanesOferta, PlanOfertaActualModel>().ReverseMap();
-                configuration.CreateMap<PlanDefinitivolModel, PlanesOferta>().ReverseMap();
-                configuration.CreateMap<EquipoMovil, MovilDevice>().ReverseMap(); //cambiar este map
+                configuration.CreateMap<PlanDefinitivolModel, PlanesOferta>().ReverseMap();                
                 configuration.CreateMap<EquipoPymes, EquipoPymesModel>().ReverseMap();
             }, typeof(Startup));
 
-            services.AddScoped<IManejoUsuario, ManejoUsuario>();
-            services.AddScoped<IPdfLogic, PdfLogic>(); // eliminar este scope
+            services.AddScoped<IManejoUsuario, ManejoUsuario>();       
             services.AddSingleton<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client(Configuration["ClientId"]));
 

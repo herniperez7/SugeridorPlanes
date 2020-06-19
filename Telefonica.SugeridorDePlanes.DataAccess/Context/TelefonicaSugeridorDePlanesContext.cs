@@ -287,26 +287,28 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             });
 
 
-
-            ///
-
             modelBuilder.Entity<EquipoPymesDTO>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToTable("Equipo_Pymes");
+                entity.ToTable("EquipoPymes");
 
-                entity.Property(e => e.Reconc_ID)
-                    .HasColumnName("reconc_ID");
+                entity.Property(e => e.CodigoEquipo)
+                    .HasColumnName("CODIGO_EQUIPO");
 
-                entity.Property(e => e.OFF_NAME)
-                    .HasColumnName("OFF_NAME");
+                entity.Property(e => e.Marca)
+                    .HasColumnName("MARCA");
 
-                entity.Property(e => e.OFF_PRICE)
-                    .HasColumnName("OFF_PRICE");                
+                entity.Property(e => e.Nombre)
+                    .HasColumnName("NOMBRE");
+
+                entity.Property(e => e.PrecioSinIva)
+                    .HasColumnName("PRECIO_S_IVA");
+
+                entity.Property(e => e.Stock)
+                    .HasColumnName("STOCK");
             });
 
-            //
 
             modelBuilder.Entity<PropuestaDTO>(entity =>
             {
