@@ -4,9 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 
-namespace Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender
+namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
-    public interface IEmailSender
+    public interface IEmailSenderLogic
     {
         Task SendEmailAsync(Email emailData, SmtpConfig config);
        

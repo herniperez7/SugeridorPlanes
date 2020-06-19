@@ -10,9 +10,10 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
 
-namespace Telefonica.SugeridorDePlanes.BusinessLogic
+namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 {
     public class PdfLogic : IPdfLogic
     {

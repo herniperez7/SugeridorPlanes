@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Services;
 using Telefonica.SugeridorDePlanes.Code;
 using Telefonica.SugeridorDePlanes.Controllers;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;

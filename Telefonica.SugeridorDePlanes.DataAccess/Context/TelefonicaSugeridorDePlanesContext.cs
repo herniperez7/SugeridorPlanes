@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.DataAccess.Context
@@ -23,7 +21,9 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
         public virtual DbSet<PlanesOfertaActualDTO> PlanesOfertaActual { get; set; }
         public virtual DbSet<EquipoPymesDTO> EquipoPymes { get; set; }
 
-
+        public virtual DbSet<PropuestaDTO> Propuesta { get; set; }
+        public virtual DbSet<EquipoPropuestaDTO> EquipoPropuesta { get; set; }
+        public virtual DbSet<LineaPropuestaDTO> LineaPropuesta { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RecomendadorB2bDTO>(entity =>
@@ -307,6 +307,51 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             });
 
             //
+
+            modelBuilder.Entity<PropuestaDTO>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("Propuestas");
+
+                entity.Property(e => e.CustAcctNumber)
+                    .HasColumnName("CustAcctNumber");
+
+                entity.Property(e => e.IdUsuario)
+                    .HasColumnName("IdUsuario");
+
+            });
+
+            //
+            modelBuilder.Entity<EquipoPropuestaDTO>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("EquipoPropuesta");
+
+                entity.Property(e => e.Equipo_Reconc_ID)
+                    .HasColumnName("Equipo_Reconc_ID");
+
+                entity.Property(e => e.IdPropuesta)
+                    .HasColumnName("IdPropuesta");
+
+            });
+
+            modelBuilder.Entity<LineaPropuestaDTO>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("LineaPropuesta");
+
+                entity.Property(e => e.IdPropuesta)
+                    .HasColumnName("IdPropuesta");
+
+                entity.Property(e => e.NumeroLinea)
+                    .HasColumnName("NumeroLinea");
+                entity.Property(e => e.Plan)
+                    .HasColumnName("Plan");
+            });
+
 
             OnModelCreatingPartial(modelBuilder);
         }

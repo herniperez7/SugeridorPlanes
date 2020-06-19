@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
-namespace Telefonica.SugeridorDePlanes.BusinessLogic
+namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 {
     public class SuggestorLogic : ISuggestorLogic
     {

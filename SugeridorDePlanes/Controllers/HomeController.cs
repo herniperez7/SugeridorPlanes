@@ -13,6 +13,7 @@ using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {

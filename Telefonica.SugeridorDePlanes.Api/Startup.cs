@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.DataAccess;
 using Telefonica.SugeridorDePlanes.DataAccess.Context;
@@ -18,7 +11,8 @@ using AutoMapper;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 using Microsoft.OpenApi.Models;
-using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Services;
 
 namespace Telefonica.SugeridorDePlanes.Api
 {
@@ -51,7 +45,7 @@ namespace Telefonica.SugeridorDePlanes.Api
             //Services
             services.AddScoped<IClientLogic, ClientLogic>();
             services.AddScoped<ISuggestorLogic, SuggestorLogic>();
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailSenderLogic, EmailSenderLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
-using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 
 namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
@@ -13,9 +13,9 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     [ApiController]
     public class UtilitiesController : ControllerBase
     {
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSenderLogic _emailSender;
         public IConfiguration _configuration { get; }
-        public UtilitiesController(IEmailSender emailSender, IConfiguration configuration)
+        public UtilitiesController(IEmailSenderLogic emailSender, IConfiguration configuration)
         {
             _emailSender = emailSender;
             _configuration = configuration;

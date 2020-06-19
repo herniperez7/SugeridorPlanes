@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 
 namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {

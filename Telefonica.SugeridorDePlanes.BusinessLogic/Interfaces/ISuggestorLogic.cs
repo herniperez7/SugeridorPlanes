@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
-namespace Telefonica.SugeridorDePlanes.BusinessLogic
+namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
     public interface ISuggestorLogic
     {

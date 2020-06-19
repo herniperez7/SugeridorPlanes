@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 
-namespace Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender
+namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailSenderLogic : IEmailSenderLogic
     {
         private readonly IWebHostEnvironment _env; 
-        public EmailSender(IWebHostEnvironment env)
+        public EmailSenderLogic(IWebHostEnvironment env)
         {
             _env = env;          
         }

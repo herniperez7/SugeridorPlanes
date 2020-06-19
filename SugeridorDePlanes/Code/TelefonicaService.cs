@@ -223,9 +223,6 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _currentEquiposPymes;
         }
 
-        /// <summary>
-        /// Actualiza la lista actual de moviles de la prupuesta
-        /// </summary>
         public void UpdateCurrentEquiposPymesList(int code, bool delete)
         {
             EquipoPymesModel mobile = null;
