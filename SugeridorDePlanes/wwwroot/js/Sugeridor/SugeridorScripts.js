@@ -489,6 +489,27 @@ function exportPdf() {
     });
 }
 
+
+function generarPropuesta() {
+
+    $("#pdfExportBtn").prop("disabled", true);
+    var devicePayment = $("#pagoEquiposTxt").val();
+    if (devicePayment == "") devicePayment = "0";
+
+    var companyName = $("#clientSelect option:selected").text();
+    $.ajax({
+        type: "POST",
+        url: gbGenerateProposal + '?devicePayment=' + devicePayment,
+        success: function (data) {
+            if (data.result) {
+                alert("true");
+            } else {
+                alert("false");
+            }
+        }
+    });
+}
+
 function sendMail() {
 
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';    

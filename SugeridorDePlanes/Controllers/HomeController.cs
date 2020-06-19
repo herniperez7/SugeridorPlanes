@@ -14,6 +14,7 @@ using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -205,6 +206,38 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return new JsonResult(data);
         }
 
+
+        [HttpPost]
+        public async Task<JsonResult> GenerateProposal(string devicePayment)
+        {
+            var resultProposal = await GenerateProposalData(devicePayment);
+            var data = new { status = "ok", result = resultProposal};
+            return new JsonResult(data);
+        }
+
+        private async Task<bool> GenerateProposalData(string devicePayment)
+        {
+            try
+            {
+
+                var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
+                var client = _telefonicaApi.GetCurrentClient();
+                var suggestorList = await _telefonicaApi.GetSuggestedPlansByRut(client.Documento);
+                
+                var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
+                var devicePaymentDouble = Convert.ToDouble(devicePayment);
+                var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
+                var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
+
+                bool requestResult = _telefonicaApi.AddProposal(mobileDevicesList, client, suggestorList, planesDefList, devicePaymentDouble);
+
+                return requestResult;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         private  byte[] GenerateByteArrayPdf(string devicePayment)
         {

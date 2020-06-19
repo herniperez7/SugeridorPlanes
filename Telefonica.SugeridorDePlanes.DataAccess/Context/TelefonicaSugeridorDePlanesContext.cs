@@ -331,8 +331,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
                 entity.ToTable("EquipoPropuesta");
 
-                entity.Property(e => e.Equipo_Reconc_ID)
-                    .HasColumnName("Equipo_Reconc_ID");
+                entity.Property(e => e.CODIGO_EQUIPO)
+                    .HasColumnName("CODIGO_EQUIPO");
 
                 entity.Property(e => e.IdPropuesta)
                     .HasColumnName("IdPropuesta");

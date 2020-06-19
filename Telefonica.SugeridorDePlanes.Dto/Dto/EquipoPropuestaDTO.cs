@@ -8,6 +8,6 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
     {
         public int Id { get; set; }
         public int IdPropuesta { get; set; }
-        public int Equipo_Reconc_ID { get; set; }
+        public string CODIGO_EQUIPO { get; set; }
     }
 }

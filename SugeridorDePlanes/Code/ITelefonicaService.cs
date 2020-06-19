@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 namespace Telefonica.SugeridorDePlanes.Code
@@ -48,5 +49,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         void UpdateCurrentEquiposPymesList(string code, bool delete);
 
         byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf);
+
+        bool AddProposal(List<EquipoPymes> mobileDevicesList, SugeridorClientes client, List<RecomendadorB2b> suggestorList, List<PlanDefinitivolModel> planesDefList, double devicePayment);
     }
 }

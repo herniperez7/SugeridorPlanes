@@ -78,13 +78,28 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
         }
 
-        [HttpGet("addPropuesta")]
+        [HttpPost("addPropuesta")]
         public async Task<ActionResult<bool>> AddPropuesta(Propuesta propuesta)
         {
             try
             {
                 var propuestaDTO = _mapper.Map<PropuestaDTO>(propuesta);
                 await _propuestaLogic.AddPropuesta(propuestaDTO);
+                var propuestaDB = await _propuestaLogic.GetPropuestaByDoc(propuesta.RutCliente);
+
+                var lineasDTO = new List<LineaPropuestaDTO>();
+                foreach(LineaPropuesta linea in propuesta.Lineas)
+                {
+                    lineasDTO.Add(new LineaPropuestaDTO() { IdPropuesta = propuestaDB.Id, NumeroLinea = linea.Numero, Plan = linea.Plan.Plan});
+                }
+                await _propuestaLogic.AddLineasPropuesta(lineasDTO);
+                var equiposDTO = new List<EquipoPropuestaDTO>();
+                foreach (EquipoPymes equipo in propuesta.Equipos)
+                {
+                    equiposDTO.Add(new EquipoPropuestaDTO() { IdPropuesta = propuestaDB.Id, CODIGO_EQUIPO = equipo.CodigoEquipo});
+                }
+
+                await _propuestaLogic.AddEquiposPropuesta(equiposDTO);
 
                 return true;
             }

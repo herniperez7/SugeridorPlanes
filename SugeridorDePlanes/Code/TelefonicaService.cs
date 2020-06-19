@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 
@@ -214,7 +215,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                     mobile.Id = id.ToString();
                     id++;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -255,17 +256,36 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public  byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf)
+        public byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf)
         {
             try
             {
-               var pdfByteArray =  _client.GeneratePdfAsync(proposalPdf).Result;
+                var pdfByteArray = _client.GeneratePdfAsync(proposalPdf).Result;
 
                 return pdfByteArray;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public bool AddProposal(List<EquipoPymes> mobileDevicesList, SugeridorClientes client, List<RecomendadorB2b> suggestorList, List<PlanDefinitivolModel>planesDefList, double devicePayment)
+        {
+            try
+            {
+                Propuesta propuesta = new Propuesta()
+                {
+                    DevicePayment = devicePayment,
+                    NombreCliente = client.Titular,
+                    Equipos = mobileDevicesList,
+                };
+                var result = _client.AddPropuestaAsync(propuesta).Result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

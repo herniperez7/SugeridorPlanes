@@ -61,11 +61,52 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
+        public async Task<PropuestaDTO> GetPropuestaByDoc(string doc)
+        {
+            try
+            {
+                var propuesta = await _context.Propuesta.Where(x => x.CustAcctNumber == doc).FirstOrDefaultAsync();
+
+                return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<bool> AddPropuesta(PropuestaDTO propuesta)
         {
             try
             {
                 await _context.Propuesta.AddAsync(propuesta);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas)
+        {
+            try
+            {
+                await _context.LineaPropuesta.AddRangeAsync(lineas);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos)
+        {
+            try
+            {
+                await _context.EquipoPropuesta.AddRangeAsync(equipos);
 
                 return true;
             }
