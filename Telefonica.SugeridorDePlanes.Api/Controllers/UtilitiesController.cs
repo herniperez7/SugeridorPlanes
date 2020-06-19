@@ -8,7 +8,7 @@ using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
-using Telefonica.SugeridorDePlanes.BusinessLogic.EmailSender;
+using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 
 namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
@@ -16,10 +16,10 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     [ApiController]
     public class UtilitiesController : ControllerBase
     {
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSenderLogic _emailSender;
         private readonly IPdfLogic _pdfLogic;
         public IConfiguration _configuration { get; }
-        public UtilitiesController(IEmailSender emailSender, IConfiguration configuration, IPdfLogic pdfLogic)
+        public UtilitiesController(IEmailSenderLogic emailSender, IConfiguration configuration, IPdfLogic pdfLogic)
         {
             _emailSender = emailSender;
             _configuration = configuration;

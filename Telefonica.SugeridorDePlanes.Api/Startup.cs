@@ -45,7 +45,7 @@ namespace Telefonica.SugeridorDePlanes.Api
             //Services
             services.AddScoped<IClientLogic, ClientLogic>();
             services.AddScoped<ISuggestorLogic, SuggestorLogic>();
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailSenderLogic, EmailSenderLogic>();
             services.AddScoped<IPdfLogic, PdfLogic>();
 
             //Repositories
