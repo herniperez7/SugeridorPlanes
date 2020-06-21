@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess;
@@ -16,10 +17,10 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     [ApiController]
     public class PropuestaController : ControllerBase
     {
-        private readonly IPropuestalLogic _propuestaLogic;
+        private readonly IPropuestaLogic _propuestaLogic;
         private readonly IMapper _mapper;
 
-        public PropuestaController(IPropuestalLogic propuestaLogic, IMapper mapper)
+        public PropuestaController(IPropuestaLogic propuestaLogic, IMapper mapper)
         {
             _propuestaLogic = propuestaLogic;
             _mapper = mapper;
@@ -79,29 +80,63 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpPost("addPropuesta")]
-        public async Task<ActionResult<bool>> AddPropuesta(Propuesta propuesta)
+        public async Task<ActionResult<bool>> AddPropuesta([FromBody]ProposalData proposal)
         {
             try
             {
-                var propuestaDTO = _mapper.Map<PropuestaDTO>(propuesta);
-                await _propuestaLogic.AddPropuesta(propuestaDTO);
-                var propuestaDB = await _propuestaLogic.GetPropuestaByDoc(propuesta.RutCliente);
-
-                var lineasDTO = new List<LineaPropuestaDTO>();
-                foreach(LineaPropuesta linea in propuesta.Lineas)
+                PropuestaDTO propuestaDTO = new PropuestaDTO()
                 {
-                    lineasDTO.Add(new LineaPropuestaDTO() { IdPropuesta = propuestaDB.Id, NumeroLinea = linea.Numero, Plan = linea.Plan.Plan});
-                }
-                await _propuestaLogic.AddLineasPropuesta(lineasDTO);
-                var equiposDTO = new List<EquipoPropuestaDTO>();
-                foreach (EquipoPymes equipo in propuesta.Equipos)
+                    Documento = proposal.Client.Documento,
+                    Guid = Guid.NewGuid().ToString(),
+                    Estado = "Pendiente"
+                };
+                if (proposal.Finalizada) propuestaDTO.Estado = "Finalizada";
+                var resultProposalAdd = await _propuestaLogic.AddPropuesta(propuestaDTO);
+                if (resultProposalAdd)
                 {
-                    equiposDTO.Add(new EquipoPropuestaDTO() { IdPropuesta = propuestaDB.Id, CODIGO_EQUIPO = equipo.CodigoEquipo});
+                    var propuestaDB = await _propuestaLogic.GetPropuestaByGuid(propuestaDTO.Guid);
+                    bool listAdded = false;
+                    if (propuestaDB != null)
+                    {
+                        if (proposal.SuggestorList.Count > 0)
+                        {
+                            var lineasDTO = new List<LineaPropuestaDTO>();
+                            for (var i = 0; i < proposal.SuggestorList.Count; i++)
+                            {
+                                lineasDTO.Add(new LineaPropuestaDTO() { NumeroLinea = proposal.SuggestorList[i].Movil.ToString(), Plan = proposal.PlanesDefList[i].Plan, IdPropuesta = propuestaDB.Id });
+
+                            }
+                            listAdded = await _propuestaLogic.AddLineasPropuesta(lineasDTO);
+                        }
+                        var equiposDTO = new List<EquipoPropuestaDTO>();
+                        if (proposal.MobileDevicesList.Count > 0)
+                        {
+                            foreach (EquipoPymes equipo in proposal.MobileDevicesList)
+                            {
+                                equiposDTO.Add(new EquipoPropuestaDTO() { IdPropuesta = propuestaDB.Id, CODIGO_EQUIPO = equipo.CodigoEquipo });
+                            }
+
+                            var equipAdded = await _propuestaLogic.AddEquiposPropuesta(equiposDTO);
+                            if (!equipAdded)
+                            {
+                                await _propuestaLogic.DeletePropuestaByGuid(propuestaDTO.Guid);
+                                return false;
+                            }
+                        }
+                        if (listAdded)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            await _propuestaLogic.DeletePropuestaByGuid(propuestaDTO.Guid);
+                            return false;
+                        }
+                    }
+                                       
                 }
-
-                await _propuestaLogic.AddEquiposPropuesta(equiposDTO);
-
-                return true;
+                               
+                return false;
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 
@@ -270,18 +271,17 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public bool AddProposal(List<EquipoPymes> mobileDevicesList, SugeridorClientes client, List<RecomendadorB2b> suggestorList, List<PlanDefinitivolModel>planesDefList, double devicePayment)
+        public bool AddProposal(ProposalData proposal)
         {
             try
             {
-                Propuesta propuesta = new Propuesta()
+                if(proposal != null)
                 {
-                    DevicePayment = devicePayment,
-                    NombreCliente = client.Titular,
-                    Equipos = mobileDevicesList,
-                };
-                var result = _client.AddPropuestaAsync(propuesta).Result;
-                return result;
+                    var result = _client.AddPropuestaAsync(proposal).Result;
+                    return result;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {

@@ -55,12 +55,12 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<bool> AddPropuestaAsync(Propuesta body);
+        System.Threading.Tasks.Task<bool> AddPropuestaAsync(ProposalData body);
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<bool> AddPropuestaAsync(Propuesta body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<bool> AddPropuestaAsync(ProposalData body, System.Threading.CancellationToken cancellationToken);
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -456,7 +456,7 @@ namespace Telefonica.SugeridorDePlanes
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<bool> AddPropuestaAsync(Propuesta body)
+        public System.Threading.Tasks.Task<bool> AddPropuestaAsync(ProposalData body)
         {
             return AddPropuestaAsync(body, System.Threading.CancellationToken.None);
         }
@@ -464,7 +464,7 @@ namespace Telefonica.SugeridorDePlanes
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<bool> AddPropuestaAsync(Propuesta body, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<bool> AddPropuestaAsync(ProposalData body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Propuesta/addPropuesta");
@@ -1314,8 +1314,8 @@ namespace Telefonica.SugeridorDePlanes
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Propuesta 
     {
-        [Newtonsoft.Json.JsonProperty("nombreCliente", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NombreCliente { get; set; }
+        [Newtonsoft.Json.JsonProperty("rutCliente", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RutCliente { get; set; }
     
         [Newtonsoft.Json.JsonProperty("lineas", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<LineaPropuesta> Lineas { get; set; }
@@ -1487,6 +1487,39 @@ namespace Telefonica.SugeridorDePlanes
     
         [Newtonsoft.Json.JsonProperty("roamingPlanRetencion", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RoamingPlanRetencion { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class ProposalData 
+    {
+        [Newtonsoft.Json.JsonProperty("mobileDevicesList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<EquipoPymes> MobileDevicesList { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("client", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public SugeridorClientes Client { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("suggestorList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<RecomendadorB2b> SuggestorList { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("planesDefList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<PlanesOferta> PlanesDefList { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("devicePayment", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double DevicePayment { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("finalizada", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Finalizada { get; set; }
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     

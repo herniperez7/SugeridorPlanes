@@ -9,7 +9,7 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.DataAccess
 {
-    public class PropuestaRepository : IPropuestalRepository
+    public class PropuestaRepository : IPropuestaRepository
     {
         protected readonly TelefonicaSugeridorDePlanesContext _context;
         public PropuestaRepository(TelefonicaSugeridorDePlanesContext context)
@@ -65,9 +65,37 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         {
             try
             {
-                var propuesta = await _context.Propuesta.Where(x => x.CustAcctNumber == doc).FirstOrDefaultAsync();
+                var propuesta = await _context.Propuesta.Where(x => x.Documento == doc).FirstOrDefaultAsync();
 
                 return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<PropuestaDTO> GetPropuestaByGuid(string guid)
+        {
+            try
+            {
+                var propuesta = await _context.Propuesta.Where(x => x.Guid == guid).FirstOrDefaultAsync();
+
+                return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task DeletePropuestaByGuid(string guid)
+        {
+            try
+            {
+                var propuesta = await _context.Propuesta.Where(x => x.Guid == guid).FirstOrDefaultAsync();
+                _context.Propuesta.Remove(propuesta);
+                
             }
             catch (Exception ex)
             {
@@ -80,7 +108,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             try
             {
                 await _context.Propuesta.AddAsync(propuesta);
-
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -93,7 +121,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             try
             {
                 await _context.LineaPropuesta.AddRangeAsync(lineas);
-
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -107,7 +135,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             try
             {
                 await _context.EquipoPropuesta.AddRangeAsync(equipos);
-
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception ex)

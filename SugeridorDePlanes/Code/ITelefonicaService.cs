@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 
 namespace Telefonica.SugeridorDePlanes.Code
@@ -50,6 +51,6 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf);
 
-        bool AddProposal(List<EquipoPymes> mobileDevicesList, SugeridorClientes client, List<RecomendadorB2b> suggestorList, List<PlanDefinitivolModel> planesDefList, double devicePayment);
+        bool AddProposal(ProposalData proposal);
     }
 }

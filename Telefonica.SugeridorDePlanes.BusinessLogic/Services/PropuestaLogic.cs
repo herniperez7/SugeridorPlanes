@@ -9,11 +9,11 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public class PropuestaLogic : IPropuestalLogic
+    public class PropuestaLogic : IPropuestaLogic
     {
-        private readonly IPropuestalRepository _proposalRepository;
+        private readonly IPropuestaRepository _proposalRepository;
 
-        public PropuestaLogic(IPropuestalRepository proposalRepository)
+        public PropuestaLogic(IPropuestaRepository proposalRepository)
         {
             _proposalRepository = proposalRepository;
         }
@@ -59,6 +59,30 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             try
             {
                 return await _proposalRepository.GetPropuestaByDoc(doc);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<PropuestaDTO> GetPropuestaByGuid(string guid)
+        {
+            try
+            {
+                return await _proposalRepository.GetPropuestaByGuid(guid);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task DeletePropuestaByGuid(string guid)
+        {
+            try
+            {
+                await _proposalRepository.DeletePropuestaByGuid(guid);
             }
             catch (Exception ex)
             {

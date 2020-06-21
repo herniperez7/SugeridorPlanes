@@ -15,6 +15,7 @@ using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -229,7 +230,10 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
                 var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
 
-                bool requestResult = _telefonicaApi.AddProposal(mobileDevicesList, client, suggestorList, planesDefList, devicePaymentDouble);
+
+                ProposalData proposal = new ProposalData() { Client = client, SuggestorList = suggestorList, PlanesDefList = planesDef, DevicePayment = devicePaymentDouble, MobileDevicesList = mobileDevicesList ,};
+
+                bool requestResult = _telefonicaApi.AddProposal(proposal);
 
                 return requestResult;
             }

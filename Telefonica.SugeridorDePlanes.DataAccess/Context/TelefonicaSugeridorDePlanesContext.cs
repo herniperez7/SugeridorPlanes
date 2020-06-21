@@ -316,11 +316,21 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
                 entity.ToTable("Propuestas");
 
-                entity.Property(e => e.CustAcctNumber)
-                    .HasColumnName("CustAcctNumber");
+                entity.Property(e => e.Documento)
+                    .HasColumnName("Documento");
 
                 entity.Property(e => e.IdUsuario)
                     .HasColumnName("IdUsuario");
+                entity.Property(e => e.Payback)
+                   .HasColumnName("Payback");
+                entity.Property(e => e.Estado)
+                   .HasColumnName("Estado");
+                entity.Property(e => e.DevicePayment)
+                   .HasColumnName("PagoEquipos");
+                entity.Property(e => e.Subsidio)
+                   .HasColumnName("Subsidio");
+                entity.Property(e => e.Guid)
+                   .HasColumnName("Guid");
 
             });
 
@@ -329,7 +339,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             {
                 entity.HasKey(e => e.Id);
 
-                entity.ToTable("EquipoPropuesta");
+                entity.ToTable("EquipoPropuestas");
 
                 entity.Property(e => e.CODIGO_EQUIPO)
                     .HasColumnName("CODIGO_EQUIPO");
@@ -343,7 +353,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             {
                 entity.HasKey(e => e.Id);
 
-                entity.ToTable("LineaPropuesta");
+                entity.ToTable("LineaPropuestas");
 
                 entity.Property(e => e.IdPropuesta)
                     .HasColumnName("IdPropuesta");

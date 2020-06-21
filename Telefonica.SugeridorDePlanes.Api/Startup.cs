@@ -36,7 +36,9 @@ namespace Telefonica.SugeridorDePlanes.Api
                 configuration.CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
                 configuration.CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
                 configuration.CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
-                configuration.CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();                
+                configuration.CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();
+                configuration.CreateMap<Propuesta, PropuestaDTO>().ForMember(dest => dest.Documento, opt => opt.MapFrom(org => org.RutCliente))
+                    .ForMember(dest => dest.IdUsuario, opt => opt.MapFrom(org => org.IdUsuario)).ReverseMap();
             }, typeof(Startup));
 
             services.AddDbContext<TelefonicaSugeridorDePlanesContext>(options =>
@@ -47,12 +49,14 @@ namespace Telefonica.SugeridorDePlanes.Api
             services.AddScoped<ISuggestorLogic, SuggestorLogic>();
             services.AddScoped<IEmailSenderLogic, EmailSenderLogic>();
             services.AddScoped<IPdfLogic, PdfLogic>();
+            services.AddScoped<IPropuestaLogic, PropuestaLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<ISuggestorRepository, SuggestorRepository>();
+            services.AddScoped<IPropuestaRepository, PropuestaRepository>();
 
-             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(config => {
                 config.SwaggerDoc("V1", new OpenApiInfo { Title = "Telefonica Web Api", Version = "V1" });

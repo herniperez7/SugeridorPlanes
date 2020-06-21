@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
-namespace Telefonica.SugeridorDePlanes.DataAccess
+namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
-    public interface IPropuestalRepository
+    public interface IPropuestaLogic
     {
         Task<List<PropuestaDTO>> GetPropuestas();
-        
+        Task<PropuestaDTO> GetPropuestaByDoc(string doc);
+        Task<PropuestaDTO> GetPropuestaByGuid(string guid);
+        Task DeletePropuestaByGuid(string guid);
         Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario);
-
-        Task<PropuestaDTO> GetPropuestaByDoc(string titular);
-        Task<PropuestaDTO> GetPropuesta(string idPropuesta);
+        Task<PropuestaDTO> GetPropuesta(string id);
         Task<bool> AddPropuesta(PropuestaDTO propuesta);
         Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas);
         Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos);
-
     }
 }
