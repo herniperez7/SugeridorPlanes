@@ -52,5 +52,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf);
 
         bool AddProposal(ProposalData proposal);
+
+        List<Propuesta> GetProposalsByUser(string idUsuario);
+        List<Propuesta> GetProposals();
     }
 }

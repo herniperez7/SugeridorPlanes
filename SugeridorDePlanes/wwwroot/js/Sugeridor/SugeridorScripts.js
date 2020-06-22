@@ -494,12 +494,14 @@ function generarPropuesta() {
 
     $("#pdfExportBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
+    var subsidio = $("#subsidioTxt").val();
+    var payback = $("#paybackTxt").val(); 
     if (devicePayment == "") devicePayment = "0";
 
     var companyName = $("#clientSelect option:selected").text();
     $.ajax({
         type: "POST",
-        url: gbGenerateProposal + '?devicePayment=' + devicePayment,
+        url: gbGenerateProposal + '?devicePayment=' + devicePayment + '&subsidio=' + subsidio + '&payback=' + payback,
         success: function (data) {
             if (data.result) {
                 alert("true");

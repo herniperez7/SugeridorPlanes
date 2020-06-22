@@ -143,5 +143,33 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
                 throw ex;
             }
         }
+
+        public async Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta)
+        {
+            try
+            {
+                var propuesta = await _context.LineaPropuesta.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
+
+                return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta)
+        {
+            try
+            {
+                var propuesta = await _context.EquipoPropuesta.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
+
+                return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

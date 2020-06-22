@@ -11,6 +11,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels
         public List<RecomendadorB2b> SuggestorList { get; set; }
         public List<PlanesOferta> PlanesDefList { get; set; }
         public double DevicePayment { get; set; }
+        public double Subsidio { get; set; }
+        public double Payback { get; set; }
         public bool Finalizada { get; set; }
     }
 }

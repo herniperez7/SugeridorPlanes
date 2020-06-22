@@ -18,5 +18,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
         Task<bool> AddPropuesta(PropuestaDTO propuesta);
         Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas);
         Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos);
+
+        Task<List<LineaPropuestaDTO>>GetLineasPropuesta(int idPropuesta);
+        Task<List<EquipoPropuestaDTO>>GetEquiposPropuesta(int idPropuesta);
     }
 }

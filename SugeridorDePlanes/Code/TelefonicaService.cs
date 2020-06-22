@@ -288,5 +288,42 @@ namespace Telefonica.SugeridorDePlanes.Code
                 return false;
             }
         }
+
+        public List<Propuesta> GetProposalsByUser(string idUsuario)
+        {
+            try
+            {
+                if (idUsuario != null && idUsuario != String.Empty)
+                {
+                    var propuestas = _client.GetPropuestasUsuarioAsync(idUsuario).Result;
+                    var propuestasList = propuestas.ToList();
+
+                    return propuestasList;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<Propuesta> GetProposals()
+        {
+            try
+            {
+
+                    var propuestas = _client.GetPropuestasAsync().Result;
+                    var propuestasList = propuestas.ToList();
+
+                    return propuestasList;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

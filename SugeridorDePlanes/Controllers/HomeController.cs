@@ -209,14 +209,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
 
         [HttpPost]
-        public async Task<JsonResult> GenerateProposal(string devicePayment)
+        public async Task<JsonResult> GenerateProposal(string devicePayment, string subsidio, string payback)
         {
-            var resultProposal = await GenerateProposalData(devicePayment);
+            var resultProposal = await GenerateProposalData(devicePayment,subsidio,payback);
             var data = new { status = "ok", result = resultProposal};
             return new JsonResult(data);
         }
 
-        private async Task<bool> GenerateProposalData(string devicePayment)
+        private async Task<bool> GenerateProposalData(string devicePayment,string subsidio, string payback)
         {
             try
             {
@@ -226,12 +226,24 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var suggestorList = await _telefonicaApi.GetSuggestedPlansByRut(client.Documento);
                 
                 var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
+                subsidio = subsidio.Replace("$ ", "");
                 var devicePaymentDouble = Convert.ToDouble(devicePayment);
+                var subsidioDouble = Convert.ToDouble(subsidio);
+                var paybackDouble = Convert.ToDouble(payback);
                 var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
                 var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
 
 
-                ProposalData proposal = new ProposalData() { Client = client, SuggestorList = suggestorList, PlanesDefList = planesDef, DevicePayment = devicePaymentDouble, MobileDevicesList = mobileDevicesList ,};
+                ProposalData proposal = new ProposalData() { 
+                    Client = client, 
+                    SuggestorList = suggestorList, 
+                    PlanesDefList = planesDef,
+                    DevicePayment = devicePaymentDouble,
+                    Payback = paybackDouble,
+                    Subsidio = subsidioDouble,
+                    MobileDevicesList = mobileDevicesList ,
+                    Finalizada =true
+                };
 
                 bool requestResult = _telefonicaApi.AddProposal(proposal);
 

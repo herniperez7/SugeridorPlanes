@@ -10,6 +10,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
         public List<LineaPropuesta> Lineas { get; set; }
         public List<EquipoPymes> Equipos { get; set; }
         public double DevicePayment { get; set; }
+        public double Payback { get; set; }
+        public double Subsidio { get; set; }
+        public string Estado { get; set; }
         public string IdUsuario { get; set; }
     }
 }

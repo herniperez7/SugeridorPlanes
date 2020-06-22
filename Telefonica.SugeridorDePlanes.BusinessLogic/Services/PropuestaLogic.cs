@@ -146,5 +146,29 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
 
             return false;
         }
+
+        public async Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta)
+        {
+            try
+            {
+                return await _proposalRepository.GetLineasPropuesta(idPropuesta);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta)
+        {
+            try
+            {
+                return await _proposalRepository.GetEquiposPropuesta(idPropuesta);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

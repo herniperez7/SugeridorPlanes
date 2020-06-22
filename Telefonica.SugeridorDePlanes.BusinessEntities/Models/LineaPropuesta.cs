@@ -9,5 +9,6 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
         public string Numero { get; set; }
         public PlanesOferta Plan { get; set; }
 
+
     }
 }

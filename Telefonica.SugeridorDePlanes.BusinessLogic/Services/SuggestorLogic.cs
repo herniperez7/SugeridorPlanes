@@ -91,5 +91,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 throw ex;
             }
         }
+
+        public async Task<EquipoPymesDTO> GetEquiposPymesByCode(string code)
+        {
+            try
+            {
+                return await _suggestorRepository.GetEquiposByCode(code);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

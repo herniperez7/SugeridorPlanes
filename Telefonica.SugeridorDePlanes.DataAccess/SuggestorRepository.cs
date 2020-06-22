@@ -108,5 +108,16 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
                 throw ex;
             }
         }
+        public async Task<EquipoPymesDTO> GetEquiposByCode(string code)
+        {
+            try
+            {
+                return await _context.EquipoPymes.Where(x =>x.CodigoEquipo == code).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
