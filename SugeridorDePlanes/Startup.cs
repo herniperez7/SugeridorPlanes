@@ -5,13 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-using Telefonica.SugeridorDePlanes.BusinessLogic;
-using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
-using Telefonica.SugeridorDePlanes.BusinessLogic.Services;
 using Telefonica.SugeridorDePlanes.Code;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
-using Telefonica.SugeridorDePlanes.Models.Usuarios;
+using Telefonica.SugeridorDePlanes.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes
 {
@@ -42,7 +38,7 @@ namespace Telefonica.SugeridorDePlanes
                 configuration.CreateMap<EquipoPymes, EquipoPymesModel>().ReverseMap();
             }, typeof(Startup));
 
-            services.AddScoped<IManejoUsuario, ManejoUsuario>();       
+            services.AddScoped<IUserManager, UserManager>();       
             services.AddSingleton<ITelefonicaService, TelefonicaService>();
             services.AddSingleton<IClient>(_ => new Client(Configuration["ClientId"]));
 

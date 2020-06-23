@@ -7,14 +7,14 @@ using System.Data.SqlClient;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 
-namespace Telefonica.SugeridorDePlanes.Models.Usuarios
+namespace Telefonica.SugeridorDePlanes.Models.Users
 {
-    public class ManejoUsuario: IManejoUsuario
+    public class UserManager : IUserManager
     { 
-        public ManejoUsuario()
+        public UserManager()
         {
         }
-        public Usuario AutentificarUsuario(string userName, string password)
+        public User AuthenticateUser(string userName, string password)
         {
             if(!String.IsNullOrEmpty(userName) && !String.IsNullOrEmpty(password))
             {
@@ -27,7 +27,7 @@ namespace Telefonica.SugeridorDePlanes.Models.Usuarios
                     results = dSearch.FindOne();
 
                     string NTuserName = results.GetDirectoryEntry().Properties["SAMAccountName"].Value.ToString();
-                    Usuario usuarioLogueado = new Usuario() { Nombre = userName};
+                    User usuarioLogueado = new User() { Nombre = userName};
                     
                     return usuarioLogueado;
 

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
-using Telefonica.SugeridorDePlanes.Models.Usuarios;
+using Telefonica.SugeridorDePlanes.Models.Users;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
@@ -21,14 +21,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 {
     public class UserProposalController : Controller
     {
-        private IManejoUsuario usuario;
+        private IUserManager UserManager;
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
 
 
-        public UserProposalController(IMapper mapper, IManejoUsuario usuarioInterface, ITelefonicaService telefonicaService)
+        public UserProposalController(IMapper mapper, IUserManager _userManager, ITelefonicaService telefonicaService)
         {
-            usuario = usuarioInterface;
+            UserManager = _userManager;
             _telefonicaApi = telefonicaService;
             _mapper = mapper;
 
