@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Telefonica.SugeridorDePlanes.Models.Usuarios.UsuariosRol
+
+namespace Telefonica.SugeridorDePlanes.Models.Users.UsersRole
 {
-    public class Administrador: UsuarioRol
+    public class Ejecutive: UserRole
     {
         
     }

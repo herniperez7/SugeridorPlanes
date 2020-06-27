@@ -1,34 +1,33 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Telefonica.SugeridorDePlanes.Models.Usuarios;
+using Telefonica.SugeridorDePlanes.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
     public class LoginController : Controller
     {
-        private IManejoUsuario usuarioManejo;
+        private IUserManager UserManager;
 
-        public LoginController(IManejoUsuario usuarioInterface)
+        public LoginController(IUserManager userManager)
         {
-            usuarioManejo = usuarioInterface;
+            UserManager = userManager;
         }
         public ViewResult Index()
         {
             return View();
         }
-        /*test*/
 
         [HttpPost]
         public ViewResult Login(string userName, string password)
         {
             
-            Usuario usuarioLogueado = usuarioManejo.AutentificarUsuario(userName, password);
-            if(usuarioLogueado == null)
+            User loggedUser = UserManager.AuthenticateUser(userName, password);
+            if(loggedUser == null)
             {
-                usuarioLogueado = new Usuario() { Nombre = "Usuario1" };
-                HttpContext.Session.SetString("UsuarioLogueado", JsonConvert.SerializeObject(usuarioLogueado));
-                ViewData["UsuarioLogueado"] = usuarioLogueado;
+                loggedUser = new User() { Nombre = "Usuario1" };
+                HttpContext.Session.SetString("UsuarioLogueado", JsonConvert.SerializeObject(loggedUser));
+                ViewData["UsuarioLogueado"] = loggedUser;
                 
                 return View("../Home/Index");
             }
