@@ -37,7 +37,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public IActionResult Index()
         {
             var proposals =  _telefonicaApi.GetProposals();
-            return View("../UserProposal/Index", proposals);
+            return View("Index", proposals);
         }
 
 

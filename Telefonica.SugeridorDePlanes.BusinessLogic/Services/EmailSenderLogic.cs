@@ -28,17 +28,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 email.Subject = emailData.Subject;
                 var content = string.Empty;
 
-                var urlMail = Path.Combine(mainUrl, "emailResources", "emailTemplate.html");
+               /* var urlMail = Path.Combine(mainUrl, "emailResources", "emailTemplate.html");
                
                 var objReader = new StreamReader(urlMail);
                 content = objReader.ReadToEnd();
                 objReader.Close();
 
-                content = Regex.Replace(content, "{BoydText}", emailData.Message);
+                content = Regex.Replace(content, "{BoydText}", emailData.Message);*/
 
                 var body = new BodyBuilder
                 {
-                    HtmlBody = content
+                    HtmlBody = emailData.Message
                 };
 
                 if (emailData.Array != null)

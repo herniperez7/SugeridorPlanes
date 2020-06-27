@@ -369,12 +369,14 @@ function calculateSecondGaps() {
 //metodo para inportar los valores actuales a los inputs de calculos
 async function importValues() {
     var $incomes = $("#incomeDivValue").text();
+
+    console.log(currentDeviceAmount);
     var $subsidy = currentDeviceAmount;
     var $payback = $("#paybackTxt").val();
     var incomeInt = parseInt($incomes);   
     var regex = /[.\s]/g;
 
-    $("#calculateSubsidyTxt").val(formatNumber($subsidy));
+    $("#calculateSubsidyTxt").val(formatNumberStr($subsidy));
     $("#calculatePaybackTxt").val($payback.replace(regex, ''));
     $("#calculateIncomeTxt").val(formatNumberStr($incomes));
 
@@ -492,7 +494,7 @@ function exportPdf() {
 
 function generarPropuesta() {
 
-    $("#pdfExportBtn").prop("disabled", true);
+    //$("#pdfExportBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
     var subsidio = $("#subsidioTxt").val();
     var payback = $("#paybackTxt").val(); 
@@ -504,9 +506,9 @@ function generarPropuesta() {
         url: gbGenerateProposal + '?devicePayment=' + devicePayment + '&subsidio=' + subsidio + '&payback=' + payback,
         success: function (data) {
             if (data.result) {
-                alert("true");
+               // alert("true");
             } else {
-                alert("false");
+              //  alert("false");
             }
         }
     });
