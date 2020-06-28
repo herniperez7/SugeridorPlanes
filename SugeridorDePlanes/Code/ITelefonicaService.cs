@@ -6,6 +6,7 @@ using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
+using Telefonica.SugeridorDePlanes.Models.Data;
 
 namespace Telefonica.SugeridorDePlanes.Code
 {
@@ -31,7 +32,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         List<PlanDefinitivolModel> GetCurrentDefinitivePlans();
 
-        void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans);
+        void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan);
 
         Task SendMail(Email emailData);
 

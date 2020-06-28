@@ -7,6 +7,7 @@ using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
+using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
 
 namespace Telefonica.SugeridorDePlanes.Code
@@ -144,9 +145,37 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _curretDefinitvePlans;
         }
 
-        public void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
+        //public void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
+        //{
+        //    _curretDefinitvePlans = currentPlans;
+        //}
+
+        public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan) 
         {
-            _curretDefinitvePlans = currentPlans;
+            var defPlansList = _curretDefinitvePlans;
+            
+            _curretDefinitvePlans = defPlansList.Select(x =>
+            new PlanDefinitivolModel
+            {
+                RecomendadorId = x.RecomendadorId,
+                Plan = x.Plan,
+                Bono = x.Bono,
+                Roaming = x.Roaming,
+                TMM_s_iva = x.TMM_s_iva,
+                TmmString = x.TMM_s_iva.ToString("n")
+            }).ToList();
+            //            
+
+            foreach (var plan in _curretDefinitvePlans)
+            {
+                if (plan.RecomendadorId == updatePlan.PlanToEdit) {
+                    plan.Plan = updatePlan.Plan;
+                    plan.Bono = long.Parse(updatePlan.Bono);
+                    plan.Roaming = updatePlan.Roaming;
+                    plan.TMM_s_iva = decimal.Parse(updatePlan.TMM);
+                    plan.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
+                }
+            }           
         }
 
         private void UpdateDefinitivePlans(List<RecomendadorB2b> planList)

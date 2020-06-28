@@ -152,34 +152,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         [HttpPost]
         public JsonResult UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
-        {
+        {            
+            _telefonicaApi.UpdateCurrentDefinitivePlans(updatePlan);
             var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
-
-            //provisorio, cambiar logica
-            defPlansList = defPlansList.Select(x =>
-            new PlanDefinitivolModel
-            {
-                RecomendadorId = x.RecomendadorId,
-                Plan = x.Plan,
-                Bono = x.Bono,
-                Roaming = x.Roaming,
-                TMM_s_iva = x.TMM_s_iva,
-                TmmString = x.TMM_s_iva.ToString("n")
-            }).ToList();
-
-            //
-
-            PlanDefinitivolModel planDef = defPlansList.Where(x => x.RecomendadorId == updatePlan.PlanToEdit).FirstOrDefault();
-            if (planDef != null)
-            {
-                planDef.Plan = updatePlan.Plan;
-                planDef.Bono = long.Parse(updatePlan.Bono);
-                planDef.Roaming = updatePlan.Roaming;
-                planDef.TMM_s_iva = decimal.Parse(updatePlan.TMM);
-                planDef.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
-            }
-
-            _telefonicaApi.UpdateCurrentDefinitivePlans(defPlansList);
             return new JsonResult(defPlansList);
         }
 
