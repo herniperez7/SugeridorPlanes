@@ -7,7 +7,7 @@ using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
-
+using Telefonica.SugeridorDePlanes.Resources.Enums;
 
 namespace Telefonica.SugeridorDePlanes.Code
 {
@@ -375,6 +375,62 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
 
             return payback;
+        }
+
+        public IndexModel CalculateIndexes() 
+        {
+            List<RecomendadorB2b> plansList = _currentPlans;
+            var defPlansList = _curretDefinitvePlans;
+            BillingStatus billingStatus = BillingStatus.None;
+
+            decimal fixedGap = 0; //Gap fijo
+            decimal billingGap = 0; //Gap de facturacion
+            decimal arpuProm = 0; // ARPUPROM
+            decimal tmmSumatory = 0; // TMM+Prestacion
+            decimal defTmmSumatory = 0;  //TMM de planes sugeridos
+            decimal tmmSinIva = 0; //TMM sin iva info actual
+                                   //   decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
+
+            foreach (var plan in plansList)
+            {
+                arpuProm += plan.ArpuProm != null ? (decimal)plan.ArpuProm : 0;
+                tmmSumatory += plan.TmmPrestacion != null ? (decimal)plan.TmmPrestacion : 0;
+                tmmSinIva += plan.TmmSinIva != null ? (decimal)plan.TmmSinIva : 0;
+            }
+
+            foreach (var defPlan in defPlansList)
+            {
+                defTmmSumatory += defPlan.TMM_s_iva;
+            }
+
+            billingGap = defTmmSumatory - arpuProm;
+            fixedGap = defTmmSumatory - tmmSumatory;
+
+            if (plansList.Count > 0)
+            {
+                if (billingGap > 0)
+                {
+                    billingStatus = BillingStatus.Higher;
+                }
+                else if (billingGap < 0)
+                {
+                     billingStatus = BillingStatus.Lower;
+                }
+                else if (billingGap == 0)
+                {
+                     billingStatus = BillingStatus.Equal;
+                }
+            }
+
+
+            var gapModel = new IndexModel
+            {
+                BillingGap = billingGap,
+                FixedGap = fixedGap,
+                 BillingStatus = billingStatus,
+                TmmPrestacion = tmmSumatory
+            };
+            return gapModel;
         }
 
     }

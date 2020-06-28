@@ -34,10 +34,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 
     <script>
-        $(document).ready(function ()
+        function openProposal(val)
         {
-
-
+            window.location.href = "@Url.Action("OpenProposalToEdit", "UserProposal")" + '?proposaId=' + val;
         }
 
 
@@ -87,7 +86,6 @@
                                 {
                                     @foreach (var propuesta in Model)
                                     {
-
                                         <tr>
                                             <td>@propuesta.RutCliente</td>
                                             <td>@propuesta.Lineas.Count</td>
@@ -96,7 +94,7 @@
                                             <td>@propuesta.Payback</td>
                                             <td>$ @propuesta.DevicePayment</td>
                                             <td>@propuesta.Estado</td>
-                                            <td class="editRow" onclick="openProposal(3)"><a href="" class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                            <td class="editRow " onclick="openProposal(@propuesta.Id)"><a  class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
                                         </tr>
                                     }
                                 }
@@ -107,8 +105,6 @@
                     </div>
                  
                 </fieldset>
-
-
             </div>
             </div>
         </div>

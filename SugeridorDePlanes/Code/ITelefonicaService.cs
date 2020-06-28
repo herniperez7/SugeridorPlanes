@@ -61,5 +61,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         decimal GetSubsidy();
 
         decimal GetPayback();
+
+        IndexModel CalculateIndexes();
     }
 }
