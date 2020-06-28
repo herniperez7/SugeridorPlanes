@@ -260,6 +260,52 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
         }
 
+        /// <summary>
+        /// Metodo para guardar la propuesta
+        /// </summary>
+        /// <param name="devicePayment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult SaveProposal(string devicePayment) 
+        {
+            try
+            {
+                var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
+                var client = _telefonicaApi.GetCurrentClient();
+                var suggestorList = _telefonicaApi.GetCurrentPlans();
+                var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
+                double devicePaymentDouble = Convert.ToDouble(devicePayment);
+                var subsidy = _telefonicaApi.GetSubsidy();
+                double subsidyDouble = Convert.ToDouble(subsidy);
+                var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
+                var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
+                var payback = _telefonicaApi.GetPayback();
+                double paybackDouble = Convert.ToDouble(payback);
+
+                ProposalData proposal = new ProposalData()
+                {
+                    Client = client,
+                    SuggestorList = suggestorList,
+                    PlanesDefList = planesDef,
+                    DevicePayment = devicePaymentDouble,
+                    Payback = paybackDouble,
+                    Subsidio = subsidyDouble,
+                    MobileDevicesList = mobileDevicesList,
+                    Finalizada = false
+                };
+
+                bool requestResult = _telefonicaApi.AddProposal(proposal);
+
+
+                var data = new { status = "ok", result = "" };
+                return new JsonResult(data);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
+        }
+
         private  byte[] GenerateByteArrayPdf(string devicePayment)
         {
             try
@@ -376,7 +422,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 TmmPrestacion = tmmSumatory
             };
             return gapModel;
-        }
+        }     
 
     }
 }

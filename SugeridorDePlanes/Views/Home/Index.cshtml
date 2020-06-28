@@ -65,7 +65,7 @@
         var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
         var gbSendMail = "@Url.Action("SendMail", "Home")";
         var gbGenerateProposal = "@Url.Action("GenerateProposal", "Home")";
-
+        var gbSaveProposal = "@Url.Action("SaveProposal", "UserProposal")";
 
     </script>
 
@@ -377,7 +377,7 @@
                                             @roamingCount
                                         </td>
                                     </tr>
-
+                                    
                                 }
                                 else
                                 {
@@ -406,17 +406,17 @@
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
                                 <select id="movilesDdl" class="custom-select" onchange="movileChange()">
-                                  
+
                                     <option> </option>
                                     @foreach (var item in movileDevices)
                                     {
                                         var marcaEquipo = string.IsNullOrEmpty(item.Marca) ? "" : item.Marca;
                                         var nombreEquipo = string.IsNullOrEmpty(item.Nombre) ? "" : item.Nombre;
 
-                                <option value="@item.Id">@marcaEquipo @nombreEquipo</option>
+                                        <option value="@item.Id">@marcaEquipo @nombreEquipo</option>
                                     }
 
-                                </select>                             
+                                </select>
 
                             </form>
                             <div id="valuesEquipos" class="p-2 ml-2">
@@ -559,8 +559,18 @@
 
 
                     </div>
+                    <button style="position: absolute;right:190px;top:-5px;outline:5px solid #fff" id="saveProposalBtn" onclick="saveProposal()">
+                        <img src="@Url.Content("~/img/icons/disketteIcon32x.png")" />
+                    </button>
+                    <button style="position: absolute;right:130px;top:-5px;outline:5px solid #fff" id="exportPdfBtn">
+                        <img src="@Url.Content("~/img/icons/IconPdf.png")" />
+                    </button>
+                    <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="sendEmailBtn">
+                        <img src="@Url.Content("~/img/icons/iconMail.png")" />
+                    </button>
                     <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
                         <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
+
                     </button>
                 </fieldset>
 
@@ -711,6 +721,40 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+
+
+
+
+        <!--Modal: modalPush-->
+        <div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-info" role="document">
+                <!--Content-->
+                <div class="modal-content text-center">
+                    <!--Header-->
+                    <div class="modal-header d-flex justify-content-center">
+                        <p class="heading">Propuesta guardada</p>
+                    </div>
+                   
+                    <!--Body-->
+                    <div class="modal-body">
+
+                        <i class="far fa-check-circle fa-4x animated rotateIn mb-4"></i>
+
+                        <p>La propuesta se guardó exitosamente!</p>
+
+                    </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer flex-center">
+
+                        <a type="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">Aceptar</a>
+                    </div>
+                </div>
+                <!--/.Content-->
             </div>
         </div>
 

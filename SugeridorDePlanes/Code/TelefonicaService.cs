@@ -18,7 +18,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         private List<RecomendadorB2b> _currentPlans;
         private List<PlanDefinitivolModel> _curretDefinitvePlans;
         private SugeridorClientes _currentClient;
-        private List<SugeridorClientes> _currentClients;
+        private List<SugeridorClientes> _currentClients;        
 
         //Lista total de moviles
         private List<EquipoPymesModel> _equiposPymes;
@@ -325,5 +325,57 @@ namespace Telefonica.SugeridorDePlanes.Code
                 return null;
             }
         }
+
+        public Propuesta GetProposalsById(string idProposal)
+        {
+            try
+            {
+                if (idProposal != null && idProposal != String.Empty)
+                {
+                    var proposal = _client.GetPropuestaAsync(idProposal).Result;                   
+
+                    return proposal;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public decimal GetSubsidy() 
+        {
+            decimal subsidy = 0;
+
+            foreach (var m in _currentEquiposPymes)
+            {
+                subsidy += m.PrecioSinIva;
+            }
+
+            return subsidy;
+        }
+
+        public decimal GetPayback() 
+        {
+            decimal subsidy = GetSubsidy();
+            decimal income = 0;
+            decimal payback = 0;
+
+            foreach (var plan in _curretDefinitvePlans)
+            {
+                income += plan.TMM_s_iva;
+            }
+
+            if (income > 0) 
+            {
+                payback = subsidy / income;
+            }
+
+            return payback;
+        }
+
     }
 }

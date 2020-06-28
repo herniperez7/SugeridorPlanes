@@ -30,6 +30,11 @@ $(document).ready(function () {
     $('#tablaPlanes tbody tr').on('click', function () {
         selectPlan(this);
     });
+
+    //$('#saveProposalBtn').on('click', function () {
+    //    window.location.href = gbSaveProposal +  '?id=' + "152";
+    //});
+
 });
 
 function selectPlan(selectedPlan) {
@@ -562,5 +567,23 @@ function saveByteArray(reportName, byte) {
 }
 
 ///////////////////////////
+
+
+function saveProposal() {
+
+    console.log("algo");
+    $.ajax({
+        type: "POST",
+        url: gbSaveProposal,
+        success: function (data) {
+            if (data.status === "ok") {
+               // alert(data.result);
+
+                $('#modalPush').modal('show'); 
+            }
+        }
+    });
+
+}
 
 
