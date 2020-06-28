@@ -27,17 +27,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public IActionResult Index()
         {
             var proposals =  _telefonicaApi.GetProposals();
+            var proposal = _telefonicaApi.GetProposalById("8");
             return View("Index", proposals);
         }
 
-        [HttpPost]
-        public JsonResult SaveProposal() 
+        public IActionResult OpenProposal(string proposaId) 
         {
-            var data = new { status = "ok", result = "propuesta guardada" };
-            return Json(data);
-            
-        }
+            var proposal = _telefonicaApi.GetProposalById(proposaId);
 
+            return View("Index");
+        }
 
     }
 }

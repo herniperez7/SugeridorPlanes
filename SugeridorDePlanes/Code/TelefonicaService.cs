@@ -326,22 +326,22 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public Propuesta GetProposalsById(string idProposal)
+        public Propuesta GetProposalById(string idProposal)
         {
             try
             {
+                Propuesta proposal = null;
+
                 if (idProposal != null && idProposal != String.Empty)
                 {
-                    var proposal = _client.GetPropuestaAsync(idProposal).Result;                   
-
-                    return proposal;
+                    proposal = _client.GetPropuestaAsync(idProposal).Result; 
                 }
 
-                return null;
+                return proposal;
             }
             catch (Exception ex)
             {
-                return null;
+                throw ex;
             }
         }
 

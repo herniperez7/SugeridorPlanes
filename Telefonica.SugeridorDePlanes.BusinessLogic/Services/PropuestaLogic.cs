@@ -46,7 +46,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         {
             try
             {
-                return await _proposalRepository.GetPropuesta(idPropuesta);
+                var proposal = await _proposalRepository.GetPropuesta(idPropuesta);
+                return proposal;
             }
             catch (Exception ex)
             {

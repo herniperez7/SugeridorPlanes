@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -32,8 +33,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         public async Task<ActionResult<List<Propuesta>>> GetPropuestas()
         {
             try
-            {
-               
+            {          
                 var propuestasDTO = await _propuestaLogic.GetPropuestas();
                 List<Propuesta> propuestas = new List<Propuesta>();
                 foreach(PropuestaDTO propuesta in propuestasDTO)
@@ -89,7 +89,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 throw ex;
             }
-
         }
 
         [HttpGet("getPropuesta")]
@@ -97,16 +96,22 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         {
             try
             {
+                var plansDto = await _suggestorLogic.GetActualPlans();
+                var mobileListDto = await _suggestorLogic.GetEquiposPymes();
                 var propuestaDto = await _propuestaLogic.GetPropuesta(idProposal);
-                var propuesta = _mapper.Map<Propuesta>(propuestaDto);
+                var proposalLinesDTO = await _propuestaLogic.GetLineasPropuesta(propuestaDto.Id);
+                var mobileDevicesDTO = await _propuestaLogic.GetEquiposPropuesta(propuestaDto.Id);
 
-                return propuesta;
+                var proposal = _mapper.Map<Propuesta>(propuestaDto);
+                PopulateProposalLines(proposal, plansDto, proposalLinesDTO);
+                PopulateProposalMobileList(proposal, mobileListDto, mobileDevicesDTO);
+
+                return proposal;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
         }
 
         [HttpPost("addPropuesta")]
@@ -165,8 +170,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                             await _propuestaLogic.DeletePropuestaByGuid(propuestaDTO.Guid);
                             return false;
                         }
-                    }
-                                       
+                    }                                       
                 }
                                
                 return false;
@@ -175,8 +179,31 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 throw ex;
             }
-
         }
 
+        private void PopulateProposalLines(Propuesta proposal, List<PlanesOfertaActualDTO> plansDto, List<LineaPropuestaDTO> linesDto) 
+        {
+            proposal.Lineas = new List<LineaPropuesta>();
+
+            foreach (var p in linesDto)
+            {
+                var plan = plansDto.Where(x => x.Plan == p.Plan).FirstOrDefault();
+                var planModel = _mapper.Map<PlanesOferta>(plan);
+                var proposalLine = new LineaPropuesta() { Numero = p.NumeroLinea, Plan = planModel };
+                proposal.Lineas.Add(proposalLine);
+            }        
+        }
+
+        private void PopulateProposalMobileList(Propuesta proposal, List<EquipoPymesDTO> equipoPymesList, List<EquipoPropuestaDTO> equipoLinesDto ) 
+        {
+            proposal.Equipos = new List<EquipoPymes>();
+
+            foreach (var m in equipoLinesDto)
+            {
+                var equipoPymesDto = equipoPymesList.Where(x => x.CodigoEquipo.Equals(m.CODIGO_EQUIPO)).FirstOrDefault();
+                var equipoModel = _mapper.Map<EquipoPymes>(equipoPymesDto);
+                proposal.Equipos.Add(equipoModel);
+            }
+        }
     }
 }

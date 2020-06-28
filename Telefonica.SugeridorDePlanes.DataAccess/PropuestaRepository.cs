@@ -20,7 +20,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         public async Task<List<PropuestaDTO>> GetPropuestas()
         {
             try
-            {
+            {                
                 var proposals = await _context.Propuesta.ToListAsync();                
 
                 return proposals;
