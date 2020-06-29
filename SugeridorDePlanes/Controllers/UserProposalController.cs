@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+
 using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
-using Telefonica.SugeridorDePlanes.Models.ApiModels;
+
 using Telefonica.SugeridorDePlanes.Models.Users;
-using Telefonica.SugeridorDePlanes.Models.Data;
-using Telefonica.SugeridorDePlanes.Resources.Enums;
-using Telefonica.SugeridorDePlanes.BusinessLogic;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
+using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.Models.ApiModels;
+using System.Collections.Generic;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -36,22 +28,62 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public IActionResult Index()
         {
-            var proposals = _telefonicaApi.GetProposals();
-            return View("../UserProposal/Index", proposals);
+            var proposals =  _telefonicaApi.GetProposals();    
+            return View("Index", proposals);
         }
 
-        [HttpPost]
-        public ViewResult OpenProposal(string proposalId)
+        public async Task<IActionResult> OpenProposalToEdit(string proposaId) 
         {
-            var proposal = _telefonicaApi.GetProposalsById(proposalId);
-            if (proposal.Estado.Equals("Finalizada"))
+            var proposal = _telefonicaApi.GetProposalById(proposaId);
+            var clientList = await _telefonicaApi.GetClientes();
+            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
+            ViewData["clientList"] = clientsModel;
+            var planOfert = await _telefonicaApi.GetActualPlansAsync();
+            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOferta>, List<PlanOfertaActualModel>>(planOfert);
+            ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
+     
+            ViewData["planOfertList"] = planesOfertList;
+            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+            _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
+            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            var planDefList = PopulateDefinitivePlanList(proposal);
+            ViewData["planDefList"] = planDefList;
+            var indexes = _telefonicaApi.CalculateIndexes();
+            ViewData["Indexes"] = indexes;
+            var mobilePymesList = _mapper.Map<List<EquipoPymesModel>>(proposal.Equipos);            
+            ViewData["mobileList"] = mobilePymesList;
+            ViewData["devicePayment"] = proposal.DevicePayment;
+            ViewData["subsidy"] = proposal.Subsidio;
+            ViewData["payback"] = proposal.Payback;
+            ViewData["currentClient"] = proposal.RutCliente;
+
+            _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
+
+            return View("../Home/Index", planMapped);           
+        }
+
+
+
+        private List<PlanDefinitivolModel> PopulateDefinitivePlanList(Propuesta proposal) 
+        {
+            List<PlanDefinitivolModel> planDefinitveList = new List<PlanDefinitivolModel>();
+            var idPlan = 1;
+            foreach (var linea in proposal.Lineas)
             {
-                return View("../Home/Index");
+                var planModel = new PlanDefinitivolModel()
+                {
+                    RecomendadorId = idPlan,
+                    Plan = linea.Plan.Plan,
+                    Bono = linea.Plan.Bono,
+                    Roaming = linea.Plan.Roaming,
+                    TMM_s_iva = (decimal)linea.Plan.TmM_s_iva
+                };
+
+                planDefinitveList.Add(planModel);
+                idPlan++;
             }
-            else
-            {
-                return View("../UserProposal", proposal);
-            }
+
+            return planDefinitveList;
         }
     }
 }

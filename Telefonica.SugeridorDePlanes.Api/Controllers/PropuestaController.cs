@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -19,22 +20,24 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     {
         private readonly IPropuestaLogic _propuestaLogic;
         private readonly ISuggestorLogic _suggestorLogic;
+        private readonly IClientLogic _clientLogic;
         private readonly IMapper _mapper;
 
-        public PropuestaController(ISuggestorLogic suggestorLogic, IPropuestaLogic propuestaLogic, IMapper mapper)
+        public PropuestaController(ISuggestorLogic suggestorLogic, IPropuestaLogic propuestaLogic, IMapper mapper, IClientLogic clientLogic)
         {
             _propuestaLogic = propuestaLogic;
             _suggestorLogic = suggestorLogic;
             _mapper = mapper;
+            _clientLogic = clientLogic;
         }
 
         [HttpGet("getPropuestas")]
         public async Task<ActionResult<List<Propuesta>>> GetPropuestas()
         {
             try
-            {
-               
+            {          
                 var propuestasDTO = await _propuestaLogic.GetPropuestas();
+                var clientList = _clientLogic.GetClientes().Result;
                 List<Propuesta> propuestas = new List<Propuesta>();
                 foreach(PropuestaDTO propuesta in propuestasDTO)
                 {
@@ -65,6 +68,11 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     propuestas.Add(item);
                 }
 
+                foreach (var p in propuestas)
+                {
+                    PopulateClientName(p, clientList);
+                }
+
                 return propuestas;
             }
             catch (Exception ex)
@@ -89,7 +97,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 throw ex;
             }
-
         }
         
         [HttpGet("getPropuesta")]
@@ -97,16 +104,24 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         {
             try
             {
+                var plansDto = await _suggestorLogic.GetActualPlans();
+                var mobileListDto = await _suggestorLogic.GetEquiposPymes();
                 var propuestaDto = await _propuestaLogic.GetPropuesta(idProposal);
-                var propuesta = _mapper.Map<Propuesta>(propuestaDto);
+                var proposalLinesDTO = await _propuestaLogic.GetLineasPropuesta(propuestaDto.Id);
+                var mobileDevicesDTO = await _propuestaLogic.GetEquiposPropuesta(propuestaDto.Id);
+                var clientList = _clientLogic.GetClientes().Result;
 
-                return propuesta;
+                var proposal = _mapper.Map<Propuesta>(propuestaDto);
+                PopulateProposalLines(proposal, plansDto, proposalLinesDTO);
+                PopulateProposalMobileList(proposal, mobileListDto, mobileDevicesDTO);
+                PopulateClientName(proposal, clientList);
+
+                return proposal;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
         }
 
         [HttpPost("addPropuesta")]
@@ -165,8 +180,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                             await _propuestaLogic.DeletePropuestaByGuid(propuestaDTO.Guid);
                             return false;
                         }
-                    }
-                                       
+                    }                                       
                 }
                                
                 return false;
@@ -175,8 +189,37 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 throw ex;
             }
-
         }
 
+        private void PopulateProposalLines(Propuesta proposal, List<PlanesOfertaActualDTO> plansDto, List<LineaPropuestaDTO> linesDto) 
+        {
+            proposal.Lineas = new List<LineaPropuesta>();
+
+            foreach (var p in linesDto)
+            {
+                var plan = plansDto.Where(x => x.Plan == p.Plan).FirstOrDefault();
+                var planModel = _mapper.Map<PlanesOferta>(plan);
+                var proposalLine = new LineaPropuesta() { Numero = p.NumeroLinea, Plan = planModel };
+                proposal.Lineas.Add(proposalLine);
+            }        
+        }
+
+        private void PopulateProposalMobileList(Propuesta proposal, List<EquipoPymes> equipoPymesList, List<EquipoPropuestaDTO> equipoLinesDto ) 
+        {
+            proposal.Equipos = new List<EquipoPymes>();
+
+            foreach (var m in equipoLinesDto)
+            {
+                var equipoPymes = equipoPymesList.Where(x => x.CodigoEquipo.Equals(m.CODIGO_EQUIPO)).FirstOrDefault();
+                proposal.Equipos.Add(equipoPymes);
+            }
+        }
+
+        private void PopulateClientName(Propuesta proposal, List<SugeridorClientesDTO> clients) 
+        {
+            var clientList = _clientLogic.GetClientes().Result;
+            var client = clientList.Where(c => c.Documento.Equals(proposal.RutCliente)).FirstOrDefault();
+            proposal.ClientName = client != null ? client.Titular : proposal.RutCliente;
+        }        
     }
 }

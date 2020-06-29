@@ -1,7 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
@@ -11,10 +13,12 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
     public class SuggestorLogic : ISuggestorLogic
     {
         private readonly ISuggestorRepository _suggestorRepository;
+        private readonly IMapper _mapper;
 
-        public SuggestorLogic(ISuggestorRepository suggestorRepository)
+        public SuggestorLogic(ISuggestorRepository suggestorRepository, IMapper mapper)
         {
             _suggestorRepository = suggestorRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<PlanesOfertaActualDTO>> GetActualPlans()
@@ -80,11 +84,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        public async Task<List<EquipoPymesDTO>> GetEquiposPymes()
+        public async Task<List<EquipoPymes>> GetEquiposPymes()
         {
             try
             {
-                return await _suggestorRepository.GetEquiposPymes();
+                var mobileDtoList = await _suggestorRepository.GetEquiposPymes();
+                var mobileList = _mapper.Map<List<EquipoPymes>>(mobileDtoList);
+                AddMobileId(mobileList);
+                return mobileList;
             }
             catch (Exception ex)
             {
@@ -103,5 +110,16 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 throw ex;
             }
         }
+
+        private void AddMobileId(List<EquipoPymes> mobileList)
+        {
+            var id = 1;
+            foreach (var m in mobileList)
+            {
+                m.Id = id.ToString();
+                id++;
+            }
+        }
+
     }
 }

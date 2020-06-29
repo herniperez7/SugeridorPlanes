@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
@@ -18,7 +19,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 
         Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode);
 
-        Task<List<EquipoPymesDTO>> GetEquiposPymes();
+        Task<List<EquipoPymes>> GetEquiposPymes();
         Task<EquipoPymesDTO> GetEquiposPymesByCode(string code);
     }
 }

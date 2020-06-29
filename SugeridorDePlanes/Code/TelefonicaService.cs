@@ -7,7 +7,8 @@ using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
-
+using Telefonica.SugeridorDePlanes.Models.Data;
+using Telefonica.SugeridorDePlanes.Resources.Enums;
 
 namespace Telefonica.SugeridorDePlanes.Code
 {
@@ -18,7 +19,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         private List<RecomendadorB2b> _currentPlans;
         private List<PlanDefinitivolModel> _curretDefinitvePlans;
         private SugeridorClientes _currentClient;
-        private List<SugeridorClientes> _currentClients;
+        private List<SugeridorClientes> _currentClients;        
 
         //Lista total de moviles
         private List<EquipoPymesModel> _equiposPymes;
@@ -144,10 +145,38 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _curretDefinitvePlans;
         }
 
-        public void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
+        //public void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
+        //{
+        //    _curretDefinitvePlans = currentPlans;
+        //}
+
+        public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan) 
         {
-            _curretDefinitvePlans = currentPlans;
-        }
+            var defPlansList = _curretDefinitvePlans;
+            
+            _curretDefinitvePlans = defPlansList.Select(x =>
+            new PlanDefinitivolModel
+            {
+                RecomendadorId = x.RecomendadorId,
+                Plan = x.Plan,
+                Bono = x.Bono,
+                Roaming = x.Roaming,
+                TMM_s_iva = x.TMM_s_iva,
+                TmmString = x.TMM_s_iva.ToString("n")
+            }).ToList();
+            //            
+
+            foreach (var plan in _curretDefinitvePlans)
+            {
+                if (plan.RecomendadorId == updatePlan.PlanToEdit) {
+                    plan.Plan = updatePlan.Plan;
+                    plan.Bono = long.Parse(updatePlan.Bono);
+                    plan.Roaming = updatePlan.Roaming;
+                    plan.TMM_s_iva = decimal.Parse(updatePlan.TMM);
+                    plan.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
+                }
+            }           
+        }      
 
         private void UpdateDefinitivePlans(List<RecomendadorB2b> planList)
         {
@@ -232,6 +261,11 @@ namespace Telefonica.SugeridorDePlanes.Code
         public List<EquipoPymesModel> GetCurrentEquiposPymesList()
         {
             return _currentEquiposPymes;
+        }
+
+        public void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList) 
+        {
+            _currentEquiposPymes = mobileList;
         }
 
         /// <summary>
@@ -344,5 +378,113 @@ namespace Telefonica.SugeridorDePlanes.Code
                 return null;
             }
         }
+
+        public Propuesta GetProposalById(string idProposal)
+        {
+            try
+            {
+                Propuesta proposal = null;
+
+                if (idProposal != null && idProposal != String.Empty)
+                {
+                    proposal = _client.GetPropuestaAsync(idProposal).Result; 
+                }
+
+                return proposal;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public decimal GetSubsidy() 
+        {
+            decimal subsidy = 0;
+
+            foreach (var m in _currentEquiposPymes)
+            {
+                subsidy += m.PrecioSinIva;
+            }
+
+            return subsidy;
+        }
+
+        public decimal GetPayback() 
+        {
+            decimal subsidy = GetSubsidy();
+            decimal income = 0;
+            decimal payback = 0;
+
+            foreach (var plan in _curretDefinitvePlans)
+            {
+                income += plan.TMM_s_iva;
+            }
+
+            if (income > 0) 
+            {
+                payback = subsidy / income;
+            }
+
+            return payback;
+        }
+
+        public IndexModel CalculateIndexes() 
+        {
+            List<RecomendadorB2b> plansList = _currentPlans;
+            var defPlansList = _curretDefinitvePlans;
+            BillingStatus billingStatus = BillingStatus.None;
+
+            decimal fixedGap = 0; //Gap fijo
+            decimal billingGap = 0; //Gap de facturacion
+            decimal arpuProm = 0; // ARPUPROM
+            decimal tmmSumatory = 0; // TMM+Prestacion
+            decimal defTmmSumatory = 0;  //TMM de planes sugeridos
+            decimal tmmSinIva = 0; //TMM sin iva info actual
+                                   //   decimal billingDifference = 0; //diferencia entre el tmm de info actual y el tmm de sugerido
+
+            foreach (var plan in plansList)
+            {
+                arpuProm += plan.ArpuProm != null ? (decimal)plan.ArpuProm : 0;
+                tmmSumatory += plan.TmmPrestacion != null ? (decimal)plan.TmmPrestacion : 0;
+                tmmSinIva += plan.TmmSinIva != null ? (decimal)plan.TmmSinIva : 0;
+            }
+
+            foreach (var defPlan in defPlansList)
+            {
+                defTmmSumatory += defPlan.TMM_s_iva;
+            }
+
+            billingGap = defTmmSumatory - arpuProm;
+            fixedGap = defTmmSumatory - tmmSumatory;
+
+            if (plansList.Count > 0)
+            {
+                if (billingGap > 0)
+                {
+                    billingStatus = BillingStatus.Higher;
+                }
+                else if (billingGap < 0)
+                {
+                     billingStatus = BillingStatus.Lower;
+                }
+                else if (billingGap == 0)
+                {
+                     billingStatus = BillingStatus.Equal;
+                }
+            }
+
+
+            var gapModel = new IndexModel
+            {
+                BillingGap = billingGap,
+                FixedGap = fixedGap,
+                 BillingStatus = billingStatus,
+                TmmPrestacion = tmmSumatory
+            };
+            return gapModel;
+        }
+
     }
 }
