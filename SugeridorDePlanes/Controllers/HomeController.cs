@@ -201,13 +201,25 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
 
+        /* [HttpPost]
+         public async Task<JsonResult> GenerateProposal(string devicePayment, string subsidio, string payback)
+         {
+             var resultProposal = await GenerateProposalData(devicePayment,subsidio,payback);
+             var data = new { status = "ok", result = resultProposal};
+             return new JsonResult(data);
+         }*/
+
+
         [HttpPost]
-        public async Task<JsonResult> GenerateProposal(string devicePayment, string subsidio, string payback)
+        public async Task<IActionResult> GenerateProposal(string devicePayment, string subsidio, string payback)
         {
-            var resultProposal = await GenerateProposalData(devicePayment,subsidio,payback);
-            var data = new { status = "ok", result = resultProposal};
-            return new JsonResult(data);
+            var resultProposal = await GenerateProposalData(devicePayment, subsidio, payback);
+            return RedirectToAction("Index", "UserProposal");
         }
+
+
+        
+
 
         private async Task<bool> GenerateProposalData(string devicePayment,string subsidio, string payback)
         {
