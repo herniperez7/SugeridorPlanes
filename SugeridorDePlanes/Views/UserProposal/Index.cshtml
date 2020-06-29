@@ -32,11 +32,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+    <script type="text/javascript" src="~/js/UserProposal/ProposalScript.js"></script>
 
 
 
 </head>
 <body>
+    <script>
+        var gbOpenProposal = "@Url.Action("OpenProposal", "UserProposal")";
+
+
+    </script>
 
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
@@ -88,7 +94,7 @@
                                             <td>@propuesta.Payback</td>
                                             <td>$ @propuesta.DevicePayment</td>
                                             <td>@propuesta.Estado</td>
-                                            <td class="editRow"><a href="" class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                            <td class="editRow"><a class="btn btn-outline-success my-2 my-sm-0" onclick="openProposal(@propuesta.Id)">Abrir</a></td>
                                         </tr>
                                     }
                                 }
@@ -97,13 +103,13 @@
                         </table>
 
                     </div>
-                 
+
                 </fieldset>
 
 
             </div>
-            </div>
         </div>
+    </div>
 
 
 </body>

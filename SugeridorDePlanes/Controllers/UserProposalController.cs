@@ -36,10 +36,22 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public IActionResult Index()
         {
-            var proposals =  _telefonicaApi.GetProposals();
+            var proposals = _telefonicaApi.GetProposals();
             return View("../UserProposal/Index", proposals);
         }
 
-
+        [HttpPost]
+        public ViewResult OpenProposal(string proposalId)
+        {
+            var proposal = _telefonicaApi.GetProposalsById(proposalId);
+            if (proposal.Estado.Equals("Finalizada"))
+            {
+                return View("../Home/Index");
+            }
+            else
+            {
+                return View("../UserProposal", proposal);
+            }
+        }
     }
 }

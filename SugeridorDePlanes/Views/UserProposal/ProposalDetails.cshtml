@@ -1,12 +1,6 @@
 ﻿@{
     var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Users.User;
-    var emptyPlans = true;
 
-    if (Model != null && Model.Count() > 0)
-    {
-        emptyPlans = false;
-
-    }
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -22,18 +16,11 @@
 
 @{
 
-    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
-    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoPymesModel>;
-    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
-    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
-    var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
-    var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
-    decimal incomeAmount = 0;
-    decimal billingAmount = 0;
+    var clientList = ViewData["suggestorLine"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
 
 }
 
-@model List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
+@model Telefonica.SugeridorDePlanes.Propuesta;
 
 <html>
 <head>
@@ -45,51 +32,13 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 
 
-    @* <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-            <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
-
-
 </head>
 <body>
-    <script>
-        var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
-        var gbGetMovilInfoUrl = "@Url.Action("GetMovilInfo", "Home")";
-        var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Home")";
-        var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Home")";
-        var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Home")";
-        var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
-        var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
-        var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
-        var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
-        var gbSendMail = "@Url.Action("SendMail", "Home")";
-        var gbGenerateProposal = "@Url.Action("GenerateProposal", "Home")"; 
-        var gbUserProposals = "@Url.Action("Index", "UserProposal")"; 
-
-
-    </script>
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
-
-
-        <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
-            </div>
-            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
-
-        </form>
-
-
-        <form class="form-inline mb-0" action="/Home/ShowPlans" method="post">
-            <div class="d-inline-flex align-items-center w-100">
-                <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por Rut" aria-label="Search">
-
-                <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
-            </div>
-        </form>
-
+        <div class="viewTitle">
+            <h2>Lista de propuestas</h2>
+        </div>
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
                 <label class="input-group-text">Nombre Usuario</label>
@@ -101,28 +50,8 @@
 
     </nav>
 
-    <nav class="d-block d-md-none navbar-light bg-light">
 
-        <form class="form-inline input-group mb-0">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
-            </div>
-
-            @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
-
-
-        </form>
-
-        <form class="form-inline mb-0">
-            <div class="d-inline-flex align-items-center w-100">
-                <input class="form-control mr-2" type="search" id="clientRutTxt" placeholder="Buscar por Rut" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-            </div>
-
-        </form>
-    </nav>
-
-    <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
+    @*<div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
         <div class="row">
             <div class="col-lg-6 col-sm-12 col-md-12">
                 <fieldset class="tableFieldset">
@@ -407,17 +336,17 @@
                             <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
 
                                 <select id="movilesDdl" class="custom-select" onchange="movileChange()">
-                                  
+
                                     <option> </option>
                                     @foreach (var item in movileDevices)
                                     {
                                         var marcaEquipo = string.IsNullOrEmpty(item.Marca) ? "" : item.Marca;
                                         var nombreEquipo = string.IsNullOrEmpty(item.Nombre) ? "" : item.Nombre;
 
-                                <option value="@item.Id">@marcaEquipo @nombreEquipo</option>
+                                        <option value="@item.Id">@marcaEquipo @nombreEquipo</option>
                                     }
 
-                                </select>                             
+                                </select>
 
                             </form>
                             <div id="valuesEquipos" class="p-2 ml-2">
@@ -715,6 +644,6 @@
         </div>
 
 
-        <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
+        <script src="~/js/Sugeridor/SugeridorScripts.js">*@@*</script>*@
 </body>
 </html>

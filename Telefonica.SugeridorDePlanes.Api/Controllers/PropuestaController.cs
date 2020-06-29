@@ -91,7 +91,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
 
         }
-
+        
         [HttpGet("getPropuesta")]
         public async Task<ActionResult<Propuesta>> GetPropuesta(string idProposal)
         {

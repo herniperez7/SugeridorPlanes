@@ -309,6 +309,25 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        public Propuesta GetProposalsById(string idProposal)
+        {
+            try
+            {
+                if (idProposal != null && idProposal != String.Empty)
+                {
+                    var propuesta = _client.GetPropuestaAsync(idProposal).Result;
+
+                    return propuesta;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public List<Propuesta> GetProposals()
         {
             try

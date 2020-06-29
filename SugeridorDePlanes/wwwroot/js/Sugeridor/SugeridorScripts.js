@@ -504,7 +504,7 @@ function generarPropuesta() {
         url: gbGenerateProposal + '?devicePayment=' + devicePayment + '&subsidio=' + subsidio + '&payback=' + payback,
         success: function (data) {
             if (data.result) {
-                alert("true");
+                window.location.href = gbUserProposals;
             } else {
                 alert("false");
             }

@@ -38,7 +38,7 @@ namespace Telefonica.SugeridorDePlanes.Api
                 configuration.CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
                 configuration.CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();
                 configuration.CreateMap<Propuesta, PropuestaDTO>().ForMember(dest => dest.Documento, opt => opt.MapFrom(org => org.RutCliente))
-                    .ForMember(dest => dest.IdUsuario, opt => opt.MapFrom(org => org.IdUsuario)).ReverseMap();
+                    .ForMember(dest => dest.IdUsuario, opt => opt.MapFrom(org => org.IdUsuario)).ForMember(dest => dest.Id, opt => opt.MapFrom(org => org.Id)).ReverseMap();
             }, typeof(Startup));
 
             services.AddDbContext<TelefonicaSugeridorDePlanesContext>(options =>

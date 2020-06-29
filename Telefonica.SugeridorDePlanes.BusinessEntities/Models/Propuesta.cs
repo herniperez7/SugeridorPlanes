@@ -6,6 +6,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
     public class Propuesta
     {
+        public string Id { get; set; }
         public string RutCliente { get; set; }
         public List<LineaPropuesta> Lineas { get; set; }
         public List<EquipoPymes> Equipos { get; set; }

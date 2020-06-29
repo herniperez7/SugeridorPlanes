@@ -55,5 +55,6 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         List<Propuesta> GetProposalsByUser(string idUsuario);
         List<Propuesta> GetProposals();
+        Propuesta GetProposalsById(string idProposal);
     }
 }
