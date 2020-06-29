@@ -32,9 +32,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return View("Index", proposals);
         }
 
-        public async Task<IActionResult> OpenProposalToEdit(string proposaId) 
+        public async Task<IActionResult> OpenProposalToEdit(Propuesta proposal) 
         {
-            var proposal = _telefonicaApi.GetProposalById(proposaId);
             var clientList = await _telefonicaApi.GetClientes();
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
             ViewData["clientList"] = clientsModel;
@@ -62,6 +61,32 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return View("../Home/Index", planMapped);           
         }
 
+
+        public async Task<IActionResult> OpenProposalFinished(Propuesta proposal)
+        {
+            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            ViewData["suggestorLines"] = planMapped;
+
+            return View("ProposalDetails", proposal);
+        }
+
+        public async Task<IActionResult> OpenProposal(string proposaId)
+        {
+            var proposal = _telefonicaApi.GetProposalById(proposaId);
+
+            if(proposal.Estado == "Finalizada")
+            {
+                return await OpenProposalFinished(proposal);
+            }
+            else if(proposal.Estado == "Pendiente")
+            {
+                return await OpenProposalToEdit(proposal);
+            }
+
+            return View();
+
+        }
 
 
         private List<PlanDefinitivolModel> PopulateDefinitivePlanList(Propuesta proposal) 

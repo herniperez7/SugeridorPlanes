@@ -523,12 +523,10 @@ function generarPropuesta() {
         type: "POST",
         url: gbGenerateProposal + '?devicePayment=' + devicePayment + '&subsidio=' + subsidio + '&payback=' + payback,
         success: function (data) {
-            if (data.result) {
                 window.location.href = gbUserProposals;
-            } else {
-                alert("false");
-            }
+       
         }
+        
     });
 }
 
