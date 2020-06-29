@@ -163,10 +163,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 throw ex;
             }
-
-
         }
-
-
     }
 }

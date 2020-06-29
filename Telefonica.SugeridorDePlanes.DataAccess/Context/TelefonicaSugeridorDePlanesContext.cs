@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Namotion.Reflection;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.DataAccess.Context
@@ -291,7 +292,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             {
                 entity.HasNoKey();
 
-                entity.ToTable("EquipoPymes");
+                entity.ToTable("EquipoPymes");               
 
                 entity.Property(e => e.CodigoEquipo)
                     .HasColumnName("CODIGO_EQUIPO");

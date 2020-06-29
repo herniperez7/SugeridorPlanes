@@ -176,7 +176,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                     plan.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
                 }
             }           
-        }
+        }      
 
         private void UpdateDefinitivePlans(List<RecomendadorB2b> planList)
         {
@@ -261,6 +261,11 @@ namespace Telefonica.SugeridorDePlanes.Code
         public List<EquipoPymesModel> GetCurrentEquiposPymesList()
         {
             return _currentEquiposPymes;
+        }
+
+        public void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList) 
+        {
+            _currentEquiposPymes = mobileList;
         }
 
         /// <summary>

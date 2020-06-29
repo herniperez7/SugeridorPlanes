@@ -64,5 +64,6 @@ namespace Telefonica.SugeridorDePlanes.Code
         decimal GetPayback();
 
         IndexModel CalculateIndexes();
+        void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList);
     }
 }

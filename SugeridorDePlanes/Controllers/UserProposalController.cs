@@ -28,8 +28,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public IActionResult Index()
         {
-            var proposals =  _telefonicaApi.GetProposals();
-           // var proposal = _telefonicaApi.GetProposalById("8");
+            var proposals =  _telefonicaApi.GetProposals();    
             return View("Index", proposals);
         }
 
@@ -51,9 +50,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["planDefList"] = planDefList;
             var indexes = _telefonicaApi.CalculateIndexes();
             ViewData["Indexes"] = indexes;
+            var mobilePymesList = _mapper.Map<List<EquipoPymesModel>>(proposal.Equipos);            
+            ViewData["mobileList"] = mobilePymesList;
+            ViewData["devicePayment"] = proposal.DevicePayment;
+            ViewData["subsidy"] = proposal.Subsidio;
+            ViewData["payback"] = proposal.Payback;
+            ViewData["currentClient"] = proposal.RutCliente;
 
-            return View("../Home/Index", planMapped);
-           // return View("Index");
+            _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
+
+            return View("../Home/Index", planMapped);           
         }
 
 
@@ -79,6 +85,5 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             return planDefinitveList;
         }
-
     }
 }

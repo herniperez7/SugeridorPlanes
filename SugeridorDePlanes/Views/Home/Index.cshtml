@@ -28,6 +28,12 @@
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
     var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
+    var mobileList = ViewData["mobileList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoPymesModel>;
+    var devicePayment = ViewData["devicePayment"];
+    var subsidy = ViewData["subsidy"];
+    var payback = ViewData["payback"];
+    var currentClient = ViewData["currentClient"];
+
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
 
@@ -65,7 +71,8 @@
         var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
         var gbSendMail = "@Url.Action("SendMail", "Home")";
         var gbGenerateProposal = "@Url.Action("GenerateProposal", "Home")";
-        var gbSaveProposal = "@Url.Action("SaveProposal", "UserProposal")";
+        var gbSaveProposal = "@Url.Action("SaveProposal", "Home")";
+        var gbCurrentClient = @ViewData["currentClient"];
 
     </script>
 
@@ -377,7 +384,7 @@
                                             @roamingCount
                                         </td>
                                     </tr>
-                                    
+
                                 }
                                 else
                                 {
@@ -439,12 +446,38 @@
                                         </tr>
                                     </thead>
                                     <tbody id="movilTableBody" style="overflow-y:auto; height:150px">
+                                        @if (mobileList.Count() > 0)
+                                        {
+                                            decimal totalAmount = 0;
+                                            int deviceCount = 0;
+
+                                            @foreach (var mobile in mobileList)
+                                            {
+                                                totalAmount += mobile.PrecioSinIva;
+                                                deviceCount++;
+                                                var rowId = "row" + mobile.Id;
+                                                var tdId = "tod" + mobile.Id;
+                                                <tr id=@rowId>
+                                                    <td>@mobile.Marca @mobile.Nombre</td>
+                                                    <td>$ @mobile.PrecioSinIva</td>
+                                                    <td id=@tdId onclick="AddDevice(@mobile.Id, false)"><i class='fa fa-times fa-lg' aria-hidden='true'></i></td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td>@deviceCount</td>
+                                                <td>$ @totalAmount</td>
+                                                <td></td>
+                                            </tr>
+
+
+                                        }
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div style="display:inline; padding-left: 20px">
-                            <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice()" disabled>Agregar</button>
+                            <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice(0,true)" disabled>Agregar</button>
                             <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="confirmDeviceBtn" onclick="confirmDevices()">Confirmar</button>
 
                         </div>
@@ -465,15 +498,15 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="subsidioInput">Subsidio</span>
                                 </div>
-                                <input type="text" id="subsidioTxt" disabled value="0" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" id="subsidioTxt" disabled value="@subsidy" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="payBackInput">Payback</span>
                                 </div>
-                                <input type="text" id="paybackTxt" class="form-control" disabled value="0" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" id="paybackTxt" class="form-control" disabled value="@payback" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="pagoEquiposInput">Pago de equipos</span>
                                 </div>
-                                <input type="text" id="pagoEquiposTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" id="pagoEquiposTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="@devicePayment">
                             </div>
 
                         </div>
@@ -546,10 +579,10 @@
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
 
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn" onclick="generarPropuesta()">Generar propuesta</button>
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
+                                @*<button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
                                     Exportar Propuesta
-                                </button>
-                                <button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>
+                                </button>*@
+                                @*<button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>*@
 
                             </div>
 
@@ -562,10 +595,10 @@
                     <button style="position: absolute;right:190px;top:-5px;outline:5px solid #fff" id="saveProposalBtn" onclick="saveProposal()">
                         <img src="@Url.Content("~/img/icons/disketteIcon32x.png")" />
                     </button>
-                    <button style="position: absolute;right:130px;top:-5px;outline:5px solid #fff" id="exportPdfBtn">
+                    <button style="position: absolute;right:130px;top:-5px;outline:5px solid #fff" id="exportPdfBtn" onclick="exportPdf()">
                         <img src="@Url.Content("~/img/icons/IconPdf.png")" />
                     </button>
-                    <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="sendEmailBtn">
+                    <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="sendEmailBtn" onclick="openEmailModal()">
                         <img src="@Url.Content("~/img/icons/iconMail.png")" />
                     </button>
                     <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
@@ -653,8 +686,10 @@
             <div class="modal-dialog">
 
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Seleccione un plan</h4>
+                   
+                    <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                        <h2 style="color:white;text-shadow: 2px 2px #25af60">Seleccione un plan</h2>
+
                     </div>
 
                     <div class="modal-body">
@@ -683,7 +718,9 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
+                        @*<button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>*@
+                        <button type="button" class="btn btn-outline-success" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
+
                     </div>
                 </div>
 
@@ -695,24 +732,25 @@
             <div class="modal-dialog">
 
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Enviar mail</h4>
+                    <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                        <h2 style="color:white;text-shadow: 2px 2px #25af60">Enviar email</h2>
+
                     </div>
 
                     <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
-                        <label for="toTxt">Para</label>
+                        <h5 for="toTxt">Para</h5>
                         <input type="email" class="form-control" id="toTxt" placeholder="nombre@dominio.com">
                         <span style="display:none" class="text-danger">Email requerido</span>
                     </div>
 
                     <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
-                        <label for="subjectTxt">Asunto</label>
+                        <h5 for="subjectTxt">Asunto</h5>
                         <input type="email" class="form-control" id="subjectTxt">
                         <span style="display:none" class="text-danger">Asunto requerido</span>
                     </div>
 
                     <div class="form-group" style="padding:10px">
-                        <label for="bodytxt">Mensaje</label>
+                        <h5 for="bodytxt">Mensaje</h5>
                         <textarea class="form-control" id="bodytxt" rows="3"></textarea>
                     </div>
 
@@ -728,35 +766,32 @@
 
 
 
-        <!--Modal: modalPush-->
         <div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog modal-notify modal-info" role="document">
-                <!--Content-->
+            <div class="modal-dialog modal-notify modal-info modal-dialog-centered" role="document">
+       
                 <div class="modal-content text-center">
-                    <!--Header-->
-                    <div class="modal-header d-flex justify-content-center">
-                        <p class="heading">Propuesta guardada</p>
+              
+                    <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                        <h2 style="color:white;text-shadow: 2px 2px #25af60">Propuesta guardada</h2>
+                      
                     </div>
-                   
-                    <!--Body-->
                     <div class="modal-body">
 
-                        <i class="far fa-check-circle fa-4x animated rotateIn mb-4"></i>
+                        <img src="@Url.Content("~/img/icons/check1.png")" />
 
-                        <p>La propuesta se guardó exitosamente!</p>
+                        <h4>La propuesta se guardó exitosamente!</h4>
 
                     </div>
 
-                    <!--Footer-->
                     <div class="modal-footer flex-center">
-
-                        <a type="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">Aceptar</a>
+                        <button type="button" class="btn btn-outline-success"  data-dismiss="modal">aceptar</button>                   
                     </div>
-                </div>
-                <!--/.Content-->
+                </div>                
             </div>
         </div>
+
+        
 
 
         <script src="~/js/Sugeridor/SugeridorScripts.js"></script>

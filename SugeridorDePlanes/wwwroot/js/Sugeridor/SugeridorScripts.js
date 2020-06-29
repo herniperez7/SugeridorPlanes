@@ -1,14 +1,14 @@
 ﻿var gbPlanToEdit;
 var gbPlanToEditRut = "";
 var defPlansList;
-var devicesAmount = 0;
+
 var currentDeviceAmount = 0;
-var devicesCount = 0;
+
 var billingGap = 0;
 
-$(document).ready(function () {
-
-  
+$(document).ready(function () {   
+    
+    
     $("#movilesDdl").select2({
        placeholder: "Seleccionar un equipo"
     });
@@ -35,6 +35,9 @@ $(document).ready(function () {
     //    window.location.href = gbSaveProposal +  '?id=' + "152";
     //});
 
+    if (gbCurrentClient != null) {        
+        $("#clientSelect").val(gbCurrentClient);
+    }
 });
 
 function selectPlan(selectedPlan) {
@@ -173,36 +176,48 @@ function movileChange() {
     });
 }
 
-function AddDevice() {
 
-    var val = $("#movilesDdl").val();     
 
+function AddDevice(val, add) {
+    var id = val; 
+    var url = gbDeleteMovilUrl;
+
+    if (add) {
+        url = gbAddMovilDecivesUrl;
+        id = $("#movilesDdl").val();
+    }
+    
     $.ajax({
         type: "POST",
-        url: gbAddMovilDecivesUrl + '?code=' + val,
+        url: url + '?code=' + id,
         success: function (data) {
-            if (data.status === "ok") {           
+            if (data.status === "ok") {
+                console.log(data.result);
+                $("#movilTableBody").html("");
+                var devicesCount = 0;
+                var devicesAmount = 0;
+                $.each(data.result, function (key, value) {
+                    var brand = value.marca !== null ? value.marca : "";
+                    var model = value.nombre !== null ? value.nombre : "";
+                    var labelName = brand + " " + model;
+                    devicesCount++;
+                    var precio = formatNumberStr(value.precioSinIva);
+                    var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
+                    var tr = "<tr id='row" + value.id + "' ><td scope='row'>" + labelName + "</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + ","+ false+")'>" + trashIcon + "</td></tr>";
+                    $("#movilTableBody").append(tr);
+                    devicesAmount += value.precioSinIva;  
+                });
 
-                var brand = data.result.marca !== null ? data.result.marca : "";
-                var model = data.result.nombre !== null ? data.result.nombre : "";
-                var labelName = brand + " " + model;
-
-
-                $("#movilTableBody tr:last").remove();
-                devicesCount++;
-                devicesAmount += data.result.precioSinIva;                
-                var precio = formatNumberStr(data.result.precioSinIva);               
-                var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                var tr = "<tr id='row" + data.result.id + "' ><td scope='row'>" + labelName + "</td><td>$" + precio + "</td><td id='deleteTd" + data.result.id + "' onclick='deleteRow(" + data.result.id + ")'>" + trashIcon + "</td></tr>";
-
-               
-                $("#movilTableBody").append(tr);      
-                var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumberStr(devicesAmount) +"</b><td></td> </tr>"
-                $("#movilTableBody").append(totalRow);             
+                console.log("1");
+                var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumberStr(devicesAmount) + "</b><td></td> </tr>"
+                $("#movilTableBody").append(totalRow);
+                console.log("2");
             }
         }
     });
+
 }
+
 
 
 
@@ -226,9 +241,7 @@ function deleteRow(val) {
                     if (devicesCount === 0) {
                         $("#movilTableBody tr").remove();
                     }
-                }
-                
-                
+                }           
             }
         }
     });
@@ -569,21 +582,23 @@ function saveByteArray(reportName, byte) {
 ///////////////////////////
 
 
-function saveProposal() {
+function saveProposal() {    
+    var devicePayment = $("#pagoEquiposTxt").val();
+    if (devicePayment == "") devicePayment = "0";
 
-    console.log("algo");
     $.ajax({
         type: "POST",
-        url: gbSaveProposal,
+        url: gbSaveProposal + '?devicePayment=' + devicePayment,
         success: function (data) {
-            if (data.status === "ok") {
-               // alert(data.result);
+            if (data.status === "ok") {              
 
                 $('#modalPush').modal('show'); 
             }
         }
-    });
-
+    }); 
 }
 
+function openEmailModal() {   
+    $('#emailModal').modal('show'); 
+}
 

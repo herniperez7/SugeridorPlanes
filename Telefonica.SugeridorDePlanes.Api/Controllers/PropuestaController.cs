@@ -20,13 +20,15 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     {
         private readonly IPropuestaLogic _propuestaLogic;
         private readonly ISuggestorLogic _suggestorLogic;
+        private readonly IClientLogic _clientLogic;
         private readonly IMapper _mapper;
 
-        public PropuestaController(ISuggestorLogic suggestorLogic, IPropuestaLogic propuestaLogic, IMapper mapper)
+        public PropuestaController(ISuggestorLogic suggestorLogic, IPropuestaLogic propuestaLogic, IMapper mapper, IClientLogic clientLogic)
         {
             _propuestaLogic = propuestaLogic;
             _suggestorLogic = suggestorLogic;
             _mapper = mapper;
+            _clientLogic = clientLogic;
         }
 
         [HttpGet("getPropuestas")]
@@ -35,6 +37,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             try
             {          
                 var propuestasDTO = await _propuestaLogic.GetPropuestas();
+                var clientList = _clientLogic.GetClientes().Result;
                 List<Propuesta> propuestas = new List<Propuesta>();
                 foreach(PropuestaDTO propuesta in propuestasDTO)
                 {
@@ -63,6 +66,11 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     item.Equipos = equiposList;
                     item.Lineas = lineasList;
                     propuestas.Add(item);
+                }
+
+                foreach (var p in propuestas)
+                {
+                    PopulateClientName(p, clientList);
                 }
 
                 return propuestas;
@@ -101,10 +109,12 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 var propuestaDto = await _propuestaLogic.GetPropuesta(idProposal);
                 var proposalLinesDTO = await _propuestaLogic.GetLineasPropuesta(propuestaDto.Id);
                 var mobileDevicesDTO = await _propuestaLogic.GetEquiposPropuesta(propuestaDto.Id);
+                var clientList = _clientLogic.GetClientes().Result;
 
                 var proposal = _mapper.Map<Propuesta>(propuestaDto);
                 PopulateProposalLines(proposal, plansDto, proposalLinesDTO);
                 PopulateProposalMobileList(proposal, mobileListDto, mobileDevicesDTO);
+                PopulateClientName(proposal, clientList);
 
                 return proposal;
             }
@@ -194,16 +204,22 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }        
         }
 
-        private void PopulateProposalMobileList(Propuesta proposal, List<EquipoPymesDTO> equipoPymesList, List<EquipoPropuestaDTO> equipoLinesDto ) 
+        private void PopulateProposalMobileList(Propuesta proposal, List<EquipoPymes> equipoPymesList, List<EquipoPropuestaDTO> equipoLinesDto ) 
         {
             proposal.Equipos = new List<EquipoPymes>();
 
             foreach (var m in equipoLinesDto)
             {
-                var equipoPymesDto = equipoPymesList.Where(x => x.CodigoEquipo.Equals(m.CODIGO_EQUIPO)).FirstOrDefault();
-                var equipoModel = _mapper.Map<EquipoPymes>(equipoPymesDto);
-                proposal.Equipos.Add(equipoModel);
+                var equipoPymes = equipoPymesList.Where(x => x.CodigoEquipo.Equals(m.CODIGO_EQUIPO)).FirstOrDefault();
+                proposal.Equipos.Add(equipoPymes);
             }
         }
+
+        private void PopulateClientName(Propuesta proposal, List<SugeridorClientesDTO> clients) 
+        {
+            var clientList = _clientLogic.GetClientes().Result;
+            var client = clientList.Where(c => c.Documento.Equals(proposal.RutCliente)).FirstOrDefault();
+            proposal.ClientName = client != null ? client.Titular : proposal.RutCliente;
+        }        
     }
 }

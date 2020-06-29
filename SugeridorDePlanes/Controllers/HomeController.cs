@@ -9,7 +9,7 @@ using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Users;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
-//using Telefonica.SugeridorDePlanes.Resources.Enums;
+
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -44,6 +44,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
             var indexes = _telefonicaApi.CalculateIndexes();
             ViewData["Indexes"] = indexes;
+            ViewData["mobileList"] = new List<EquipoPymesModel>();
+
+            ViewData["devicePayment"] = 0;
+            ViewData["subsidy"] = 0;
+            ViewData["payback"] = 0;
+            ViewData["currentClient"] = "null";
+
 
             return View("../Home/Index", planMapped);
         }
@@ -65,6 +72,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["Indexes"] = indexes;
             ViewData["clientList"] = clientsModel;
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
+            ViewData["mobileList"] = new List<EquipoPymesModel>();
+
+            ViewData["devicePayment"] = 0;
+            ViewData["subsidy"] = 0;
+            ViewData["payback"] = 0;
+            ViewData["currentClient"] = "null";
 
             return View("../Home/Index", planMapped);
         }
@@ -122,7 +135,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             if (mobile != null)
             {
                 _telefonicaApi.UpdateCurrentEquiposPymesList(mobile.CodigoEquipo, false);
-                var data = new { status = "ok", result = mobile };
+                var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
                 return Json(data);
             }
             else
@@ -140,7 +153,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             if (mobile != null)
             {
                 _telefonicaApi.UpdateCurrentEquiposPymesList(mobile.CodigoEquipo, true);
-                var data = new { status = "ok", result = mobile };
+                var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
                 return Json(data);
             }
             else
