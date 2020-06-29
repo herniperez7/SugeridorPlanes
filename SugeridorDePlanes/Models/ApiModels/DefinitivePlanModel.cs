@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.Models.ApiModels
 {
-    public class PlanDefinitivolModel
+    public class DefinitivePlanModel
     {
         public int RecomendadorId { get; set; }
         public string Plan { get; set; }

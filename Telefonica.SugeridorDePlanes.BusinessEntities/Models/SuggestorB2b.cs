@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
-    public class RecomendadorB2b
+    public class SuggestorB2b
     {
         public int Id { get; set; }
         public string Rut { get; set; }

@@ -12,25 +12,25 @@ namespace Telefonica.SugeridorDePlanes.Code
 {
     public interface ITelefonicaService
     {
-        Task<List<SugeridorClientes>> GetClientes();
+        Task<List<SuggestorClient>> GetClientes();
 
-        Task<List<RecomendadorB2b>> GetSuggestedPlans();
+        Task<List<SuggestorB2b>> GetSuggestedPlans();
 
-        Task<List<RecomendadorB2b>> GetSuggestedPlansByRut(string rut);
+        Task<List<SuggestorB2b>> GetSuggestedPlansByRut(string rut);
 
-        Task<List<RecomendadorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
+        Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
 
-        Task<List<PlanesOferta>> GetActualPlansAsync();
+        Task<List<OfertPlan>> GetActualPlansAsync();
 
         /// <summary>
         /// Retorna los planes del cliente actual
         /// </summary>
         /// <returns></returns>
-        List<RecomendadorB2b> GetCurrentPlans();
+        List<SuggestorB2b> GetCurrentPlans();
 
-        List<PlanDefinitivolModel> UpdateDefinitivePlanList(List<RecomendadorB2b> planList);
+        List<DefinitivePlanModel> UpdateDefinitivePlanList(List<SuggestorB2b> planList);
 
-        List<PlanDefinitivolModel> GetCurrentDefinitivePlans();
+        List<DefinitivePlanModel> GetCurrentDefinitivePlans();
 
         void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan);
 
@@ -40,13 +40,13 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         decimal GetDefinitivePlansIncome();
 
-        SugeridorClientes GetCurrentClient();
+        SuggestorClient GetCurrentClient();
 
-        List<SugeridorClientes> GetCurrentClients();
+        List<SuggestorClient> GetCurrentClients();
 
-        List<EquipoPymesModel> GetEquiposPymesList();
+        List<DevicePymesModel> GetEquiposPymesList();
 
-        List<EquipoPymesModel> GetCurrentEquiposPymesList();
+        List<DevicePymesModel> GetCurrentEquiposPymesList();
 
         void UpdateCurrentEquiposPymesList(string code, bool delete);
 
@@ -54,16 +54,16 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         bool AddProposal(ProposalData proposal);
 
-        List<Propuesta> GetProposalsByUser(string idUsuario);
-        List<Propuesta> GetProposals();
+        List<Proposal> GetProposalsByUser(string idUsuario);
+        List<Proposal> GetProposals();
 
-        Propuesta GetProposalById(string idProposal);
+        Proposal GetProposalById(string idProposal);
 
         decimal GetSubsidy();
 
         decimal GetPayback();
 
         IndexModel CalculateIndexes();
-        void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList);
+        void SetCurrentEquiposPymesList(List<DevicePymesModel> mobileList);
     }
 }

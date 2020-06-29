@@ -5,24 +5,25 @@ using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess;
+using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
 {
-    public class PropuestaLogic : IPropuestaLogic
+    public class ProposalLogic : IProposalLogic
     {
-        private readonly IPropuestaRepository _proposalRepository;
+        private readonly IProposalRepository _proposalRepository;
 
-        public PropuestaLogic(IPropuestaRepository proposalRepository)
+        public ProposalLogic(IProposalRepository proposalRepository)
         {
             _proposalRepository = proposalRepository;
         }
 
-        public async Task<List<PropuestaDTO>> GetPropuestas()
+        public async Task<List<ProposalDTO>> GetProposals()
         {
             try
             {                 
-                return await _proposalRepository.GetPropuestas();
+                return await _proposalRepository.GetProposals();
             }
             catch (Exception ex)
             {
@@ -30,11 +31,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario)
+        public async Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario)
         {
             try
             {
-                return await _proposalRepository.GetPropuestasUsuario(idUsuario);
+                return await _proposalRepository.GetProposalsUsuario(idUsuario);
             }
             catch (Exception ex)
             {
@@ -42,11 +43,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuesta(string idPropuesta)
+        public async Task<ProposalDTO> GetProposal(string idProposal)
         {
             try
             {
-                var proposal = await _proposalRepository.GetPropuesta(idPropuesta);
+                var proposal = await _proposalRepository.GetProposal(idProposal);
                 return proposal;
             }
             catch (Exception ex)
@@ -55,11 +56,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuestaByDoc(string doc)
+        public async Task<ProposalDTO> GetProposalByDoc(string doc)
         {
             try
             {
-                return await _proposalRepository.GetPropuestaByDoc(doc);
+                return await _proposalRepository.GetProposalByDoc(doc);
             }
             catch (Exception ex)
             {
@@ -67,11 +68,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuestaByGuid(string guid)
+        public async Task<ProposalDTO> GetProposalByGuid(string guid)
         {
             try
             {
-                return await _proposalRepository.GetPropuestaByGuid(guid);
+                return await _proposalRepository.GetProposalByGuid(guid);
             }
             catch (Exception ex)
             {
@@ -79,11 +80,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task DeletePropuestaByGuid(string guid)
+        public async Task DeleteProposalByGuid(string guid)
         {
             try
             {
-                await _proposalRepository.DeletePropuestaByGuid(guid);
+                await _proposalRepository.DeleteProposalByGuid(guid);
             }
             catch (Exception ex)
             {
@@ -91,14 +92,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<bool> AddPropuesta(PropuestaDTO propuesta)
+        public async Task<bool> AddProposal(ProposalDTO Proposal)
         {
-            if(propuesta != null)
+            if(Proposal != null)
             {
                 try
                 {
 
-                    await _proposalRepository.AddPropuesta(propuesta);
+                    await _proposalRepository.AddProposal(Proposal);
                     return true;
                 }
                 catch (Exception ex)
@@ -110,14 +111,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             return false;
         }
 
-        public async Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas)
+        public async Task<bool> AddLineasProposal(List<ProposalLineDTO> lineas)
         {
             if (lineas != null && lineas.Count>0)
             {
                 try
                 {
 
-                    await _proposalRepository.AddLineasPropuesta(lineas);
+                    await _proposalRepository.AddLineasProposal(lineas);
                     return true;
                 }
                 catch (Exception ex)
@@ -129,14 +130,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             return false;
         }
 
-        public async Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos)
+        public async Task<bool> AddEquiposProposal(List<ProposalDeviceDTO> equipos)
         {
             if (equipos != null && equipos.Count > 0)
             {
                 try
                 {
 
-                    await _proposalRepository.AddEquiposPropuesta(equipos);
+                    await _proposalRepository.AddEquiposProposal(equipos);
                     return true;
                 }
                 catch (Exception ex)
@@ -148,11 +149,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             return false;
         }
 
-        public async Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta)
+        public async Task<List<ProposalLineDTO>> GetLineasProposal(int idProposal)
         {
             try
             {
-                return await _proposalRepository.GetLineasPropuesta(idPropuesta);
+                return await _proposalRepository.GetLineasProposal(idProposal);
             }
             catch (Exception ex)
             {
@@ -160,11 +161,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta)
+        public async Task<List<ProposalDeviceDTO>> GetEquiposProposal(int idProposal)
         {
             try
             {
-                return await _proposalRepository.GetEquiposPropuesta(idPropuesta);
+                return await _proposalRepository.GetEquiposProposal(idProposal);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess;
+using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic
@@ -17,7 +18,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             _clientRepository = clientRepository;
         }
 
-        public async Task<List<SugeridorClientesDTO>> GetClientes()
+        public async Task<List<SuggestorClientDTO>> GetClientes()
         {
             try
             {                 

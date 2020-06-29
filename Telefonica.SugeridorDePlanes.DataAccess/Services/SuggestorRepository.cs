@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.DataAccess.Context;
+using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
-namespace Telefonica.SugeridorDePlanes.DataAccess
+namespace Telefonica.SugeridorDePlanes.DataAccess.Services
 {
     public class SuggestorRepository : ISuggestorRepository
     {
@@ -18,11 +19,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             _context = context;
         }
 
-        public async Task<List<PlanesOfertaActualDTO>> GetActualPlans()
+        public async Task<List<OfertActualPlanDTO>> GetActualPlans()
         {
             try
             {
-                var plans = await _context.PlanesOfertaActual.ToListAsync();
+                var plans = await _context.OfertPlanActual.ToListAsync();
 
                 return plans;
             }
@@ -33,11 +34,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode)
+        public async Task<OfertActualPlanDTO> GetPlanByCode(string planCode)
         {
             try
             {
-                var plan = await _context.PlanesOfertaActual.Where(x => x.Plan == planCode).FirstOrDefaultAsync() ;
+                var plan = await _context.OfertPlanActual.Where(x => x.Plan == planCode).FirstOrDefaultAsync() ;
 
                 return plan;
 
@@ -49,11 +50,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlans()
+        public async Task<List<SuggestorB2bDTO>> GetSuggestedPlans()
         {
             try
             {
-                var plans =  await _context.RecomendadorB2b.ToListAsync();
+                var plans =  await _context.SuggestorB2b.ToListAsync();
 
                 return plans;
             }
@@ -63,11 +64,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
+        public async Task<List<SuggestorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
         {
             try
             {
-                var plans = await _context.RecomendadorB2b.Where(x => x.CaNumber == clientNumber).ToListAsync();
+                var plans = await _context.SuggestorB2b.Where(x => x.CaNumber == clientNumber).ToListAsync();
 
                 return plans;
             }
@@ -77,11 +78,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
+        public async Task<List<SuggestorB2bDTO>> GetSuggestedPlansByRut(string rut)
         {
             try
             {
-                var plans = await _context.RecomendadorB2b.Where(x => x.Rut == rut).ToListAsync();
+                var plans = await _context.SuggestorB2b.Where(x => x.Rut == rut).ToListAsync();
 
                 return plans;
             }
@@ -95,7 +96,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         /// Retorna la lista de los equipos moviles
         /// </summary>
         /// <returns></returns>
-        public async Task<List<EquipoPymesDTO>> GetEquiposPymes()
+        public async Task<List<DevicePymesDTO>> GetEquiposPymes()
         {
             try
             {
@@ -108,7 +109,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
                 throw ex;
             }
         }
-        public async Task<EquipoPymesDTO> GetEquiposByCode(string code)
+        public async Task<DevicePymesDTO> GetEquiposByCode(string code)
         {
             try
             {

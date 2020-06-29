@@ -22,13 +22,13 @@
 
 @{
 
-    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SugeridorClientesModel>;
-    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoPymesModel>;
-    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanOfertaActualModel>;
-    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
+    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorClientModel>;
+    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
+    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.OfertActualPlanModel>;
+    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DefinitivePlanModel>;
     var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
     var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
-    var mobileList = ViewData["mobileList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.EquipoPymesModel>;
+    var mobileList = ViewData["mobileList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
     var devicePayment = ViewData["devicePayment"];
     var subsidy = ViewData["subsidy"];
     var payback = ViewData["payback"];
@@ -39,7 +39,7 @@
 
 }
 
-@model List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
+@model List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorB2bModel>;
 
 <html>
 <head>
@@ -49,13 +49,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
-
-
-    @* <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-            <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
-
 
 </head>
 <body>
@@ -73,7 +66,7 @@
         var gbGenerateProposal = "@Url.Action("GenerateProposal", "Home")";
         var gbSaveProposal = "@Url.Action("SaveProposal", "Home")";
         var gbCurrentClient = @ViewData["currentClient"];
-        var gbUserProposals = "@Url.Action("Index", "UserProposal")";
+        var gbUserProposals = "@Url.Action("ProposalList", "UserProposal")";
 
     </script>
 
@@ -579,9 +572,9 @@
 
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
 
-                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn" onclick="generarPropuesta()">Generar propuesta</button>
+                                <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarProposalBtn" onclick="generarProposal()">Generar Proposal</button>
                                 @*<button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
-                                    Exportar Propuesta
+                                    Exportar Proposal
                                 </button>*@
                                 @*<button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>*@
 
@@ -774,14 +767,14 @@
                 <div class="modal-content text-center">
               
                     <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
-                        <h2 style="color:white;text-shadow: 2px 2px #25af60">Propuesta guardada</h2>
+                        <h2 style="color:white;text-shadow: 2px 2px #25af60">Proposal guardada</h2>
                       
                     </div>
                     <div class="modal-body">
 
                         <img src="@Url.Content("~/img/icons/check1.png")" />
 
-                        <h4>La propuesta se guardó exitosamente!</h4>
+                        <h4>La Proposal se guardó exitosamente!</h4>
 
                     </div>
 

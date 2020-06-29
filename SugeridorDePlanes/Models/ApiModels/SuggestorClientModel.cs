@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Telefonica.SugeridorDePlanes.Models.ApiModels
 {
-    public class SugeridorClientesModel
+    public class SuggestorClientModel
     {
         public string CustAcctNumber { get; set; }
         public string Titular { get; set; }

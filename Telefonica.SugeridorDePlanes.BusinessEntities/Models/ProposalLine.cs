@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
-    public class LineaPropuesta
+    public class ProposalLine
     {
         public string Numero { get; set; }
-        public PlanesOferta Plan { get; set; }
+        public OfertPlan Plan { get; set; }
 
 
     }

@@ -21,7 +21,7 @@
 }
 
 
-@model List<Telefonica.SugeridorDePlanes.Propuesta>;
+@model List<Telefonica.SugeridorDePlanes.Proposal>;
 
 <html>
 <head>
@@ -48,7 +48,7 @@
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
         <div class="viewTitle">
-            <h2>Lista de propuestas</h2>
+            <h2>Lista de Proposals</h2>
         </div>
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
@@ -66,7 +66,7 @@
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-md-12">
                 <fieldset class="tableFieldset">
-                    <legend>Mis propuestas</legend>
+                    <legend>Mis Proposals</legend>
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
@@ -84,17 +84,17 @@
                             <tbody>
                                 @if (Model != null)
                                 {
-                                    @foreach (var propuesta in Model)
+                                    @foreach (var Proposal in Model)
                                     {
                                         <tr>
-                                            <td>@propuesta.ClientName</td>
-                                            <td>@propuesta.Lineas.Count</td>
-                                            <td>@propuesta.Equipos.Count</td>
-                                            <td>$ @propuesta.Subsidio</td>
-                                            <td>@propuesta.Payback</td>
-                                            <td>$ @propuesta.DevicePayment</td>
-                                            <td>@propuesta.Estado</td>
-                                            <td class="editRow " onclick="openProposal(@propuesta.Id)"><a  class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                            <td>@Proposal.ClientName</td>
+                                            <td>@Proposal.Lineas.Count</td>
+                                            <td>@Proposal.Equipos.Count</td>
+                                            <td>$ @Proposal.Subsidio</td>
+                                            <td>@Proposal.Payback</td>
+                                            <td>$ @Proposal.DevicePayment</td>
+                                            <td>@Proposal.Estado</td>
+                                            <td class="editRow " onclick="openProposal(@Proposal.Id)"><a  class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
                                         </tr>
                                     }
                                 }

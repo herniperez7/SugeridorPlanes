@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Telefonica.SugeridorDePlanes.Models.ApiModels
 {
-    public class EquipoPymesModel
+    public class DevicePymesModel
     {
         public string Id { get; set; }
         public string CodigoEquipo { get; set; }

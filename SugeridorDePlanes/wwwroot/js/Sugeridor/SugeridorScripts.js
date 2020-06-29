@@ -487,7 +487,7 @@ function calculateStatus(val) {
 function exportPdf() {
    
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
-    var exportText = "Exportar Propuesta";
+    var exportText = "Exportar Proposal";
     $("#pdfExportBtn").html(loading);
     $("#pdfExportBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
@@ -510,7 +510,7 @@ function exportPdf() {
 }
 
 
-function generarPropuesta() {
+function generarProposal() {
 
     //$("#pdfExportBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();

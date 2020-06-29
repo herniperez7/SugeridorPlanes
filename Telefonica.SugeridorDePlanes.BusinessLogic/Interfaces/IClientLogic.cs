@@ -8,6 +8,6 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
     public interface IClientLogic
     {
-        Task<List<SugeridorClientesDTO>> GetClientes();
+        Task<List<SuggestorClientDTO>> GetClientes();
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
+namespace Telefonica.SugeridorDePlanes.Dto.Dto
 {
-    public class SugeridorClientes
+    public class SuggestorClientDTO
     {
         public string CustAcctNumber { get; set; }
         public string Titular { get; set; }

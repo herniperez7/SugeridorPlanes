@@ -32,24 +32,24 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return View("Index", proposals);
         }
 
-        public async Task<IActionResult> OpenProposalToEdit(Propuesta proposal) 
+        public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 
         {
             var clientList = await _telefonicaApi.GetClientes();
-            List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
+            List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
             ViewData["clientList"] = clientsModel;
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
-            List<PlanOfertaActualModel> planesOfertList = _mapper.Map<List<PlanesOferta>, List<PlanOfertaActualModel>>(planOfert);
+            List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
      
             ViewData["planOfertList"] = planesOfertList;
-            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
             _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
             var planDefList = PopulateDefinitivePlanList(proposal);
             ViewData["planDefList"] = planDefList;
             var indexes = _telefonicaApi.CalculateIndexes();
             ViewData["Indexes"] = indexes;
-            var mobilePymesList = _mapper.Map<List<EquipoPymesModel>>(proposal.Equipos);            
+            var mobilePymesList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);            
             ViewData["mobileList"] = mobilePymesList;
             ViewData["devicePayment"] = proposal.DevicePayment;
             ViewData["subsidy"] = proposal.Subsidio;
@@ -62,10 +62,10 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
 
-        public async Task<IActionResult> OpenProposalFinished(Propuesta proposal)
+        public async Task<IActionResult> OpenProposalFinished(Proposal proposal)
         {
-            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
-            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
             ViewData["suggestorLines"] = planMapped;
 
             return View("ProposalDetails", proposal);
@@ -89,13 +89,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
 
-        private List<PlanDefinitivolModel> PopulateDefinitivePlanList(Propuesta proposal) 
+        private List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal) 
         {
-            List<PlanDefinitivolModel> planDefinitveList = new List<PlanDefinitivolModel>();
+            List<DefinitivePlanModel> planDefinitveList = new List<DefinitivePlanModel>();
             var idPlan = 1;
             foreach (var linea in proposal.Lineas)
             {
-                var planModel = new PlanDefinitivolModel()
+                var planModel = new DefinitivePlanModel()
                 {
                     RecomendadorId = idPlan,
                     Plan = linea.Plan.Plan,

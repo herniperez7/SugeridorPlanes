@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.Dto.Dto
 {
-    public class LineaPropuestaDTO
+    public class ProposalLineDTO
     {
         public int Id { get; set; }
         public int IdPropuesta { get; set; }

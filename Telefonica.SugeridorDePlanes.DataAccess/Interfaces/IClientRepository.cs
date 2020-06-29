@@ -4,10 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
-namespace Telefonica.SugeridorDePlanes.DataAccess
+namespace Telefonica.SugeridorDePlanes.DataAccess.Interfaces
 {
     public interface IClientRepository
     {
-        Task<List<SugeridorClientesDTO>> GetClientes();
+        Task<List<SuggestorClientDTO>> GetClientes();
     }
 }

@@ -7,19 +7,19 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
-    public interface IPropuestaLogic
+    public interface IProposalLogic
     {
-        Task<List<PropuestaDTO>> GetPropuestas();
-        Task<PropuestaDTO> GetPropuestaByDoc(string doc);
-        Task<PropuestaDTO> GetPropuestaByGuid(string guid); 
-        Task DeletePropuestaByGuid(string guid);
-        Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario);
-        Task<PropuestaDTO> GetPropuesta(string id);
-        Task<bool> AddPropuesta(PropuestaDTO propuesta);
-        Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas);
-        Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos);
+        Task<List<ProposalDTO>> GetProposals();
+        Task<ProposalDTO> GetProposalByDoc(string doc);
+        Task<ProposalDTO> GetProposalByGuid(string guid); 
+        Task DeleteProposalByGuid(string guid);
+        Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario);
+        Task<ProposalDTO> GetProposal(string id);
+        Task<bool> AddProposal(ProposalDTO Proposal);
+        Task<bool> AddLineasProposal(List<ProposalLineDTO> lineas);
+        Task<bool> AddEquiposProposal(List<ProposalDeviceDTO> equipos);
 
-        Task<List<LineaPropuestaDTO>>GetLineasPropuesta(int idPropuesta);
-        Task<List<EquipoPropuestaDTO>>GetEquiposPropuesta(int idPropuesta);
+        Task<List<ProposalLineDTO>>GetLineasProposal(int idProposal);
+        Task<List<ProposalDeviceDTO>>GetEquiposProposal(int idProposal);
     }
 }

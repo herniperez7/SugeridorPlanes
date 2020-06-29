@@ -24,7 +24,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             _env = env;
         }
 
-        public byte[] GeneratePdfFromHtml(List<EquipoPymes> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
+        public byte[] GeneratePdfFromHtml(List<DevicePymes> movilDevices, List<OfertPlan> planList, string companyName, double devicePayment)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
         /// <summary>
         /// Metodo que genera los html con los datos de moviles y las tarifas
         /// </summary>
-        private void GenerateHtml(string directoryUrl, List<EquipoPymes> mobileDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
+        private void GenerateHtml(string directoryUrl, List<DevicePymes> mobileDevices, List<OfertPlan> planList, string companyName, double devicePayment)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        private decimal GetMothlyFee(List<PlanesOferta> planList)
+        private decimal GetMothlyFee(List<OfertPlan> planList)
         {
             decimal monthlyFee = 0;
 
@@ -143,7 +143,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             return monthlyFee;
         }
 
-        private decimal GetDevicesCost(List<EquipoPymes> movilDevices)
+        private decimal GetDevicesCost(List<DevicePymes> movilDevices)
         {
             decimal devicesCost = 0;
 
@@ -155,7 +155,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             return devicesCost;
         }
 
-        private string GetContentMoviles(List<EquipoPymes> mobileDevices)
+        private string GetContentMoviles(List<DevicePymes> mobileDevices)
         {
             var movilPdfList = GroupedMovilList(mobileDevices);
             string content = string.Empty;
@@ -167,7 +167,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             return content;
         }
 
-        private string GetContentPlans(List<PlanesOferta> planList)
+        private string GetContentPlans(List<OfertPlan> planList)
         {
             var planPdfList = GroupedPlanList(planList);
             var contentPlans = string.Empty;
@@ -214,7 +214,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 
             return contentPlans;
         }
-        private List<MovilPdf> GroupedMovilList(List<EquipoPymes> mobileDevices)
+        private List<MovilPdf> GroupedMovilList(List<DevicePymes> mobileDevices)
         {
             try
             {
@@ -239,7 +239,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        private List<PlanPdf> GroupedPlanList(List<PlanesOferta> planList)
+        private List<PlanPdf> GroupedPlanList(List<OfertPlan> planList)
         {
             var planPdfList = new List<PlanPdf>();
 
@@ -303,7 +303,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             {
                 Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
+                var mainPdf = Path.Combine(mainUrl, "pdf", "ProposalComercial.pdf");
                 string[] lstFiles = new string[3];
                 lstFiles[0] = mainPdf;
                 lstFiles[1] = Path.Combine(directoryPath, "pagina1.pdf");

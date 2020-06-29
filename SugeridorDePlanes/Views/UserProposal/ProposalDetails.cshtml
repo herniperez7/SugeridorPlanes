@@ -16,7 +16,7 @@
 
 @{
 
-    var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
+    var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorB2bModel>;
     var emptyPlans = true;
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
@@ -29,7 +29,7 @@
 
 }
 
-@model Telefonica.SugeridorDePlanes.Propuesta;
+@model Telefonica.SugeridorDePlanes.Proposal;
 
 <html>
 <head>
@@ -52,7 +52,7 @@
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
         <div class="viewTitle">
-            <h2>Detalles propuesta</h2>
+            <h2>Detalles Proposal</h2>
         </div>
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">

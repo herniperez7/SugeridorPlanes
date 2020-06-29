@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
-    public class Propuesta
+    public class Proposal
     {
         public int Id { get; set; }
         public string RutCliente { get; set; }
         public string ClientName { get; set; }
-        public List<LineaPropuesta> Lineas { get; set; }
-        public List<EquipoPymes> Equipos { get; set; }
+        public List<ProposalLine> Lineas { get; set; }
+        public List<DevicePymes> Equipos { get; set; }
         public double DevicePayment { get; set; }
         public double Payback { get; set; }
         public double Subsidio { get; set; }

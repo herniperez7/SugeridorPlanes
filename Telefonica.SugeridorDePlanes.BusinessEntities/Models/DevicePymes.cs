@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
-    public class EquipoPymes
+    public class DevicePymes
     {
         public string Id { get; set; }
         public string CodigoEquipo { get; set; }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess;
+using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
@@ -21,7 +22,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<PlanesOfertaActualDTO>> GetActualPlans()
+        public async Task<List<OfertActualPlanDTO>> GetActualPlans()
         {
             try
             {
@@ -35,7 +36,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
         }
 
 
-        public async Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode)
+        public async Task<OfertActualPlanDTO> GetPlanByCode(string planCode)
         {
             try
             {
@@ -48,7 +49,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlans()
+        public async Task<List<SuggestorB2bDTO>> GetSuggestedPlans()
         {
             try
             {
@@ -60,7 +61,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
+        public async Task<List<SuggestorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber)
         {
             try
             {
@@ -72,7 +73,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        public async Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut)
+        public async Task<List<SuggestorB2bDTO>> GetSuggestedPlansByRut(string rut)
         {
             try
             {
@@ -84,12 +85,12 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        public async Task<List<EquipoPymes>> GetEquiposPymes()
+        public async Task<List<DevicePymes>> GetEquiposPymes()
         {
             try
             {
                 var mobileDtoList = await _suggestorRepository.GetEquiposPymes();
-                var mobileList = _mapper.Map<List<EquipoPymes>>(mobileDtoList);
+                var mobileList = _mapper.Map<List<DevicePymes>>(mobileDtoList);
                 AddMobileId(mobileList);
                 return mobileList;
             }
@@ -99,7 +100,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        public async Task<EquipoPymesDTO> GetEquiposPymesByCode(string code)
+        public async Task<DevicePymesDTO> GetEquiposPymesByCode(string code)
         {
             try
             {
@@ -111,7 +112,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
         }
 
-        private void AddMobileId(List<EquipoPymes> mobileList)
+        private void AddMobileId(List<DevicePymes> mobileList)
         {
             var id = 1;
             foreach (var m in mobileList)

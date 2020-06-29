@@ -5,23 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.DataAccess.Context;
+using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
-namespace Telefonica.SugeridorDePlanes.DataAccess
+namespace Telefonica.SugeridorDePlanes.DataAccess.Services
 {
-    public class PropuestaRepository : IPropuestaRepository
+    public class ProposalRepository : IProposalRepository
     {
         protected readonly TelefonicaSugeridorDePlanesContext _context;
-        public PropuestaRepository(TelefonicaSugeridorDePlanesContext context)
+        public ProposalRepository(TelefonicaSugeridorDePlanesContext context)
         {
             _context = context;
         }
 
-        public async Task<List<PropuestaDTO>> GetPropuestas()
+        public async Task<List<ProposalDTO>> GetProposals()
         {
             try
             {                
-                var proposals = await _context.Propuesta.ToListAsync();                
+                var proposals = await _context.Proposal.ToListAsync();                
 
                 return proposals;
             }
@@ -31,14 +32,14 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }            
         }
 
-        public async Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario)
+        public async Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario)
         {
             try
             {
                 int id = int.Parse(idUsuario);
-                var propuestas = await _context.Propuesta.Where(x => x.IdUsuario == id).ToListAsync();
+                var Proposals = await _context.Proposal.Where(x => x.IdUsuario == id).ToListAsync();
 
-                return propuestas;
+                return Proposals;
             }
             catch (Exception ex)
             {
@@ -46,14 +47,14 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuesta(string idPropuesta)
+        public async Task<ProposalDTO> GetProposal(string idProposal)
         {
             try
             {
-                int id = int.Parse(idPropuesta);
-                var propuesta = await _context.Propuesta.Where(x => x.Id == id).FirstOrDefaultAsync();
+                int id = int.Parse(idProposal);
+                var Proposal = await _context.Proposal.Where(x => x.Id == id).FirstOrDefaultAsync();
 
-                return propuesta;
+                return Proposal;
             }
             catch (Exception ex)
             {
@@ -61,13 +62,13 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuestaByDoc(string doc)
+        public async Task<ProposalDTO> GetProposalByDoc(string doc)
         {
             try
             {
-                var propuesta = await _context.Propuesta.Where(x => x.Documento == doc).FirstOrDefaultAsync();
+                var Proposal = await _context.Proposal.Where(x => x.Documento == doc).FirstOrDefaultAsync();
 
-                return propuesta;
+                return Proposal;
             }
             catch (Exception ex)
             {
@@ -75,13 +76,13 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuestaByGuid(string guid)
+        public async Task<ProposalDTO> GetProposalByGuid(string guid)
         {
             try
             {
-                var propuesta = await _context.Propuesta.Where(x => x.Guid == guid).FirstOrDefaultAsync();
+                var Proposal = await _context.Proposal.Where(x => x.Guid == guid).FirstOrDefaultAsync();
 
-                return propuesta;
+                return Proposal;
             }
             catch (Exception ex)
             {
@@ -89,12 +90,12 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task DeletePropuestaByGuid(string guid)
+        public async Task DeleteProposalByGuid(string guid)
         {
             try
             {
-                var propuesta = await _context.Propuesta.Where(x => x.Guid == guid).FirstOrDefaultAsync();
-                _context.Propuesta.Remove(propuesta);
+                var Proposal = await _context.Proposal.Where(x => x.Guid == guid).FirstOrDefaultAsync();
+                _context.Proposal.Remove(Proposal);
                 
             }
             catch (Exception ex)
@@ -103,11 +104,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<bool> AddPropuesta(PropuestaDTO propuesta)
+        public async Task<bool> AddProposal(ProposalDTO Proposal)
         {
             try
             {
-                await _context.Propuesta.AddAsync(propuesta);
+                await _context.Proposal.AddAsync(Proposal);
                 _context.SaveChanges();
                 return true;
             }
@@ -116,25 +117,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
                 throw ex;
             }
         }
-        public async Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas)
+        public async Task<bool> AddLineasProposal(List<ProposalLineDTO> lineas)
         {
             try
             {
-                await _context.LineaPropuesta.AddRangeAsync(lineas);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos)
-        {
-            try
-            {
-                await _context.EquipoPropuesta.AddRangeAsync(equipos);
+                await _context.ProposalLine.AddRangeAsync(lineas);
                 _context.SaveChanges();
                 return true;
             }
@@ -144,13 +131,13 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta)
+        public async Task<bool> AddEquiposProposal(List<ProposalDeviceDTO> equipos)
         {
             try
             {
-                var propuesta = await _context.LineaPropuesta.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
-
-                return propuesta;
+                await _context.ProposalDevice.AddRangeAsync(equipos);
+                _context.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
@@ -158,13 +145,27 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta)
+        public async Task<List<ProposalLineDTO>> GetLineasProposal(int idProposal)
         {
             try
             {
-                var propuesta = await _context.EquipoPropuesta.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
+                var Proposal = await _context.ProposalLine.Where(x => x.IdPropuesta == idProposal).ToListAsync();
 
-                return propuesta;
+                return Proposal;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<ProposalDeviceDTO>> GetEquiposProposal(int idProposal)
+        {
+            try
+            {
+                var Proposal = await _context.ProposalDevice.Where(x => x.IdPropuesta == idProposal).ToListAsync();
+
+                return Proposal;
             }
             catch (Exception ex)
             {
