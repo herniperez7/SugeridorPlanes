@@ -70,7 +70,7 @@
                     <div class="tableFixHead">
                         <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
-                                <tr>
+                                <tr style="text-align:center">
                                     <th>Cliente</th>
                                     <th>Cant. Lineas</th>
                                     <th>Cant. Equipos</th>
@@ -78,24 +78,27 @@
                                     <th>Payback</th>
                                     <th>PagoEquipos</th>
                                     <th>Estado</th>
+                                    <th>Fecha</th>
                                     <th>Abrir</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if (Model != null)
                                 {
+                                    DateTime proposalDate = DateTime.Today;
                                     @foreach (var propuesta in Model)
                                     {
-                                        <tr>
-                                            <td>@propuesta.ClientName</td>
-                                            <td>@propuesta.Lineas.Count</td>
-                                            <td>@propuesta.Equipos.Count</td>
-                                            <td>$ @propuesta.Subsidio</td>
-                                            <td>@propuesta.Payback</td>
-                                            <td>$ @propuesta.DevicePayment</td>
-                                            <td>@propuesta.Estado</td>
-                                            <td class="editRow " onclick="openProposal(@propuesta.Id)"><a  class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
-                                        </tr>
+                                <tr>
+                                    <td>@propuesta.ClientName</td>
+                                    <td>@propuesta.Lineas.Count</td>
+                                    <td>@propuesta.Equipos.Count</td>
+                                    <td>$ @propuesta.Subsidio</td>
+                                    <td>@propuesta.Payback</td>
+                                    <td>$ @propuesta.DevicePayment</td>
+                                    <td>@propuesta.Estado</td>
+                                    <td>@proposalDate.ToShortDateString()</td>
+                                    <td class="editRow " onclick="openProposal(@propuesta.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                </tr>
                                     }
                                 }
 

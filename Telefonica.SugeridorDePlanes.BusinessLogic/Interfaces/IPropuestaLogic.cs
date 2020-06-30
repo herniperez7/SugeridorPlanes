@@ -21,5 +21,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 
         Task<List<LineaPropuestaDTO>>GetLineasPropuesta(int idPropuesta);
         Task<List<EquipoPropuestaDTO>>GetEquiposPropuesta(int idPropuesta);
+        void UpdateProposal(PropuestaDTO proposal);
+        void UpdateTotalProposal(TransactionProposalDTO transactionProposal);
     }
 }

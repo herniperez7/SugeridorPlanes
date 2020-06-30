@@ -191,6 +191,59 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
+        public void UpdateTotalProposal(Propuesta proposal) 
+        {
+            try
+            {
+                var mobileListDto = _mapper.Map<List<EquipoPropuestaDTO>>(proposal.Equipos);
+                var linesDto = _mapper.Map<List<LineaPropuestaDTO>>(proposal.Lineas);
+                var proposalDto = new PropuestaDTO()
+                {
+                    Documento = proposal.RutCliente,
+                    Payback = proposal.Payback,
+                    DevicePayment = proposal.DevicePayment,
+                    Subsidio = proposal.Subsidio,
+                    Guid = Guid.NewGuid().ToString(),
+                    Estado = proposal.Estado
+                };
+
+                var transactionProposal = new TransactionProposalDTO()
+                {
+                    Proposal = proposalDto,
+                    Lines = linesDto,
+                    MobileDevices = mobileListDto
+                };
+
+                _propuestaLogic.UpdateTotalProposal(transactionProposal);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }        
+        }
+
+        public void FinalizeProposal(Propuesta proposal) 
+        {
+            try
+            {
+                var proposalDto = new PropuestaDTO()
+                {
+                    Documento = proposal.RutCliente,
+                    Payback = proposal.Payback,
+                    DevicePayment = proposal.DevicePayment,
+                    Subsidio = proposal.Subsidio,
+                    Guid = Guid.NewGuid().ToString(),
+                    Estado = proposal.Estado
+                };
+
+                _propuestaLogic.UpdateProposal(proposalDto);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }        
+        }
+
         private void PopulateProposalLines(Propuesta proposal, List<PlanesOfertaActualDTO> plansDto, List<LineaPropuestaDTO> linesDto) 
         {
             proposal.Lineas = new List<LineaPropuesta>();
@@ -217,9 +270,11 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
         private void PopulateClientName(Propuesta proposal, List<SugeridorClientesDTO> clients) 
         {
-            var clientList = _clientLogic.GetClientes().Result;
+            var clientList = clients;
             var client = clientList.Where(c => c.Documento.Equals(proposal.RutCliente)).FirstOrDefault();
             proposal.ClientName = client != null ? client.Titular : proposal.RutCliente;
-        }        
+        }
+        
+
     }
 }

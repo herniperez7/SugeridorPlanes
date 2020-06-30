@@ -17,6 +17,7 @@
 @{
 
     var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
+    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var emptyPlans = true;
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
@@ -39,10 +40,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
-
-
 </head>
 <body>
+
+    <script>
+        var gbUserProposals = "@Url.Action("Index", "UserProposal")"
+
+
+        function proposalMenu() {
+            window.location.href = gbUserProposals;
+        }
+    </script>
 
     <style>
         #IndexesValue input{
@@ -50,16 +58,16 @@
         }
     </style>
 
-    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
-        <div class="viewTitle">
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3" >
+        <div class="viewTitle" >
             <h2>Detalles propuesta</h2>
         </div>
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
                 <label class="input-group-text">Nombre Usuario</label>
             </div>
-            <div class="input-group-prepend">
-                <label class="input-group-text">Cerrar sesion</label>
+            <div class="input-group-prepend" onclick="proposalMenu()">
+                <label class="input-group-text" style="cursor:pointer">Menú principal</label>
             </div>
         </form>
 
@@ -212,9 +220,7 @@
                                     <th class="long-column" scope="col">Plan</th>
                                     <th class="long-column" scope="col">TMM (sin iva)</th>
                                     <th class="long-column" scope="col">Datos del bono</th>
-                                    <th scope="col">Roaming</th>
-                                    <th scope="col">Editar</th>
-
+                                    <th scope="col">Roaming</th>   
                                 </tr>
                             </thead>
                             <tbody>
@@ -222,25 +228,25 @@
                                 {
                                     decimal totalBono = 0;
                                     int roamingCount = 0;
-                                    @foreach (var linea in Model.Lineas.Select((value, i) => new { value, i }))
+                                    @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
                                     {
-                                        var plan = linea.value.Plan;
-                                        incomeAmount += (decimal)plan.TmM_s_iva;
-                                        totalBono += (decimal)plan.Bono;
-                                        var bonoGb = plan.Bono;
 
-                                        if (plan.Roaming.ToLower() != "no")
+                                        incomeAmount += (decimal)plan.value.TMM_s_iva;
+                                        totalBono += (decimal)plan.value.Bono;
+                                        var bonoGb = plan.value.Bono;
+
+                                        if (plan.value.Roaming.ToLower() != "no")
                                         {
                                             roamingCount++;
                                         }
 
                                         <tr>
-                                            <td>@linea.i</td>
-                                            <td>@plan.Plan</td>
-                                            <td>$ @FormatCultureNumber(Convert.ToDecimal(plan.TmM_s_iva))</td>
+                                            <td>@plan.value.RecomendadorId</td>
+                                            <td>@plan.value.Plan</td>
+                                            <td>$ @FormatCultureNumber(plan.value.TMM_s_iva)</td>
                                             <td>@bonoGb Gb</td>
-                                            <td>@plan.Roaming</td>
-                                            <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@linea.i.ToString(), @clientList[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
+                                            <td>@plan.value.Roaming</td>
+                                           
                                         </tr>
                                     }
                                     <tr>
@@ -285,7 +291,7 @@
                                 <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                                     <thead class="thead-dark">
 
-                                        <tr>
+                                        <tr style="text-align:center">
                                             <th scope="col">Marca</th>
                                             <th scope="col">Nombre</th>
                                             <th scope="col">Precio Sin iva</th>
@@ -294,15 +300,31 @@
                                     <tbody id="movilTableBody" style="overflow-y:auto; height:150px">
                                         @if (Model.Equipos.Count > 0)
                                         {
+                                            double totalAmount = 0;
+
                                             @foreach (var device in Model.Equipos)
                                             {
-                                                <tr>
-                                                    <td>@device.Marca</td>
-                                                    <td>@device.Nombre</td>
-                                                    <td>@device.PrecioSinIva</td>
+                                                totalAmount += device.PrecioSinIva;
+                                    <tr>
+                                        <td>@device.Marca</td>
+                                        <td>@device.Nombre</td>
+                                        <td>$ @device.PrecioSinIva</td>
 
-                                                </tr>
-                                            }
+                                    </tr>
+                                }
+                                    <tr>
+                                        <td class="total-column">
+                                            Totales
+                                        </td>
+                                        <td class="total-column">
+                                            @Model.Equipos.Count()
+                                        </td>
+                                        <td class="total-column">
+                                           $ @totalAmount
+                                        </td>
+
+                                    </tr>
+
                                         }
                                         else
                                         {
@@ -348,6 +370,13 @@
 
                         </div>
                     </div>
+
+                    <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="exportPdfBtn">
+                        <img src="@Url.Content("~/img/icons/IconPdf.png")" />
+                    </button>
+                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="sendEmailBtn">
+                        <img src="@Url.Content("~/img/icons/iconMail.png")" />
+                    </button>
                 </fieldset>
 
             </div>
@@ -363,6 +392,6 @@
             }
 
 
-
+            </div>
 </body>
 </html>

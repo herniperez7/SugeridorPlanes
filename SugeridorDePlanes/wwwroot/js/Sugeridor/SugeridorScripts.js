@@ -209,7 +209,7 @@ function AddDevice(val, add) {
                 });
 
                 console.log("1");
-                var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b><td><b>$ " + formatNumberStr(devicesAmount) + "</b><td></td> </tr>"
+                var totalRow = "<tr id='totalRow'><td class='total-column'>" + devicesCount + "<td class='total-column'>$ " + formatNumberStr(devicesAmount) + "<td class='total-column'></td> </tr>"
                 $("#movilTableBody").append(totalRow);
                 console.log("2");
             }
@@ -487,9 +487,9 @@ function calculateStatus(val) {
 function exportPdf() {
    
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
-    var exportText = "Exportar Propuesta";
-    $("#pdfExportBtn").html(loading);
-    $("#pdfExportBtn").prop("disabled", true);
+    var exportText = "Generar propuesta";
+    $("#generarPropuestaBtn").html(loading);
+    $("#generarPropuestaBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
     if (devicePayment == "") devicePayment = "0";
 
@@ -502,8 +502,8 @@ function exportPdf() {
 
                 var pdfBase64 = base64ToArrayBuffer(data.result);
                 saveByteArray("presupuesto-" + companyName, pdfBase64);
-                $("#pdfExportBtn").html(exportText);
-                $("#pdfExportBtn").prop("disabled", false);
+                $("#generarPropuestaBtn").html(exportText);
+                $("#generarPropuestaBtn").prop("disabled", false);
             }            
         }
     });
@@ -521,7 +521,7 @@ function generarPropuesta() {
     var companyName = $("#clientSelect option:selected").text();
     $.ajax({
         type: "POST",
-        url: gbGenerateProposal + '?devicePayment=' + devicePayment + '&subsidio=' + subsidio + '&payback=' + payback,
+        url: gbGenerateProposal + '?devicePayment=' + devicePayment,
         success: function (data) {
                 window.location.href = gbUserProposals;
        
@@ -533,9 +533,9 @@ function generarPropuesta() {
 function sendMail() {
 
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';    
-    $("#sendMailBtn").html(loading);
-    $("#sendMailBtn").prop("disabled", true);
-    var buttontext = "Enviar mail";
+    $("#generarPropuestaBtn").html(loading);
+    $("#generarPropuestaBtn").prop("disabled", true);
+    var buttontext = "Generar propuesta";
     
     var toText = $("#toTxt").val();
     var subjectText = $("#subjectTxt").val();
@@ -547,8 +547,8 @@ function sendMail() {
         url: gbSendMail + '?to=' + toText + '&subject=' + subjectText + '&bodytext=' + bodyText + '&devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
-                $("#sendMailBtn").html(buttontext);
-                $("#sendMailBtn").prop("disabled", false);
+                $("#generarPropuestaBtn").html(buttontext);
+                $("#generarPropuestaBtn").prop("disabled", false);
             }
             
         }
@@ -600,3 +600,6 @@ function openEmailModal() {
     $('#emailModal').modal('show'); 
 }
 
+function proposalMenu() {
+    window.location.href = gbUserProposals;
+}

@@ -30,6 +30,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
+            _telefonicaApi.EmptyEquipoPymesCurrentList();
             var clientList = await _telefonicaApi.GetClientes();
             List<SugeridorClientesModel> clientsModel = _mapper.Map<List<SugeridorClientes>, List<SugeridorClientesModel>>(clientList);
             ViewData["clientList"] = clientsModel;
@@ -58,6 +59,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowPlans(string rut)
         {
+            _telefonicaApi.EmptyEquipoPymesCurrentList();
             var clientList = await _telefonicaApi.GetClientes();
             _telefonicaApi.UpdateCurrentClient(rut);
             var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
@@ -198,29 +200,26 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> GenerateProposal(string devicePayment, string subsidio, string payback)
+        public async Task<IActionResult> GenerateProposal(string devicePayment)
         {
-            var resultProposal = await GenerateProposalData(devicePayment, subsidio, payback);
+            var resultProposal = await GenerateProposalData(devicePayment);
             return RedirectToAction("Index", "UserProposal");
         }
 
-
-
-
-
-        private async Task<bool> GenerateProposalData(string devicePayment, string subsidio, string payback)
+        private async Task<bool> GenerateProposalData(string devicePayment)
         {
             try
             {
-
-                var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
-                var client = _telefonicaApi.GetCurrentClient();
-                var suggestorList = await _telefonicaApi.GetSuggestedPlansByRut(client.Documento);
-
                 var planesDefList = _telefonicaApi.GetCurrentDefinitivePlans();
-                subsidio = subsidio.Replace("$ ", "");
+                var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
+                var subsidy = _telefonicaApi.GetSubsidy();
+                var payback = _telefonicaApi.GetPayback();
+                var client = _telefonicaApi.GetCurrentClient();
+                var suggestorList = await _telefonicaApi.GetSuggestedPlansByRut(client.Documento);                
+                
                 var devicePaymentDouble = Convert.ToDouble(devicePayment);
-                var subsidioDouble = Convert.ToDouble(subsidio);
+                
+                var subsidioDouble = Convert.ToDouble(subsidy);
                 var paybackDouble = Convert.ToDouble(payback);
                 var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
                 var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
@@ -239,6 +238,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 };
 
                 bool requestResult = _telefonicaApi.AddProposal(proposal);
+                _telefonicaApi.EmptyEquipoPymesCurrentList();
 
                 return requestResult;
             }
@@ -283,7 +283,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 };
 
                 bool requestResult = _telefonicaApi.AddProposal(proposal);
-
 
                 var data = new { status = "ok", result = "" };
                 return new JsonResult(data);

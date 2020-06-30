@@ -170,6 +170,65 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             {
                 throw ex;
             }
+        }        
+
+        public async void UpdatePropsal(PropuestaDTO proposal) 
+        {
+            try
+            {
+                _context.Propuesta.Update(proposal);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async void UpdateTotalProposal(TransactionProposalDTO proposaTransaction) 
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    UpdatePropsal(proposaTransaction.Proposal);
+                    UpdateProposalLines(proposaTransaction.Lines);
+                    UpdateProposalMobileDevices(proposaTransaction.MobileDevices);
+
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();                  
+                }                
+            }
+        }
+
+        private async void UpdateProposalLines(List<LineaPropuestaDTO> proposalLines)
+        {
+            try
+            {
+                _context.LineaPropuesta.UpdateRange(proposalLines);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async void UpdateProposalMobileDevices(List<EquipoPropuestaDTO> mobileList)
+        {
+            try
+            {
+                _context.EquipoPropuesta.UpdateRange(mobileList);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

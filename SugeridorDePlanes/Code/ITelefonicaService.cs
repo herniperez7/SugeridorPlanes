@@ -65,5 +65,9 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         IndexModel CalculateIndexes();
         void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList);
+
+        void EmptyEquipoPymesCurrentList();
+
+        void SetCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans);
     }
 }

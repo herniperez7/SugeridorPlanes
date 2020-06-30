@@ -171,5 +171,29 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 throw ex;
             }
         }
+
+        public void UpdateProposal(PropuestaDTO proposal) 
+        {
+            try
+            {
+                 _proposalRepository.UpdatePropsal(proposal);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            } 
+        }
+
+        public void UpdateTotalProposal(TransactionProposalDTO transactionProposal) 
+        {
+            try
+            {
+                _proposalRepository.UpdateTotalProposal(transactionProposal);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }        
+        }
     }
 }

@@ -1,4 +1,7 @@
-﻿function openProposal(proposal) {
+﻿
+
+
+function openProposal(proposal) {
     if (proposal != undefined) {
         $.ajax({
             type: "POST",

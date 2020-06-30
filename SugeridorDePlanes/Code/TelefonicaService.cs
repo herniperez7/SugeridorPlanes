@@ -145,10 +145,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _curretDefinitvePlans;
         }
 
-        //public void UpdateCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
-        //{
-        //    _curretDefinitvePlans = currentPlans;
-        //}
+        public void SetCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
+        {
+            _curretDefinitvePlans = currentPlans;
+        }
 
         public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan) 
         {
@@ -425,6 +425,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             if (income > 0) 
             {
                 payback = subsidy / income;
+                payback = Math.Round(payback, 1);
             }
 
             return payback;
@@ -484,6 +485,11 @@ namespace Telefonica.SugeridorDePlanes.Code
                 TmmPrestacion = tmmSumatory
             };
             return gapModel;
+        }
+
+        public void EmptyEquipoPymesCurrentList() {
+
+            _currentEquiposPymes = new List<EquipoPymesModel>();
         }
 
     }

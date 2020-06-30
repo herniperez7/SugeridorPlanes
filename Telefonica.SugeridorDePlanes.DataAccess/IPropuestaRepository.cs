@@ -8,8 +8,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
 {
     public interface IPropuestaRepository
     {
-        Task<List<PropuestaDTO>> GetPropuestas();
-        
+        Task<List<PropuestaDTO>> GetPropuestas();        
         Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario);
         Task<PropuestaDTO> GetPropuestaByGuid(string guid);
         Task DeletePropuestaByGuid(string guid);
@@ -19,7 +18,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas);
         Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos);
         Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta);
-        Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta);
-
+        Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta);        
+        void UpdatePropsal(PropuestaDTO proposal);
+        void UpdateTotalProposal(TransactionProposalDTO proposaTransaction);
     }
 }

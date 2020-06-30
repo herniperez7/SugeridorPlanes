@@ -46,6 +46,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
             var planDefList = PopulateDefinitivePlanList(proposal);
+            _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
             ViewData["planDefList"] = planDefList;
             var indexes = _telefonicaApi.CalculateIndexes();
             ViewData["Indexes"] = indexes;
@@ -66,6 +67,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            var planDefList = PopulateDefinitivePlanList(proposal);
+            ViewData["planDefList"] = planDefList;
             ViewData["suggestorLines"] = planMapped;
 
             return View("ProposalDetails", proposal);
@@ -99,7 +102,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 {
                     RecomendadorId = idPlan,
                     Plan = linea.Plan.Plan,
-                    Bono = linea.Plan.Bono,
+                    Bono = linea.Plan?.Bono_ != null ? linea.Plan.Bono_ / 1024 : 0,
                     Roaming = linea.Plan.Roaming,
                     TMM_s_iva = (decimal)linea.Plan.TmM_s_iva
                 };

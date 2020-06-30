@@ -101,8 +101,8 @@
             <div class="input-group-prepend">
                 <label class="input-group-text">Nombre Usuario</label>
             </div>
-            <div class="input-group-prepend">
-                <label class="input-group-text">Cerrar sesion</label>
+            <div class="input-group-prepend" onclick="proposalMenu()">
+                <label class="input-group-text" style="cursor:pointer">Menú principal</label>
             </div>
         </form>
 
@@ -440,7 +440,7 @@
                                 <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
                                     <thead class="thead-dark">
 
-                                        <tr>
+                                        <tr style="text-align:center">
                                             <th scope="col">Equipo</th>
                                             <th scope="col">Lande</th>
                                             <th scope="col">Borrar</th>
@@ -465,9 +465,9 @@
                                                 </tr>
                                             }
                                             <tr>
-                                                <td>@deviceCount</td>
-                                                <td>$ @totalAmount</td>
-                                                <td></td>
+                                                <td class="total-column">@deviceCount</td>
+                                                <td class="total-column">$ @totalAmount</td>
+                                                <td class="total-column"></td>
                                             </tr>
 
 
@@ -580,11 +580,7 @@
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
 
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn" onclick="generarPropuesta()">Generar propuesta</button>
-                                @*<button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
-                                    Exportar Propuesta
-                                </button>*@
-                                @*<button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>*@
-
+                             
                             </div>
 
 
