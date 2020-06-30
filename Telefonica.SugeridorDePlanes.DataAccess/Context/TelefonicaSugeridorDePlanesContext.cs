@@ -378,6 +378,9 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                 entity.Property(e => e.Email)
                     .HasColumnName("Email");
 
+                entity.Property(e => e.Rol)
+                    .HasColumnName("Rol");
+
             });
 
 

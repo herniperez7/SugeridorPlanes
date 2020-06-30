@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Telefonica.SugeridorDePlanes.Models.Users.UsersRole
 {
-    public class Ejecutive: UserRole
+    public class Executive: UserRole
     {
         
     }
