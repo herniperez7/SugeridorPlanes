@@ -25,6 +25,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
         public virtual DbSet<ProposalDTO> Proposal { get; set; }
         public virtual DbSet<ProposalDeviceDTO> ProposalDevice { get; set; }
         public virtual DbSet<ProposalLineDTO> ProposalLine { get; set; }
+        public virtual DbSet<UserDTO> User { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SuggestorB2bDTO>(entity =>
@@ -363,6 +364,20 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                     .HasColumnName("NumeroLinea");
                 entity.Property(e => e.Plan)
                     .HasColumnName("Plan");
+            });
+
+            modelBuilder.Entity<UserDTO>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("Usuarios");
+
+                entity.Property(e => e.NombreCompleto)
+                    .HasColumnName("NombreCompleto");
+
+                entity.Property(e => e.Email)
+                    .HasColumnName("Email");
+
             });
 
 

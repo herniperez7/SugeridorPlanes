@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
@@ -16,7 +17,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         private List<SuggestorB2b> _currentPlans;
         private List<DefinitivePlanModel> _curretDefinitvePlans;
         private SuggestorClient _currentClient;
-        private List<SuggestorClient> _currentClients;        
+        private List<SuggestorClient> _currentClients;
 
         //Lista total de moviles
         private List<DevicePymesModel> _equiposPymes;
@@ -147,10 +148,10 @@ namespace Telefonica.SugeridorDePlanes.Code
         //    _curretDefinitvePlans = currentPlans;
         //}
 
-        public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan) 
+        public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan)
         {
             var defPlansList = _curretDefinitvePlans;
-            
+
             _curretDefinitvePlans = defPlansList.Select(x =>
             new DefinitivePlanModel
             {
@@ -165,15 +166,16 @@ namespace Telefonica.SugeridorDePlanes.Code
 
             foreach (var plan in _curretDefinitvePlans)
             {
-                if (plan.RecomendadorId == updatePlan.PlanToEdit) {
+                if (plan.RecomendadorId == updatePlan.PlanToEdit)
+                {
                     plan.Plan = updatePlan.Plan;
                     plan.Bono = long.Parse(updatePlan.Bono);
                     plan.Roaming = updatePlan.Roaming;
                     plan.TMM_s_iva = decimal.Parse(updatePlan.TMM);
                     plan.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
                 }
-            }           
-        }      
+            }
+        }
 
         private void UpdateDefinitivePlans(List<SuggestorB2b> planList)
         {
@@ -251,7 +253,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         }
 
         public List<DevicePymesModel> GetEquiposPymesList()
-        {            
+        {
             return _equiposPymes.ToList();
         }
 
@@ -260,7 +262,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _currentEquiposPymes;
         }
 
-        public void SetCurrentEquiposPymesList(List<DevicePymesModel> mobileList) 
+        public void SetCurrentEquiposPymesList(List<DevicePymesModel> mobileList)
         {
             _currentEquiposPymes = mobileList;
         }
@@ -274,14 +276,14 @@ namespace Telefonica.SugeridorDePlanes.Code
             mobile = _equiposPymes.Where(x => x.CodigoEquipo == code).FirstOrDefault();
             if (delete)
             {
-                if(mobile != null)
+                if (mobile != null)
                 {
                     _currentEquiposPymes.Remove(mobile);
-                }                
+                }
             }
             else
-            {                
-                if(mobile != null)
+            {
+                if (mobile != null)
                 {
                     _currentEquiposPymes.Add(mobile);
                 }
@@ -306,7 +308,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                if(proposal != null)
+                if (proposal != null)
                 {
                     var result = _client.AddProposalAsync(proposal).Result;
                     return result;
@@ -364,10 +366,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             try
             {
 
-                    var Proposals = _client.GetProposalsAsync().Result;
-                    var ProposalsList = Proposals.ToList();
+                var Proposals = _client.GetProposalsAsync().Result;
+                var ProposalsList = Proposals.ToList();
 
-                    return ProposalsList;
+                return ProposalsList;
 
             }
             catch (Exception ex)
@@ -384,7 +386,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
                 if (idProposal != null && idProposal != String.Empty)
                 {
-                    proposal = _client.GetProposalAsync(idProposal).Result; 
+                    proposal = _client.GetProposalAsync(idProposal).Result;
                 }
 
                 return proposal;
@@ -396,7 +398,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         }
 
 
-        public decimal GetSubsidy() 
+        public decimal GetSubsidy()
         {
             decimal subsidy = 0;
 
@@ -408,7 +410,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return subsidy;
         }
 
-        public decimal GetPayback() 
+        public decimal GetPayback()
         {
             decimal subsidy = GetSubsidy();
             decimal income = 0;
@@ -419,7 +421,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 income += plan.TMM_s_iva;
             }
 
-            if (income > 0) 
+            if (income > 0)
             {
                 payback = subsidy / income;
             }
@@ -427,7 +429,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return payback;
         }
 
-        public IndexModel CalculateIndexes() 
+        public IndexModel CalculateIndexes()
         {
             List<SuggestorB2b> plansList = _currentPlans;
             var defPlansList = _curretDefinitvePlans;
@@ -464,11 +466,11 @@ namespace Telefonica.SugeridorDePlanes.Code
                 }
                 else if (billingGap < 0)
                 {
-                     billingStatus = BillingStatus.Lower;
+                    billingStatus = BillingStatus.Lower;
                 }
                 else if (billingGap == 0)
                 {
-                     billingStatus = BillingStatus.Equal;
+                    billingStatus = BillingStatus.Equal;
                 }
             }
 
@@ -477,11 +479,56 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 BillingGap = billingGap,
                 FixedGap = fixedGap,
-                 BillingStatus = billingStatus,
+                BillingStatus = billingStatus,
                 TmmPrestacion = tmmSumatory
             };
             return gapModel;
         }
 
+        public User GetUserByEmail(string userEmail)
+        {
+            if (userEmail != String.Empty)
+            {
+                try
+                {
+
+                    return _client.GetUserByEmailAsync(userEmail).Result;
+
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public User GetUserById(string userId)
+        {
+            if (userId != String.Empty)
+            {
+                try
+                {
+
+                    return _client.GetUserByIdAsync(userId).Result;
+
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
+    
 }

@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Telefonica.SugeridorDePlanes.Models.Users;
+using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
     public class LoginController : Controller
     {
-        private IUserManager UserManager;
+        private TelefonicaModel.IUserManager UserManager;
 
-        public LoginController(IUserManager userManager)
+        public LoginController(TelefonicaModel.IUserManager userManager)
         {
             UserManager = userManager;
         }
@@ -21,11 +21,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public ViewResult Login(string userName, string password)
         {
-            
-            User loggedUser = UserManager.AuthenticateUser(userName, password);
+
+            TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
             if(loggedUser == null)
             {
-                loggedUser = new User() { Nombre = "Usuario1" };
+                loggedUser = new TelefonicaModel.User() { Nombre = "Usuario1" };
                 HttpContext.Session.SetString("UsuarioLogueado", JsonConvert.SerializeObject(loggedUser));
                 ViewData["UsuarioLogueado"] = loggedUser;
                 

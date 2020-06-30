@@ -65,5 +65,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         IndexModel CalculateIndexes();
         void SetCurrentEquiposPymesList(List<DevicePymesModel> mobileList);
+        User GetUserByEmail(string userEmail);
+        User GetUserById(string userId);
     }
 }
