@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 

@@ -9,7 +9,8 @@ using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Users;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
-
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -18,6 +19,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private IUserManager UserManager;
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
+        private User loggedUser;
 
 
         public SuggestorController(IMapper mapper, IUserManager userManager, ITelefonicaService telefonicaService)
@@ -30,9 +32,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
+
+            loggedUser = JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("UsuarioLogueado"));
             var clientList = await _telefonicaApi.GetClientes();
             List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
             ViewData["clientList"] = clientsModel;
+            ViewData["loggedUser"] = loggedUser.NombreCompleto;
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
             List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
@@ -213,10 +218,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var paybackDouble = Convert.ToDouble(payback);
                 var planesDef = _mapper.Map<List<OfertPlan>>(planesDefList);
                 var mobileDevicesList = _mapper.Map<List<DevicePymes>>(mobileList);
-
+                var userId = Convert.ToInt32(loggedUser.Id);
 
                 ProposalData proposal = new ProposalData()
                 {
+                    IdUsuario = userId,
                     Client = client,
                     SuggestorList = suggestorList,
                     PlanesDefList = planesDef,

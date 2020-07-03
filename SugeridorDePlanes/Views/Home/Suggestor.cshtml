@@ -21,7 +21,7 @@
 }
 
 @{
-
+    var loggedUser = ViewData["loggedUser"] as Telefonica.SugeridorDePlanes.Models.Users.User;
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorClientModel>;
     var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.OfertActualPlanModel>;
@@ -92,7 +92,7 @@
 
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
-                <label class="input-group-text">Nombre Usuario</label>
+                <label class="input-group-text">@loggedUser.Nombre</label>
             </div>
             <div class="input-group-prepend">
                 <label class="input-group-text">Cerrar sesion</label>

@@ -136,51 +136,50 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     DevicePayment = proposal.DevicePayment,
                     Subsidio = proposal.Subsidio,
                     Guid = Guid.NewGuid().ToString(),
-                    Estado = "Pendiente"
+                    Estado = "Pendiente",
+                    IdUsuario = proposal.IdUsuario
+                    
                 };
                 if (proposal.Finalizada) ProposalDTO.Estado = "Finalizada";
                 var resultProposalAdd = await _ProposalLogic.AddProposal(ProposalDTO);
                 if (resultProposalAdd)
                 {
-                    var ProposalDB = await _ProposalLogic.GetProposalByGuid(ProposalDTO.Guid);
                     bool listAdded = false;
-                    if (ProposalDB != null)
+                    if (proposal.SuggestorList.Count > 0)
                     {
-                        if (proposal.SuggestorList.Count > 0)
+                        var lineasDTO = new List<ProposalLineDTO>();
+                        for (var i = 0; i < proposal.SuggestorList.Count; i++)
                         {
-                            var lineasDTO = new List<ProposalLineDTO>();
-                            for (var i = 0; i < proposal.SuggestorList.Count; i++)
-                            {
-                                lineasDTO.Add(new ProposalLineDTO() { NumeroLinea = proposal.SuggestorList[i].Movil.ToString(), Plan = proposal.PlanesDefList[i].Plan, IdPropuesta = ProposalDB.Id });
+                            lineasDTO.Add(new ProposalLineDTO() { NumeroLinea = proposal.SuggestorList[i].Movil.ToString(), Plan = proposal.PlanesDefList[i].Plan, IdPropuesta = ProposalDTO.Id });
 
-                            }
-                            listAdded = await _ProposalLogic.AddLineasProposal(lineasDTO);
                         }
-                        var equiposDTO = new List<ProposalDeviceDTO>();
-                        if (proposal.MobileDevicesList.Count > 0)
+                        listAdded = await _ProposalLogic.AddLineasProposal(lineasDTO);
+                    }
+                    var equiposDTO = new List<ProposalDeviceDTO>();
+                    if (proposal.MobileDevicesList.Count > 0)
+                    {
+                        foreach (DevicePymes equipo in proposal.MobileDevicesList)
                         {
-                            foreach (DevicePymes equipo in proposal.MobileDevicesList)
-                            {
-                                equiposDTO.Add(new ProposalDeviceDTO() { IdPropuesta = ProposalDB.Id, CODIGO_EQUIPO = equipo.CodigoEquipo });
-                            }
+                            equiposDTO.Add(new ProposalDeviceDTO() { IdPropuesta = ProposalDTO.Id, CODIGO_EQUIPO = equipo.CodigoEquipo });
+                        }
 
-                            var equipAdded = await _ProposalLogic.AddEquiposProposal(equiposDTO);
-                            if (!equipAdded)
-                            {
-                                await _ProposalLogic.DeleteProposalByGuid(ProposalDTO.Guid);
-                                return false;
-                            }
-                        }
-                        if (listAdded)
-                        {
-                            return true;
-                        }
-                        else
+                        var equipAdded = await _ProposalLogic.AddEquiposProposal(equiposDTO);
+                        if (!equipAdded)
                         {
                             await _ProposalLogic.DeleteProposalByGuid(ProposalDTO.Guid);
                             return false;
                         }
-                    }                                       
+                    }
+                    if (listAdded)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        await _ProposalLogic.DeleteProposalByGuid(ProposalDTO.Guid);
+                        return false;
+                    }
+                                                           
                 }
                                
                 return false;
