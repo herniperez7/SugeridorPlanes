@@ -9,17 +9,13 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
     public interface IPropuestaRepository
     {
         Task<List<PropuestaDTO>> GetPropuestas();        
-        Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario);
-        Task<PropuestaDTO> GetPropuestaByGuid(string guid);
-        Task DeletePropuestaByGuid(string guid);
+        Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario);      
         Task<PropuestaDTO> GetPropuestaByDoc(string titular);
         Task<PropuestaDTO> GetPropuesta(string idPropuesta);
-        Task<bool> AddPropuesta(PropuestaDTO propuesta);
-        Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas);
-        Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos);
+        Task<int> InsertProposal(TransactionProposalDTO proposaTransaction);   
         Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta);
-        Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta);        
-        void UpdatePropsal(PropuestaDTO proposal);
-        void UpdateTotalProposal(TransactionProposalDTO proposaTransaction);
+        Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta);
+        Task<bool> UpdatePropsal(PropuestaDTO proposal);
+        Task<bool> UpdateTotalProposal(TransactionProposalDTO transactionProposal);
     }
 }

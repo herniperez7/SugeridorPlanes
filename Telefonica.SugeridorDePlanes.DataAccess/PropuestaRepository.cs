@@ -20,15 +20,15 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
         public async Task<List<PropuestaDTO>> GetPropuestas()
         {
             try
-            {                
-                var proposals = await _context.Propuesta.ToListAsync();                
+            {
+                var proposals = await _context.Propuesta.ToListAsync();
 
                 return proposals;
             }
             catch (Exception ex)
             {
                 throw ex;
-            }            
+            }
         }
 
         public async Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario)
@@ -75,48 +75,21 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<PropuestaDTO> GetPropuestaByGuid(string guid)
+        private async Task<int> AddPropuesta(PropuestaDTO propuesta)
         {
             try
             {
-                var propuesta = await _context.Propuesta.Where(x => x.Guid == guid).FirstOrDefaultAsync();
-
-                return propuesta;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task DeletePropuestaByGuid(string guid)
-        {
-            try
-            {
-                var propuesta = await _context.Propuesta.Where(x => x.Guid == guid).FirstOrDefaultAsync();
-                _context.Propuesta.Remove(propuesta);
-                
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<bool> AddPropuesta(PropuestaDTO propuesta)
-        {
-            try
-            {
-                await _context.Propuesta.AddAsync(propuesta);
+                _context.Propuesta.Update(propuesta);
                 _context.SaveChanges();
-                return true;
+                var proposalId = propuesta.Id;
+                return proposalId;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public async Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas)
+        private async Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas)
         {
             try
             {
@@ -130,7 +103,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos)
+        private async Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos)
         {
             try
             {
@@ -142,6 +115,39 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             {
                 throw ex;
             }
+        }
+
+        public async Task<int> InsertProposal(TransactionProposalDTO proposaTransaction)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                var proposalId = await AddPropuesta(proposaTransaction.Proposal);
+
+                foreach (var line in proposaTransaction.Lines)
+                {
+                    line.IdPropuesta = proposalId;
+                }
+
+                await AddLineasPropuesta(proposaTransaction.Lines);
+
+                foreach (var mobile in proposaTransaction.MobileDevices)
+                {
+                    mobile.IdPropuesta = proposalId;
+                }
+
+                await AddEquiposPropuesta(proposaTransaction.MobileDevices);
+
+                await _context.SaveChangesAsync();
+                transaction.Commit();
+                return proposalId;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw ex;
+            }
+
         }
 
         public async Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta)
@@ -170,14 +176,15 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             {
                 throw ex;
             }
-        }        
+        }
 
-        public async void UpdatePropsal(PropuestaDTO proposal) 
+        public async Task<bool> UpdatePropsal(PropuestaDTO proposal)
         {
             try
             {
                 _context.Propuesta.Update(proposal);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
@@ -185,32 +192,47 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        public async void UpdateTotalProposal(TransactionProposalDTO proposaTransaction) 
+        public async Task<bool> UpdateTotalProposal(TransactionProposalDTO proposaTransaction)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using var transaction = _context.Database.BeginTransaction();
+            try
             {
-                try
-                {
-                    UpdatePropsal(proposaTransaction.Proposal);
-                    UpdateProposalLines(proposaTransaction.Lines);
-                    UpdateProposalMobileDevices(proposaTransaction.MobileDevices);
+                await UpdatePropsal(proposaTransaction.Proposal);
+                var proposalId = proposaTransaction.Proposal.Id;
 
-                    await _context.SaveChangesAsync();
-                    transaction.Commit();
+                foreach (var mobile in proposaTransaction.MobileDevices)
+                {
+                    mobile.IdPropuesta = proposalId;
                 }
-                catch (Exception ex)
+
+                foreach (var line in proposaTransaction.Lines)
                 {
-                    transaction.Rollback();                  
-                }                
+                    line.IdPropuesta = proposalId;
+                }
+
+                await UpdateProposalMobileDevices(proposaTransaction.MobileDevices, proposalId);
+                await UpdateProposalLines(proposaTransaction.Lines, proposalId);
+
+
+                // await _context.SaveChanges();
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw ex;
             }
         }
 
-        private async void UpdateProposalLines(List<LineaPropuestaDTO> proposalLines)
+        private async Task<bool> UpdateProposalLines(List<LineaPropuestaDTO> proposalLines, int proposalId)
         {
             try
             {
-                _context.LineaPropuesta.UpdateRange(proposalLines);
-                await _context.SaveChangesAsync();
+                _context.LineaPropuesta.RemoveRange(_context.LineaPropuesta.Where(x => x.IdPropuesta == proposalId));
+                _context.LineaPropuesta.AddRange(proposalLines);
+                _context.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
@@ -218,12 +240,16 @@ namespace Telefonica.SugeridorDePlanes.DataAccess
             }
         }
 
-        private async void UpdateProposalMobileDevices(List<EquipoPropuestaDTO> mobileList)
+        private async Task<bool> UpdateProposalMobileDevices(List<EquipoPropuestaDTO> mobileList, int proposalId)
         {
             try
             {
-                _context.EquipoPropuesta.UpdateRange(mobileList);
-                await _context.SaveChangesAsync();
+
+                // _context.EquipoPropuesta.UpdateRange(_context.EquipoPropuesta.Where(x => x.IdPropuesta == proposalId));
+                _context.EquipoPropuesta.RemoveRange(_context.EquipoPropuesta.Where(x => x.IdPropuesta == proposalId));
+                _context.EquipoPropuesta.AddRange(mobileList);
+                _context.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {

@@ -7,8 +7,6 @@ using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Users;
-using Telefonica.SugeridorDePlanes.Models.Data;
-using Telefonica.SugeridorDePlanes.Resources.Enums;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -18,25 +16,75 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
 
-
         public ProposalDetails(IMapper mapper, IUserManager userManager, ITelefonicaService telefonicaService)
         {
             UserManager = userManager;
             _telefonicaApi = telefonicaService;
             _mapper = mapper;
-         
         }
 
         public async Task<IActionResult> Index(Propuesta proposal)
-        {
-              var equipos = ViewData["movileDevices"];
-              List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
-              var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-              ViewData["suggestorLine"] = planMapped;
+        {    
+            List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+            var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
+            ViewData["suggestorLine"] = planMapped;
 
-             return View("../UserProposal/ProposalDetails", proposal);
+            return View("../UserProposal/ProposalDetails", proposal);
         }
 
-     
+        [HttpGet]
+        public JsonResult GeneratePdf()
+        {
+            var currentProposal = _telefonicaApi.GetCurrentProposal();
+            var devicePayment = currentProposal.DevicePayment.ToString();
+            var pdfByteArray = GenerateByteArrayPdf(devicePayment);
+            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+            var data = new { status = "ok", result = base64String };
+            return new JsonResult(data);
+        }
+
+        private byte[] GenerateByteArrayPdf(string devicePayment)
+        {
+            try
+            {
+                byte[] pdfByteArray = _telefonicaApi.GeneratePdfFromHtml(devicePayment);
+
+                return pdfByteArray;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<JsonResult> SendMail(string to, string subject, string bodytext, string devicePayment)
+        {
+            try
+            {
+                var byteArray = GenerateByteArrayPdf(devicePayment);
+                var email = new Email
+                {
+                    FromDisplayName = "Gonzalo",
+                    FromEmailAddress = "gjulean1991@hotmail.com",
+                    // ToName = "",
+                    ToEmailAddress = to,
+                    Subject = subject,
+                    Message = bodytext,
+                    Array = byteArray,
+                };
+
+                await _telefonicaApi.SendMail(email);
+
+                var data = new { status = "ok" };
+                return new JsonResult(data);
+            }
+            catch (Exception ex)
+            {
+                var data = new { status = "error" };
+                return new JsonResult(data);
+            }
+        }
+
+
     }
 }

@@ -28,6 +28,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public IActionResult Index()
         {
+            _telefonicaApi.SetCurrentProposal(null);
             var proposals =  _telefonicaApi.GetProposals();    
             return View("Index", proposals);
         }
@@ -45,7 +46,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
             _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-            var planDefList = PopulateDefinitivePlanList(proposal);
+            var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
             _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
             ViewData["planDefList"] = planDefList;
             var indexes = _telefonicaApi.CalculateIndexes();
@@ -58,6 +59,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["currentClient"] = proposal.RutCliente;
 
             _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
+            _telefonicaApi.SetConfirmedEquiposPymes(mobilePymesList);
 
             return View("../Home/Index", planMapped);           
         }
@@ -67,9 +69,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             List<RecomendadorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
             var planMapped = _mapper.Map<List<RecomendadorB2b>, List<RecomendadorB2bModel>>(plansList);
-            var planDefList = PopulateDefinitivePlanList(proposal);
+            var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
+            _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
+            var mobileList = _mapper.Map<List<EquipoPymesModel>>(proposal.Equipos);
+            _telefonicaApi.SetConfirmedEquiposPymes(mobileList);
             ViewData["planDefList"] = planDefList;
             ViewData["suggestorLines"] = planMapped;
+            ViewData["companyName"] = proposal.ClientName;
 
             return View("ProposalDetails", proposal);
         }
@@ -77,6 +83,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> OpenProposal(string proposaId)
         {
             var proposal = _telefonicaApi.GetProposalById(proposaId);
+            _telefonicaApi.SetCurrentProposal(proposal);
 
             if(proposal.Estado == "Finalizada")
             {
@@ -91,27 +98,5 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         }
 
-
-        private List<PlanDefinitivolModel> PopulateDefinitivePlanList(Propuesta proposal) 
-        {
-            List<PlanDefinitivolModel> planDefinitveList = new List<PlanDefinitivolModel>();
-            var idPlan = 1;
-            foreach (var linea in proposal.Lineas)
-            {
-                var planModel = new PlanDefinitivolModel()
-                {
-                    RecomendadorId = idPlan,
-                    Plan = linea.Plan.Plan,
-                    Bono = linea.Plan?.Bono_ != null ? linea.Plan.Bono_ / 1024 : 0,
-                    Roaming = linea.Plan.Roaming,
-                    TMM_s_iva = (decimal)linea.Plan.TmM_s_iva
-                };
-
-                planDefinitveList.Add(planModel);
-                idPlan++;
-            }
-
-            return planDefinitveList;
-        }
     }
 }

@@ -56,10 +56,14 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="Scripts" />
-    <Folder Include="dbo" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Scripts\SugeridorDePlanes.sql" />
+    <Build Include="dbo\Tables\Sugeridor_Clientes.sql" />
+    <Build Include="dbo\Tables\RECOMENDADOR_B2B.sql" />
+    <Build Include="dbo\Tables\Propuestas.sql" />
+    <Build Include="dbo\Tables\Planes_Oferta_Actual.sql" />
+    <Build Include="dbo\Tables\LineaPropuestas.sql" />
+    <Build Include="dbo\Tables\EquipoPymes.sql" />
+    <Build Include="dbo\Tables\EquipoPropuestas.sql" />
   </ItemGroup>
 </Project>

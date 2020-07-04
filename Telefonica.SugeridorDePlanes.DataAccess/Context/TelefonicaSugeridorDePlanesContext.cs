@@ -319,7 +319,6 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
                 entity.Property(e => e.Documento)
                     .HasColumnName("Documento");
-
                 entity.Property(e => e.IdUsuario)
                     .HasColumnName("IdUsuario");
                 entity.Property(e => e.Payback)
@@ -330,8 +329,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                    .HasColumnName("PagoEquipos");
                 entity.Property(e => e.Subsidio)
                    .HasColumnName("Subsidio");
-                entity.Property(e => e.Guid)
-                   .HasColumnName("Guid");
+                  entity.Property(e => e.CreatedDate)
+                   .HasColumnName("FechaCreacion");             
 
             });
 

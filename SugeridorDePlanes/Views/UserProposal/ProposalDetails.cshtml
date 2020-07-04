@@ -18,6 +18,7 @@
 
     var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
+    var companyName = ViewData["companyName"];
     var emptyPlans = true;
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
@@ -35,32 +36,23 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+    <script src="~/js/ProposalDetail/ProposaldetailsScript.js"></script>
 </head>
 <body>
-
     <script>
-        var gbUserProposals = "@Url.Action("Index", "UserProposal")"
-
-
-        function proposalMenu() {
-            window.location.href = gbUserProposals;
-        }
+        var gbUserProposals = "@Url.Action("Index", "UserProposal")";
+        var gbExportPdf = "@Url.Action("GeneratePdf", "ProposalDetails")";
+        var gbSendMail = "@Url.Action("SendMail", "ProposalDetails")";
     </script>
-
     <style>
-        #IndexesValue input{
+        #IndexesValue input {
             margin-right: 35px;
         }
     </style>
 
-    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3" >
-        <div class="viewTitle" >
-            <h2>Detalles propuesta</h2>
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
+        <div class="viewTitle">
+            <h2>Detalles propuesta de: <span id="companyNameTitle">@companyName</span></h2>
         </div>
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
@@ -73,6 +65,18 @@
 
     </nav>
 
+    <div id="loaderDiv" style="display:none">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+
+        </div>
+        <div class="d-flex justify-content-center">
+            <h5>Aguarde...</h5>
+        </div>
+    </div>
+    
 
     <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
         <div class="row">
@@ -220,7 +224,7 @@
                                     <th class="long-column" scope="col">Plan</th>
                                     <th class="long-column" scope="col">TMM (sin iva)</th>
                                     <th class="long-column" scope="col">Datos del bono</th>
-                                    <th scope="col">Roaming</th>   
+                                    <th scope="col">Roaming</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -246,7 +250,7 @@
                                             <td>$ @FormatCultureNumber(plan.value.TMM_s_iva)</td>
                                             <td>@bonoGb Gb</td>
                                             <td>@plan.value.Roaming</td>
-                                           
+
                                         </tr>
                                     }
                                     <tr>
@@ -305,25 +309,25 @@
                                             @foreach (var device in Model.Equipos)
                                             {
                                                 totalAmount += device.PrecioSinIva;
-                                    <tr>
-                                        <td>@device.Marca</td>
-                                        <td>@device.Nombre</td>
-                                        <td>$ @device.PrecioSinIva</td>
+                                                <tr>
+                                                    <td>@device.Marca</td>
+                                                    <td>@device.Nombre</td>
+                                                    <td>$ @device.PrecioSinIva</td>
 
-                                    </tr>
-                                }
-                                    <tr>
-                                        <td class="total-column">
-                                            Totales
-                                        </td>
-                                        <td class="total-column">
-                                            @Model.Equipos.Count()
-                                        </td>
-                                        <td class="total-column">
-                                           $ @totalAmount
-                                        </td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="total-column">
+                                                    Totales
+                                                </td>
+                                                <td class="total-column">
+                                                    @Model.Equipos.Count()
+                                                </td>
+                                                <td class="total-column">
+                                                    $ @totalAmount
+                                                </td>
 
-                                    </tr>
+                                            </tr>
 
                                         }
                                         else
@@ -369,20 +373,17 @@
                             </div>
 
                         </div>
+
                     </div>
 
-                    <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="exportPdfBtn">
+                    <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="exportPdfBtn" onclick="exportPdf()">
                         <img src="@Url.Content("~/img/icons/IconPdf.png")" />
                     </button>
-                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="sendEmailBtn">
+                    <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="sendEmailBtn" onclick="openEmailModal()">
                         <img src="@Url.Content("~/img/icons/iconMail.png")" />
                     </button>
                 </fieldset>
-
             </div>
-
-
-
 
             @if (clientList != null && clientList.Count() > 4)
             {
@@ -390,8 +391,42 @@
                     $(".tableFieldset .tableFixHead").css("height", "230px");
                 </script>
             }
+        </div>
 
+
+        <div class="modal fade" id="emailModal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                        <h2 style="color:white;text-shadow: 2px 2px #25af60">Enviar email</h2>
+
+                    </div>
+
+                    <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
+                        <h5 for="toTxt">Para</h5>
+                        <input type="email" class="form-control" id="toTxt" placeholder="nombre@dominio.com">
+                        <span style="display:none" class="text-danger">Email requerido</span>
+                    </div>
+
+                    <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
+                        <h5 for="subjectTxt">Asunto</h5>
+                        <input type="email" class="form-control" id="subjectTxt">
+                        <span style="display:none" class="text-danger">Asunto requerido</span>
+                    </div>
+
+                    <div class="form-group" style="padding:10px">
+                        <h5 for="bodytxt">Mensaje</h5>
+                        <textarea class="form-control" id="bodytxt" rows="3"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal">Enviar</button>
+                    </div>
+                </div>
 
             </div>
+        </div>
+
 </body>
 </html>

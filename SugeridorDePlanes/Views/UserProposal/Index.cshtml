@@ -27,25 +27,14 @@
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
-
     <script>
         function openProposal(val)
         {
             window.location.href = "@Url.Action("OpenProposal", "UserProposal")" + '?proposaId=' + val;
         }
-
-
     </script>
-
 </head>
 <body>
-
-
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
         <div class="viewTitle">
             <h2>Lista de propuestas</h2>
@@ -85,20 +74,19 @@
                             <tbody>
                                 @if (Model != null)
                                 {
-                                    DateTime proposalDate = DateTime.Today;
                                     @foreach (var propuesta in Model)
                                     {
-                                <tr>
-                                    <td>@propuesta.ClientName</td>
-                                    <td>@propuesta.Lineas.Count</td>
-                                    <td>@propuesta.Equipos.Count</td>
-                                    <td>$ @propuesta.Subsidio</td>
-                                    <td>@propuesta.Payback</td>
-                                    <td>$ @propuesta.DevicePayment</td>
-                                    <td>@propuesta.Estado</td>
-                                    <td>@proposalDate.ToShortDateString()</td>
-                                    <td class="editRow " onclick="openProposal(@propuesta.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
-                                </tr>
+                                        <tr>
+                                            <td>@propuesta.ClientName</td>
+                                            <td>@propuesta.Lineas.Count</td>
+                                            <td>@propuesta.Equipos.Count</td>
+                                            <td>$ @propuesta.Subsidio</td>
+                                            <td>@propuesta.Payback</td>
+                                            <td>$ @propuesta.DevicePayment</td>
+                                            <td>@propuesta.Estado</td>
+                                            <td>@propuesta.CreatedDate</td>
+                                            <td class="editRow " onclick="openProposal(@propuesta.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                        </tr>
                                     }
                                 }
 
@@ -106,11 +94,11 @@
                         </table>
 
                     </div>
-                 
+
                 </fieldset>
             </div>
-            </div>
         </div>
+    </div>
 
 
 </body>

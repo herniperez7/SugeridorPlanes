@@ -48,19 +48,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 
                 email.Body = body.ToMessageBody();
 
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
-                {
-                    client.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                using var client = new MailKit.Net.Smtp.SmtpClient();
+                client.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                    // Start of provider specific settings
-                    await client.ConnectAsync(config.SmtpHost, config.Port, false).ConfigureAwait(false);
-                    await client.AuthenticateAsync(config.UserName, config.Password).ConfigureAwait(false);
-                    // End of provider specific settings
+                // Start of provider specific settings
+                await client.ConnectAsync(config.SmtpHost, config.Port, false).ConfigureAwait(false);
+                await client.AuthenticateAsync(config.UserName, config.Password).ConfigureAwait(false);
+                // End of provider specific settings
 
-                    await client.SendAsync(email).ConfigureAwait(false);
-                    await client.DisconnectAsync(true).ConfigureAwait(false);
-                }
+                await client.SendAsync(email).ConfigureAwait(false);
+                await client.DisconnectAsync(true).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models.PDF;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
@@ -19,12 +16,16 @@ namespace Telefonica.SugeridorDePlanes.Code
         private List<RecomendadorB2b> _currentPlans;
         private List<PlanDefinitivolModel> _curretDefinitvePlans;
         private SugeridorClientes _currentClient;
-        private List<SugeridorClientes> _currentClients;        
+        private List<SugeridorClientes> _currentClients;
 
         //Lista total de moviles
         private List<EquipoPymesModel> _equiposPymes;
         //Lista de moviles seleccionados para incorporar en la propuesta
         private List<EquipoPymesModel> _currentEquiposPymes;
+        //Lista de moviles que se confirmaron para la propuesta
+        private List<EquipoPymesModel> _confirmedEquiposPymes;
+
+        private Propuesta _CurrentProposal;
 
         public TelefonicaService(IClient client, IMapper mapper)
         {
@@ -33,8 +34,29 @@ namespace Telefonica.SugeridorDePlanes.Code
             _mapper = mapper;
             PopulateEquiposPymesList(); //---> provisorio, ubicar el metodo cuando se leguea
             _currentEquiposPymes = new List<EquipoPymesModel>();
+            _confirmedEquiposPymes = new List<EquipoPymesModel>();
         }
 
+        public List<EquipoPymesModel> GetConfirmedEquiposPymes()
+        {
+            var equiposPymes = _confirmedEquiposPymes;
+            return equiposPymes;
+        }
+
+        public void SetConfirmedEquiposPymes(List<EquipoPymesModel> currentList) 
+        {
+            _confirmedEquiposPymes = currentList;
+        }
+
+        public Propuesta GetCurrentProposal()
+        {
+            return _CurrentProposal;
+        }
+
+        public void SetCurrentProposal(Propuesta proposal)
+        {
+            this._CurrentProposal = proposal;
+        }
 
         public async Task<List<SugeridorClientes>> GetClientes()
         {
@@ -150,10 +172,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             _curretDefinitvePlans = currentPlans;
         }
 
-        public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan) 
+        public void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan)
         {
             var defPlansList = _curretDefinitvePlans;
-            
+
             _curretDefinitvePlans = defPlansList.Select(x =>
             new PlanDefinitivolModel
             {
@@ -168,15 +190,16 @@ namespace Telefonica.SugeridorDePlanes.Code
 
             foreach (var plan in _curretDefinitvePlans)
             {
-                if (plan.RecomendadorId == updatePlan.PlanToEdit) {
+                if (plan.RecomendadorId == updatePlan.PlanToEdit)
+                {
                     plan.Plan = updatePlan.Plan;
                     plan.Bono = long.Parse(updatePlan.Bono);
                     plan.Roaming = updatePlan.Roaming;
                     plan.TMM_s_iva = decimal.Parse(updatePlan.TMM);
                     plan.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
                 }
-            }           
-        }      
+            }
+        }
 
         private void UpdateDefinitivePlans(List<RecomendadorB2b> planList)
         {
@@ -243,6 +266,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 foreach (var mobile in _equiposPymes)
                 {
                     mobile.Id = id.ToString();
+                    mobile.PrecioSinIva = Math.Round(mobile.PrecioSinIva, 1);
                     id++;
                 }
 
@@ -254,7 +278,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         }
 
         public List<EquipoPymesModel> GetEquiposPymesList()
-        {            
+        {
             return _equiposPymes.ToList();
         }
 
@@ -263,7 +287,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _currentEquiposPymes;
         }
 
-        public void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList) 
+        public void SetCurrentEquiposPymesList(List<EquipoPymesModel> mobileList)
         {
             _currentEquiposPymes = mobileList;
         }
@@ -274,27 +298,44 @@ namespace Telefonica.SugeridorDePlanes.Code
         public void UpdateCurrentEquiposPymesList(string code, bool delete)
         {
             EquipoPymesModel mobile = null;
-            mobile = _equiposPymes.Where(x => x.CodigoEquipo == code).FirstOrDefault();
+
             if (delete)
             {
-                if(mobile != null)
+                mobile = _currentEquiposPymes.Where(x => x.Id == code).FirstOrDefault();
+                if (mobile != null)
                 {
                     _currentEquiposPymes.Remove(mobile);
-                }                
+                }
             }
             else
-            {                
-                if(mobile != null)
+            {
+                mobile = _equiposPymes.Where(x => x.Id == code).FirstOrDefault();
+                if (mobile != null)
                 {
                     _currentEquiposPymes.Add(mobile);
                 }
             }
         }
 
-        public byte[] GeneratePdfFromHtml(ProposalPdf proposalPdf)
+        public byte[] GeneratePdfFromHtml(string devicePayment)
         {
             try
             {
+                var mobileList = GetConfirmedEquiposPymes();
+                var client = GetCurrentClient();
+                var planesDefList = GetCurrentDefinitivePlans();
+                var devicePaymentDouble = Convert.ToDouble(devicePayment);
+                var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
+                var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
+
+                var proposalPdf = new ProposalPdf
+                {
+                    MobileList = mobileDevicesList,
+                    PlanList = planesDef,
+                    CompanyName = client.Titular,
+                    DevicePayment = devicePaymentDouble
+                };
+
                 var pdfByteArray = _client.GeneratePdfAsync(proposalPdf).Result;
 
                 return pdfByteArray;
@@ -305,21 +346,28 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public bool AddProposal(ProposalData proposal)
+        public async Task<Propuesta> AddProposal(ProposalData proposal)
         {
             try
             {
-                if(proposal != null)
+                Propuesta proposalResult = null;
+                Propuesta currentProposal = _CurrentProposal;
+                if (proposal != null)
                 {
-                    var result = _client.AddPropuestaAsync(proposal).Result;
-                    return result;
+                    if (_CurrentProposal != null)
+                    {
+                        await SaveProposal(proposal.DevicePayment.ToString(), proposal.Finalizada);
+                    }
+                    else 
+                    {
+                        proposalResult = await _client.AddPropuestaAsync(proposal);
+                    }                    
                 }
-
-                return false;
+                return proposalResult;
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 
@@ -367,10 +415,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             try
             {
 
-                    var propuestas = _client.GetPropuestasAsync().Result;
-                    var propuestasList = propuestas.ToList();
+                var propuestas = _client.GetPropuestasAsync().Result;
+                var propuestasList = propuestas.ToList();
 
-                    return propuestasList;
+                return propuestasList;
 
             }
             catch (Exception ex)
@@ -387,7 +435,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
                 if (idProposal != null && idProposal != String.Empty)
                 {
-                    proposal = _client.GetPropuestaAsync(idProposal).Result; 
+                    proposal = _client.GetPropuestaAsync(idProposal).Result;
                 }
 
                 return proposal;
@@ -399,11 +447,11 @@ namespace Telefonica.SugeridorDePlanes.Code
         }
 
 
-        public decimal GetSubsidy() 
+        public decimal GetSubsidy()
         {
             decimal subsidy = 0;
 
-            foreach (var m in _currentEquiposPymes)
+            foreach (var m in _confirmedEquiposPymes)
             {
                 subsidy += m.PrecioSinIva;
             }
@@ -411,7 +459,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return subsidy;
         }
 
-        public decimal GetPayback() 
+        public decimal GetPayback()
         {
             decimal subsidy = GetSubsidy();
             decimal income = 0;
@@ -422,7 +470,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 income += plan.TMM_s_iva;
             }
 
-            if (income > 0) 
+            if (income > 0)
             {
                 payback = subsidy / income;
                 payback = Math.Round(payback, 1);
@@ -431,7 +479,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return payback;
         }
 
-        public IndexModel CalculateIndexes() 
+        public IndexModel CalculateIndexes()
         {
             List<RecomendadorB2b> plansList = _currentPlans;
             var defPlansList = _curretDefinitvePlans;
@@ -468,11 +516,11 @@ namespace Telefonica.SugeridorDePlanes.Code
                 }
                 else if (billingGap < 0)
                 {
-                     billingStatus = BillingStatus.Lower;
+                    billingStatus = BillingStatus.Lower;
                 }
                 else if (billingGap == 0)
                 {
-                     billingStatus = BillingStatus.Equal;
+                    billingStatus = BillingStatus.Equal;
                 }
             }
 
@@ -481,15 +529,132 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 BillingGap = billingGap,
                 FixedGap = fixedGap,
-                 BillingStatus = billingStatus,
+                BillingStatus = billingStatus,
                 TmmPrestacion = tmmSumatory
             };
             return gapModel;
         }
 
-        public void EmptyEquipoPymesCurrentList() {
-
+        public void EmptyEquipoPymesCurrentList()
+        {
             _currentEquiposPymes = new List<EquipoPymesModel>();
+        }
+
+
+        /// <summary>
+        /// Metodo para actualizar el estado de la propuesta
+        /// </summary>
+        /// <param name="proposal"></param>
+        public async void UpdateProposal(ProposalData proposal)
+        {
+            try
+            {
+                await _client.UpdateProposalAsync(proposal);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Metodo para actualiar toda la propuesta con sus planes y equipos
+        /// </summary>
+        public async Task<bool> UpdateTotalProposal(ProposalData proposal)
+        {
+            try
+            {
+                await _client.UpdateTotalProposalAsync(proposal);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public ProposalData GetProposalData(string devicePayment, bool isCreated)
+        {
+            var planesDefList = GetCurrentDefinitivePlans();
+            var mobileList = GetConfirmedEquiposPymes();
+            var subsidy = GetSubsidy();
+            var payback = GetPayback();
+            var client = GetCurrentClient();
+            var suggestorList = GetCurrentPlans();
+            var devicePaymentDouble = Convert.ToDouble(devicePayment);
+            var subsidioDouble = Convert.ToDouble(subsidy);
+            var paybackDouble = Convert.ToDouble(payback);
+            var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
+            var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
+
+            ProposalData proposalData = new ProposalData()
+            {
+                Client = client,
+                SuggestorList = suggestorList,
+                PlanesDefList = planesDef,
+                DevicePayment = devicePaymentDouble,
+                Payback = paybackDouble,
+                Subsidio = subsidioDouble,
+                MobileDevicesList = mobileDevicesList,
+                Finalizada = isCreated
+            };
+
+            return proposalData;
+        }
+
+        public async Task<bool> SaveProposal(string devicePayment, bool isFinalized)
+        {
+            try
+            {
+                var currentProposal = GetCurrentProposal();
+                //Si no hay una propuesta activa, entonces se esta creando una nueva, de lo contrario se actualizando la actual
+                bool isCreated = currentProposal == null; 
+                var proposalData = GetProposalData(devicePayment, isCreated);
+
+                //si no hay una propuesta activa, se crea
+                if (isCreated)
+                {
+                    var proposalRecuest = await AddProposal(proposalData);
+                    SetCurrentProposal(proposalRecuest);
+                }
+                else
+                {
+                    proposalData.Id = currentProposal.Id;
+                    proposalData.Finalizada = isFinalized;
+                    await UpdateTotalProposal(proposalData);
+                    isCreated = false;
+                }
+
+                return isCreated;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public List<PlanDefinitivolModel> PopulateDefinitivePlanList(Propuesta proposal)
+        {
+            List<PlanDefinitivolModel> planDefinitveList = new List<PlanDefinitivolModel>();
+            var idPlan = 1;
+            foreach (var linea in proposal.Lineas)
+            {
+                var planModel = new PlanDefinitivolModel()
+                {
+                    RecomendadorId = idPlan,
+                    Plan = linea.Plan.Plan,
+                    Bono = linea.Plan?.Bono_ != null ? linea.Plan.Bono_ / 1024 : 0,
+                    Roaming = linea.Plan.Roaming,
+                    TMM_s_iva = (decimal)linea.Plan.TmM_s_iva
+                };
+
+                planDefinitveList.Add(planModel);
+                idPlan++;
+            }
+
+            return planDefinitveList;
         }
 
     }

@@ -43,24 +43,11 @@
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
-
-
-    @* <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-            <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />*@
-
-
+    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />   
 </head>
 <body>
     <script>
-        var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
+        var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan", "Home")";
         var gbGetMovilInfoUrl = "@Url.Action("GetMovilInfo", "Home")";
         var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Home")";
         var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Home")";
@@ -128,6 +115,18 @@
 
         </form>
     </nav>
+
+    <div id="loaderDiv" style="display:none">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+
+        </div>
+        <div class="d-flex justify-content-center">
+            <h5>Aguarde...</h5>
+        </div>
+    </div>
 
     <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
         <div class="row">
@@ -580,7 +579,7 @@
                             <div style="display: table-cell;vertical-align: middle;text-align: center;">
 
                                 <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarPropuestaBtn" onclick="generarPropuesta()">Generar propuesta</button>
-                             
+
                             </div>
 
 
@@ -683,7 +682,7 @@
             <div class="modal-dialog">
 
                 <div class="modal-content">
-                   
+
                     <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
                         <h2 style="color:white;text-shadow: 2px 2px #25af60">Seleccione un plan</h2>
 
@@ -714,8 +713,7 @@
                         </table>
                     </div>
 
-                    <div class="modal-footer">
-                        @*<button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>*@
+                    <div class="modal-footer">               
                         <button type="button" class="btn btn-outline-success" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
 
                     </div>
@@ -766,29 +764,28 @@
         <div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-notify modal-info modal-dialog-centered" role="document">
-       
+
                 <div class="modal-content text-center">
-              
+
                     <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
                         <h2 style="color:white;text-shadow: 2px 2px #25af60">Propuesta guardada</h2>
-                      
                     </div>
                     <div class="modal-body">
 
                         <img src="@Url.Content("~/img/icons/check1.png")" />
 
-                        <h4>La propuesta se guardó exitosamente!</h4>
+                        <h4 id="saveProposaltext">La propuesta se guardó exitosamente!</h4>
 
                     </div>
 
                     <div class="modal-footer flex-center">
-                        <button type="button" class="btn btn-outline-success"  data-dismiss="modal">aceptar</button>                   
+                        <button type="button" class="btn btn-outline-success" data-dismiss="modal">aceptar</button>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
 
-        
+
 
 
         <script src="~/js/Sugeridor/SugeridorScripts.js"></script>

@@ -26,12 +26,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 
         public byte[] GeneratePdfFromHtml(List<EquipoPymes> movilDevices, List<PlanesOferta> planList, string companyName, double devicePayment)
         {
+            //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             try
             {
-                //directorio temporal que va a alojar provisoriamente los html que se van a modificar y los pdfs 
-                string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                Directory.CreateDirectory(tempDirectory);
-
+                Directory.CreateDirectory(tempDirectory);  
                 CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
                 GenerateHtml(tempDirectory, movilDevices, planList, companyName, devicePayment); //modifico las copias generadas
                 ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
@@ -40,12 +39,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
+                DeleteDirectory(tempDirectory);
                 throw ex;
             }
             
         }
-
-
 
 
         /// <summary>
@@ -71,6 +69,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
+                DeleteDirectory(directoryPath);
                 throw ex;
             }
         }
@@ -126,7 +125,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-
+                DeleteDirectory(directoryUrl);
                 throw ex;
             }
         }
@@ -234,7 +233,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 return movilPdfList;
             }
             catch (Exception ex)
-            {
+            {               
                 throw ex;
             }
         }
@@ -293,6 +292,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
+                DeleteDirectory(directoryPath);
                 throw ex;
             }
         }
@@ -321,7 +321,6 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 //Open the output file
                 sourceDocument.Open();
 
-
                 foreach (var item in lstFiles)
                 {
                     document.LoadFromFile(item);
@@ -346,16 +345,27 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 byte[] bytes =  File.ReadAllBytes(pdfFilePath);
 
                 //elimino el directorio temporal
-                Directory.Delete(directoryPath, true);
+                DeleteDirectory(directoryPath);
 
                 return bytes;
             }
 
             catch (Exception ex)
             {
+                DeleteDirectory(directoryPath);
                 throw ex;
             }
 
+        }
+
+        private void DeleteDirectory(string directoryPath) 
+        {
+            bool exist = Directory.Exists(directoryPath);
+            if (exist) 
+            {
+                //elimino el directorio temporal
+                Directory.Delete(directoryPath, true);
+            }
         }
     }
 }
