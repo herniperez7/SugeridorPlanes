@@ -72,7 +72,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
            
             var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
             _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
-            var mobileList = _mapper.Map<List<EquipoPymesModel>>(proposal.Equipos);
+            var mobileList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);
             _telefonicaApi.SetConfirmedEquiposPymes(mobileList);
             ViewData["planDefList"] = planDefList;
             List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);

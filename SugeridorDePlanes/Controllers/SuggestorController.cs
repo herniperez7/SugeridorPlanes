@@ -8,6 +8,8 @@ using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Users;
 using Telefonica.SugeridorDePlanes.Models.Data;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -29,12 +31,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-            loggedUser = JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("UsuarioLogueado"));
+           // loggedUser = JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("UsuarioLogueado"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
             var clientList = await _telefonicaApi.GetClientes();
             List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
             ViewData["clientList"] = clientsModel;
-            ViewData["loggedUser"] = loggedUser.NombreCompleto;
+            // ViewData["loggedUser"] = loggedUser.NombreCompleto;
+            ViewData["loggedUser"] = "Jose perez";
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
             List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
@@ -52,6 +55,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["payback"] = 0;
             ViewData["currentClient"] = "null";
             _telefonicaApi.SetCurrentProposal(null);
+
 
 
             return View("../Home/Suggestor", planMapped);
@@ -202,7 +206,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             try
             {
                 var porposalData = _telefonicaApi.GetProposalData(devicePayment, true);
-                Propuesta requestResult = await _telefonicaApi.AddProposal(porposalData);
+                Proposal requestResult = await _telefonicaApi.AddProposal(porposalData);
                 _telefonicaApi.EmptyEquipoPymesCurrentList();
                 return true;
             }

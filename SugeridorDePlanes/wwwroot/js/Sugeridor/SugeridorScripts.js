@@ -490,8 +490,8 @@ function exportPdf() {
    
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
     var exportText = "Exportar Proposal";
-    $("#pdfExportBtn").html(loading);
-    $("#pdfExportBtn").prop("disabled", true);
+    $("#generarProposalBtn").html(loading);
+    $("#generarProposalBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
     if (devicePayment == "") devicePayment = "0";
     $("#loaderDiv").show();
@@ -504,8 +504,8 @@ function exportPdf() {
             if (data.status === "ok") {
                 var pdfBase64 = base64ToArrayBuffer(data.result);
                 saveByteArray("presupuesto-" + companyName, pdfBase64);
-                $("#generarPropuestaBtn").html(exportText);
-                $("#generarPropuestaBtn").prop("disabled", false);
+                $("#generarProposalBtn").html(exportText);
+                $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
             }            
         }
@@ -513,15 +513,10 @@ function exportPdf() {
 }
 
 
-function generarProposal() {
-
-    //$("#pdfExportBtn").prop("disabled", true);
-    var devicePayment = $("#pagoEquiposTxt").val();
-    var subsidio = $("#subsidioTxt").val();
-    var payback = $("#paybackTxt").val(); 
+function generarProposal() {   
+    var devicePayment = $("#pagoEquiposTxt").val();  
     if (devicePayment == "") devicePayment = "0";
-    $("#loaderDiv").show();
-    var companyName = $("#clientSelect option:selected").text();
+    $("#loaderDiv").show();    
     $.ajax({
         type: "POST",
         url: gbGenerateProposal + '?devicePayment=' + devicePayment,

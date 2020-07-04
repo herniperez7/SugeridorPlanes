@@ -43,29 +43,25 @@
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
-    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">*@
-    <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
-    @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>*@
+    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />    
+   <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
+   
 
 </head>
 <body>
     <script>
         var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
-        var gbGetMovilInfoUrl = "@Url.Action("GetMovilInfo", "Home")";
-        var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Home")";
-        var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Home")";
-        var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Home")";
-        var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
-        var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
-        var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
-        var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
-        var gbSendMail = "@Url.Action("SendMail", "Home")";
-        var gbGenerateProposal = "@Url.Action("GenerateProposal", "Home")";
-        var gbSaveProposal = "@Url.Action("SaveProposal", "Home")";
+        var gbGetMovilInfoUrl = "@Url.Action("GetMovilInfo", "Suggestor")";
+        var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Suggestor")";
+        var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Suggestor")";
+        var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Suggestor")";
+        var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Suggestor")";
+        var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Suggestor")";
+        var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Suggestor")";
+        var gbExportPdf = "@Url.Action("GeneratePdf", "Suggestor")";
+        var gbSendMail = "@Url.Action("SendMail", "Suggestor")";
+        var gbGenerateProposal = "@Url.Action("GenerateProposal", "Suggestor")";
+        var gbSaveProposal = "@Url.Action("SaveProposal", "Suggestor")";
         var gbCurrentClient = @ViewData["currentClient"];
         var gbUserProposals = "@Url.Action("ProposalList", "UserProposal")";
 
@@ -173,6 +169,18 @@
         </ul>
     </nav>
     <div class="area">
+
+        <div id="loaderDiv" style="display:none">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+            </div>
+            <div class="d-flex justify-content-center">
+                <h5>Aguarde...</h5>
+            </div>
+        </div>
         <div class="pl-md-5 pr-md-5 pt-md-3" style="margin-left:30px">
             <div class="row">
                 <div class="col-lg-6 col-sm-12 col-md-12">
@@ -624,11 +632,7 @@
                                 <div style="display: table-cell;vertical-align: middle;text-align: center;">
 
                                     <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarProposalBtn" onclick="generarProposal()">Generar Proposal</button>
-                                    @*<button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
-                                        Exportar Proposal
-                                    </button>*@
-                                    @*<button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>*@
-
+                                   
                                 </div>
 
 
@@ -818,14 +822,14 @@
                     <div class="modal-content text-center">
 
                         <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
-                            <h2 style="color:white;text-shadow: 2px 2px #25af60">Proposal guardada</h2>
+                            <h2 style="color:white;text-shadow: 2px 2px #25af60">Propuesta guardada</h2>
 
                         </div>
                         <div class="modal-body">
 
                             <img src="@Url.Content("~/img/icons/check1.png")" />
 
-                            <h4>La Proposal se guardó exitosamente!</h4>
+                            <h4 id="saveProposaltext">La propuesta se guardó exitosamente!</h4>
 
                         </div>
 

@@ -123,8 +123,6 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 throw ex;
             }
-
-
         }
 
         public async Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber)
@@ -362,8 +360,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                     }
                     else 
                     {
-                        // descomentar
-                       // proposalResult = await _client.AddPropuestaAsync(proposal);
+                        proposalResult = await _client.AddProposalAsync(proposal);
                     }                    
                 }
                 return proposalResult;
@@ -566,33 +563,14 @@ namespace Telefonica.SugeridorDePlanes.Code
             _currentEquiposPymes = new List<DevicePymesModel>();
         }
 
-
-        /// <summary>
-        /// Metodo para actualizar el estado de la propuesta
-        /// </summary>
-        /// <param name="proposal"></param>
-        public async void UpdateProposal(ProposalData proposal)
-        {
-            try
-            {
-                //descomentar
-               // await _client.UpdateProposalAsync(proposal);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         /// <summary>
         /// Metodo para actualiar toda la propuesta con sus planes y equipos
         /// </summary>
         public async Task<bool> UpdateTotalProposal(ProposalData proposal)
         {
             try
-            {
-                //descomentar
-               // await _client.UpdateTotalProposalAsync(proposal);
+            {                
+               await _client.UpdateTotalProposalAsync(proposal);
                 return true;
             }
             catch (Exception ex)
