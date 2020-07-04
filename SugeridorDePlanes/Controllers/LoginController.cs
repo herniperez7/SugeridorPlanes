@@ -27,7 +27,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             //TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
           
-                var loggedUser = new TelefonicaModel.User() { Nombre = "Usuario1" ,Email = "Usuario1@gmail.com",Id=1};
+                var loggedUser = new TelefonicaModel.User() { NombreCompleto = "Usuario1" ,Email = "Usuario1@gmail.com",Id=1 , Rol = new TelefonicaModel.UsersRole.Administrative()};
                 HttpContext.Session.SetString("UsuarioLogueado", JsonConvert.SerializeObject(loggedUser));
                 ViewData["UsuarioLogueado"] = loggedUser;
                 

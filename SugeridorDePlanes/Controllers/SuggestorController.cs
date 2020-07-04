@@ -32,7 +32,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             loggedUser = JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("UsuarioLogueado"));
             var clientList = await _telefonicaApi.GetClientes();
             List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);

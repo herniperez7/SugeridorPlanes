@@ -27,7 +27,7 @@ namespace Telefonica.SugeridorDePlanes.Models.Users
                     results = dSearch.FindOne();
 
                     string NTuserName = results.GetDirectoryEntry().Properties["SAMAccountName"].Value.ToString();
-                    User usuarioLogueado = new User() { Nombre = userName};
+                    User usuarioLogueado = new User() { NombreCompleto = userName};
                     
                     return usuarioLogueado;
 
