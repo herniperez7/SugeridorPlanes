@@ -9,11 +9,11 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
     /// </summary>
     public class TransactionProposalDTO
     {
-        public PropuestaDTO Proposal { get; set; }
+        public ProposalDTO Proposal { get; set; }
 
-        public List<LineaPropuestaDTO> Lines { get; set; }
+        public List<ProposalLineDTO> Lines { get; set; }
 
-        public List<EquipoPropuestaDTO> MobileDevices { get; set; }
+        public List<ProposalDeviceDTO> MobileDevices { get; set; }
 
     }
 }

@@ -26,7 +26,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         //Lista de moviles que se confirmaron para la propuesta
         private List<DevicePymesModel> _confirmedEquiposPymes;
 
-        private Propuesta _CurrentProposal;
+        private Proposal _CurrentProposal;
 
         public TelefonicaService(IClient client, IMapper mapper)
         {
@@ -39,28 +39,28 @@ namespace Telefonica.SugeridorDePlanes.Code
             _confirmedEquiposPymes = new List<DevicePymesModel>();
         }
 
-        public List<EquipoPymesModel> GetConfirmedEquiposPymes()
+        public List<DevicePymesModel> GetConfirmedEquiposPymes()
         {
             var equiposPymes = _confirmedEquiposPymes;
             return equiposPymes;
         }
 
-        public void SetConfirmedEquiposPymes(List<EquipoPymesModel> currentList) 
+        public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList) 
         {
             _confirmedEquiposPymes = currentList;
         }
 
-        public Propuesta GetCurrentProposal()
+        public Proposal GetCurrentProposal()
         {
             return _CurrentProposal;
         }
 
-        public void SetCurrentProposal(Propuesta proposal)
+        public void SetCurrentProposal(Proposal proposal)
         {
             this._CurrentProposal = proposal;
         }
 
-        public async Task<List<SugeridorClientes>> GetClientes()
+        public async Task<List<SuggestorClient>> GetClientes()
         {
             try
             {
@@ -169,7 +169,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             return _curretDefinitvePlans;
         }
 
-        public void SetCurrentDefinitivePlans(List<PlanDefinitivolModel> currentPlans)
+        public void SetCurrentDefinitivePlans(List<DefinitivePlanModel> currentPlans)
         {
             _curretDefinitvePlans = currentPlans;
         }
@@ -299,7 +299,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         /// </summary>
         public void UpdateCurrentEquiposPymesList(string code, bool delete)
         {
-            EquipoPymesModel mobile = null;
+            DevicePymesModel mobile = null;
 
             if (delete)
             {
@@ -327,8 +327,8 @@ namespace Telefonica.SugeridorDePlanes.Code
                 var client = GetCurrentClient();
                 var planesDefList = GetCurrentDefinitivePlans();
                 var devicePaymentDouble = Convert.ToDouble(devicePayment);
-                var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
-                var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
+                var planesDef = _mapper.Map<List<OfertPlan>>(planesDefList);
+                var mobileDevicesList = _mapper.Map<List<DevicePymes>>(mobileList);
 
                 var proposalPdf = new ProposalPdf
                 {
@@ -348,12 +348,12 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public async Task<Propuesta> AddProposal(ProposalData proposal)
+        public async Task<Proposal> AddProposal(ProposalData proposal)
         {
             try
             {
-                Propuesta proposalResult = null;
-                Propuesta currentProposal = _CurrentProposal;
+                Proposal proposalResult = null;
+                Proposal currentProposal = _CurrentProposal;
                 if (proposal != null)
                 {
                     if (_CurrentProposal != null)
@@ -362,7 +362,8 @@ namespace Telefonica.SugeridorDePlanes.Code
                     }
                     else 
                     {
-                        proposalResult = await _client.AddPropuestaAsync(proposal);
+                        // descomentar
+                       // proposalResult = await _client.AddPropuestaAsync(proposal);
                     }                    
                 }
                 return proposalResult;
@@ -562,7 +563,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         public void EmptyEquipoPymesCurrentList()
         {
-            _currentEquiposPymes = new List<EquipoPymesModel>();
+            _currentEquiposPymes = new List<DevicePymesModel>();
         }
 
 
@@ -574,7 +575,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                await _client.UpdateProposalAsync(proposal);
+                //descomentar
+               // await _client.UpdateProposalAsync(proposal);
             }
             catch (Exception ex)
             {
@@ -589,7 +591,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             try
             {
-                await _client.UpdateTotalProposalAsync(proposal);
+                //descomentar
+               // await _client.UpdateTotalProposalAsync(proposal);
                 return true;
             }
             catch (Exception ex)
@@ -610,8 +613,8 @@ namespace Telefonica.SugeridorDePlanes.Code
             var devicePaymentDouble = Convert.ToDouble(devicePayment);
             var subsidioDouble = Convert.ToDouble(subsidy);
             var paybackDouble = Convert.ToDouble(payback);
-            var planesDef = _mapper.Map<List<PlanesOferta>>(planesDefList);
-            var mobileDevicesList = _mapper.Map<List<EquipoPymes>>(mobileList);
+            var planesDef = _mapper.Map<List<OfertPlan>>(planesDefList);
+            var mobileDevicesList = _mapper.Map<List<DevicePymes>>(mobileList);
 
             ProposalData proposalData = new ProposalData()
             {
@@ -660,13 +663,13 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
-        public List<PlanDefinitivolModel> PopulateDefinitivePlanList(Propuesta proposal)
+        public List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal)
         {
-            List<PlanDefinitivolModel> planDefinitveList = new List<PlanDefinitivolModel>();
+            List<DefinitivePlanModel> planDefinitveList = new List<DefinitivePlanModel>();
             var idPlan = 1;
             foreach (var linea in proposal.Lineas)
             {
-                var planModel = new PlanDefinitivolModel()
+                var planModel = new DefinitivePlanModel()
                 {
                     RecomendadorId = idPlan,
                     Plan = linea.Plan.Plan,

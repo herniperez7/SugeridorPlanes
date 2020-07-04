@@ -76,11 +76,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        private async Task<int> AddPropuesta(PropuestaDTO propuesta)
+        private async Task<int> AddProposal(ProposalDTO propuesta)
         {
             try
             {
-                _context.Propuesta.Update(propuesta);
+                _context.Proposal.Update(propuesta);
                 _context.SaveChanges();
                 var proposalId = propuesta.Id;
                 return proposalId;
@@ -90,11 +90,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
                 throw ex;
             }
         }
-        private async Task<bool> AddLineasPropuesta(List<LineaPropuestaDTO> lineas)
+        private async Task<bool> AddLineasPropuesta(List<ProposalLineDTO> lineas)
         {
             try
             {
-                await _context.LineaPropuesta.AddRangeAsync(lineas);
+                await _context.ProposalLine.AddRangeAsync(lineas);
                 _context.SaveChanges();
                 return true;
             }
@@ -104,11 +104,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        private async Task<bool> AddEquiposPropuesta(List<EquipoPropuestaDTO> equipos)
+        private async Task<bool> AddEquiposProposal(List<ProposalDeviceDTO> equipos)
         {
             try
             {
-                await _context.EquipoPropuesta.AddRangeAsync(equipos);
+                await _context.ProposalDevice.AddRangeAsync(equipos);
                 _context.SaveChanges();
                 return true;
             }
@@ -123,7 +123,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                var proposalId = await AddPropuesta(proposaTransaction.Proposal);
+                var proposalId = await AddProposal(proposaTransaction.Proposal);
 
                 foreach (var line in proposaTransaction.Lines)
                 {
@@ -137,7 +137,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
                     mobile.IdPropuesta = proposalId;
                 }
 
-                await AddEquiposPropuesta(proposaTransaction.MobileDevices);
+                await AddEquiposProposal(proposaTransaction.MobileDevices);
 
                 await _context.SaveChangesAsync();
                 transaction.Commit();
@@ -151,11 +151,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
 
         }
 
-        public async Task<List<LineaPropuestaDTO>> GetLineasPropuesta(int idPropuesta)
+        public async Task<List<ProposalLineDTO>> AddLineasProposal(int idPropuesta)
         {
             try
             {
-                var propuesta = await _context.LineaPropuesta.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
+                var propuesta = await _context.ProposalLine.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
 
                 return propuesta;
             }
@@ -165,13 +165,13 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        public async Task<List<EquipoPropuestaDTO>> GetEquiposPropuesta(int idPropuesta)
+        public async Task<List<ProposalDeviceDTO>> GetEquiposProposal(int proposalId)
         {
             try
             {
-                var propuesta = await _context.EquipoPropuesta.Where(x => x.IdPropuesta == idPropuesta).ToListAsync();
+                var proposalDevices = await _context.ProposalDevice.Where(x => x.IdPropuesta == proposalId).ToListAsync();
 
-                return propuesta;
+                return proposalDevices;
             }
             catch (Exception ex)
             {
@@ -179,11 +179,25 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        public async Task<bool> UpdatePropsal(PropuestaDTO proposal)
+        public async Task<List<ProposalLineDTO>> GetLineasProposal(int proposalId) 
         {
             try
             {
-                _context.Propuesta.Update(proposal);
+                var proposalLines = await _context.ProposalLine.Where(x => x.IdPropuesta == proposalId).ToListAsync();
+
+                return proposalLines;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> UpdatePropsal(ProposalDTO proposal)
+        {
+            try
+            {
+                _context.Proposal.Update(proposal);
                 _context.SaveChanges();
                 return true;
             }
@@ -226,12 +240,12 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        private async Task<bool> UpdateProposalLines(List<LineaPropuestaDTO> proposalLines, int proposalId)
+        private async Task<bool> UpdateProposalLines(List<ProposalLineDTO> proposalLines, int proposalId)
         {
             try
             {
-                _context.LineaPropuesta.RemoveRange(_context.LineaPropuesta.Where(x => x.IdPropuesta == proposalId));
-                _context.LineaPropuesta.AddRange(proposalLines);
+                _context.ProposalLine.RemoveRange(_context.ProposalLine.Where(x => x.IdPropuesta == proposalId));
+                _context.ProposalLine.AddRange(proposalLines);
                 _context.SaveChanges();
                 return true;
             }
@@ -241,14 +255,13 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        private async Task<bool> UpdateProposalMobileDevices(List<EquipoPropuestaDTO> mobileList, int proposalId)
+        private async Task<bool> UpdateProposalMobileDevices(List<ProposalDeviceDTO> mobileList, int proposalId)
         {
             try
             {
-
                 // _context.EquipoPropuesta.UpdateRange(_context.EquipoPropuesta.Where(x => x.IdPropuesta == proposalId));
-                _context.EquipoPropuesta.RemoveRange(_context.EquipoPropuesta.Where(x => x.IdPropuesta == proposalId));
-                _context.EquipoPropuesta.AddRange(mobileList);
+                _context.ProposalDevice.RemoveRange(_context.ProposalDevice.Where(x => x.IdPropuesta == proposalId));
+                _context.ProposalDevice.AddRange(mobileList);
                 _context.SaveChanges();
                 return true;
             }
@@ -257,5 +270,6 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
                 throw ex;
             }
         }
+
     }
 }

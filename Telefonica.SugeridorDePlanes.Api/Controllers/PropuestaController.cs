@@ -15,12 +15,12 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     [ApiController]
     public class PropuestaController : ControllerBase
     {
-        private readonly IPropuestaLogic _propuestaLogic;
+        private readonly IProposalLogic _propuestaLogic;
         private readonly ISuggestorLogic _suggestorLogic;
         private readonly IClientLogic _clientLogic;
         private readonly IMapper _mapper;
 
-        public PropuestaController(ISuggestorLogic suggestorLogic, IPropuestaLogic propuestaLogic, IMapper mapper, IClientLogic clientLogic)
+        public PropuestaController(ISuggestorLogic suggestorLogic, IProposalLogic propuestaLogic, IMapper mapper, IClientLogic clientLogic)
         {
             _propuestaLogic = propuestaLogic;
             _suggestorLogic = suggestorLogic;
@@ -29,14 +29,14 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getPropuestas")]
-        public async Task<ActionResult<List<Propuesta>>> GetPropuestas()
+        public async Task<ActionResult<List<Proposal>>> GetPropuestas()
         {
             try
             {
-                var propuestasDTO = await _propuestaLogic.GetPropuestas();
+                var propuestasDTO = await _propuestaLogic.GetProposals();
                 var clientList = _clientLogic.GetClientes().Result;
-                List<Propuesta> propuestas = new List<Propuesta>();
-                foreach (PropuestaDTO propuesta in propuestasDTO)
+                List<Proposal> propuestas = new List<Proposal>();
+                foreach (ProposalDTO propuesta in propuestasDTO)
                 {
                     var lineasDTO = await _propuestaLogic.GetLineasPropuesta(propuesta.Id);
                     var equiposDTO = await _propuestaLogic.GetEquiposPropuesta(propuesta.Id);
@@ -53,7 +53,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     var equiposList = new List<EquipoPymes>();
                     if (equiposDTO.Count > 0)
                     {
-                        foreach (EquipoPropuestaDTO equipo in equiposDTO)
+                        foreach (prop equipo in equiposDTO)
                         {
                             var movilDevice = await _suggestorLogic.GetEquiposPymesByCode(equipo.CODIGO_EQUIPO);
                             equiposList.Add(new EquipoPymes() { CodigoEquipo = equipo.CODIGO_EQUIPO, Marca = movilDevice.Marca, Nombre = movilDevice.Nombre, PrecioSinIva = movilDevice.PrecioSinIva, Stock = movilDevice.Stock });

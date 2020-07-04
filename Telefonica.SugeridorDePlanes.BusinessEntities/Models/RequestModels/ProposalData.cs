@@ -8,10 +8,10 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels
     {
      
         public int Id { get; set; }
-        public List<EquipoPymes> MobileDevicesList { get; set; }
-        public SugeridorClientes Client { get; set; }
-        public List<RecomendadorB2b> SuggestorList { get; set; }
-        public List<PlanesOferta> PlanesDefList { get; set; }        
+        public List<DevicePymes> MobileDevicesList { get; set; }
+        public SuggestorClient Client { get; set; }
+        public List<SuggestorB2b> SuggestorList { get; set; }
+        public List<OfertPlan> PlanesDefList { get; set; }        
         public double DevicePayment { get; set; }
         public double Subsidio { get; set; }
         public double Payback { get; set; }

@@ -102,7 +102,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
 
-        private List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal) 
+        private List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal)
         {
             List<DefinitivePlanModel> planDefinitveList = new List<DefinitivePlanModel>();
             var idPlan = 1;
@@ -120,6 +120,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 planDefinitveList.Add(planModel);
                 idPlan++;
             }
+            return planDefinitveList;
+        }
 
     }
 }

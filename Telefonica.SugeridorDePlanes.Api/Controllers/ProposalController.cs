@@ -134,8 +134,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     Documento = proposal.Client.Documento,
                     Payback = proposal.Payback,
                     DevicePayment = proposal.DevicePayment,
-                    Subsidio = proposal.Subsidio,
-                    Guid = Guid.NewGuid().ToString(),
+                    Subsidio = proposal.Subsidio,                    
                     Estado = "Pendiente",
                     IdUsuario = proposal.IdUsuario
                     

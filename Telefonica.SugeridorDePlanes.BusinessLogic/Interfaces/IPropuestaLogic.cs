@@ -9,14 +9,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
     public interface IProposalLogic
     {
-        Task<List<PropuestaDTO>> GetPropuestas();
-        Task<PropuestaDTO> GetPropuestaByDoc(string doc);
-        Task<List<PropuestaDTO>> GetPropuestasUsuario(string idUsuario);
-        Task<PropuestaDTO> GetPropuesta(string id);  
+        Task<List<ProposalDTO>> GetProposals();
+        Task<ProposalDTO> GetProposalByDoc(string doc);
+        Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario);
+        Task<ProposalDTO> GetProposal(string id);  
         Task<int> InsertProposal(TransactionProposalDTO proposaTransaction);
-        Task<List<LineaPropuestaDTO>>GetLineasPropuesta(int idPropuesta);
-        Task<List<EquipoPropuestaDTO>>GetEquiposPropuesta(int idPropuesta);
-        void UpdateProposal(PropuestaDTO proposal);
+        Task<List<ProposalLineDTO>> GetLineasProposal(int idPropuesta);
+        Task<List<ProposalDeviceDTO>> GetEquiposProposal(int idPropuesta);
+        void UpdateProposal(ProposalDTO proposal);
         Task<bool> UpdateTotalProposal(TransactionProposalDTO transactionProposal);
     }
 }
