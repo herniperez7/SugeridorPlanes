@@ -16,7 +16,8 @@
 
 @{
 
-    var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.RecomendadorB2bModel>;
+    var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorB2bModel>;
+
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.PlanDefinitivolModel>;
     var companyName = ViewData["companyName"];
     var emptyPlans = true;
@@ -31,7 +32,7 @@
 
 }
 
-@model Telefonica.SugeridorDePlanes.Propuesta;
+@model Telefonica.SugeridorDePlanes.Proposal;
 
 <html>
 <head>

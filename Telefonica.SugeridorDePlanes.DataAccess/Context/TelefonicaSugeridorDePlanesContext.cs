@@ -17,17 +17,18 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
         {
         }
 
-        public virtual DbSet<RecomendadorB2bDTO> RecomendadorB2b { get; set; }
-        public virtual DbSet<SugeridorClientesDTO> SugeridorClientes { get; set; }
-        public virtual DbSet<PlanesOfertaActualDTO> PlanesOfertaActual { get; set; }
-        public virtual DbSet<EquipoPymesDTO> EquipoPymes { get; set; }
+        public virtual DbSet<SuggestorB2bDTO> SuggestorB2b { get; set; }
+        public virtual DbSet<SuggestorClientDTO> SuggestorClient { get; set; }
+        public virtual DbSet<OfertActualPlanDTO> OfertPlanActual { get; set; }
+        public virtual DbSet<DevicePymesDTO> EquipoPymes { get; set; }
 
-        public virtual DbSet<PropuestaDTO> Propuesta { get; set; }
-        public virtual DbSet<EquipoPropuestaDTO> EquipoPropuesta { get; set; }
-        public virtual DbSet<LineaPropuestaDTO> LineaPropuesta { get; set; }
+        public virtual DbSet<ProposalDTO> Proposal { get; set; }
+        public virtual DbSet<ProposalDeviceDTO> ProposalDevice { get; set; }
+        public virtual DbSet<ProposalLineDTO> ProposalLine { get; set; }
+        public virtual DbSet<UserDTO> User { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RecomendadorB2bDTO>(entity =>
+            modelBuilder.Entity<SuggestorB2bDTO>(entity =>
             {
                 entity.HasNoKey();
 
@@ -218,7 +219,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                     .HasColumnType("decimal(10, 2)");
             });
 
-            modelBuilder.Entity<SugeridorClientesDTO>(entity =>
+            modelBuilder.Entity<SuggestorClientDTO>(entity =>
             {
                 entity.HasNoKey();
 
@@ -250,7 +251,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             });
 
 
-            modelBuilder.Entity<PlanesOfertaActualDTO>(entity =>
+            modelBuilder.Entity<OfertActualPlanDTO>(entity =>
             {
                 entity.HasNoKey();
 
@@ -288,7 +289,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             });
 
 
-            modelBuilder.Entity<EquipoPymesDTO>(entity =>
+            modelBuilder.Entity<DevicePymesDTO>(entity =>
             {
                 entity.HasNoKey();
 
@@ -311,7 +312,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             });
 
 
-            modelBuilder.Entity<PropuestaDTO>(entity =>
+            modelBuilder.Entity<ProposalDTO>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
@@ -335,7 +336,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             });
 
             //
-            modelBuilder.Entity<EquipoPropuestaDTO>(entity =>
+            modelBuilder.Entity<ProposalDeviceDTO>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
@@ -349,7 +350,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
             });
 
-            modelBuilder.Entity<LineaPropuestaDTO>(entity =>
+            modelBuilder.Entity<ProposalLineDTO>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
@@ -362,6 +363,23 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                     .HasColumnName("NumeroLinea");
                 entity.Property(e => e.Plan)
                     .HasColumnName("Plan");
+            });
+
+            modelBuilder.Entity<UserDTO>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("Usuarios");
+
+                entity.Property(e => e.NombreCompleto)
+                    .HasColumnName("NombreCompleto");
+
+                entity.Property(e => e.Email)
+                    .HasColumnName("Email");
+
+                entity.Property(e => e.Rol)
+                    .HasColumnName("Rol");
+
             });
 
 

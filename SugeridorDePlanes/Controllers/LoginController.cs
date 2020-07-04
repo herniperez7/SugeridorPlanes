@@ -1,37 +1,38 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Telefonica.SugeridorDePlanes.Models.Users;
+using Telefonica.SugeridorDePlanes.Code;
+using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
     public class LoginController : Controller
     {
-        private IUserManager UserManager;
+        private TelefonicaModel.IUserManager UserManager;
+        private ITelefonicaService TelefonaService;
 
-        public LoginController(IUserManager userManager)
+        public LoginController(TelefonicaModel.IUserManager userManager, ITelefonicaService telefonaService)
         {
             UserManager = userManager;
+            TelefonaService = telefonaService;
         }
         public ViewResult Index()
         {
-            return View();
+            return View("../Login/Login");
         }
 
         [HttpPost]
-        public ViewResult Login(string userName, string password)
+        public ActionResult Login(string userName, string password)
         {
-            
-            User loggedUser = UserManager.AuthenticateUser(userName, password);
-            if(loggedUser == null)
-            {
-                loggedUser = new User() { Nombre = "Usuario1" };
+
+            //TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
+          
+                var loggedUser = new TelefonicaModel.User() { NombreCompleto = "Usuario1" ,Email = "Usuario1@gmail.com",Id=1 , Rol = new TelefonicaModel.UsersRole.Administrative()};
                 HttpContext.Session.SetString("UsuarioLogueado", JsonConvert.SerializeObject(loggedUser));
                 ViewData["UsuarioLogueado"] = loggedUser;
                 
-                return View("../Home/Index");
-            }
-            return View();
+                return this.RedirectToAction("Index", "Suggestor");
+            
         }
 
     }

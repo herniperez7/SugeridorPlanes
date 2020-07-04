@@ -11,10 +11,10 @@ namespace Telefonica.SugeridorDePlanes.Resources
     {
         public Mapper()
         {
-            CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
-            CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
-            CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
-            CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();
+            CreateMap<SuggestorClient, SuggestorClientDTO>().ReverseMap();
+            CreateMap<SuggestorB2b, SuggestorB2bDTO>().ReverseMap();
+            CreateMap<OfertPlan, OfertActualPlanDTO>().ReverseMap();
+            CreateMap<DevicePymes, DevicePymesDTO>().ReverseMap();
         }
     }
 }

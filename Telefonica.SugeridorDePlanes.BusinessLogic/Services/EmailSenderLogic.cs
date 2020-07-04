@@ -43,7 +43,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 
                 if (emailData.Array != null)
                 {
-                    body.Attachments.Add("Propuesta.pdf", emailData.Array, new ContentType("application", "pdf"));
+                    body.Attachments.Add("Proposal.pdf", emailData.Array, new ContentType("application", "pdf"));
                 }
 
                 email.Body = body.ToMessageBody();

@@ -489,9 +489,9 @@ function calculateStatus(val) {
 function exportPdf() {
    
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
-    var exportText = "Generar propuesta";
-    $("#generarPropuestaBtn").html(loading);
-    $("#generarPropuestaBtn").prop("disabled", true);
+    var exportText = "Exportar Proposal";
+    $("#pdfExportBtn").html(loading);
+    $("#pdfExportBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
     if (devicePayment == "") devicePayment = "0";
     $("#loaderDiv").show();
@@ -513,7 +513,7 @@ function exportPdf() {
 }
 
 
-function generarPropuesta() {
+function generarProposal() {
 
     //$("#pdfExportBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();

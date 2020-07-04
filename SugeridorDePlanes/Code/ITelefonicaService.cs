@@ -12,15 +12,15 @@ namespace Telefonica.SugeridorDePlanes.Code
 {
     public interface ITelefonicaService
     {
-        Task<List<SugeridorClientes>> GetClientes();
+        Task<List<SuggestorClient>> GetClientes();
 
-        Task<List<RecomendadorB2b>> GetSuggestedPlans();
+        Task<List<SuggestorB2b>> GetSuggestedPlans();
 
-        Task<List<RecomendadorB2b>> GetSuggestedPlansByRut(string rut);
+        Task<List<SuggestorB2b>> GetSuggestedPlansByRut(string rut);
 
-        Task<List<RecomendadorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
+        Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
 
-        Task<List<PlanesOferta>> GetActualPlansAsync();
+        Task<List<OfertPlan>> GetActualPlansAsync();
 
         /// <summary>
         /// Retorna los planes del cliente actual

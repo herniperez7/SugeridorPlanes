@@ -1,0 +1,848 @@
+﻿@{
+    var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Users.User;
+    var emptyPlans = true;
+
+    if (Model != null && Model.Count() > 0)
+    {
+        emptyPlans = false;
+
+    }
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@functions {
+
+    public static string FormatCultureNumber(decimal? value)
+    {
+        return @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatCultureNumber(value);
+    }
+}
+
+@{
+    var loggedUser = ViewData["loggedUser"];
+    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorClientModel>;
+    var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
+    var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.OfertActualPlanModel>;
+    var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DefinitivePlanModel>;
+    var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
+    var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
+    var mobileList = ViewData["mobileList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
+    var devicePayment = ViewData["devicePayment"];
+    var subsidy = ViewData["subsidy"];
+    var payback = ViewData["payback"];
+    var currentClient = ViewData["currentClient"];
+
+    decimal incomeAmount = 0;
+    decimal billingAmount = 0;
+
+}
+
+@model List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorB2bModel>;
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+</head>
+<body>
+    <script>
+        var gbUpdateDefinitivePlanUrl = "@Url.Action("UpdateDefinitivePlan")";
+        var gbGetMovilInfoUrl = "@Url.Action("GetMovilInfo", "Home")";
+        var gbAddMovilDecivesUrl = "@Url.Action("AddMovilDevice", "Home")";
+        var gbDeleteMovilUrl = "@Url.Action("DeleteMovilFromList", "Home")";
+        var gbCalculatePayBack = "@Url.Action("CalculatePayback", "Home")";
+        var gbCalculateGap = "@Url.Action("CalculateIndexesResult", "Home")";
+        var gbGetMovilListUrl = "@Url.Action("GetMovilList", "Home")";
+        var gbGetDefinitvePlansList = "@Url.Action("GetDefinitivePlansList", "Home")";
+        var gbExportPdf = "@Url.Action("GeneratePdf", "Home")";
+        var gbSendMail = "@Url.Action("SendMail", "Home")";
+        var gbGenerateProposal = "@Url.Action("GenerateProposal", "Home")";
+        var gbSaveProposal = "@Url.Action("SaveProposal", "Home")";
+        var gbCurrentClient = @ViewData["currentClient"];
+        var gbUserProposals = "@Url.Action("ProposalList", "UserProposal")";
+
+    </script>
+
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:70px">
+
+
+        <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
+            </div>
+            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
+
+        </form>
+
+
+        <form class="form-inline mb-0" action="/Home/ShowPlans" method="post">
+            <div class="d-inline-flex align-items-center w-100">
+                <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por Rut" aria-label="Search">
+
+                <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        <form class="form-inline input-group mb-0 w-auto">
+            <div class="input-group-prepend">
+                <label class="input-group-text">@loggedUser</label>
+            </div>
+        </form>
+
+    </nav>
+
+    <nav class="d-block d-md-none navbar-light bg-light">
+
+        <form class="form-inline input-group mb-0">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
+            </div>
+
+            @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
+
+
+        </form>
+
+        <form class="form-inline mb-0">
+            <div class="d-inline-flex align-items-center w-100">
+                <input class="form-control mr-2" type="search" id="clientRutTxt" placeholder="Buscar por Rut" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </div>
+
+        </form>
+    </nav>
+
+    <nav class="main-menu" id="sideNav">
+        <ul>
+            <li>
+                <a href="http://justinfarrow.com">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+                        Dashboard
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-laptop fa-2x"></i>
+                    <span class="nav-text">
+                        Stars Components
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">
+                        Forms
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-folder-open fa-2x"></i>
+                    <span class="nav-text">
+                        Pages
+                    </span>
+                </a>
+
+            </li>
+
+        </ul>
+
+        <ul class="logout">
+            <li>
+                <a href="#">
+                    <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Logout
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="area">
+        <div class="pl-md-5 pr-md-5 pt-md-3" style="margin-left:30px">
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 col-md-12">
+                    <fieldset class="tableFieldset">
+                        <legend>Info actual de cliente</legend>
+                        <div class="tableFixHead">
+                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                                <thead class="thead-dark">
+                                    <tr style="height:60px;">
+                                        <th scope="col">#</th>
+                                        <th scope="col">Número</th>
+                                        <th scope="col">Plan</th>
+                                        <th class="long-column" scope="col">TMM (sin iva)</th>
+                                        <th class="long-column" scope="col">Prestación codigo</th>
+                                        <th class="long-column" scope="col">TMM Prestación (sin iva)</th>
+                                        <th class="long-column" scope="col">Promedio facturado</th>
+                                        <th class="long-column" scope="col">Consumo promedio de datos</th>
+                                        <th class="long-column" scope="col">MOU OFFNET</th>
+                                        <th scope="col">ROAMER</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!emptyPlans)
+                                    {
+
+
+
+                                        decimal totalTmm = 0;
+                                        decimal totalConsumo = 0;
+                                        decimal mouOffNet = 0;
+                                        int roamerCount = 0;
+                                        decimal bonoGbPlan = 0;
+                                        foreach (var plan in Model.Select((value) => new { value }))
+                                        {
+                                            totalTmm += (decimal)plan.value.TmmSinIva;
+                                            billingAmount += (decimal)plan.value.ArpuProm;
+
+                                            mouOffNet += (decimal)@plan.value.MinutosVozOffProm;
+                                            bonoGbPlan = (decimal)@plan.value.MbTotalProm / 1024;
+                                            totalConsumo += bonoGbPlan;
+
+                                            var format = new System.Globalization.CultureInfo("es-AR").NumberFormat;
+                                            format.NumberDecimalSeparator = ",";
+                                            format.CurrencyGroupSeparator = ".";
+
+                                            if (plan.value.Roamer.ToLower() == "roamer")
+                                            {
+                                                roamerCount++;
+                                            }
+
+
+                                            <tr>
+                                                <td>@plan.value.Id</td>
+                                                <td>@plan.value.Movil</td>
+                                                <td>@plan.value.CodPlan</td>
+                                                <td>$ @FormatCultureNumber(plan.value.TmmSinIva)</td>
+                                                <td>@plan.value.Prestacion1</td>
+                                                <td>$ @FormatCultureNumber(plan.value.TmmPrestacionSinIva)</td>
+                                                <td>$ @FormatCultureNumber(plan.value.ArpuProm)</td>
+                                                <td>@Decimal.Round(@bonoGbPlan) Gb</td>
+                                                <td>@FormatCultureNumber(plan.value.MinutosVozOffProm)</td>
+
+                                                @if (plan.value.Roamer.ToLower() == "roamer")
+                                                {
+                                                    <td style="text-align:center">
+
+                                                        <svg class="bi bi-check" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="text-align:center">
+                                                        <svg class="bi bi-x" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                                            <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd" />
+                                                        </svg>
+
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+
+                                        <tr>
+                                            <td class="total-column" colspan="3" style="text-align:left;">Totales</td>
+
+                                            <td class="total-column">
+                                                $ @FormatCultureNumber(totalTmm)
+                                            </td>
+                                            <td class="total-column" colspan="2"></td>
+                                            <td class="total-column">
+                                                $ @FormatCultureNumber(billingAmount)
+                                            </td>
+                                            <td class="total-column">
+                                                @Decimal.Round(@totalConsumo) Gb
+                                            </td>
+                                            <td class="total-column">
+                                                @FormatCultureNumber(mouOffNet)
+                                            </td>
+                                            <td class="total-column">
+                                                @roamerCount
+                                            </td>
+
+                                        </tr>
+
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="total-column" colspan="10">
+                                                Sin datos
+                                            </td>
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        @if (!emptyPlans)
+                        {
+                            <p class="total-billing-column">
+                                Facturación máxima: $@FormatCultureNumber(Model[0].ArpuRutMax) (Fecha: @Telefonica.SugeridorDePlanes.Resources.helpers.TelefonicaHelper.FormatDate(@Model[0].FechaArpuRutMax))
+
+                            </p>
+                        }
+                    </fieldset>
+
+
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <fieldset class="tableFieldset">
+                        <legend>Plan sugerido</legend>
+                        <div class="tableFixHead">
+                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th class="long-column" scope="col">Plan sugerido</th>
+                                        <th class="long-column" scope="col">TMM (sin iva)</th>
+                                        <th class="long-column" scope="col">Datos del bono</th>
+                                        <th scope="col">Roaming</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!emptyPlans)
+                                    {
+                                        decimal totalTmm = 0;
+                                        decimal totalBono = 0;
+                                        int roamingCount = 0;
+                                        foreach (var plan in Model.Select((value) => new { value }))
+                                        {
+                                            totalTmm += (decimal)plan.value.TmmPlanSugerido;
+                                            totalBono += (decimal)plan.value.BonoPlanSugerido / 1024;
+                                            var bonoGb = plan.value.BonoPlanSugerido / 1024;
+
+                                            if (plan.value.RoamingPlanSugerido.ToLower() != "no")
+                                            {
+                                                roamingCount++;
+                                            }
+
+                                            <tr id="@plan.value.Id{planSugerido}">
+                                                <td>@plan.value.Id</td>
+                                                <td>@plan.value.PlanSugerido</td>
+                                                <td>$ @FormatCultureNumber(plan.value.TmmPlanSugerido)</td>
+                                                <td>@bonoGb Gb</td>
+                                                <td>@plan.value.RoamingPlanSugerido</td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                            <td class="total-column">
+                                                $ @FormatCultureNumber(totalTmm)
+                                            </td>
+                                            <td class="total-column">
+                                                @totalBono Gb
+                                            </td>
+                                            <td class="total-column">
+                                                @roamingCount
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="total-column" colspan="5">
+                                                Sin datos
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <fieldset class="tableFieldset">
+                        <legend>Plan definitivo</legend>
+                        <div class="tableFixHead">
+                            <table class="table table-bordered table-striped mb-0" id="tablaPlanesDefi" style="border: 1px solid #ddd !important;">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th class="long-column" scope="col">Plan sugerido</th>
+                                        <th class="long-column" scope="col">TMM (sin iva)</th>
+                                        <th class="long-column" scope="col">Datos del bono</th>
+                                        <th scope="col">Roaming</th>
+                                        <th scope="col">Editar</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!emptyPlans)
+                                    {
+                                        decimal totalBono = 0;
+                                        int roamingCount = 0;
+                                        @foreach (var plan in planDefList.Select((value, i) => new { value, i }))
+                                        {
+                                            incomeAmount += (decimal)plan.value.TMM_s_iva;
+                                            totalBono += (decimal)plan.value.Bono;
+                                            var bonoGb = plan.value.Bono;
+
+                                            if (plan.value.Roaming.ToLower() != "no")
+                                            {
+                                                roamingCount++;
+                                            }
+
+                                            <tr>
+                                                <td>@plan.value.RecomendadorId</td>
+                                                <td>@plan.value.Plan</td>
+                                                <td>$ @FormatCultureNumber(plan.value.TMM_s_iva)</td>
+                                                <td>@bonoGb Gb</td>
+                                                <td>@plan.value.Roaming</td>
+                                                <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td class="total-column" colspan="2" style="text-align:left;">Totales</td>
+                                            <td id="defPlanIncomeTr" class="total-column">
+                                                $ @FormatCultureNumber(incomeAmount)
+                                            </td>
+                                            <td class="total-column">
+                                                @totalBono Gb
+                                            </td>
+                                            <td class="total-column">
+                                                @roamingCount
+                                            </td>
+                                        </tr>
+
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="total-column" colspan="6">
+                                                Sin datos
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+
+                    <fieldset>
+                        <legend>Terminales</legend>
+                        <div class="row" style="height: 250px">
+                            <div class="col-lg-5">
+
+                                <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
+
+                                    <select id="movilesDdl" class="custom-select" onchange="movileChange()">
+
+                                        <option> </option>
+                                        @foreach (var item in movileDevices)
+                                        {
+                                            var marcaEquipo = string.IsNullOrEmpty(item.Marca) ? "" : item.Marca;
+                                            var nombreEquipo = string.IsNullOrEmpty(item.Nombre) ? "" : item.Nombre;
+
+                                            <option value="@item.Id">@marcaEquipo @nombreEquipo</option>
+                                        }
+
+                                    </select>
+
+                                </form>
+                                <div id="valuesEquipos" class="p-2 ml-2">
+
+                                    <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue"></label><br />
+                                    <label><b>Stock: </b></label><label class="ml-1" id="stockValue"></label>
+
+                                </div>
+
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="tableFixHeadDevices pr-2">
+                                    <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                                        <thead class="thead-dark">
+
+                                            <tr>
+                                                <th scope="col">Equipo</th>
+                                                <th scope="col">Lande</th>
+                                                <th scope="col">Borrar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="movilTableBody" style="overflow-y:auto; height:150px">
+                                            @if (mobileList.Count() > 0)
+                                            {
+                                                decimal totalAmount = 0;
+                                                int deviceCount = 0;
+
+                                                @foreach (var mobile in mobileList)
+                                                {
+                                                    totalAmount += mobile.PrecioSinIva;
+                                                    deviceCount++;
+                                                    var rowId = "row" + mobile.Id;
+                                                    var tdId = "tod" + mobile.Id;
+                                                    <tr id=@rowId>
+                                                        <td>@mobile.Marca @mobile.Nombre</td>
+                                                        <td>$ @mobile.PrecioSinIva</td>
+                                                        <td id=@tdId onclick="AddDevice(@mobile.Id, false)"><i class='fa fa-times fa-lg' aria-hidden='true'></i></td>
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <td>@deviceCount</td>
+                                                    <td>$ @totalAmount</td>
+                                                    <td></td>
+                                                </tr>
+
+
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="display:inline; padding-left: 20px">
+                                <button style=" height:40px; line-height: 8px;" class="btn btn-outline-success my-2 my-sm-0 p-3" id="addDeviceBtn" onclick="AddDevice(0,true)" disabled>Agregar</button>
+                                <button style=" height:40px; line-height: 8px" class="btn btn-outline-success my-2 my-sm-0 p-3" type="submit" id="confirmDeviceBtn" onclick="confirmDevices()">Confirmar</button>
+
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+
+                </div>
+
+                <div class="col-lg-7" style="display:block" id="IndexesDiv">
+                    <fieldset>
+                        <legend>Resumen oficial</legend>
+                        <div class="row" style="height: 250px">
+
+                            <div class="col-lg-4">
+                                <div class="ml-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="subsidioInput">Subsidio</span>
+                                    </div>
+                                    <input type="text" id="subsidioTxt" disabled value="@subsidy" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="payBackInput">Payback</span>
+                                    </div>
+                                    <input type="text" id="paybackTxt" class="form-control" disabled value="@payback" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="pagoEquiposInput">Pago de equipos</span>
+                                    </div>
+                                    <input type="text" id="pagoEquiposTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="@devicePayment">
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+
+                                <div id="divbillingStatus">
+                                    @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
+                                    {
+                                        <div class="superiorBillingMain">
+                                            <div class="superiorBillingChild">
+                                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
+
+                                            </div>
+                                        </div>
+                                    }
+
+                                    else if (@indexModel.BillingStatus.ToString().Equals("Lower"))
+                                    {
+                                        <div class="lowerBillingMain">
+                                            <div class="lowerBillingChild">
+                                                <div style="font-weight:bold; color:#FF0000">
+                                                    <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (@indexModel.BillingStatus.ToString().Equals("Equal"))
+                                    {
+                                        <div class="equalBillingMain">
+                                            <div class="equalBillingMainChild">
+                                                <div style="font-weight:bold; color:#FFD200">
+                                                    <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+
+                                        <div id="divClaculatedBillingStatus">
+                                            <div class="emptyBillingDataMain">
+                                                <div class="emptyBillingDataChild">
+                                                    <div style="font-weight:bold; color:#666666">
+                                                        Sin datos
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div id="valuesResumen" class="p-2">
+                                    <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @FormatCultureNumber(indexModel.FixedGap)</label><br />
+                                    <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @FormatCultureNumber(indexModel.BillingGap)</label><br />
+
+                                    <label><b>Subsidio: </b></label><label class="ml-1" id="calulatedSubsidy"></label><br />
+                                    <label><b>Payback: </b></label><label class="ml-1" id="calulatedPayBack"></label><br />
+                                    <label><b>Ingreso: </b></label><label class="ml-1" id="calulatedIncome"></label><br />
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+                                <div style="display: table-cell;vertical-align: middle;text-align: center;">
+
+                                    <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarProposalBtn" onclick="generarProposal()">Generar Proposal</button>
+                                    @*<button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="pdfExportBtn" onclick="exportPdf()">
+                                        Exportar Proposal
+                                    </button>*@
+                                    @*<button data-toggle="modal" href="#emailModal" class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="button" id="sendMailBtn">Enviar mail</button>*@
+
+                                </div>
+
+
+
+                            </div>
+
+
+                        </div>
+                        <button style="position: absolute;right:190px;top:-5px;outline:5px solid #fff" id="saveProposalBtn" onclick="saveProposal()">
+                            <img src="@Url.Content("~/img/icons/disketteIcon32x.png")" />
+                        </button>
+                        <button style="position: absolute;right:130px;top:-5px;outline:5px solid #fff" id="exportPdfBtn" onclick="exportPdf()">
+                            <img src="@Url.Content("~/img/icons/IconPdf.png")" />
+                        </button>
+                        <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="sendEmailBtn" onclick="openEmailModal()">
+                            <img src="@Url.Content("~/img/icons/iconMail.png")" />
+                        </button>
+                        <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
+                            <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
+
+                        </button>
+                    </fieldset>
+
+                </div>
+
+                <div class="col-lg-7" style="display:none" id="calculateDiv">
+                    <fieldset>
+                        <legend> Simulación </legend>
+                        <div class="row" style="height: 250px">
+
+                            <div class="col-lg-4">
+                                <div class="ml-3">
+                                    <div class="input-group-prepend ">
+                                        <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(1)">Subsidio</button>
+                                    </div>
+                                    <input type="text" id="calculateSubsidyTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(2)">Payback</button>
+                                    </div>
+                                    <input type="text" id="calculatePaybackTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(3)">Ingreso</button>
+                                    </div>
+                                    <input type="text" id="calculateIncomeTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+
+                                <div id="divClaculatedBillingStatus">
+                                    <div class="emptyBillingDataMain">
+                                        <div class="emptyBillingDataChild">
+                                            <div style="font-weight:bold; color:#666666">
+                                                Sin datos
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div id="valuesResumen" class="p-2">
+                                    <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapCalculatedValue">Sin calcular </label><br />
+                                    <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingCalculatedValue">Sin calcular</label><br />
+
+                                    <div id="incomeDivValue" style="display:none">@incomeAmount</div>
+                                    <div id="billingDivValue" style="display:none">@billingAmount</div>
+                                    <div id="tmmPrestasionDivValue" style="display:none"> @indexModel.TmmPrestacion</div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+
+                                <div style="display: table-cell;vertical-align: middle;text-align: center;">
+                                    <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="importValuesBtn" onclick="importValues()">Importar valores</button>
+                                    <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="resetValuesBtn" onclick="resetValues()">Resetear valores</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(2)">
+                            <img src="@Url.Content("~/img/icons/budgetIcon32x.png")" />
+                        </button>
+                    </fieldset>
+                </div>
+
+            </div>
+
+
+            @if (Model != null && Model.Count() > 4)
+            {
+                <script>
+                    $(".tableFieldset .tableFixHead").css("height", "230px");
+                </script>
+            }
+
+
+            <div class="modal fade" id="plansModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                            <h2 style="color:white;text-shadow: 2px 2px #25af60">Seleccione un plan</h2>
+
+                        </div>
+
+                        <div class="modal-body">
+                            <table id="tablaPlanes">
+                                <thead>
+                                    <tr>
+                                        <th>Plan</th>
+                                        <th>TMM</th>
+                                        <th>Bono</th>
+                                        <th>Roaming</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var plan in planOfertList.Select((value) => new { value }))
+                                    {
+                                        var bono = @plan.value.Bono_ / 1024;
+                                        <tr>
+                                            <td>@plan.value.Plan</td>
+                                            <td>@plan.value.TMM_s_iva</td>
+                                            <td>@bono</td>
+                                            <td>@plan.value.Roaming</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            @*<button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>*@
+                            <button type="button" class="btn btn-outline-success" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="emailModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                            <h2 style="color:white;text-shadow: 2px 2px #25af60">Enviar email</h2>
+
+                        </div>
+
+                        <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
+                            <h5 for="toTxt">Para</h5>
+                            <input type="email" class="form-control" id="toTxt" placeholder="nombre@dominio.com">
+                            <span style="display:none" class="text-danger">Email requerido</span>
+                        </div>
+
+                        <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
+                            <h5 for="subjectTxt">Asunto</h5>
+                            <input type="email" class="form-control" id="subjectTxt">
+                            <span style="display:none" class="text-danger">Asunto requerido</span>
+                        </div>
+
+                        <div class="form-group" style="padding:10px">
+                            <h5 for="bodytxt">Mensaje</h5>
+                            <textarea class="form-control" id="bodytxt" rows="3"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal">Enviar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+            <div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-notify modal-info modal-dialog-centered" role="document">
+
+                    <div class="modal-content text-center">
+
+                        <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                            <h2 style="color:white;text-shadow: 2px 2px #25af60">Proposal guardada</h2>
+
+                        </div>
+                        <div class="modal-body">
+
+                            <img src="@Url.Content("~/img/icons/check1.png")" />
+
+                            <h4>La Proposal se guardó exitosamente!</h4>
+
+                        </div>
+
+                        <div class="modal-footer flex-center">
+                            <button type="button" class="btn btn-outline-success" data-dismiss="modal">aceptar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
+
+
+        </div>
+
+</body>
+</html>

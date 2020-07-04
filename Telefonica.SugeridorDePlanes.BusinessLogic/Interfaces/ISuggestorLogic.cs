@@ -9,17 +9,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
     public interface ISuggestorLogic
     {
-        Task<List<RecomendadorB2bDTO>> GetSuggestedPlans();
+        Task<List<SuggestorB2bDTO>> GetSuggestedPlans();
 
-        Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByRut(string rut);
+        Task<List<SuggestorB2bDTO>> GetSuggestedPlansByRut(string rut);
 
-        Task<List<RecomendadorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber);
+        Task<List<SuggestorB2bDTO>> GetSuggestedPlansByClientNumer(string clientNumber);
 
-        Task<List<PlanesOfertaActualDTO>> GetActualPlans();
+        Task<List<OfertActualPlanDTO>> GetActualPlans();
 
-        Task<PlanesOfertaActualDTO> GetPlanByCode(string planCode);
+        Task<OfertActualPlanDTO> GetPlanByCode(string planCode);
 
-        Task<List<EquipoPymes>> GetEquiposPymes();
-        Task<EquipoPymesDTO> GetEquiposPymesByCode(string code);
+        Task<List<DevicePymes>> GetEquiposPymes();
+        Task<DevicePymesDTO> GetEquiposPymesByCode(string code);
     }
 }

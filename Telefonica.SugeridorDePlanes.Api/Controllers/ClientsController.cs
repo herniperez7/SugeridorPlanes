@@ -26,16 +26,16 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getClients")]
-        public async Task<ActionResult<List<SugeridorClientes>>> GetClients()
+        public async Task<ActionResult<List<SuggestorClient>>> GetClients()
         {
             try
             {
-                var clientList = new List<SugeridorClientes>();
+                var clientList = new List<SuggestorClient>();
                 var clientsDto = await _clientService.GetClientes();
 
                 foreach (var item in clientsDto)
                 {
-                    var clientModel = _mapper.Map<SugeridorClientes>(item);
+                    var clientModel = _mapper.Map<SuggestorClient>(item);
                     clientList.Add(clientModel);
                 }
 

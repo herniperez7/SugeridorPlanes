@@ -13,6 +13,9 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 using Microsoft.OpenApi.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Services;
+using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
+using Telefonica.SugeridorDePlanes.DataAccess.Services;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes.Api
 {
@@ -33,11 +36,12 @@ namespace Telefonica.SugeridorDePlanes.Api
 
             services.AddAutoMapper(configuration =>
             {
-                configuration.CreateMap<SugeridorClientes, SugeridorClientesDTO>().ReverseMap();
-                configuration.CreateMap<RecomendadorB2b, RecomendadorB2bDTO>().ReverseMap();
-                configuration.CreateMap<PlanesOferta, PlanesOfertaActualDTO>().ReverseMap();
-                configuration.CreateMap<EquipoPymes, EquipoPymesDTO>().ReverseMap();
-                configuration.CreateMap<Propuesta, PropuestaDTO>().ForMember(dest => dest.Documento, opt => opt.MapFrom(org => org.RutCliente))
+                configuration.CreateMap<SuggestorClient, SuggestorClientDTO>().ReverseMap();
+                configuration.CreateMap<SuggestorB2b, SuggestorB2bDTO>().ReverseMap();
+                configuration.CreateMap<OfertPlan, OfertActualPlanDTO>().ReverseMap();
+                configuration.CreateMap<DevicePymes, DevicePymesDTO>().ReverseMap();
+                configuration.CreateMap<User, UserDTO>().ForMember(dest => dest.Rol, opt => opt.MapFrom(org => org.RolString)).ForMember(dest => dest.Rol, opt => opt.Ignore()).ReverseMap();
+                configuration.CreateMap<Proposal, ProposalDTO>().ForMember(dest => dest.Documento, opt => opt.MapFrom(org => org.RutCliente))
                     .ForMember(dest => dest.IdUsuario, opt => opt.MapFrom(org => org.IdUsuario)).ForMember(dest => dest.Id, opt => opt.MapFrom(org => org.Id)).ReverseMap();
             }, typeof(Startup));
 
@@ -49,12 +53,12 @@ namespace Telefonica.SugeridorDePlanes.Api
             services.AddScoped<ISuggestorLogic, SuggestorLogic>();
             services.AddScoped<IEmailSenderLogic, EmailSenderLogic>();
             services.AddScoped<IPdfLogic, PdfLogic>();
-            services.AddScoped<IPropuestaLogic, PropuestaLogic>();
+            services.AddScoped<IProposalLogic, ProposalLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<ISuggestorRepository, SuggestorRepository>();
-            services.AddScoped<IPropuestaRepository, PropuestaRepository>();
+            services.AddScoped<IProposalRepository, ProposalRepository>();
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

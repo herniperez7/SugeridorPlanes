@@ -10,7 +10,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
     public interface IPdfLogic
     {
-        byte[] GeneratePdfFromHtml(List<EquipoPymes> mobileDevices, List<PlanesOferta> planList, string companyName, double devicePayment);
+        byte[] GeneratePdfFromHtml(List<DevicePymes> mobileDevices, List<OfertPlan> planList, string companyName, double devicePayment);
 
     }
 }

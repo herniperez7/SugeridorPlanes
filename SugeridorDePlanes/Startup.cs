@@ -31,11 +31,11 @@ namespace Telefonica.SugeridorDePlanes
             });
             services.AddAutoMapper(configuration =>
             {
-                configuration.CreateMap<RecomendadorB2b, RecomendadorB2bModel>().ReverseMap();
-                configuration.CreateMap<SugeridorClientes, SugeridorClientesModel>().ReverseMap();
-                configuration.CreateMap<PlanesOferta, PlanOfertaActualModel>().ReverseMap();
-                configuration.CreateMap<PlanDefinitivolModel, PlanesOferta>().ReverseMap();                
-                configuration.CreateMap<EquipoPymes, EquipoPymesModel>().ReverseMap();
+                configuration.CreateMap<SuggestorB2b, SuggestorB2bModel>().ReverseMap();
+                configuration.CreateMap<SuggestorClient, SuggestorClientModel>().ReverseMap();
+                configuration.CreateMap<OfertPlan, OfertActualPlanModel>().ReverseMap();
+                configuration.CreateMap<DefinitivePlanModel, OfertPlan>().ReverseMap();                
+                configuration.CreateMap<DevicePymes, DevicePymesModel>().ReverseMap();
             }, typeof(Startup));
 
             services.AddScoped<IUserManager, UserManager>();       

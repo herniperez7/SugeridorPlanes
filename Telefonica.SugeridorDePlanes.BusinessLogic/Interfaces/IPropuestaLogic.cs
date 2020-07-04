@@ -7,7 +7,7 @@ using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
-    public interface IPropuestaLogic
+    public interface IProposalLogic
     {
         Task<List<PropuestaDTO>> GetPropuestas();
         Task<PropuestaDTO> GetPropuestaByDoc(string doc);

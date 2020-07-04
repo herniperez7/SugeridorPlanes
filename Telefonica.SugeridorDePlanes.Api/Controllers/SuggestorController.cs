@@ -23,16 +23,16 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getPlans")]
-        public async Task<ActionResult<List<RecomendadorB2b>>> GetSuggestedPlans()
+        public async Task<ActionResult<List<SuggestorB2b>>> GetSuggestedPlans()
         {
             try
             {
-                var plansList = new List<RecomendadorB2b>();
+                var plansList = new List<SuggestorB2b>();
                 var plansDto = await _suggestorService.GetSuggestedPlans();
 
                 for (int i = 0; i < plansDto.Count; i++)
                 {
-                    var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
+                    var planModel = _mapper.Map<SuggestorB2b>(plansDto[i]);
                     planModel.Id = i;
                     plansList.Add(planModel);
                 }
@@ -48,7 +48,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getPlansByRut")]
-        public async Task<ActionResult<List<RecomendadorB2b>>> GetSuggestedPlansByRut(string rut)
+        public async Task<ActionResult<List<SuggestorB2b>>> GetSuggestedPlansByRut(string rut)
         {
             /*test*/
             try
@@ -58,12 +58,12 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     return BadRequest();
                 }
 
-                var plansList = new List<RecomendadorB2b>();
+                var plansList = new List<SuggestorB2b>();
                 var plansDto = await _suggestorService.GetSuggestedPlansByRut(rut);
 
                 for (int i = 0; i < plansDto.Count; i++)
                 {
-                    var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
+                    var planModel = _mapper.Map<SuggestorB2b>(plansDto[i]);
                     planModel.Id = i;
                     plansList.Add(planModel);
                 }
@@ -79,7 +79,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getPlansByClientNumber")]
-        public async Task<ActionResult<List<RecomendadorB2b>>> GetPlansByClientNumber(string clientNumber)
+        public async Task<ActionResult<List<SuggestorB2b>>> GetPlansByClientNumber(string clientNumber)
         {
             try
             {
@@ -88,12 +88,12 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     return BadRequest();
                 }
 
-                var plansList = new List<RecomendadorB2b>();
+                var plansList = new List<SuggestorB2b>();
                 var plansDto = await _suggestorService.GetSuggestedPlansByClientNumer(clientNumber);
 
                 for (int i = 0; i < plansDto.Count; i++)
                 {
-                    var planModel = _mapper.Map<RecomendadorB2b>(plansDto[i]);
+                    var planModel = _mapper.Map<SuggestorB2b>(plansDto[i]);
                     planModel.Id = i;
                     plansList.Add(planModel);
                 }
@@ -108,16 +108,16 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getActualPlans")]
-        public async Task<ActionResult<List<PlanesOferta>>> GetActualPlans()
+        public async Task<ActionResult<List<OfertPlan>>> GetActualPlans()
         {
             try
             {
-                var plansList = new List<PlanesOferta>();
+                var plansList = new List<OfertPlan>();
                 var plansDto = await _suggestorService.GetActualPlans();
 
                 foreach (var item in plansDto)
                 {
-                    var planModel = _mapper.Map<PlanesOferta>(item);
+                    var planModel = _mapper.Map<OfertPlan>(item);
                     plansList.Add(planModel);
                 }
 
@@ -131,13 +131,13 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
 
         [HttpGet("getPlanByCode")]
-        public async Task<ActionResult<PlanesOferta>> GetPlanByCode(string planCode)
+        public async Task<ActionResult<OfertPlan>> GetPlanByCode(string planCode)
         {
             try
             {
                 var plansDto = await _suggestorService.GetPlanByCode(planCode);
 
-                var planModel = _mapper.Map<PlanesOferta>(plansDto);
+                var planModel = _mapper.Map<OfertPlan>(plansDto);
 
                 return planModel;
             }
@@ -148,13 +148,13 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getMobileDevices")]
-        public async Task<ActionResult<List<EquipoPymes>>> GetEquiposPymes()
+        public async Task<ActionResult<List<DevicePymes>>> GetEquiposPymes()
         {
             try
             {
                 var mobileDevicesDto = await _suggestorService.GetEquiposPymes();
 
-                var mobileDevicesModel = _mapper.Map<List<EquipoPymes>>(mobileDevicesDto);
+                var mobileDevicesModel = _mapper.Map<List<DevicePymes>>(mobileDevicesDto);
 
                 return mobileDevicesModel;
 
