@@ -303,7 +303,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             {
                 Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-                var mainPdf = Path.Combine(mainUrl, "pdf", "ProposalComercial.pdf");
+                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
                 string[] lstFiles = new string[3];
                 lstFiles[0] = mainPdf;
                 lstFiles[1] = Path.Combine(directoryPath, "pagina1.pdf");

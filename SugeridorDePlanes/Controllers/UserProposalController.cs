@@ -30,7 +30,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             _telefonicaApi.SetCurrentProposal(null);
             var proposals =  _telefonicaApi.GetProposals();    
-            return View("Index", proposals);
+            return View("../UserProposal/ProposalList", proposals);
         }
 
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 

@@ -76,16 +76,17 @@
                                 {
                                     @foreach (var Proposal in Model)
                                     {
-                                        <tr>
-                                            <td>@Proposal.ClientName</td>
-                                            <td>@Proposal.Lineas.Count</td>
-                                            <td>@Proposal.Equipos.Count</td>
-                                            <td>$ @Proposal.Subsidio</td>
-                                            <td>@Proposal.Payback</td>
-                                            <td>$ @Proposal.DevicePayment</td>
-                                            <td>@Proposal.Estado</td>
-                                            <td class="editRow " onclick="openProposal(@Proposal.Id)"><a  class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
-                                        </tr>
+                                <tr>
+                                    <td>@Proposal.ClientName</td>
+                                    <td>@Proposal.Lineas.Count</td>
+                                    <td>@Proposal.Equipos.Count</td>
+                                    <td>$ @Proposal.Subsidio</td>
+                                    <td>@Proposal.Payback</td>
+                                    <td>$ @Proposal.DevicePayment</td>
+                                    <td> @Proposal.CreatedDate</td>
+                                    <td>@Proposal.Estado</td>
+                                    <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                </tr>
                                     }
                                 }
 
