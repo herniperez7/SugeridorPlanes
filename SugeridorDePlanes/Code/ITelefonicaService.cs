@@ -57,5 +57,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         List<DevicePymesModel> GetConfirmedEquiposPymes();
         void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList);
         List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal);
+        User GetUserByEmail(string userEmail);
+        User GetUserById(string userId);
     }
 }

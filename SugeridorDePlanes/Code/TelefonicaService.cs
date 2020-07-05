@@ -558,6 +558,29 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        public User GetUserById(string userId)
+        {
+            if (userId != String.Empty)
+            {
+                try
+                {
+
+                    return _client.GetUserByIdAsync(userId).Result;
+
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
         public void EmptyEquipoPymesCurrentList()
         {
             _currentEquiposPymes = new List<DevicePymesModel>();

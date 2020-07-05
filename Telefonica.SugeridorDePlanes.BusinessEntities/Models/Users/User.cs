@@ -10,20 +10,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users
         public string NombreCompleto { get; set; }
         public string Email { get; set; }
         public string RolString { get; set; }
-        public UserRole Rol { 
-            get { return Rol; }
-            set
-            {
-                switch (RolString)
-                {
-                    case "Ejecutivo":
-                        Rol = new Executive();
-                        break;
-                    case "Administrador":
-                        Rol = new Administrative();
-                        break;
-                }
-            }
-        } 
+        public UserRole Rol { get; set; }           
+        
     }
 }

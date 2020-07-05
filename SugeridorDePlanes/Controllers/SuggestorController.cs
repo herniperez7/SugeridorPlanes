@@ -10,6 +10,7 @@ using Telefonica.SugeridorDePlanes.Models.Users;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -18,7 +19,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private IUserManager UserManager;
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
-        private User loggedUser;
+        private TelefonicaModel.User loggedUser;
 
 
         public SuggestorController(IMapper mapper, IUserManager userManager, ITelefonicaService telefonicaService)
@@ -31,13 +32,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-           // loggedUser = JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("UsuarioLogueado"));
+            loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
+
             var clientList = await _telefonicaApi.GetClientes();
             List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
             ViewData["clientList"] = clientsModel;
-            // ViewData["loggedUser"] = loggedUser.NombreCompleto;
-            ViewData["loggedUser"] = "Jose perez";
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
             List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();

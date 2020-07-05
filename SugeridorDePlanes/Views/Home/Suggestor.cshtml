@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Telefonica.SugeridorDePlanes.Models.Users;
+@using Telefonica.SugeridorDePlanes.Models.Users.UsersRole;
+
+@{
     var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Users.User;
     var emptyPlans = true;
 
@@ -21,7 +24,8 @@
 }
 
 @{
-    var loggedUser = ViewData["loggedUser"];
+    var loggedUser = ViewData["loggedUser"] as User;
+    var userRole = ViewData["userRole"];
     var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorClientModel>;
     var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.OfertActualPlanModel>;
@@ -43,9 +47,9 @@
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />    
-   <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
-   
+    <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
+
 
 </head>
 <body>
@@ -89,7 +93,7 @@
 
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
-                <label class="input-group-text">@loggedUser</label>
+                <label class="input-group-text">@loggedUser.NombreCompleto</label>
             </div>
         </form>
 
@@ -122,7 +126,7 @@
                 <a href="http://justinfarrow.com">
                     <i class="fa fa-home fa-2x"></i>
                     <span class="nav-text">
-                        Dashboard
+                        Sugeridor
                     </span>
                 </a>
 
@@ -131,30 +135,24 @@
                 <a href="#">
                     <i class="fa fa-laptop fa-2x"></i>
                     <span class="nav-text">
-                        Stars Components
+                        Lista de propuestas
                     </span>
                 </a>
 
             </li>
-            <li class="has-subnav">
-                <a href="#">
-                    <i class="fa fa-list fa-2x"></i>
-                    <span class="nav-text">
-                        Forms
-                    </span>
-                </a>
+            @if (userRole.Equals("Administrative"))
+            {
+                <li class="has-subnav">
+                    <a href="#">
+                        <i class="fa fa-list fa-2x"></i>
+                        <span class="nav-text">
+                            Crear usuario
+                        </span>
+                    </a>
 
-            </li>
-            <li class="has-subnav">
-                <a href="#">
-                    <i class="fa fa-folder-open fa-2x"></i>
-                    <span class="nav-text">
-                        Pages
-                    </span>
-                </a>
-
-            </li>
-
+                </li>
+            }
+            
         </ul>
 
         <ul class="logout">
@@ -162,7 +160,7 @@
                 <a href="#">
                     <i class="fa fa-power-off fa-2x"></i>
                     <span class="nav-text">
-                        Logout
+                        Cerrar sesion
                     </span>
                 </a>
             </li>
@@ -632,7 +630,7 @@
                                 <div style="display: table-cell;vertical-align: middle;text-align: center;">
 
                                     <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarProposalBtn" onclick="generarProposal()">Generar Proposal</button>
-                                   
+
                                 </div>
 
 

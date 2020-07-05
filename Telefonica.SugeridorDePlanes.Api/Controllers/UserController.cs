@@ -34,7 +34,19 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                
                 var userDTO = await _userLogic.GetUserByEmail(userEmail);
                 var user = _mapper.Map<User>(userDTO);
-
+                if (userDTO != null)
+                { 
+                    switch (userDTO.Rol)
+                        {
+                            case "Ejecutivo":
+                                user.Rol = new Executive();
+                                break;
+                            case "Administrador":
+                                user.Rol = new Administrative();
+                                break;
+                        }
+                    }
+                
                 return user;
             }
             catch (Exception ex)

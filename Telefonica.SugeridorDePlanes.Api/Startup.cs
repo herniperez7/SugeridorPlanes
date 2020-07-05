@@ -40,7 +40,7 @@ namespace Telefonica.SugeridorDePlanes.Api
                 configuration.CreateMap<SuggestorB2b, SuggestorB2bDTO>().ReverseMap();
                 configuration.CreateMap<OfertPlan, OfertActualPlanDTO>().ReverseMap();
                 configuration.CreateMap<DevicePymes, DevicePymesDTO>().ReverseMap();
-                configuration.CreateMap<User, UserDTO>().ForMember(dest => dest.Rol, opt => opt.MapFrom(org => org.RolString)).ForMember(dest => dest.Rol, opt => opt.Ignore()).ReverseMap();
+                configuration.CreateMap<UserDTO, User>().ForMember(dest => dest.RolString, opt => opt.MapFrom(org => org.Rol)).ForMember(dest => dest.Rol, opt => opt.Ignore()).ReverseMap();
                 configuration.CreateMap<Proposal, ProposalDTO>().ForMember(dest => dest.Documento, opt => opt.MapFrom(org => org.RutCliente))
                     .ForMember(dest => dest.IdUsuario, opt => opt.MapFrom(org => org.IdUsuario)).ForMember(dest => dest.Id, opt => opt.MapFrom(org => org.Id)).ReverseMap();
             }, typeof(Startup));
@@ -54,9 +54,11 @@ namespace Telefonica.SugeridorDePlanes.Api
             services.AddScoped<IEmailSenderLogic, EmailSenderLogic>();
             services.AddScoped<IPdfLogic, PdfLogic>();
             services.AddScoped<IProposalLogic, ProposalLogic>();
+            services.AddScoped<IUserLogic, UserLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISuggestorRepository, SuggestorRepository>();
             services.AddScoped<IProposalRepository, ProposalRepository>();
 

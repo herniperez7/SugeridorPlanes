@@ -24,14 +24,20 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public ActionResult Login(string userName, string password)
         {
+            if(userName!=string.Empty && password != string.Empty)
+            {
+                //TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
+                var user = TelefonaService.GetUserByEmail(userName);
+                HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
+                HttpContext.Session.SetString("UserRole", user.RolString);
 
-            //TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
-          
-                var loggedUser = new TelefonicaModel.User() { NombreCompleto = "Usuario1" ,Email = "Usuario1@gmail.com",Id=1 , Rol = new TelefonicaModel.UsersRole.Administrative()};
-                HttpContext.Session.SetString("UsuarioLogueado", JsonConvert.SerializeObject(loggedUser));
-                ViewData["UsuarioLogueado"] = loggedUser;
-                
                 return this.RedirectToAction("Index", "Suggestor");
+            }
+            else
+            {
+                return View();
+            }
+            
             
         }
 
