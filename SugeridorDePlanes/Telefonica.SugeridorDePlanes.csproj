@@ -8,6 +8,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\vendor\mask\" />
+    <Folder Include="wwwroot\vendor\tableSorter\" />
   </ItemGroup>
 
   <ItemGroup>

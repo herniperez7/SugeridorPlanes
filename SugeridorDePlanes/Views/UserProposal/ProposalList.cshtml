@@ -28,10 +28,18 @@
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
     <script>
+        $(document).ready(function () {
+            $(function () {
+                $("#tableProposalList").tablesorter();
+            });
+        });   
+
         function openProposal(val)
         {
             window.location.href = "@Url.Action("OpenProposal", "UserProposal")" + '?proposaId=' + val;
         }
+        
+        
     </script>
 </head>
 <body>
@@ -57,7 +65,7 @@
                 <fieldset class="tableFieldset">
                     <legend>Mis Proposals</legend>
                     <div class="tableFixHead">
-                        <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <table class="table table-bordered table-striped mb-0 tablesorter" id="tableProposalList" style="border: 1px solid #ddd !important;">
                             <thead class="thead-dark">
                                 <tr style="text-align:center">
                                     <th>Cliente</th>

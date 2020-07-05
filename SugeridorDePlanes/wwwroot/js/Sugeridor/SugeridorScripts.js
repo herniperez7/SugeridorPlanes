@@ -5,6 +5,14 @@ var currentDeviceAmount = 0;
 var billingGap = 0;
 
 $(document).ready(function () {       
+
+    $(function () {
+        $("#tablaPlanes").tablesorter();
+    });
+
+    $(function () {
+        $("#tableMobiles").tablesorter();
+    });
     
     $("#movilesDdl").select2({
        placeholder: "Seleccionar un equipo"
@@ -28,9 +36,9 @@ $(document).ready(function () {
         selectPlan(this);
     });
 
-    //$('#saveProposalBtn').on('click', function () {
-    //    window.location.href = gbSaveProposal +  '?id=' + "152";
-    //});
+    $('#tableMobiles tbody tr').on('click', function () {
+        selectMobile(this);
+    });   
 
     if (gbCurrentClient != null) {        
         $("#clientSelect").val(gbCurrentClient);
@@ -40,6 +48,27 @@ $(document).ready(function () {
 function selectPlan(selectedPlan) {
     $('#tablaPlanes tbody tr').removeClass("selectedOfertPlan");
     selectedPlan.classList.add("selectedOfertPlan");
+}
+
+function selectMobile(selectedMobile) {
+    $('#tableMobiles tbody tr').removeClass("selectedOfertPlan");
+    selectedMobile.classList.add("selectedOfertPlan");
+}
+
+function confirmSelectedMobile() {
+    
+    var rows = $('#tableMobiles tbody tr');
+    var mobileSelected;
+    var i = 0
+    while (i < rows.length && mobileSelected === undefined) {
+        var element = rows[i];
+        if (element.classList.contains("selectedOfertPlan")) {
+            mobileSelected = element;
+        }
+        i++;
+    }
+    var mobileId = mobileSelected.cells[0].innerText.toString(); 
+    AddDevice(mobileId, true, true)   
 }
 
 function confirmSelectPlan() {
@@ -175,28 +204,31 @@ function movileChange() {
 }
 
 
-
-function AddDevice(val, add) {
+// si isModal esta en true, es por que viene el id desde el modal de moviles o de la tabla generada automaticamente
+function AddDevice(val, add, isModal = false) { 
     var id = val; 
     var url = gbDeleteMovilUrl;
 
+    //si se agrega el movil, el valor del id se saca del combo box
     if (add) {
         url = gbAddMovilDecivesUrl;
         id = $("#movilesDdl").val();
+        if (isModal) {           
+            id = val;
+        }
     }
     
     $.ajax({
         type: "POST",
         url: url + '?code=' + id,
         success: function (data) {
+           
             if (data.status === "ok") {
-              
+               
                 $("#movilTableBody").html("");
                 var devicesCount = 0;
                 var devicesAmount = 0;
                 $.each(data.result, function (key, value) {
-
-                  
 
                     var brand = value.marca !== null ? value.marca : "";
                     var model = value.nombre !== null ? value.nombre : "";
@@ -211,7 +243,6 @@ function AddDevice(val, add) {
                     devicesAmount = Number(devicesAmount.toFixed(1))
                 });
 
-               
                 var totalRow = "<tr id='totalRow'><td class='total-column'>" + devicesCount + "<td class='total-column'>$ " + formatNumberStr(devicesAmount) + "<td class='total-column'></td> </tr>"
                 $("#movilTableBody").append(totalRow);
             
@@ -605,4 +636,8 @@ function openEmailModal() {
 
 function proposalMenu() {
     window.location.href = gbUserProposals;
+}
+
+function openMobileModal() {
+    $('#mobilesModal').modal('show'); 
 }
