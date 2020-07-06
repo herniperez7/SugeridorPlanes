@@ -20,8 +20,8 @@
 }
 
 .main-menu {
-    background: #212121;
-    border-right: 1px solid #e5e5e5;
+    background: #fff;
+    border-right: 1px solid rgba(0, 169, 224, 0.3);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -50,9 +50,9 @@
             display: table;
             border-collapse: collapse;
             border-spacing: 0;
-            color: #999;
+            color: #00a9e0;
             font-family: arial;
-            font-size: 14px;
+            font-size: 20px;
             text-decoration: none;
             -webkit-transform: translateZ(0) scale(1,1);
             -webkit-transition: all .1s linear;

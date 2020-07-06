@@ -29,8 +29,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public IActionResult Index()
         {
+
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = userRole;
             _telefonicaApi.SetCurrentProposal(null);
             if(userRole == "Administrador")
             {
