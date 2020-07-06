@@ -40,9 +40,9 @@ namespace Telefonica.SugeridorDePlanes.Code
         void UpdateCurrentEquiposPymesList(string code, bool delete);
         byte[] GeneratePdfFromHtml(string devicePayment);
         Task<Proposal> AddProposal(ProposalData proposal);
-        List<Proposal> GetProposalsByUser(string idUsuario);
-        List<Proposal> GetProposals();
-        Proposal GetProposalById(string idProposal);
+        Task<List<Proposal>> GetProposalsByUser(string idUsuario);
+        Task<List<Proposal>> GetProposals();
+        Task<Proposal> GetProposalById(string idProposal);
         decimal GetSubsidy();
         decimal GetPayback();
         IndexModel CalculateIndexes();

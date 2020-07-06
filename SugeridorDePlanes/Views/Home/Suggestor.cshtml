@@ -101,11 +101,6 @@
             </div>
         </form>
 
-        <form class="form-inline input-group mb-0 w-auto">
-            <div class="input-group-prepend">
-                <label class="input-group-text">@loggedUser.NombreCompleto</label>
-            </div>
-        </form>
 
     </nav>
 
@@ -167,6 +162,14 @@
         </ul>
 
         <ul class="logout">
+            <li>
+                <p href="#">
+                    <i class="fa fa-user fa-2x"></i>
+                    <span class="nav-text">
+                        @loggedUser.NombreCompleto
+                    </span>
+                </p>
+            </li>
             <li>
                 <a href="#">
                     <i class="fa fa-power-off fa-2x"></i>

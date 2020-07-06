@@ -371,13 +371,13 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public List<Proposal> GetProposalsByUser(string idUsuario)
+        public async Task<List<Proposal>> GetProposalsByUser(string idUsuario)
         {
             try
             {
                 if (idUsuario != null && idUsuario != String.Empty)
                 {
-                    var Proposals = _client.GetProposalsUsuarioAsync(idUsuario).Result;
+                    var Proposals = await _client.GetProposalsUsuarioAsync(idUsuario);
                     var ProposalsList = Proposals.ToList();
 
                     return ProposalsList;
@@ -391,13 +391,13 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public Proposal GetProposalsById(string idProposal)
+        public async Task<Proposal> GetProposalsById(string idProposal)
         {
             try
             {
                 if (idProposal != null && idProposal != String.Empty)
                 {
-                    var Proposal = _client.GetProposalAsync(idProposal).Result;
+                    var Proposal = await _client.GetProposalAsync(idProposal);
 
                     return Proposal;
                 }
@@ -410,12 +410,12 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public List<Proposal> GetProposals()
+        public async Task<List<Proposal>> GetProposals()
         {
             try
             {
 
-                var Proposals = _client.GetProposalsAsync().Result;
+                var Proposals = await _client.GetProposalsAsync();
                 var ProposalsList = Proposals.ToList();
 
                 return ProposalsList;
@@ -427,7 +427,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        public Proposal GetProposalById(string idProposal)
+        public async Task<Proposal> GetProposalById(string idProposal)
         {
             try
             {
@@ -435,7 +435,7 @@ namespace Telefonica.SugeridorDePlanes.Code
 
                 if (idProposal != null && idProposal != String.Empty)
                 {
-                    proposal = _client.GetProposalAsync(idProposal).Result;
+                    proposal = await _client.GetProposalAsync(idProposal);
                 }
 
                 return proposal;

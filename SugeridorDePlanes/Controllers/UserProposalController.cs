@@ -27,7 +27,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
 
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
@@ -37,12 +37,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _telefonicaApi.SetCurrentProposal(null);
             if(userRole == "Administrador")
             {
-                var proposals = _telefonicaApi.GetProposals();
+                var proposals = await _telefonicaApi.GetProposals();
                 return View("../UserProposal/ProposalList", proposals);
             }
             else
             {
-                var proposals = _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
+                var proposals = await _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
                 return View("../UserProposal/ProposalList", proposals);
             }
             
@@ -100,7 +100,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> OpenProposal(string proposaId)
         {
-            var proposal = _telefonicaApi.GetProposalById(proposaId);
+            var proposal = await _telefonicaApi.GetProposalById(proposaId);
             _telefonicaApi.SetCurrentProposal(proposal);
 
             if(proposal.Estado == "Finalizada")
