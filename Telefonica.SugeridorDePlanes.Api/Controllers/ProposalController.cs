@@ -195,21 +195,9 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         private async Task PopulateUser(Proposal p)
         {
             var userDTO = await _userLogic.GetUserById(p.IdUsuario);
-            p.Usuario = _mapper.Map<User>(userDTO);
-            if (userDTO != null)
-            {
-                switch (userDTO.Rol)
-                {
-                    case "Ejecutivo":
-                        p.Usuario.Rol = new Executive();
-                        break;
-                    case "Administrador":
-                        p.Usuario.Rol = new Administrative();
-                        break;
-                }
-            }
+            p.NombreUsuario = userDTO.NombreCompleto;   
+            
         }
-        
 
         private void PopulateProposalLines(Proposal proposal, List<OfertActualPlanDTO> plansDto, List<ProposalLineDTO> linesDto)
         {
