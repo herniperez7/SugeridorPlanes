@@ -1,5 +1,9 @@
-﻿@{
-    var usuario = ViewData["LoggedUser"] as Telefonica.SugeridorDePlanes.Models.Users.User;
+﻿@using Telefonica.SugeridorDePlanes.Models.Users;
+@using Telefonica.SugeridorDePlanes.Models.Users.UsersRole;
+
+@{
+    var loggedUser = ViewData["loggedUser"] as User;
+    var userRole = ViewData["userRole"];
     var emptyPlans = true;
 
     if (Model != null && Model.Count() > 0)
@@ -27,87 +31,133 @@
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
-
+    <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
     <script>
         $(document).ready(function () {
             $(function () {
                 $("#tableProposalList").tablesorter();
             });
-        });   
+        });
 
         function openProposal(val)
         {
             window.location.href = "@Url.Action("OpenProposal", "UserProposal")" + '?proposaId=' + val;
         }
-        
-        
+
+
     </script>
 </head>
 <body>
-    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 ml-3">
-        <div class="viewTitle">
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:60px">
+        <div class="viewTitle" style="margin-left:20px">
             <h2>Lista de Propuestas</h2>
         </div>
         <form class="form-inline input-group mb-0 w-auto">
             <div class="input-group-prepend">
-                <label class="input-group-text">Nombre Usuario</label>
-            </div>
-            <div class="input-group-prepend">
-                <label class="input-group-text">Cerrar sesion</label>
+                <label class="input-group-text">@loggedUser.NombreCompleto</label>
             </div>
         </form>
 
     </nav>
+    <nav class="main-menu" id="sideNav">
+        <ul>
+            <li>
+                <a href="@Url.Action("Index", "Suggestor")">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+                        Sugeridor
+                    </span>
+                </a>
 
+            </li>
+            <li class="has-subnav">
+                <a href="@Url.Action("Index", "UserProposal")">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">
+                        Lista de propuestas
+                    </span>
+                </a>
 
-    <div class="container-fluid pl-md-5 pr-md-5 pt-md-3">
-        <div class="row">
-            <div class="col-lg-12 col-sm-12 col-md-12">
-                <fieldset class="tableFieldset">
-                    <legend>Mis Propuestas</legend>
-                    <div class="tableFixHead">
-                        <table class="table table-bordered table-striped mb-0 tablesorter" id="tableProposalList" style="border: 1px solid #ddd !important;">
-                            <thead class="thead-dark">
-                                <tr style="text-align:center">
-                                    <th>Cliente</th>
-                                    <th>Cant. Lineas</th>
-                                    <th>Cant. Equipos</th>
-                                    <th>Subsidio</th>
-                                    <th>Payback</th>
-                                    <th>PagoEquipos</th>
-                                    <th>Estado</th>
-                                    <th>Fecha</th>
-                                    <th>Abrir</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    @foreach (var Proposal in Model)
+            </li>
+            @if (userRole.Equals("Administrador"))
+            {
+                <li class="has-subnav">
+                    <a href="#">
+                        <i class="fa fa-laptop fa-2x"></i>
+                        <span class="nav-text">
+                            Crear usuario
+                        </span>
+                    </a>
+
+                </li>
+            }
+
+        </ul>
+
+        <ul class="logout">
+            <li>
+                <a href="#">
+                    <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Cerrar sesion
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="area">
+        <div class="pl-md-5 pr-md-5 pt-md-3" style="margin-left:30px">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                    <fieldset class="tableFieldset">
+                        <legend>Mis Proposals</legend>
+                        <div class="tableFixHead">
+                            <table class="table table-bordered table-striped mb-0 tablesorter" id="tableProposalList" style="border: 1px solid #ddd !important;">
+                                <thead class="thead-dark">
+                                    <tr style="text-align:center">
+                                        <th>Cliente</th>
+                                        <th>Cant. Lineas</th>
+                                        <th>Cant. Equipos</th>
+                                        <th>Subsidio</th>
+                                        <th>Payback</th>
+                                        <th>PagoEquipos</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th>Abrir</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
                                     {
-                                <tr>
-                                    <td>@Proposal.ClientName</td>
-                                    <td>@Proposal.Lineas.Count</td>
-                                    <td>@Proposal.Equipos.Count</td>
-                                    <td>$ @Proposal.Subsidio</td>
-                                    <td>@Proposal.Payback</td>
-                                    <td>$ @Proposal.DevicePayment</td>
-                                    <td> @Proposal.CreatedDate</td>
-                                    <td>@Proposal.Estado</td>
-                                    <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
-                                </tr>
+                                        @foreach (var Proposal in Model)
+                                        {
+                                            <tr>
+                                                <td>@Proposal.ClientName</td>
+                                                <td>@Proposal.Lineas.Count</td>
+                                                <td>@Proposal.Equipos.Count</td>
+                                                <td>$ @Proposal.Subsidio</td>
+                                                <td>@Proposal.Payback</td>
+                                                <td>$ @Proposal.DevicePayment</td>
+                                                <td> @Proposal.CreatedDate</td>
+                                                <td>@Proposal.Estado</td>
+                                                <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                            </tr>
+                                        }
                                     }
-                                }
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                    </div>
+                        </div>
 
-                </fieldset>
+                    </fieldset>
+                </div>
             </div>
         </div>
+
     </div>
+
+
 
 
 </body>

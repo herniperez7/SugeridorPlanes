@@ -35,20 +35,26 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _telefonicaApi.EmptyEquipoPymesCurrentList();
 
             var clientList = await _telefonicaApi.GetClientes();
-            List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
-            ViewData["clientList"] = clientsModel;
+
             ViewData["loggedUser"] = loggedUser;
             ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
             var planOfert = await _telefonicaApi.GetActualPlansAsync();
             List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
             ViewData["planOfertList"] = planesOfertList;
-            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
-            _telefonicaApi.UpdateCurrentClient(clientsModel[0].Documento);
-            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+            var planMapped = new List<SuggestorB2bModel>();
+            if (clientList != null && clientList.Count > 0)
+            {
+                List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
+                ViewData["clientList"] = clientsModel;
+                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
+                planMapped =_mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                _telefonicaApi.UpdateCurrentClient(clientsModel[0].Documento);
+                var indexes = _telefonicaApi.CalculateIndexes();
+                ViewData["Indexes"] = indexes;
+            }
+
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-            var indexes = _telefonicaApi.CalculateIndexes();
-            ViewData["Indexes"] = indexes;
             ViewData["mobileList"] = new List<DevicePymesModel>();
 
             ViewData["devicePayment"] = 0;

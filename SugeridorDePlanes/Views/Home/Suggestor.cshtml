@@ -30,7 +30,12 @@
     var movileDevices = ViewData["movileDevices"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
     var planOfertList = ViewData["planOfertList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.OfertActualPlanModel>;
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DefinitivePlanModel>;
-    var recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
+    SelectList recomendadorOptions = null;
+    if (clientList != null && clientList.Count > 0)
+    {
+        recomendadorOptions = new SelectList(clientList, "Documento", "Titular");
+    }
+
     var indexModel = ViewData["Indexes"] as Telefonica.SugeridorDePlanes.Models.ApiModels.IndexModel;
     var mobileList = ViewData["mobileList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DevicePymesModel>;
     var devicePayment = ViewData["devicePayment"];
@@ -49,6 +54,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/TelefonicaFonts.css" />
 
 
 </head>
@@ -71,19 +77,23 @@
 
     </script>
 
-    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:70px">
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:60px">
 
 
-        <form class="form-inline input-group mb-0 w-auto" action="/Suggestor/ShowPlans" method="post">
+        <form class="form-inline input-group mb-0 w-auto" action="/Suggestor/ShowPlans" method="post" style="margin-left:20px">
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
             </div>
-            @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
+            @if (recomendadorOptions != null)
+            {
+                @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
+            }
+
 
         </form>
 
 
-        <form class="form-inline mb-0" action="/Home/ShowPlans" method="post">
+        <form class="form-inline mb-0" action="/Suggestor/ShowPlans" method="post">
             <div class="d-inline-flex align-items-center w-100">
                 <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por Rut" aria-label="Search">
 
@@ -105,9 +115,10 @@
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
             </div>
-
-            @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
-
+            @if (recomendadorOptions != null)
+            {
+                @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
+             } 
 
         </form>
 
@@ -461,7 +472,7 @@
                         <div class="row" style="height: 250px">
                             <div class="col-lg-5">
 
-                                <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
+                                <form class="form-inline input-group mb-0 w-auto" action="/Suggestor/ShowPlans" method="post">
 
                                     <select id="movilesDdl" class="custom-select" onchange="movileChange()">
 
@@ -568,36 +579,40 @@
 
 
                                 <div id="divbillingStatus">
-                                    @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
+                                    @if (indexModel != null)
                                     {
-                                        <div class="superiorBillingMain">
-                                            <div class="superiorBillingChild">
-                                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
+                                        @if (@indexModel.BillingStatus.ToString().Equals("Higher"))
+                                        {
+                                            <div class="superiorBillingMain">
+                                                <div class="superiorBillingChild">
+                                                    <i class="fa fa-check-circle fa-lg" aria-hidden="true"> <span class="spanSatus">Facturación superior </span></i>
 
-                                            </div>
-                                        </div>
-                                    }
-
-                                    else if (@indexModel.BillingStatus.ToString().Equals("Lower"))
-                                    {
-                                        <div class="lowerBillingMain">
-                                            <div class="lowerBillingChild">
-                                                <div style="font-weight:bold; color:#FF0000">
-                                                    <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
-                                    else if (@indexModel.BillingStatus.ToString().Equals("Equal"))
-                                    {
-                                        <div class="equalBillingMain">
-                                            <div class="equalBillingMainChild">
-                                                <div style="font-weight:bold; color:#FFD200">
-                                                    <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
+                                        }
+
+                                        else if (@indexModel.BillingStatus.ToString().Equals("Lower"))
+                                        {
+                                            <div class="lowerBillingMain">
+                                                <div class="lowerBillingChild">
+                                                    <div style="font-weight:bold; color:#FF0000">
+                                                        <i class="fa fa-times fa-lg" aria-hidden="true"><span class="spanSatus"> Facturación inferior</span></i>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
+                                        else if (@indexModel.BillingStatus.ToString().Equals("Equal"))
+                                        {
+                                            <div class="equalBillingMain">
+                                                <div class="equalBillingMainChild">
+                                                    <div style="font-weight:bold; color:#FFD200">
+                                                        <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"><span class="spanSatus"> Misma facturación</span></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                     }
+
                                     else
                                     {
 
@@ -614,9 +629,16 @@
                                 </div>
 
                                 <div id="valuesResumen" class="p-2">
-                                    <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @FormatCultureNumber(indexModel.FixedGap)</label><br />
-                                    <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @FormatCultureNumber(indexModel.BillingGap)</label><br />
-
+                                    @if (indexModel != null)
+                                    {
+                                        <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ @FormatCultureNumber(indexModel.FixedGap)</label><br />
+                                        <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ @FormatCultureNumber(indexModel.BillingGap)</label><br />
+                                    }
+                                    else
+                                    {
+                                        <label><b>GAP Fijo: </b></label><label class="ml-1" id="gapValue">$ 0</label><br />
+                                        <label><b>GAP Facturación: </b></label><label class="ml-1" id="gapBilingValue">$ 0</label><br />
+                                    }
                                     <label><b>Subsidio: </b></label><label class="ml-1" id="calulatedSubsidy"></label><br />
                                     <label><b>Payback: </b></label><label class="ml-1" id="calulatedPayBack"></label><br />
                                     <label><b>Ingreso: </b></label><label class="ml-1" id="calulatedIncome"></label><br />
@@ -629,8 +651,14 @@
                             <div class="col-lg-4 align-items-center dis-grid justify-content-center">
 
                                 <div style="display: table-cell;vertical-align: middle;text-align: center;">
-
-                                    <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarProposalBtn" onclick="generarProposal()">Generar Proposal</button>
+                                    @if (Model != null && Model.Count > 0)
+                                    {
+                                        <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="generarProposalBtn" onclick="generarProposal()">Generar Propuesta</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" disabled type="submit" id="generarProposalBtn">Generar Propuesta</button>
+                                    }
 
                                 </div>
 
@@ -640,18 +668,36 @@
 
 
                         </div>
-                        <button style="position: absolute;right:190px;top:-5px;outline:5px solid #fff" id="saveProposalBtn" onclick="saveProposal()">
-                            <img src="@Url.Content("~/img/icons/disketteIcon32x.png")" />
-                        </button>
-                        <button style="position: absolute;right:130px;top:-5px;outline:5px solid #fff" id="exportPdfBtn" onclick="exportPdf()">
-                            <img src="@Url.Content("~/img/icons/IconPdf.png")" />
-                        </button>
-                        <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="sendEmailBtn" onclick="openEmailModal()">
-                            <img src="@Url.Content("~/img/icons/iconMail.png")" />
-                        </button>
-                        <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
-                            <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
-                        </button>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            <button style="position: absolute;right:190px;top:-5px;outline:5px solid #fff" id="saveProposalBtn" onclick="saveProposal()">
+                                <img src="@Url.Content("~/img/icons/disketteIcon32x.png")" />
+                            </button>
+                            <button style="position: absolute;right:130px;top:-5px;outline:5px solid #fff" id="exportPdfBtn" onclick="exportPdf()">
+                                <img src="@Url.Content("~/img/icons/IconPdf.png")" />
+                            </button>
+                            <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="sendEmailBtn" onclick="openEmailModal()">
+                                <img src="@Url.Content("~/img/icons/iconMail.png")" />
+                            </button>
+                            <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
+                                <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
+                            </button>
+                        }
+                        else
+                        {
+                            <button disabled style="position: absolute;right:190px;top:-5px;cursor:no-drop;" id="saveProposalBtn" onclick="saveProposal()">
+                                <img src="@Url.Content("~/img/icons/disketteIcon32x.png")" />
+                            </button>
+                            <button disabled style="position: absolute;right:130px;top:-5px;cursor:no-drop;" id="exportPdfBtn" onclick="exportPdf()">
+                                <img src="@Url.Content("~/img/icons/IconPdf.png")" />
+                            </button>
+                            <button disabled style="position: absolute;right:70px;top:-5px;cursor:no-drop;" id="sendEmailBtn" onclick="openEmailModal()">
+                                <img src="@Url.Content("~/img/icons/iconMail.png")" />
+                            </button>
+                            <button disabled style="position: absolute;right:10px;top:-5px;cursor:no-drop;" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
+                                <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
+                            </button>
+                        }
                     </fieldset>
 
                 </div>
@@ -700,7 +746,11 @@
 
                                     <div id="incomeDivValue" style="display:none">@incomeAmount</div>
                                     <div id="billingDivValue" style="display:none">@billingAmount</div>
-                                    <div id="tmmPrestasionDivValue" style="display:none"> @indexModel.TmmPrestacion</div>
+                                    @if (indexModel != null)
+                                    {
+                                        <div id="tmmPrestasionDivValue" style="display:none"> @indexModel.TmmPrestacion</div>
+                                    }
+
                                 </div>
                             </div>
 
