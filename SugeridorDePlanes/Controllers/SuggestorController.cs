@@ -19,7 +19,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         private IUserManager UserManager;
         private readonly IMapper _mapper;
         private ITelefonicaService _telefonicaApi;
-        private TelefonicaModel.User loggedUser;
 
 
         public SuggestorController(IMapper mapper, IUserManager userManager, ITelefonicaService telefonicaService)
@@ -32,7 +31,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-            loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
 
             var clientList = await _telefonicaApi.GetClientes();
@@ -201,13 +200,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             var resultProposal = await GenerateProposalData(devicePayment);
             return RedirectToAction("Index", "UserProposal");
+            
         }
 
         private async Task<bool> GenerateProposalData(string devicePayment)
         {
             try
             {
-                var porposalData = _telefonicaApi.GetProposalData(devicePayment, true);
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var porposalData = _telefonicaApi.GetProposalData(devicePayment, true, loggedUser.Id);
                 Proposal requestResult = await _telefonicaApi.AddProposal(porposalData);
                 _telefonicaApi.EmptyEquipoPymesCurrentList();
                 return true;
@@ -227,8 +228,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<JsonResult> SaveProposal(string devicePayment)
         {
             try
-            {      
-                bool isCreated = await _telefonicaApi.SaveProposal(devicePayment, false);
+            {
+                var  loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                bool isCreated = await _telefonicaApi.SaveProposal(devicePayment, false,loggedUser.Id);
                 var modalText = !isCreated ? "La propuesta se actualizó exitosamente!" : "La propuesta se guardó exitosamente!";
                 var data = new { status = "ok", result = modalText };
                 return new JsonResult(data);

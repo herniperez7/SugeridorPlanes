@@ -67,14 +67,14 @@
         var gbGenerateProposal = "@Url.Action("GenerateProposal", "Suggestor")";
         var gbSaveProposal = "@Url.Action("SaveProposal", "Suggestor")";
         var gbCurrentClient = @ViewData["currentClient"];
-        var gbUserProposals = "@Url.Action("ProposalList", "UserProposal")";
+        var gbUserProposals = "@Url.Action("Index", "UserProposal")";
 
     </script>
 
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:70px">
 
 
-        <form class="form-inline input-group mb-0 w-auto" action="/Home/ShowPlans" method="post">
+        <form class="form-inline input-group mb-0 w-auto" action="/Suggestor/ShowPlans" method="post">
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
             </div>
@@ -123,7 +123,7 @@
     <nav class="main-menu" id="sideNav">
         <ul>
             <li>
-                <a href="http://justinfarrow.com">
+                <a href="@Url.Action("Index", "Suggestor")">
                     <i class="fa fa-home fa-2x"></i>
                     <span class="nav-text">
                         Sugeridor
@@ -132,19 +132,19 @@
 
             </li>
             <li class="has-subnav">
-                <a href="#">
-                    <i class="fa fa-laptop fa-2x"></i>
+                <a href="@Url.Action("Index", "UserProposal")">
+                    <i class="fa fa-list fa-2x"></i>
                     <span class="nav-text">
                         Lista de propuestas
                     </span>
                 </a>
 
             </li>
-            @if (userRole.Equals("Administrative"))
+            @if (userRole.Equals("Administrador"))
             {
                 <li class="has-subnav">
                     <a href="#">
-                        <i class="fa fa-list fa-2x"></i>
+                        <i class="fa fa-laptop fa-2x"></i>
                         <span class="nav-text">
                             Crear usuario
                         </span>

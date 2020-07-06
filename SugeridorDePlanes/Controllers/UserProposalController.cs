@@ -1,13 +1,14 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-
 using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
-
 using Telefonica.SugeridorDePlanes.Models.Users;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
+using Microsoft.AspNetCore.Http;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -28,9 +29,20 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public IActionResult Index()
         {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var userRole = HttpContext.Session.GetString("UserRole");
             _telefonicaApi.SetCurrentProposal(null);
-            var proposals =  _telefonicaApi.GetProposals();    
-            return View("../UserProposal/ProposalList", proposals);
+            if(userRole == "Administrador")
+            {
+                var proposals = _telefonicaApi.GetProposals();
+                return View("../UserProposal/ProposalList", proposals);
+            }
+            else
+            {
+                var proposals = _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
+                return View("../UserProposal/ProposalList", proposals);
+            }
+            
         }
 
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 

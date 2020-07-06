@@ -525,7 +525,6 @@ function generarProposal() {
                 window.location.href = gbUserProposals;
        
         }
-        
     });
 }
 

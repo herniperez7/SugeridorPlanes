@@ -37,42 +37,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             try
             {
                 var ProposalsDTO = await _ProposalLogic.GetProposals();
-                var clientList = _clientLogic.GetClientes().Result;
-                List<Proposal> Proposals = new List<Proposal>();
-                foreach (ProposalDTO Proposal in ProposalsDTO)
-                {
-                    var lineasDTO = await _ProposalLogic.GetLineasProposal(Proposal.Id);
-                    var equiposDTO = await _ProposalLogic.GetEquiposProposal(Proposal.Id);
-                    var lineasList = new List<ProposalLine>();
-                    if (lineasDTO.Count > 0)
-                    {
-                        foreach (ProposalLineDTO linea in lineasDTO)
-                        {
-                            var plan = await _suggestorLogic.GetPlanByCode(linea.Plan);
-                            var planModel = _mapper.Map<OfertPlan>(plan);
-                            lineasList.Add(new ProposalLine() { Numero = linea.NumeroLinea, Plan = planModel });
-                        }
-                    }
-                    var equiposList = new List<DevicePymes>();
-                    if (equiposDTO.Count > 0)
-                    {
-                        foreach (ProposalDeviceDTO equipo in equiposDTO)
-                        {
-                            var movilDevice = await _suggestorLogic.GetEquiposPymesByCode(equipo.CODIGO_EQUIPO);
-                            equiposList.Add(new DevicePymes() { CodigoEquipo = equipo.CODIGO_EQUIPO, Marca = movilDevice.Marca, Nombre = movilDevice.Nombre, PrecioSinIva = movilDevice.PrecioSinIva, Stock = movilDevice.Stock });
-                        }
-                    }
-                    var item = _mapper.Map<Proposal>(Proposal);
-                    item.Equipos = equiposList;
-                    item.Lineas = lineasList;
-                    Proposals.Add(item);
-                }
-
-                foreach (var p in Proposals)
-                {
-                    PopulateClientName(p, clientList);
-                }
-
+                List<Proposal> Proposals = await getProposalWithData(ProposalsDTO);
                 return Proposals;
             }
             catch (Exception ex)
@@ -88,7 +53,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             try
             {
                 var ProposalsDTO = await _ProposalLogic.GetProposalsUsuario(idProposal);
-                var Proposals = _mapper.Map<List<Proposal>>(ProposalsDTO);
+                List<Proposal> Proposals = await getProposalWithData(ProposalsDTO);
 
 
                 return Proposals;
@@ -157,7 +122,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     Subsidio = proposal.Subsidio,
                     Estado = transactionProposalDto.Proposal.Estado,
                     CreatedDate = transactionProposalDto.Proposal.CreatedDate,
-                    IdUsuario = ""
+                    IdUsuario = proposal.IdUsuario.ToString()
                 };
 
                 return proposalRequest;
@@ -184,6 +149,46 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        private async Task<List<Proposal>> getProposalWithData(List<ProposalDTO> ProposalsDTO)
+        {
+            var clientList = _clientLogic.GetClientes().Result;
+            List<Proposal> Proposals = new List<Proposal>();
+            foreach (ProposalDTO Proposal in ProposalsDTO)
+            {
+                var lineasDTO = await _ProposalLogic.GetLineasProposal(Proposal.Id);
+                var equiposDTO = await _ProposalLogic.GetEquiposProposal(Proposal.Id);
+                var lineasList = new List<ProposalLine>();
+                if (lineasDTO.Count > 0)
+                {
+                    foreach (ProposalLineDTO linea in lineasDTO)
+                    {
+                        var plan = await _suggestorLogic.GetPlanByCode(linea.Plan);
+                        var planModel = _mapper.Map<OfertPlan>(plan);
+                        lineasList.Add(new ProposalLine() { Numero = linea.NumeroLinea, Plan = planModel });
+                    }
+                }
+                var equiposList = new List<DevicePymes>();
+                if (equiposDTO.Count > 0)
+                {
+                    foreach (ProposalDeviceDTO equipo in equiposDTO)
+                    {
+                        var movilDevice = await _suggestorLogic.GetEquiposPymesByCode(equipo.CODIGO_EQUIPO);
+                        equiposList.Add(new DevicePymes() { CodigoEquipo = equipo.CODIGO_EQUIPO, Marca = movilDevice.Marca, Nombre = movilDevice.Nombre, PrecioSinIva = movilDevice.PrecioSinIva, Stock = movilDevice.Stock });
+                    }
+                }
+                var item = _mapper.Map<Proposal>(Proposal);
+                item.Equipos = equiposList;
+                item.Lineas = lineasList;
+                Proposals.Add(item);
+            }
+
+            foreach (var p in Proposals)
+            {
+                PopulateClientName(p, clientList);
+            }
+            return Proposals;
         }
 
         private void PopulateProposalLines(Proposal proposal, List<OfertActualPlanDTO> plansDto, List<ProposalLineDTO> linesDto)
@@ -227,7 +232,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 DevicePayment = proposal.DevicePayment,
                 Subsidio = proposal.Subsidio,
                 CreatedDate = DateTime.Now,
-                Estado = "Pendiente"
+                Estado = "Pendiente",
+                IdUsuario = proposal.IdUsuario
             };
 
 

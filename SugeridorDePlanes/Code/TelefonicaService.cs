@@ -356,7 +356,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 {
                     if (_CurrentProposal != null)
                     {
-                        await SaveProposal(proposal.DevicePayment.ToString(), proposal.Finalizada);
+                        await SaveProposal(proposal.DevicePayment.ToString(), proposal.Finalizada,proposal.IdUsuario);
                     }
                     else 
                     {
@@ -603,7 +603,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         }
 
 
-        public ProposalData GetProposalData(string devicePayment, bool isCreated)
+        public ProposalData GetProposalData(string devicePayment, bool isCreated, int idUsuario)
         {
             var planesDefList = GetCurrentDefinitivePlans();
             var mobileList = GetConfirmedEquiposPymes();
@@ -626,20 +626,21 @@ namespace Telefonica.SugeridorDePlanes.Code
                 Payback = paybackDouble,
                 Subsidio = subsidioDouble,
                 MobileDevicesList = mobileDevicesList,
-                Finalizada = isCreated
+                Finalizada = isCreated,
+                IdUsuario = idUsuario,
             };
 
             return proposalData;
         }
 
-        public async Task<bool> SaveProposal(string devicePayment, bool isFinalized)
+        public async Task<bool> SaveProposal(string devicePayment, bool isFinalized, int userId)
         {
             try
             {
                 var currentProposal = GetCurrentProposal();
                 //Si no hay una propuesta activa, entonces se esta creando una nueva, de lo contrario se actualizando la actual
                 bool isCreated = currentProposal == null; 
-                var proposalData = GetProposalData(devicePayment, isCreated);
+                var proposalData = GetProposalData(devicePayment, isCreated, userId);
 
                 //si no hay una propuesta activa, se crea
                 if (isCreated)

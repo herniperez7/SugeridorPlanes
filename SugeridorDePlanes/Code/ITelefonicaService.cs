@@ -52,8 +52,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         Task<bool> UpdateTotalProposal(ProposalData proposal);
         Proposal GetCurrentProposal();
         void SetCurrentProposal(Proposal proposal);
-        public ProposalData GetProposalData(string devicePayment, bool isCreated);
-        Task<bool> SaveProposal(string devicePayment, bool isFinalized);
+        public ProposalData GetProposalData(string devicePayment, bool isCreated, int idUsuario);
+        Task<bool> SaveProposal(string devicePayment, bool isFinalized, int userId);
         List<DevicePymesModel> GetConfirmedEquiposPymes();
         void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList);
         List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal);

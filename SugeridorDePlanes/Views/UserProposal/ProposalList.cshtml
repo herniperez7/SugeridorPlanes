@@ -1,5 +1,5 @@
 ﻿@{
-    var usuario = ViewData["UsuarioLogueado"] as Telefonica.SugeridorDePlanes.Models.Users.User;
+    var usuario = ViewData["LoggedUser"] as Telefonica.SugeridorDePlanes.Models.Users.User;
     var emptyPlans = true;
 
     if (Model != null && Model.Count() > 0)
