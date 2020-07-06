@@ -129,7 +129,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 {
                     RecomendadorId = idPlan,
                     Plan = linea.Plan.Plan,
-                    Bono = linea.Plan.Bono,
+                    Bono = linea.Plan.Bono_ / 1024,
                     Roaming = linea.Plan.Roaming,
                     TMM_s_iva = (decimal)linea.Plan.TmM_s_iva
                 };
