@@ -1,0 +1,58 @@
+﻿@using Telefonica.SugeridorDePlanes.Models.Users;
+@using Telefonica.SugeridorDePlanes.Models.Users.UsersRole;
+@model User;
+    <nav class="main-menu" id="sideNav">
+        <ul>
+            <li>
+                <a href="@Url.Action("Index", "Suggestor")">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+                        Sugeridor
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="@Url.Action("Index", "UserProposal")">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">
+                        Lista de propuestas
+                    </span>
+                </a>
+
+            </li>
+            @if (Model.Rol.Equals("Administrador"))
+            {
+                <li class="has-subnav">
+                    <a href="#">
+                        <i class="fa fa-laptop fa-2x"></i>
+                        <span class="nav-text">
+                            Crear usuario
+                        </span>
+                    </a>
+
+                </li>
+            }
+
+        </ul>
+
+        <ul class="logout">
+            <li>
+                <p href="#">
+                    <i class="fa fa-user fa-2x"></i>
+                    <span class="nav-text">
+                        @Model.NombreCompleto
+                    </span>
+                </p>
+            </li>
+            <li>
+                <a href="@Url.Action("Logout", "Login")">
+                    <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Cerrar sesion
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+  
