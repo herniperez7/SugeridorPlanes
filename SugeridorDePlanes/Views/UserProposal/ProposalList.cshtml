@@ -121,25 +121,29 @@
                         <legend>Mis Proposals</legend>
                         <div class="tableFixHead">
                             <table class="table table-bordered table-striped mb-0 tablesorter" id="tableProposalList" style="border: 1px solid #ddd !important;">
-                                <thead class="thead-dark">
-                                    <tr style="text-align:center">
-                                        <th>Cliente</th>
-                                        <th>Cant. Lineas</th>
-                                        <th>Cant. Equipos</th>
-                                        <th>Subsidio</th>
-                                        <th>Payback</th>
-                                        <th>PagoEquipos</th>
-                                        <th>Estado</th>
-                                        <th>Fecha</th>
-                                        <th>Abrir</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        @foreach (var Proposal in Model)
+                                @if (userRole.Equals("Administrador"))
+                                {
+                                    <thead class="thead-dark">
+                                        <tr style="text-align:center">
+                                            <th>Usuario</th>
+                                            <th>Cliente</th>
+                                            <th>Cant. Lineas</th>
+                                            <th>Cant. Equipos</th>
+                                            <th>Subsidio</th>
+                                            <th>Payback</th>
+                                            <th>PagoEquipos</th>
+                                            <th>Estado</th>
+                                            <th>Fecha</th>
+                                            <th>Abrir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
                                         {
+                                            @foreach (var Proposal in Model)
+                                            {
                                             <tr>
+                                                <td>@Proposal.Usuario.NombreCompleto</td>
                                                 <td>@Proposal.ClientName</td>
                                                 <td>@Proposal.Lineas.Count</td>
                                                 <td>@Proposal.Equipos.Count</td>
@@ -150,10 +154,49 @@
                                                 <td>@Proposal.Estado</td>
                                                 <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
                                             </tr>
+                                            }
                                         }
-                                    }
 
-                                </tbody>
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <thead class="thead-dark">
+                                        <tr style="text-align:center">
+                                            <th>Cliente</th>
+                                            <th>Cant. Lineas</th>
+                                            <th>Cant. Equipos</th>
+                                            <th>Subsidio</th>
+                                            <th>Payback</th>
+                                            <th>PagoEquipos</th>
+                                            <th>Estado</th>
+                                            <th>Fecha</th>
+                                            <th>Abrir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            @foreach (var Proposal in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Proposal.ClientName</td>
+                                                    <td>@Proposal.Lineas.Count</td>
+                                                    <td>@Proposal.Equipos.Count</td>
+                                                    <td>$ @Proposal.Subsidio</td>
+                                                    <td>@Proposal.Payback</td>
+                                                    <td>$ @Proposal.DevicePayment</td>
+                                                    <td> @Proposal.CreatedDate</td>
+                                                    <td>@Proposal.Estado</td>
+                                                    <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                }
+
+
                             </table>
 
                         </div>

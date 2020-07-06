@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users;
 
 namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
 {
@@ -16,6 +17,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
         public double Subsidio { get; set; }
         public string Estado { get; set; }
         public string IdUsuario { get; set; }
+        public User Usuario { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

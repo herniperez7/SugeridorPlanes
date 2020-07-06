@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
-using Telefonica.SugeridorDePlanes.BusinessLogic;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
-using Telefonica.SugeridorDePlanes.DataAccess;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.Api.Controllers
@@ -21,14 +19,16 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         private readonly IProposalLogic _ProposalLogic;
         private readonly ISuggestorLogic _suggestorLogic;
         private readonly IClientLogic _clientLogic;
+        private readonly IUserLogic _userLogic;
         private readonly IMapper _mapper;
 
-        public ProposalController(ISuggestorLogic suggestorLogic, IProposalLogic ProposalLogic, IMapper mapper, IClientLogic clientLogic)
+        public ProposalController(ISuggestorLogic suggestorLogic, IProposalLogic ProposalLogic, IMapper mapper, IClientLogic clientLogic, IUserLogic userLogic)
         {
             _ProposalLogic = ProposalLogic;
             _suggestorLogic = suggestorLogic;
             _mapper = mapper;
             _clientLogic = clientLogic;
+            _userLogic = userLogic;
         }
 
         [HttpGet("getProposals")]
@@ -186,10 +186,30 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 
             foreach (var p in Proposals)
             {
+                await PopulateUser(p);
                 PopulateClientName(p, clientList);
             }
             return Proposals;
         }
+
+        private async Task PopulateUser(Proposal p)
+        {
+            var userDTO = await _userLogic.GetUserById(p.IdUsuario);
+            p.Usuario = _mapper.Map<User>(userDTO);
+            if (userDTO != null)
+            {
+                switch (userDTO.Rol)
+                {
+                    case "Ejecutivo":
+                        p.Usuario.Rol = new Executive();
+                        break;
+                    case "Administrador":
+                        p.Usuario.Rol = new Administrative();
+                        break;
+                }
+            }
+        }
+        
 
         private void PopulateProposalLines(Proposal proposal, List<OfertActualPlanDTO> plansDto, List<ProposalLineDTO> linesDto)
         {

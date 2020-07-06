@@ -85,8 +85,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> OpenProposalFinished(Proposal proposal)
         {
-           
-           
             var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
             _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
             var mobileList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);
