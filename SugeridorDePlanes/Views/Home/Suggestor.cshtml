@@ -922,17 +922,24 @@
 
                                         <tr>
                                             <td>@mobile.Id</td>
-                                            <td>@mobile.Marca</td>
-                                            <td>@mobileName</td>
-                                            <td>$ @mobile.PrecioSinIva</td>
-                                            <td>@mobile.Stock</td>
-                                        </tr>
-                                    }
+                                            <td class="hasTooltip">
+                                                @mobile.Marca
+                                                <span>@mobile.Marca @mobile.Nombre</span>
+                                            </td>
+                                            <td class="hasTooltip">
+                                                @mobileName
+                                            <span>@mobile.Marca @mobile.Nombre</span>
+                                        </td>
+                                            <td>$ @FormatCultureNumber(mobile.PrecioSinIva)</td>
+                                        <td>@mobile.Stock</td>
+                                    </tr>
+                                }
                                 </tbody>
                             </table>
                         </div>
 
-                        <div class="modal-footer">
+                        <div class="modal-footer justify-content-between">
+                           
                             <button type="button" class="btn btn-outline-success" onclick="confirmSelectedMobile()" data-dismiss="modal">Seleccionar</button>
                         </div>
                     </div>
