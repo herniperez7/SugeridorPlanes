@@ -492,7 +492,7 @@
 
                                             <tr>
                                                 <th scope="col">Equipo</th>
-                                                <th scope="col">Lande</th>
+                                                <th scope="col">Landed</th>
                                                 <th scope="col">Borrar</th>
                                             </tr>
                                         </thead>
@@ -533,9 +533,10 @@
 
                             </div>
                         </div>
-
+                        <button style="position: absolute;right:10px;top:-5px;outline:1px solid #fff" onclick="openMobileModal()">
+                            <img src="@Url.Content("~/img/icons/mobileIcon32x.png")" />
+                        </button>
                     </fieldset>
-
 
                 </div>
 
@@ -650,7 +651,6 @@
                         </button>
                         <button style="position: absolute;right:10px;top:-5px;outline:5px solid #fff" id="calculatIndexesBtn" onclick="alternateBugdetFields(1)">
                             <img src="@Url.Content("~/img/icons/calculatorIcon32x.png")" />
-
                         </button>
                     </fieldset>
 
@@ -740,12 +740,12 @@
                         </div>
 
                         <div class="modal-body">
-                            <table id="tablaPlanes">
+                            <table id="tablaPlanes" class="tablesorter">
                                 <thead>
                                     <tr>
                                         <th>Plan</th>
                                         <th>TMM</th>
-                                        <th>Bono</th>
+                                        <th>Bono  </th>
                                         <th>Roaming</th>
                                     </tr>
                                 </thead>
@@ -765,7 +765,6 @@
                         </div>
 
                         <div class="modal-footer">
-                            @*<button type="button" class="btn btn-default" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>*@
                             <button type="button" class="btn btn-outline-success" onclick="confirmSelectPlan()" data-dismiss="modal">Seleccionar</button>
 
                         </div>
@@ -805,13 +804,8 @@
                             <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal">Enviar</button>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
-
-
 
             <div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
@@ -839,12 +833,64 @@
             </div>
 
 
+            <div class="modal fade" id="mobilesModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header d-flex justify-content-center" style="background-color:#2bcb73">
+                            <h2 style="color:white;text-shadow: 2px 2px #25af60">Seleccione un equipo</h2>
+
+                        </div>
+
+                        <div class="modal-body">
+                            <table id="tableMobiles" class="tablesorter">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Landed </th>
+                                        <th>Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var mobile in movileDevices)
+                                    {
+                                        var mobileName = string.Empty;
+                                        if (mobile.Nombre.Length > 13)
+                                        {
+                                            mobileName = mobile.Nombre.Substring(0, 12) + "...";
+                                        }
+                                        else
+                                        {
+                                            mobileName = mobile.Nombre;
+                                        }
+
+                                        <tr>
+                                            <td>@mobile.Id</td>
+                                            <td>@mobile.Marca</td>
+                                            <td>@mobileName</td>
+                                            <td>$ @mobile.PrecioSinIva</td>
+                                            <td>@mobile.Stock</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-success" onclick="confirmSelectedMobile()" data-dismiss="modal">Seleccionar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
 
 
             <script src="~/js/Sugeridor/SugeridorScripts.js"></script>
-
-
         </div>
-
+    </div>
 </body>
 </html>

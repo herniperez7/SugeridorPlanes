@@ -259,8 +259,42 @@ th {
 
 
 
+/********/
+
+#mobilesModal .modal-body {
+    overflow-y: auto;
+    height: 450px
+}
 
 
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+    background-image: url(/img/icons/sort_both.png);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space: normal;
+    padding: 4px 20px 4px 4px;
+}
 
+.tablesorter-default thead .headerSortUp,
+.tablesorter-default thead .tablesorter-headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc {
+    background-image: url(/img/icons/sort_asc.png);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space: normal;
+    padding: 4px 20px 4px 4px;
+}
 
-
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc {
+    background-image: url(/img/icons/sort_desc.png);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space: normal;
+    padding: 4px 20px 4px 4px;
+}
