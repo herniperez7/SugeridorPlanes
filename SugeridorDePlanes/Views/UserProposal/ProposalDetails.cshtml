@@ -18,9 +18,7 @@
 @{
     var loggedUser = ViewData["loggedUser"] as User;
     var userRole = ViewData["userRole"];
-
     var clientList = ViewData["suggestorLines"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorB2bModel>;
-
     var planDefList = ViewData["planDefList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.DefinitivePlanModel>;
     var companyName = ViewData["companyName"];
     var emptyPlans = true;
@@ -99,7 +97,7 @@
 
         <ul class="logout">
             <li>
-                <p href="#">
+                <p>
                     <i class="fa fa-user fa-2x"></i>
                     <span class="nav-text">
                         @loggedUser.NombreCompleto
@@ -107,7 +105,7 @@
                 </p>
             </li>
             <li>
-                <a href="#">
+                <a href="@Url.Action("Logout", "Login")">
                     <i class="fa fa-power-off fa-2x"></i>
                     <span class="nav-text">
                         Cerrar sesion

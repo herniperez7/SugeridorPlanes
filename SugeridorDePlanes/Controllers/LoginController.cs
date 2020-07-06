@@ -41,5 +41,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             
         }
 
+        [HttpGet("Logout")]
+        public ActionResult Logout()
+        {
+
+            HttpContext.Session.Clear();
+            return this.RedirectToAction("Index", "Login");
+
+        }
+
     }
 }
