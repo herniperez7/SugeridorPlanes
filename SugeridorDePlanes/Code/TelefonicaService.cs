@@ -640,7 +640,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 var currentProposal = GetCurrentProposal();
                 //Si no hay una propuesta activa, entonces se esta creando una nueva, de lo contrario se actualizando la actual
                 bool isCreated = currentProposal == null; 
-                var proposalData = GetProposalData(devicePayment, isCreated, userId);
+                var proposalData = GetProposalData(devicePayment, isFinalized, userId);
 
                 //si no hay una propuesta activa, se crea
                 if (isCreated)

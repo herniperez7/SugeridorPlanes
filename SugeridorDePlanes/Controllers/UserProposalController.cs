@@ -47,6 +47,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 
         {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             var clientList = await _telefonicaApi.GetClientes();
             List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
             ViewData["clientList"] = clientsModel;
@@ -59,7 +60,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
             var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
             var planDefList = PopulateDefinitivePlanList(proposal);
-          
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
             _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
             ViewData["planDefList"] = planDefList;
             var indexes = _telefonicaApi.CalculateIndexes();
@@ -74,7 +76,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
             _telefonicaApi.SetConfirmedEquiposPymes(mobilePymesList);
 
-            return View("../Home/Index", planMapped);           
+            return View("../Home/Suggestor", planMapped);           
         }
 
 

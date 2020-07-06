@@ -65,6 +65,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowPlans(string rut)
         {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
             var clientList = await _telefonicaApi.GetClientes();
             _telefonicaApi.UpdateCurrentClient(rut);
@@ -81,7 +82,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["clientList"] = clientsModel;
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
             ViewData["mobileList"] = new List<DevicePymesModel>();
-
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
             ViewData["devicePayment"] = 0;
             ViewData["subsidy"] = 0;
             ViewData["payback"] = 0;
