@@ -40,7 +40,7 @@ $(document).ready(function () {
         selectMobile(this);
     });   
 
-    if (gbCurrentClient != null) {        
+    if (gbCurrentClient !== null) {        
         $("#clientSelect").val(gbCurrentClient);
     }
 });
@@ -524,7 +524,7 @@ function exportPdf() {
     $("#generarProposalBtn").html(loading);
     $("#generarProposalBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
-    if (devicePayment == "") devicePayment = "0";
+    if (devicePayment === "") devicePayment = "0";
     $("#loaderDiv").show();
 
     var companyName = $("#clientSelect option:selected").text();
@@ -546,7 +546,7 @@ function exportPdf() {
 
 function generarProposal() {   
     var devicePayment = $("#pagoEquiposTxt").val();  
-    if (devicePayment == "") devicePayment = "0";
+    if (devicePayment === "") devicePayment = "0";
     $("#loaderDiv").show();    
     $.ajax({
         type: "POST",
@@ -613,7 +613,7 @@ function saveByteArray(reportName, byte) {
 
 function saveProposal() {    
     var devicePayment = $("#pagoEquiposTxt").val();
-    if (devicePayment == "") devicePayment = "0";
+    if (devicePayment === "") devicePayment = "0";
     $("#loaderDiv").show();
 
     $.ajax({
