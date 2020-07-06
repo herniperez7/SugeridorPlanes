@@ -51,6 +51,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 
         {
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = userRole;
             var clientList = await _telefonicaApi.GetClientes();
             List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
             ViewData["clientList"] = clientsModel;
@@ -85,6 +88,10 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> OpenProposalFinished(Proposal proposal)
         {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = userRole;
             var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
             _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
             var mobileList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);
