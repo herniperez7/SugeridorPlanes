@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Data;
 using Telefonica.SugeridorDePlanes.Resources.Enums;
+using Telefonica.SugeridorDePlanes.Resources.helpers;
 
 namespace Telefonica.SugeridorDePlanes.Code
 {
@@ -13,30 +14,75 @@ namespace Telefonica.SugeridorDePlanes.Code
     {
         private readonly IClient _client;
         private readonly IMapper _mapper;
-        private List<SuggestorB2b> _currentPlans;
-        private List<DefinitivePlanModel> _curretDefinitvePlans;
-        private SuggestorClient _currentClient;
-        private List<SuggestorClient> _currentClients;
+        private static List<OfertActualPlanModel> _ofertPlanList;
+        private static List<SuggestorB2b> _currentPlans;
+        private static List<DefinitivePlanModel> _curretDefinitvePlans;
+        private static SuggestorClientModel _currentClient;
+        private static List<SuggestorClientModel> _currentClients;
 
         //Lista total de moviles
-        private List<DevicePymesModel> _equiposPymes;
+        private static List<DevicePymesModel> _equiposPymes;
         //Lista de moviles seleccionados para incorporar en la Proposal
-        private List<DevicePymesModel> _currentEquiposPymes;
-      
-        //Lista de moviles que se confirmaron para la propuesta
-        private List<DevicePymesModel> _confirmedEquiposPymes;
+        private static List<DevicePymesModel> _currentEquiposPymes;
 
-        private Proposal _CurrentProposal;
+        //Lista de moviles que se confirmaron para la propuesta
+        private static List<DevicePymesModel> _confirmedEquiposPymes;
+        private static Proposal _CurrentProposal;
 
         public TelefonicaService(IClient client, IMapper mapper)
         {
             _client = client;
             _currentPlans = new List<SuggestorB2b>();
             _mapper = mapper;
-            PopulateEquiposPymesList(); //---> provisorio, ubicar el metodo cuando se leguea
-            _currentEquiposPymes = new List<DevicePymesModel>();
-          
-            _confirmedEquiposPymes = new List<DevicePymesModel>();
+
+            if (_confirmedEquiposPymes == null) 
+            {
+                _confirmedEquiposPymes = new List<DevicePymesModel>();
+            }
+        }
+
+        public async Task<bool> PopulateData() 
+        {
+            try
+            {
+                await PopulateEquiposPymesList();
+                await PopulateClientList();
+                await PopulateOfertPlanList();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }        
+        }
+
+        private async Task<bool> PopulateOfertPlanList()
+        {
+            try
+            {
+                var plans = await _client.GetActualPlansAsync();
+                _ofertPlanList = _mapper.Map<List<OfertActualPlanModel>>(plans);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
+        }
+
+        private async Task<bool> PopulateClientList()
+        {
+            try
+            {
+                _currentClients = new List<SuggestorClientModel>();
+                var clients = await _client.GetClientsAsync();
+                _currentClients = _mapper.Map<List<SuggestorClientModel>>(clients);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
         }
 
         public List<DevicePymesModel> GetConfirmedEquiposPymes()
@@ -45,12 +91,12 @@ namespace Telefonica.SugeridorDePlanes.Code
             return equiposPymes;
         }
 
-        public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList) 
+        public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList)
         {
             foreach (var m in currentList)
             {
                 _confirmedEquiposPymes.Add(m);
-            }     
+            }
         }
 
         public Proposal GetCurrentProposal()
@@ -60,31 +106,17 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         public void SetCurrentProposal(Proposal proposal)
         {
-            this._CurrentProposal = proposal;
-        }
+            _CurrentProposal = proposal;
+        }     
 
-        public async Task<List<SuggestorClient>> GetClientes()
-        {
-            try
-            {
-                var clients = await _client.GetClientsAsync();
-                List<SuggestorClient> clientList = clients.ToList();
-                _currentClients = clientList;
-
-                return clientList;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public List<SuggestorClient> GetCurrentClients()
+        //cambia
+        public List<SuggestorClientModel> GetCurrentClients()
         {
             return _currentClients;
         }
 
-        public SuggestorClient GetCurrentClient()
+        //cambia
+        public SuggestorClientModel GetCurrentClient()
         {
             return _currentClient;
         }
@@ -112,20 +144,10 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
-        public async Task<List<OfertPlan>> GetActualPlansAsync()
+        //se cambia
+        public List<OfertActualPlanModel> GetActualPlans()
         {
-            try
-            {
-                var plans = await _client.GetActualPlansAsync();
-                List<OfertPlan> planList = plans.ToList();
-                PopulateEquiposPymesList();
-
-                return planList;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return _ofertPlanList;
         }
 
         public async Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber)
@@ -179,6 +201,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         {
             var defPlansList = _curretDefinitvePlans;
 
+            var ofertPlan = _ofertPlanList.Where(x => x.Plan.Equals(updatePlan.Plan)).FirstOrDefault();
+
             _curretDefinitvePlans = defPlansList.Select(x =>
             new DefinitivePlanModel
             {
@@ -187,21 +211,23 @@ namespace Telefonica.SugeridorDePlanes.Code
                 Bono = x.Bono,
                 Roaming = x.Roaming,
                 TMM_s_iva = x.TMM_s_iva,
-                TmmString = x.TMM_s_iva.ToString("n")
+                TmmString = TelefonicaHelper.FormatCultureNumber(x.TMM_s_iva)
             }).ToList();
             //            
 
+            
             foreach (var plan in _curretDefinitvePlans)
             {
                 if (plan.RecomendadorId == updatePlan.PlanToEdit)
                 {
-                    plan.Plan = updatePlan.Plan;
-                    plan.Bono = long.Parse(updatePlan.Bono);
-                    plan.Roaming = updatePlan.Roaming;
-                    plan.TMM_s_iva = decimal.Parse(updatePlan.TMM);
-                    plan.TmmString = decimal.Parse(updatePlan.TMM).ToString("n");
+                    plan.Plan = ofertPlan.Plan;
+                    plan.Bono = ofertPlan.Bono_;
+                    plan.Roaming = ofertPlan.Roaming;
+                    plan.TMM_s_iva = ofertPlan.TMM_s_iva;
+                    plan.TmmString = TelefonicaHelper.FormatCultureNumber(ofertPlan.TMM_s_iva);
                 }
             }
+            
         }
 
         private void UpdateDefinitivePlans(List<SuggestorB2b> planList)
@@ -258,7 +284,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-        private async void PopulateEquiposPymesList()
+        private async Task<bool> PopulateEquiposPymesList()
         {
             try
             {
@@ -272,7 +298,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                     mobile.PrecioSinIva = Math.Round(mobile.PrecioSinIva, 1);
                     id++;
                 }
-
+                return true;
             }
             catch (Exception ex)
             {
@@ -287,7 +313,8 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         public List<DevicePymesModel> GetCurrentEquiposPymesList()
         {
-            return _currentEquiposPymes;
+            var mobileList = _currentEquiposPymes;
+            return mobileList;
         }
 
         public void SetCurrentEquiposPymesList(List<DevicePymesModel> mobileList)
@@ -359,12 +386,12 @@ namespace Telefonica.SugeridorDePlanes.Code
                 {
                     if (_CurrentProposal != null)
                     {
-                        await SaveProposal(proposal.DevicePayment.ToString(), proposal.Finalizada,proposal.IdUsuario);
+                        await SaveProposal(proposal.DevicePayment.ToString(), proposal.Finalizada, proposal.IdUsuario);
                     }
-                    else 
+                    else
                     {
                         proposalResult = await _client.AddProposalAsync(proposal);
-                    }                    
+                    }
                 }
                 return proposalResult;
             }
@@ -595,8 +622,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         public async Task<bool> UpdateTotalProposal(ProposalData proposal)
         {
             try
-            {                
-               await _client.UpdateTotalProposalAsync(proposal);
+            {
+                await _client.UpdateTotalProposalAsync(proposal);
                 return true;
             }
             catch (Exception ex)
@@ -612,7 +639,8 @@ namespace Telefonica.SugeridorDePlanes.Code
             var mobileList = GetConfirmedEquiposPymes();
             var subsidy = GetSubsidy();
             var payback = GetPayback();
-            var client = GetCurrentClient();
+            var clientModel = GetCurrentClient();
+            var client = _mapper.Map<SuggestorClient>(clientModel);
             var suggestorList = GetCurrentPlans();
             var devicePaymentDouble = Convert.ToDouble(devicePayment);
             var subsidioDouble = Convert.ToDouble(subsidy);
@@ -642,7 +670,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 var currentProposal = GetCurrentProposal();
                 //Si no hay una propuesta activa, entonces se esta creando una nueva, de lo contrario se actualizando la actual
-                bool isCreated = currentProposal == null; 
+                bool isCreated = currentProposal == null;
                 var proposalData = GetProposalData(devicePayment, isFinalized, userId);
 
                 //si no hay una propuesta activa, se crea

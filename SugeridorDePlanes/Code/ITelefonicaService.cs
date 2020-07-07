@@ -11,21 +11,11 @@ using Telefonica.SugeridorDePlanes.Models.Data;
 namespace Telefonica.SugeridorDePlanes.Code
 {
     public interface ITelefonicaService
-    {
-        Task<List<SuggestorClient>> GetClientes();
-
+    {      
         Task<List<SuggestorB2b>> GetSuggestedPlans();
-
         Task<List<SuggestorB2b>> GetSuggestedPlansByRut(string rut);
-
         Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
-
-        Task<List<OfertPlan>> GetActualPlansAsync();
-
-        /// <summary>
-        /// Retorna los planes del cliente actual
-        /// </summary>
-        /// <returns></returns>
+        List<OfertActualPlanModel> GetActualPlans();        
         List<SuggestorB2b> GetCurrentPlans();
         List<DefinitivePlanModel> UpdateDefinitivePlanList(List<SuggestorB2b> planList);
         List<DefinitivePlanModel> GetCurrentDefinitivePlans();
@@ -33,8 +23,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         Task SendMail(Email emailData);
         void UpdateCurrentClient(string document);
         decimal GetDefinitivePlansIncome();
-        SuggestorClient GetCurrentClient();
-        List<SuggestorClient> GetCurrentClients();
+        SuggestorClientModel GetCurrentClient();
+        List<SuggestorClientModel> GetCurrentClients();
         List<DevicePymesModel> GetEquiposPymesList();
         List<DevicePymesModel> GetCurrentEquiposPymesList();
         void UpdateCurrentEquiposPymesList(string code, bool delete);
@@ -59,5 +49,6 @@ namespace Telefonica.SugeridorDePlanes.Code
         List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal);
         User GetUserByEmail(string userEmail);
         User GetUserById(string userId);
+        Task<bool> PopulateData();
     }
 }

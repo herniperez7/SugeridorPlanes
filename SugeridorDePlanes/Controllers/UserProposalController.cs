@@ -54,11 +54,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var userRole = HttpContext.Session.GetString("UserRole");
             ViewData["loggedUser"] = loggedUser;
             ViewData["userRole"] = userRole;
-            var clientList = await _telefonicaApi.GetClientes();
-            List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
-            ViewData["clientList"] = clientsModel;
-            var planOfert = await _telefonicaApi.GetActualPlansAsync();
-            List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
+            var clientList = _telefonicaApi.GetCurrentClients();            
+            ViewData["clientList"] = clientList;
+            var planesOfertList = _telefonicaApi.GetActualPlans();
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
      
             ViewData["planOfertList"] = planesOfertList;

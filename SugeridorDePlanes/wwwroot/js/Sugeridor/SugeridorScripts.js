@@ -4,7 +4,7 @@ var defPlansList;
 var currentDeviceAmount = 0;
 var billingGap = 0;
 
-$(document).ready(function () {       
+$(document).ready(function () {
 
     $(function () {
         $("#tablaPlanes").tablesorter();
@@ -13,9 +13,9 @@ $(document).ready(function () {
     $(function () {
         $("#tableMobiles").tablesorter();
     });
-    
+
     $("#movilesDdl").select2({
-       placeholder: "Seleccionar un equipo"
+        placeholder: "Seleccionar un equipo"
     });
 
     $("#calculateSubsidyTxt").mask("#.##0", { reverse: true });
@@ -29,7 +29,7 @@ $(document).ready(function () {
             $("#clientRutBtn").prop('disabled', false);
         else
             $("#clientRutBtn").prop('disabled', true);
-    })
+    });
 
 
     $('#tablaPlanes tbody tr').on('click', function () {
@@ -38,11 +38,27 @@ $(document).ready(function () {
 
     $('#tableMobiles tbody tr').on('click', function () {
         selectMobile(this);
-    });   
+    });
 
-    if (gbCurrentClient !== null) {        
+    if (gbCurrentClient !== null) {
         $("#clientSelect").val(gbCurrentClient);
     }
+
+    $("#pagoEquiposTxt").keypress(function (e) {
+        console.log(e);
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code === 13) {
+            calculatePayBack();
+        }
+    });
+
+    $("#pagoEquiposTxt").focusout(function () {
+        calculatePayBack();
+    });
+
+     $(".tableFixHead").on("scroll", function () {
+         $(".tableFixHead:not(this)").scrollTop($(this).scrollTop());   
+     });
 });
 
 function selectPlan(selectedPlan) {
@@ -56,10 +72,10 @@ function selectMobile(selectedMobile) {
 }
 
 function confirmSelectedMobile() {
-    
+
     var rows = $('#tableMobiles tbody tr');
     var mobileSelected;
-    var i = 0
+    var i = 0;
     while (i < rows.length && mobileSelected === undefined) {
         var element = rows[i];
         if (element.classList.contains("selectedOfertPlan")) {
@@ -67,8 +83,8 @@ function confirmSelectedMobile() {
         }
         i++;
     }
-    var mobileId = mobileSelected.cells[0].innerText.toString(); 
-    AddDevice(mobileId, true, true)   
+    var mobileId = mobileSelected.cells[0].innerText.toString();
+    AddDevice(mobileId, true, true);
 }
 
 function confirmSelectPlan() {
@@ -92,7 +108,7 @@ function confirmSelectPlan() {
             contentType: "application/json",
             data: JSON.stringify(planUpdate),
             processData: true,
-            success: function (recData) { loadDefinitivePlans(recData) },
+            success: function (recData) { loadDefinitivePlans(recData); },
             error: function () { alert('A error'); }
         });
     }
@@ -128,7 +144,6 @@ function loadDefinitivePlans(planList) {
             if (plan.roaming.toString().toLowerCase() !== "no") {
                 roamingCount++;
             }
-
 
             var element = "";
             element += "<tr>";
@@ -167,13 +182,13 @@ function confirmDevices() {
                 });
 
                 total = Number(total.toFixed(1));
-                currentDeviceAmount = total;              
+                currentDeviceAmount = total;
                 var inputValue = "$ " + formatNumberStr(total);
                 $("#subsidioTxt").val(inputValue);
                 calculatePayBack();
             }
         }
-    });    
+    });
 }
 
 
@@ -194,10 +209,12 @@ function movileChange() {
                 if (data.result) {
                     var precio = "$ " + formatNumberStr(data.result.precioSinIva);
                     $("#landedValue").html(precio);
-                    $("#stockValue").html(data.result.stock);
+
+                    //este valor se comenta por que aun no esta resuelto el stock (descomentar la etiqueta en la vista tambien)
+                    //$("#stockValue").html(data.result.stock); 
                 } else {
                     $("#landedValue").html("");
-                    $("#stockValue").html("");
+                    //$("#stockValue").html("");
                 }
             }
         }
@@ -206,26 +223,26 @@ function movileChange() {
 
 
 // si isModal esta en true, es por que viene el id desde el modal de moviles o de la tabla generada automaticamente
-function AddDevice(val, add, isModal = false) { 
-    var id = val; 
+function AddDevice(val, add, isModal = false) {
+    var id = val;
     var url = gbDeleteMovilUrl;
 
     //si se agrega el movil, el valor del id se saca del combo box
     if (add) {
         url = gbAddMovilDecivesUrl;
         id = $("#movilesDdl").val();
-        if (isModal) {           
+        if (isModal) {
             id = val;
         }
     }
-    
+
     $.ajax({
         type: "POST",
         url: url + '?code=' + id,
         success: function (data) {
-           
+
             if (data.status === "ok") {
-               
+
                 $("#movilTableBody").html("");
                 var devicesCount = 0;
                 var devicesAmount = 0;
@@ -234,19 +251,26 @@ function AddDevice(val, add, isModal = false) {
                     var brand = value.marca !== null ? value.marca : "";
                     var model = value.nombre !== null ? value.nombre : "";
                     var labelName = brand + " " + model;
+
+                    var mobileName = labelName;
+                    if (labelName.length > 20) {
+                        mobileName = labelName.substr(0, 15) + "...";
+                    }
+
+
                     devicesCount++;
                     var precio = formatNumberStr(value.precioSinIva);
                     var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                    var tr = "<tr id='row" + value.id + "' ><td scope='row'>" + labelName + "</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + ","+ false+")'>" + trashIcon + "</td></tr>";
+                    var tr = "<tr id='row" + value.id + "' ><td scope='row' class='hasTooltip'>" + mobileName + "<span>" + labelName +"</span>"+"</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + "," + false + ")'>" + trashIcon + "</td></tr>";
                     $("#movilTableBody").append(tr);
-                    
+
                     devicesAmount += value.precioSinIva;
-                    devicesAmount = Number(devicesAmount.toFixed(1))
+                    devicesAmount = Number(devicesAmount.toFixed(1));
                 });
 
-                var totalRow = "<tr id='totalRow'><td class='total-column'>" + devicesCount + "<td class='total-column'>$ " + formatNumberStr(devicesAmount) + "<td class='total-column'></td> </tr>"
+                var totalRow = "<tr id='totalRow'><td class='total-column'>" + devicesCount + "<td class='total-column'>$ " + formatNumberStr(devicesAmount) + "<td class='total-column'></td> </tr>";
                 $("#movilTableBody").append(totalRow);
-            
+
             }
         }
     });
@@ -258,25 +282,25 @@ function AddDevice(val, add, isModal = false) {
 
 function deleteRow(val) {
 
-    
+
     $.ajax({
         type: "POST",
         url: gbDeleteMovilUrl + '?code=' + val,
         success: function (data) {
             if (data.status === "ok") {
                 $("#movilTableBody tr:last").remove();
-                if (data.result) {                 
+                if (data.result) {
                     var rowId = "row" + val;
                     $("#" + rowId).remove();
                     devicesCount--;
                     devicesAmount -= data.result.precioSinIva;
-                    var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b></td><td><b>$ " + formatNumber(devicesAmount) + "</b></td><td></td> </tr>"
+                    var totalRow = "<tr id='totalRow'><td><b>" + devicesCount + "</b></td><td><b>$ " + formatNumber(devicesAmount) + "</b></td><td></td> </tr>";
                     $("#movilTableBody").append(totalRow);
 
                     if (devicesCount === 0) {
                         $("#movilTableBody tr").remove();
                     }
-                }           
+                }
             }
         }
     });
@@ -287,8 +311,11 @@ function deleteRow(val) {
 
 function calculatePayBack() {
 
+    var devicePayment = $("#pagoEquiposTxt").val();
+    if (isNaN(devicePayment)) devicePayment = 0;
+
     $.ajax({
-        url: gbCalculatePayBack,
+        url: gbCalculatePayBack + '?devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
                 $("#paybackTxt").val(data.result);
@@ -305,10 +332,10 @@ function calculateGaps(val) {
         url: gbCalculateGap + '?rut=' + val,
         success: function (data) {
             if (data.status === "ok") {
-                var billingGapValue = "$ " + formatNumberStr(data.result.billingGap);                
+                var billingGapValue = "$ " + formatNumberStr(data.result.billingGap);
                 var fixedGapValue = "$ " + formatNumberStr(data.result.fixedGap);
 
-                $("#gapValue").html(fixedGapValue);                
+                $("#gapValue").html(fixedGapValue);
                 $("#gapBilingValue").html(billingGapValue);
                 billingGap = data.result.billingGap;
 
@@ -370,7 +397,7 @@ function alternateBugdetFields(val) {
 }
 
 function calculateIndexes(val) {
-    
+
     var $subsidy = $("#calculateSubsidyTxt");
     var $payback = $("#calculatePaybackTxt");
     var $income = $("#calculateIncomeTxt");
@@ -391,7 +418,7 @@ function calculateIndexes(val) {
     } else {
         var income = correctFormatInverse(subsidyValue) / correctFormatInverse(paybackValue);
         income = correctFormat(income.toFixed(1));
-        $income.val(formatNumberStr(income));  
+        $income.val(formatNumberStr(income));
         calculateStatus(income);
     }
 
@@ -401,7 +428,7 @@ function calculateIndexes(val) {
 
 
     calculateSecondGaps();
-    
+
 
 }
 
@@ -427,7 +454,7 @@ async function importValues() {
 
     var $subsidy = currentDeviceAmount;
     var $payback = $("#paybackTxt").val();
-    var incomeInt = parseInt($incomes);   
+    var incomeInt = parseInt($incomes);
     var regex = /[.\s]/g;
 
     $("#calculateSubsidyTxt").val(formatNumberStr($subsidy));
@@ -436,10 +463,10 @@ async function importValues() {
 
     calculateSecondGaps();
     calculateStatus(incomeInt);
-    
+
 }
 
-function resetValues() { 
+function resetValues() {
     var emptyBillingDiv = "<div class='emptyBillingDataMain'><div class='emptyBillingDataChild'><div style='font-weight:bold; color:#666666'>Sin datos</div></div></div>";
     var $divSatus = $("#divClaculatedBillingStatus");
     $divSatus.html("");
@@ -452,25 +479,25 @@ function resetValues() {
 
 //esta funcion se activa cuando se cliquea fuera del input de los ingresos en la herramienta de calculo
 function unfocusInput() {
-    
+
     $("#calculateIncomeTxt").focusout(function () {
         var incomeAmount = $("#calculateIncomeTxt").val();
         calculateStatus(incomeAmount);
     });
-    
+
 }
 
 function focusInput() {
     $("#calculateSubsidyTxt").focus(function () {
         var $subsidyVal = $("#calculateSubsidyTxt").val();
         var regex = /[.\s]/g;
-        $subsidyVal = $subsidyVal.replace(regex, '');    
+        $subsidyVal = $subsidyVal.replace(regex, '');
         $("#calculateSubsidyTxt").val($subsidyVal);
     });
 }
 
 function cleanFormat(val) {
-    var regex = /[.\s]/g;   
+    var regex = /[.\s]/g;
     val = val.replace(regex, '');
     return val;
 }
@@ -492,12 +519,12 @@ function correctFormatInverse(val) {
 
 
 //setea el status del fieldet de calculo de indices
-function calculateStatus(val) {    
+function calculateStatus(val) {
 
     val = cleanFormat(val.toString()); //le saco el punto de miles en caso de que venga con ese formato
     var billingAmout = $("#billingDivValue").text();
     var billingGap = parseInt(val) - parseInt(billingAmout);
-   
+
 
     var $divSatus = $("#divClaculatedBillingStatus");
     $divSatus.html("");
@@ -521,7 +548,7 @@ function calculateStatus(val) {
 
 
 function exportPdf() {
-   
+
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
     var exportText = "Exportar Proposal";
     $("#generarProposalBtn").html(loading);
@@ -541,34 +568,34 @@ function exportPdf() {
                 $("#generarProposalBtn").html(exportText);
                 $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
-            }            
+            }
         }
     });
 }
 
 
-function generarProposal() {   
-    var devicePayment = $("#pagoEquiposTxt").val();  
+function generarProposal() {
+    var devicePayment = $("#pagoEquiposTxt").val();
     if (devicePayment === "") devicePayment = "0";
-    $("#loaderDiv").show();    
+    $("#loaderDiv").show();
     $.ajax({
         type: "POST",
         url: gbGenerateProposal + '?devicePayment=' + devicePayment,
         success: function (data) {
             $("#loaderDiv").hide();
-                window.location.href = gbUserProposals;
-       
+            window.location.href = gbUserProposals;
+
         }
     });
 }
 
 function sendMail() {
 
-    var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';    
+    var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
     $("#generarPropuestaBtn").html(loading);
     $("#generarPropuestaBtn").prop("disabled", true);
     var buttontext = "Generar propuesta";
-    
+
     var toText = $("#toTxt").val();
     var subjectText = $("#subjectTxt").val();
     var bodyText = $("#bodytxt").val();
@@ -584,7 +611,7 @@ function sendMail() {
                 $("#generarPropuestaBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
             }
-            
+
         }
     });
 
@@ -614,7 +641,7 @@ function saveByteArray(reportName, byte) {
 ///////////////////////////
 
 
-function saveProposal() {    
+function saveProposal() {
     var devicePayment = $("#pagoEquiposTxt").val();
     if (devicePayment === "") devicePayment = "0";
     $("#loaderDiv").show();
@@ -626,14 +653,14 @@ function saveProposal() {
             if (data.status === "ok") {
                 $("#loaderDiv").hide();
                 $("#saveProposaltext").html(data.result);
-                $('#modalPush').modal('show'); 
+                $('#modalPush').modal('show');
             }
         }
-    }); 
+    });
 }
 
-function openEmailModal() {   
-    $('#emailModal').modal('show'); 
+function openEmailModal() {
+    $('#emailModal').modal('show');
 }
 
 function proposalMenu() {
@@ -641,5 +668,6 @@ function proposalMenu() {
 }
 
 function openMobileModal() {
-    $('#mobilesModal').modal('show'); 
+    $('#mobilesModal').modal('show');
 }
+

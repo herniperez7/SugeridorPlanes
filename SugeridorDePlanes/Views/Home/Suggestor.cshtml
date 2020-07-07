@@ -113,7 +113,7 @@
             @if (recomendadorOptions != null)
             {
                 @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
-             } 
+            }
 
         </form>
 
@@ -158,7 +158,7 @@
 
                 </li>
             }
-            
+
         </ul>
 
         <ul class="logout">
@@ -198,8 +198,8 @@
                 <div class="col-lg-6 col-sm-12 col-md-12">
                     <fieldset class="tableFieldset">
                         <legend>Info actual de cliente</legend>
-                        <div class="tableFixHead">
-                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <div class="tableFixHead" id="infoActualTableDiv">
+                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;" id="infoActualTable">
                                 <thead class="thead-dark">
                                     <tr style="height:60px;">
                                         <th scope="col">#</th>
@@ -330,8 +330,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <fieldset class="tableFieldset">
                         <legend>Plan sugerido</legend>
-                        <div class="tableFixHead">
-                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;">
+                        <div class="tableFixHead" id="suggestedPlanTableDiv">
+                            <table class="table table-bordered table-striped mb-0" style="border: 1px solid #ddd !important;" id="suggestedPlanTable">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">#</th>
@@ -434,6 +434,7 @@
                                                 <td>$ @FormatCultureNumber(plan.value.TMM_s_iva)</td>
                                                 <td>@bonoGb Gb</td>
                                                 <td>@plan.value.Roaming</td>
+
                                                 <td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(@plan.i.ToString(), @Model[0].Rut)" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>
                                             </tr>
                                         }
@@ -494,7 +495,7 @@
                                 <div id="valuesEquipos" class="p-2 ml-2">
 
                                     <label><b>C.Landed: </b></label><label class="ml-1" id="landedValue"></label><br />
-                                    <label><b>Stock: </b></label><label class="ml-1" id="stockValue"></label>
+                                    @*<label><b>Stock: </b></label><label class="ml-1" id="stockValue"></label>*@
 
                                 </div>
 
@@ -725,7 +726,7 @@
                                         <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(3)">Ingreso</button>
                                     </div>
                                     <input type="text" id="calculateIncomeTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                                    
+
                                 </div>
 
                             </div>
@@ -808,15 +809,14 @@
                                     @foreach (var plan in planOfertList.Select((value) => new { value }))
                                     {
                                         var bono = @plan.value.Bono_ / 1024;
-                                    <tr>
-                                        <td>@plan.value.Plan</td>
-                                        @*<td>@FormatCultureNumber(plan.value.TMM_s_iva)</td>*@
-                                        <td>@plan.value.TMM_s_iva</td>
-                                        <td>@bono</td>
-                                        <td>@plan.value.Roaming</td>
-                                    </tr>
+                                        <tr>
+                                            <td>@plan.value.Plan</td>
+                                            <td>@FormatCultureNumber(plan.value.TMM_s_iva)</td>
+                                            <td>@bono</td>
+                                            <td>@plan.value.Roaming</td>
+                                        </tr>
                                     }
-                                </tbody> 
+                                </tbody>
                             </table>
                         </div>
 
@@ -907,16 +907,16 @@
                                         <th>Marca</th>
                                         <th>Modelo</th>
                                         <th>Landed </th>
-                                        <th>Stock</th>
+                                        @*<th>Stock</th>*@
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var mobile in movileDevices)
                                     {
                                         var mobileName = string.Empty;
-                                        if (mobile.Nombre.Length > 13)
+                                        if (mobile.Nombre.Length >= 15)
                                         {
-                                            mobileName = mobile.Nombre.Substring(0, 12) + "...";
+                                            mobileName = mobile.Nombre.Substring(0, 15) + "...";
                                         }
                                         else
                                         {
@@ -931,18 +931,18 @@
                                             </td>
                                             <td class="hasTooltip">
                                                 @mobileName
-                                            <span>@mobile.Marca @mobile.Nombre</span>
-                                        </td>
+                                                <span>@mobile.Marca @mobile.Nombre</span>
+                                            </td>
                                             <td>$ @FormatCultureNumber(mobile.PrecioSinIva)</td>
-                                        <td>@mobile.Stock</td>
-                                    </tr>
-                                }
+                                          
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
 
-                        <div class="modal-footer justify-content-between">
-                           
+                        <div class="modal-footer">
+
                             <button type="button" class="btn btn-outline-success" onclick="confirmSelectedMobile()" data-dismiss="modal">Seleccionar</button>
                         </div>
                     </div>

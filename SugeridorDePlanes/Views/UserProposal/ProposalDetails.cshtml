@@ -356,30 +356,29 @@
                                         <tbody id="movilTableBody" style="overflow-y:auto; height:150px">
                                             @if (Model.Equipos.Count > 0)
                                             {
-                                                double totalAmount = 0;
+                                                double totalAmount = 0;                                               
 
                                                 @foreach (var device in Model.Equipos)
                                                 {
                                                     totalAmount += device.PrecioSinIva;
-                                                    <tr>
-                                                        <td>@device.Marca</td>
-                                                        <td>@device.Nombre</td>
-                                                        <td>$ @device.PrecioSinIva</td>
-
-                                                    </tr>
+                                            <tr>
+                                                <td>@device.Marca</td>
+                                                <td>@device.Nombre</td>
+                                                @*<td>$ @device.PrecioSinIva</td>*@
+                                                <td>$ @FormatCultureNumber((decimal)device.PrecioSinIva)</td>
+                                            </tr>
                                                 }
-                                                <tr>
-                                                    <td class="total-column">
-                                                        Totales
-                                                    </td>
-                                                    <td class="total-column">
-                                                        @Model.Equipos.Count()
-                                                    </td>
-                                                    <td class="total-column">
-                                                        $ @totalAmount
-                                                    </td>
-
-                                                </tr>
+                                        <tr>
+                                            <td class="total-column">
+                                                Totales
+                                            </td>
+                                            <td class="total-column">
+                                                @Model.Equipos.Count()
+                                            </td>
+                                            <td class="total-column">
+                                                $ @FormatCultureNumber((decimal)Math.Round(totalAmount, 2))
+                                            </td>                                            
+                                        </tr>
 
                                             }
                                             else
@@ -413,7 +412,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="subsidioInput">Subsidio</span>
                                     </div>
-                                    <input type="text" id="subsidioTxt" disabled value="$ @Model.Subsidio" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <input type="text" id="subsidioTxt" disabled value="$ @FormatCultureNumber((decimal)Model.Subsidio)" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="payBackInput">Payback</span>
                                     </div>
@@ -421,13 +420,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="pagoEquiposInput">Pago de equipos</span>
                                     </div>
-                                    <input type="text" id="pagoEquiposTxt" class="form-control" disabled value="$ @Model.DevicePayment" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <input type="text" id="pagoEquiposTxt" class="form-control" disabled value="$ @FormatCultureNumber((decimal)Model.DevicePayment)" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 </div>
 
                             </div>
 
                         </div>
-
+                        
                         <button style="position: absolute;right:70px;top:-5px;outline:5px solid #fff" id="exportPdfBtn" onclick="exportPdf()">
                             <img src="@Url.Content("~/img/icons/IconPdf.png")" />
                         </button>

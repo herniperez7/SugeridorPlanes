@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.Code;
 using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
 
@@ -9,12 +10,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     public class LoginController : Controller
     {
         private TelefonicaModel.IUserManager UserManager;
-        private ITelefonicaService TelefonaService;
+        private ITelefonicaService _telefonicaService;
 
         public LoginController(TelefonicaModel.IUserManager userManager, ITelefonicaService telefonaService)
         {
             UserManager = userManager;
-            TelefonaService = telefonaService;
+            _telefonicaService = telefonaService;
         }
         public ViewResult Index()
         {
@@ -22,14 +23,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(string userName, string password)
+        public async Task<ActionResult> Login(string userName, string password)
         {
             if(userName!=string.Empty && password != string.Empty)
             {
                 //TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
-                var user = TelefonaService.GetUserByEmail(userName);
+                var user = _telefonicaService.GetUserByEmail(userName);
                 HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
                 HttpContext.Session.SetString("UserRole", user.RolString);
+                await _telefonicaService.PopulateData();
 
                 return this.RedirectToAction("Index", "Suggestor");
             }

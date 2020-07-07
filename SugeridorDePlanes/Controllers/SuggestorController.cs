@@ -33,37 +33,29 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
-
-            var clientList = await _telefonicaApi.GetClientes();
-
+            var clientList = _telefonicaApi.GetCurrentClients();
             ViewData["loggedUser"] = loggedUser;
             ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
-            var planOfert = await _telefonicaApi.GetActualPlansAsync();
-            List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
+            var planesOfertList = _telefonicaApi.GetActualPlans();         
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
             ViewData["planOfertList"] = planesOfertList;
             var planMapped = new List<SuggestorB2bModel>();
             if (clientList != null && clientList.Count > 0)
-            {
-                List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
-                ViewData["clientList"] = clientsModel;
-                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientsModel[0].Documento);
+            {                
+                ViewData["clientList"] = clientList;
+                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientList[0].Documento);
                 planMapped =_mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-                _telefonicaApi.UpdateCurrentClient(clientsModel[0].Documento);
+                _telefonicaApi.UpdateCurrentClient(clientList[0].Documento);
                 var indexes = _telefonicaApi.CalculateIndexes();
                 ViewData["Indexes"] = indexes;
             }
-
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
             ViewData["mobileList"] = new List<DevicePymesModel>();
-
             ViewData["devicePayment"] = 0;
             ViewData["subsidy"] = 0;
             ViewData["payback"] = 0;
             ViewData["currentClient"] = "null";
             _telefonicaApi.SetCurrentProposal(null);
-
-
 
             return View("../Home/Suggestor", planMapped);
         }
@@ -73,19 +65,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
-            var clientList = await _telefonicaApi.GetClientes();
+            var clientList = _telefonicaApi.GetCurrentClients();
             _telefonicaApi.UpdateCurrentClient(rut);
             var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
-            var planOfert = await _telefonicaApi.GetActualPlansAsync();
-            List<SuggestorClientModel> clientsModel = _mapper.Map<List<SuggestorClient>, List<SuggestorClientModel>>(clientList);
-            List<OfertActualPlanModel> planesOfertList = _mapper.Map<List<OfertPlan>, List<OfertActualPlanModel>>(planOfert);
+            var planesOfertList = _telefonicaApi.GetActualPlans();
             var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
             var indexes = _telefonicaApi.CalculateIndexes();
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
             ViewData["selectedRut"] = rut;
             ViewData["planOfertList"] = planesOfertList;
             ViewData["Indexes"] = indexes;
-            ViewData["clientList"] = clientsModel;
+            ViewData["clientList"] = clientList;
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
             ViewData["mobileList"] = new List<DevicePymesModel>();
             ViewData["loggedUser"] = loggedUser;
@@ -99,8 +89,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return View("../Home/Suggestor", planMapped);
         }
 
-        public JsonResult CalculatePayback()
+        public JsonResult CalculatePayback(string devicePayment)
         {
+            int deveicePaymentInt = int.Parse(devicePayment);
             var mobileList = _telefonicaApi.GetConfirmedEquiposPymes();
             var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
             decimal payback = 0;
@@ -111,6 +102,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             {
                 subsidio += movil.PrecioSinIva;
             }
+
+            subsidio -= deveicePaymentInt;
 
             foreach (var plan in defPlansList)
             {
@@ -147,8 +140,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         [HttpPost]
         public JsonResult AddMovilDevice(string code)
-        {
-            
+        {            
             if (!string.IsNullOrEmpty(code))
             {
                 _telefonicaApi.UpdateCurrentEquiposPymesList(code, false);
