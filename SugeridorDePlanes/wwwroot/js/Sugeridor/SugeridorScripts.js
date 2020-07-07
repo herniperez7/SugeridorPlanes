@@ -75,7 +75,7 @@ function confirmSelectPlan() {
     if (gbPlanToEdit !== undefined) {
         var rows = $('#tablaPlanes tbody tr');
         var planSelected;
-        var i = 0
+        var i = 0;
         while (i < rows.length && planSelected === undefined) {
             var element = rows[i];
             if (element.classList.contains("selectedOfertPlan")) {
@@ -83,6 +83,7 @@ function confirmSelectPlan() {
             }
             i++;
         }
+
         var planUpdate = { PlanToEditRut: gbPlanToEditRut, PlanToEdit: gbPlanToEdit, Plan: planSelected.cells[0].innerText, TMM: planSelected.cells[1].innerText, Bono: planSelected.cells[2].innerText, Roaming: planSelected.cells[3].innerText };
 
         $.ajax({
@@ -304,9 +305,11 @@ function calculateGaps(val) {
         url: gbCalculateGap + '?rut=' + val,
         success: function (data) {
             if (data.status === "ok") {
+                var billingGapValue = "$ " + formatNumberStr(data.result.billingGap);                
+                var fixedGapValue = "$ " + formatNumberStr(data.result.fixedGap);
 
-                $("#gapValue").html(data.result.fixedGap);                
-                $("#gapBilingValue").html(data.result.billingGap);
+                $("#gapValue").html(fixedGapValue);                
+                $("#gapBilingValue").html(billingGapValue);
                 billingGap = data.result.billingGap;
 
                 $("#divbillingStatus").html("");

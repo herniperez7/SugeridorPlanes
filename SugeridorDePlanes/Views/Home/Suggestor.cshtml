@@ -573,6 +573,7 @@
                                         <span class="input-group-text" id="pagoEquiposInput">Pago de equipos</span>
                                     </div>
                                     <input type="text" id="pagoEquiposTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="@devicePayment">
+                                    <span style="color:#AAAAAA; font-size:13px">*Payback incluye pago de equipos</span>
                                 </div>
 
                             </div>
@@ -724,6 +725,7 @@
                                         <button class="btn btn-outline-success calculateButtons" type="button" onclick="calculateIndexes(3)">Ingreso</button>
                                     </div>
                                     <input type="text" id="calculateIncomeTxt" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    
                                 </div>
 
                             </div>
@@ -806,14 +808,15 @@
                                     @foreach (var plan in planOfertList.Select((value) => new { value }))
                                     {
                                         var bono = @plan.value.Bono_ / 1024;
-                                        <tr>
-                                            <td>@plan.value.Plan</td>
-                                            <td>@plan.value.TMM_s_iva</td>
-                                            <td>@bono</td>
-                                            <td>@plan.value.Roaming</td>
-                                        </tr>
+                                    <tr>
+                                        <td>@plan.value.Plan</td>
+                                        @*<td>@FormatCultureNumber(plan.value.TMM_s_iva)</td>*@
+                                        <td>@plan.value.TMM_s_iva</td>
+                                        <td>@bono</td>
+                                        <td>@plan.value.Roaming</td>
+                                    </tr>
                                     }
-                                </tbody>
+                                </tbody> 
                             </table>
                         </div>
 

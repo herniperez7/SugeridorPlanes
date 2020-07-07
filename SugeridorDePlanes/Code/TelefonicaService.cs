@@ -47,7 +47,10 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList) 
         {
-            _confirmedEquiposPymes = currentList;
+            foreach (var m in currentList)
+            {
+                _confirmedEquiposPymes.Add(m);
+            }     
         }
 
         public Proposal GetCurrentProposal()
