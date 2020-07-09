@@ -88,6 +88,7 @@ function confirmSelectedMobile() {
 }
 
 function confirmSelectPlan() {
+    console.log("confirm");
     if (gbPlanToEdit !== undefined) {
         var rows = $('#tablaPlanes tbody tr');
         var planSelected;
@@ -114,9 +115,10 @@ function confirmSelectPlan() {
     }
 }
 
-function establisPlanToEdit(planToEdit, rut) {
+function establisPlanToEdit(planToEdit) {
+    console.log("establish");
     gbPlanToEdit = planToEdit;
-    gbPlanToEditRut = rut.toString();
+   // gbPlanToEditRut = rut.toString();
 }
 
 function loadDefinitivePlans(planList) {
@@ -153,7 +155,7 @@ function loadDefinitivePlans(planList) {
             element += "<td>" + bono + " Gb</td>";
             element += "<td>" + plan.roaming + "</td>";
 
-            element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ', ' + gbPlanToEditRut + ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
+            element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
             element += "</tr>";
             $('#tablaPlanesDefi tbody').append(element);
         }

@@ -81,7 +81,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
         {
             try
             {
-                var firstHtmlsourcePath = Path.Combine(directoryUrl, "Pagina1.html");
+                var firstHtmlsourcePath = Path.Combine(directoryUrl, "pagina1.html");
                 var secondHtmlsourcePath = Path.Combine(directoryUrl, "Pagina2.html");
                 string content = string.Empty;
 
@@ -192,7 +192,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                     for (var i = 0; i < countPLans - 2; i = i + 2)
                     {
                         contentPlans += "<tr>";
-                        contentPlans += "<td><p>" + planPdfList[i].Cantidad + " lineas <b>" + planPdfList[i].Bono + "GB <b/></p><p>Plan celular</p></td>";
+                        contentPlans += "<td><p>" + planPdfList[i].Cantidad + " lineas <b>" + planPdfList[i].Bono + "GB </b></p><p>Plan celular</p></td>";
                         contentPlans += "<td><p>" + planPdfList[i + 1].Cantidad + " lineas <b>" + planPdfList[i + 1].Bono + "GB <b/></p><p>Plan celular</p></td>";
                         contentPlans += "</tr>";
 
@@ -306,8 +306,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
                 string[] lstFiles = new string[3];
                 lstFiles[0] = mainPdf;
-                lstFiles[1] = Path.Combine(directoryPath, "pagina1.pdf");
-                lstFiles[2] = Path.Combine(directoryPath, "pagina2.pdf");
+                lstFiles[1] = Path.Combine(directoryPath, "pagina2.pdf");
+                lstFiles[2] = Path.Combine(directoryPath, "pagina1.pdf");
+                
 
                 PdfReader reader = null;
                 Document sourceDocument = null;
@@ -321,18 +322,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 //Open the output file
                 sourceDocument.Open();
 
-                foreach (var item in lstFiles)
+                for (int j = 1; j <= lstFiles.Length; j++)                    
                 {
-                    document.LoadFromFile(item);
+                    document.LoadFromFile(lstFiles[j]);
                     int pages = document.Pages.Count;
 
-                    reader = new PdfReader(item);
+                    reader = new PdfReader(lstFiles[j]);
                     //Add pages of current file
                     for (int i = 1; i <= pages; i++)
                     {
                         importedPage = pdfCopyProvider.GetImportedPage(reader, i);
-                        pdfCopyProvider.AddPage(importedPage);
-
+                        pdfCopyProvider.AddPage(importedPage);    
                     }
                     reader.Close();
                 }
