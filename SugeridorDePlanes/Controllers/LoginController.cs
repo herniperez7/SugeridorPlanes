@@ -18,14 +18,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             _telefonicaService = telefonaService;
         }
         public ViewResult Index()
-        {
+        {            
             return View("../Login/Login");
         }
 
         [HttpPost]
         public async Task<ActionResult> Login(string userName, string password)
-        {
-            if(userName!=string.Empty && password != string.Empty)
+        {           
+
+            if (userName!=string.Empty && password != string.Empty)
             {
                 //TelefonicaModel.User loggedUser = UserManager.AuthenticateUser(userName, password);
                 var user = _telefonicaService.GetUserByEmail(userName);
@@ -51,6 +52,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return this.RedirectToAction("Index", "Login");
 
         }
+
 
     }
 }

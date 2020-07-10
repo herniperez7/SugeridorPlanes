@@ -8,33 +8,34 @@
 </head>
 <body>
 
-    <div class="limiter">
+    <div class="limiter" id="divForm">
         <div class="container-login100">
             <div class="wrap-login100 p-b-20">
                 <div class="text-center">
-                     <img src="~/img/Movistar-azul-vertical.jpg" style="width: 70%;" alt="Logo movistar" class="img-fluid">
+                    <img src="~/img/Movistar-azul-vertical.jpg" style="width: 70%;" alt="Logo movistar" class="img-fluid">
                 </div>
                 <form class="login100-form validate-form" action="/Login/Login" method="post">
                     <div class="wrap-input100 validate-input m-t-30 m-b-35" data-validate="Ingrese su email">
-                        <input class="input100" type="text" name="username">
+                        <input class="input100" type="text" name="username" id="userNameTxt">
                         <span class="focus-input100" data-placeholder="Email"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input m-b-50" data-validate="Ingrese contraseña">
-                        <input class="input100" type="password" name="password">
+                        <input class="input100" type="password" name="password" id="userPassTxt">
                         <span class="focus-input100" data-placeholder="Contraseña"></span>
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <input class="login100-form-btn" value="Login" type="submit">
+                        <input class="login100-form-btn" value="Login" type="submit" id="loginBtn">
                     </div>
 
                 </form>
+               
             </div>
         </div>
-    </div>
-
+    </div>    
+    
     <script src="~/js/Login/LoginScript.js"></script>
-
+    <div id="touchDiv"></div>
 </body>
 </html>

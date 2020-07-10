@@ -88,9 +88,9 @@
             {
                 @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
             }
-
-
         </form>
+
+
 
 
         <form class="form-inline mb-0" action="/Suggestor/ShowPlans" method="post">
@@ -303,7 +303,7 @@
                                     else
                                     {
                                         <tr>
-                                            <td class="total-column" colspan="10">
+                                            <td class="total-column" colspan="10" style="text-align:center;">
                                                 Sin datos
                                             </td>
 
@@ -519,20 +519,26 @@
 
                                                 @foreach (var mobile in mobileList)
                                                 {
+                                                    var mobileName = mobile.Marca + " " + mobile.Nombre;
+                                                    if (mobileName.Length > 20)
+                                                    {
+                                                        mobileName = mobileName.Substring(0, 15) + "...";
+                                                    }
+
                                                     totalAmount += mobile.PrecioSinIva;
                                                     deviceCount++;
                                                     var rowId = "row" + mobile.Id;
                                                     var tdId = "tod" + mobile.Id;
                                                     <tr id=@rowId>
-                                                        <td>@mobile.Marca @mobile.Nombre</td>
+                                                        <td data-toggle="tooltip" data-placement="top" title="@mobile.Marca @mobile.Nombre">@mobileName</td>
                                                         <td>$ @mobile.PrecioSinIva</td>
                                                         <td id=@tdId onclick="AddDevice(@mobile.Id, false)"><i class='fa fa-times fa-lg' aria-hidden='true'></i></td>
                                                     </tr>
                                                 }
-                                                <tr>
-                                                    <td>@deviceCount</td>
-                                                    <td>$ @totalAmount</td>
-                                                    <td></td>
+                                                <tr >
+                                                    <td class='total-column'>@deviceCount</td>
+                                                    <td class='total-column'>$ @totalAmount</td>
+                                                    <td class='total-column'></td>
                                                 </tr>
 
 
@@ -796,8 +802,8 @@
                         </div>
 
                         <div class="modal-body">
-                            <table id="tablaPlanes" class="tablesorter">
-                                <thead>
+                            <table id="tablaPlanes" class="tablesorter" style="margin: 0 auto">
+                                <thead style="text-align:center">
                                     <tr>
                                         <th>Plan</th>
                                         <th>TMM</th>
@@ -809,11 +815,23 @@
                                     @foreach (var plan in planOfertList.Select((value) => new { value }))
                                     {
                                         var bono = @plan.value.Bono_ / 1024;
+
+                                        var roaming = string.Empty;
+                                        if (plan.value.Roaming.Length >= 20)
+                                        {
+                                            roaming = plan.value.Roaming.Substring(0, 20) + "...";
+                                        }
+                                        else
+                                        {
+                                            roaming = plan.value.Roaming;
+                                        }
+
+
                                         <tr>
                                             <td>@plan.value.Plan</td>
-                                            <td>@FormatCultureNumber(plan.value.TMM_s_iva)</td>
-                                            <td>@bono</td>
-                                            <td>@plan.value.Roaming</td>
+                                            <td data-toggle="tooltip" data-placement="top" title="$ @FormatCultureNumber(plan.value.TMM_s_iva)">$ @plan.value.TMM_s_iva</td>
+                                            <td>@bono Gb</td>
+                                            <td data-toggle="tooltip" data-placement="top" title="@plan.value.Roaming">@roaming</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -925,16 +943,15 @@
 
                                         <tr>
                                             <td>@mobile.Id</td>
-                                            <td class="hasTooltip">
+                                            <td data-toggle="tooltip" data-placement="top" title="@mobile.Marca @mobile.Nombre">
                                                 @mobile.Marca
-                                                <span>@mobile.Marca @mobile.Nombre</span>
+
                                             </td>
-                                            <td class="hasTooltip">
+                                            <td data-toggle="tooltip" data-placement="top" title="@mobile.Marca @mobile.Nombre">
                                                 @mobileName
-                                                <span>@mobile.Marca @mobile.Nombre</span>
                                             </td>
-                                            <td>$ @FormatCultureNumber(mobile.PrecioSinIva)</td>
-                                          
+                                            <td data-toggle="tooltip" data-placement="top" title="$ @FormatCultureNumber(mobile.PrecioSinIva)">$ @mobile.PrecioSinIva</td>
+
                                         </tr>
                                     }
                                 </tbody>

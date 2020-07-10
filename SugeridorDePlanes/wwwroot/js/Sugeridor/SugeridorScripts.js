@@ -59,6 +59,10 @@ $(document).ready(function () {
      $(".tableFixHead").on("scroll", function () {
          $(".tableFixHead:not(this)").scrollTop($(this).scrollTop());   
      });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 });
 
 function selectPlan(selectedPlan) {
@@ -88,7 +92,7 @@ function confirmSelectedMobile() {
 }
 
 function confirmSelectPlan() {
-    console.log("confirm");
+   
     if (gbPlanToEdit !== undefined) {
         var rows = $('#tablaPlanes tbody tr');
         var planSelected;
@@ -153,7 +157,7 @@ function loadDefinitivePlans(planList) {
             element += "<td>" + plan.plan + "</td>";
             element += "<td>" + "$" + plan.tmmString + "</td>";
             element += "<td>" + bono + " Gb</td>";
-            element += "<td>" + plan.roaming + "</td>";
+            element += "<td data-toggle='tooltip' data-placement='top' title=" + plan.roaming +">" + plan.roaming + "</td>";
 
             element += '<td class="editRow"><a data-toggle="modal" onclick="establisPlanToEdit(' + plan.recomendadorId + ')" href="#plansModal" class="btn btn-outline-success my-2 my-sm-0">Editar</a></td>';
             element += "</tr>";
@@ -259,11 +263,10 @@ function AddDevice(val, add, isModal = false) {
                         mobileName = labelName.substr(0, 15) + "...";
                     }
 
-
                     devicesCount++;
                     var precio = formatNumberStr(value.precioSinIva);
                     var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                    var tr = "<tr id='row" + value.id + "' ><td scope='row' class='hasTooltip'>" + mobileName + "<span>" + labelName +"</span>"+"</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + "," + false + ")'>" + trashIcon + "</td></tr>";
+                    var tr = "<tr id='row" + value.id + "' ><td data-toggle='tooltip' data-placement='top' title='" + labelName +"'>" + mobileName + "</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + "," + false + ")'>" + trashIcon + "</td></tr>";
                     $("#movilTableBody").append(tr);
 
                     devicesAmount += value.precioSinIva;

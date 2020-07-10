@@ -18,7 +18,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
     public class PdfLogic : IPdfLogic
     {
         private readonly IWebHostEnvironment _env;
-
+        private int mobilesPages;
         public PdfLogic(IWebHostEnvironment env)
         {
             _env = env;
@@ -30,10 +30,10 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             try
             {
-                Directory.CreateDirectory(tempDirectory);  
-                CopyFiles(tempDirectory); //copio los htmls desde el directorio base a un directorio temporal
+                Directory.CreateDirectory(tempDirectory);
+                CopyFiles(tempDirectory, movilDevices); //copio los htmls desde el directorio base a un directorio temporal
                 GenerateHtml(tempDirectory, movilDevices, planList, companyName, devicePayment); //modifico las copias generadas
-                ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
+                ConvertHtmlToPdf(tempDirectory);  // ConvertHtmlToPdf(tempDirectory); //convierto las copias a pdf
                 var bytesArrayPdf = MergePdf(tempDirectory); //mergeo los pdf generados con las primeras paginas estaticas del pdf completo y retorno un array de bytes de ese pdf completo
                 return bytesArrayPdf;
             }
@@ -42,7 +42,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 DeleteDirectory(tempDirectory);
                 throw ex;
             }
-            
+
         }
 
 
@@ -50,8 +50,11 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
         /// Metodo para copiarl los html con sus imagenes para modificar
         /// </summary>
         /// <param name="directoryPath"></param>
-        private void CopyFiles(string directoryPath)
+        private void CopyFiles(string directoryPath, List<DevicePymes> movilDevices)
         {
+            var movilPdfList = GroupedMovilList(movilDevices);
+            mobilesPages = CalculatePages(movilPdfList.Count);            
+            var destPath = string.Empty;
             try
             {
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot", "html");
@@ -62,8 +65,19 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                     FileInfo info = new FileInfo(file);
                     if (File.Exists(info.FullName))
                     {
-                        var destPath = Path.Combine(directoryPath, info.Name);
-                        File.Copy(info.FullName, destPath);
+                        if (info.Name.Equals("mobiles.html"))
+                        {
+                            for (int i = 0; i < mobilesPages; i++)
+                            {
+                                var fileName = info.Name.Split(".")[0] + i.ToString() + ".html";
+                                destPath = Path.Combine(directoryPath, fileName);
+                                File.Copy(info.FullName, destPath);
+                            }
+                        }
+                        else {
+                            destPath = Path.Combine(directoryPath, info.Name);
+                            File.Copy(info.FullName, destPath);
+                        }                        
                     }
                 }
             }
@@ -79,33 +93,19 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
         /// </summary>
         private void GenerateHtml(string directoryUrl, List<DevicePymes> mobileDevices, List<OfertPlan> planList, string companyName, double devicePayment)
         {
+
+
             try
             {
-                var firstHtmlsourcePath = Path.Combine(directoryUrl, "pagina1.html");
-                var secondHtmlsourcePath = Path.Combine(directoryUrl, "Pagina2.html");
-                string content = string.Empty;
+                GenerateHtmlMobiles(directoryUrl, mobileDevices);
 
-                StreamReader objReader = new StreamReader(firstHtmlsourcePath);
-                content = objReader.ReadToEnd();
-                objReader.Close();
-
+                var firstHtmlsourcePath = Path.Combine(directoryUrl, "Subsidy.html");              
+                string content = string.Empty;  
                 decimal devicesCost = GetDevicesCost(mobileDevices);
-
-                var contentMoviles = GetContentMoviles(mobileDevices);
-
                 var contentPlans = GetContentPlans(planList);
-
                 var monthyFee = GetMothlyFee(planList);
-
                 var subsidio = (double)devicesCost - devicePayment;
-
-                content = Regex.Replace(content, "{devices}", contentMoviles);
-
-                StreamWriter writer = new StreamWriter(firstHtmlsourcePath);
-                writer.Write(content);
-                writer.Close();
-
-                objReader = new StreamReader(secondHtmlsourcePath);
+                StreamReader objReader = new StreamReader(firstHtmlsourcePath);
                 content = objReader.ReadToEnd();
                 objReader.Close();
 
@@ -113,13 +113,12 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 string formatDate = today.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
                 content = Regex.Replace(content, "{date}", formatDate)
                                .Replace("{company}", companyName)
-                               .Replace("{plans}", contentPlans)
-                               .Replace("{devicesCost}", TelefonicaHelper.FormatCultureNumber(devicesCost))
-                               .Replace("{subsidio}", TelefonicaHelper.FormatCultureDouble(subsidio))
+                               .Replace("{plans}", contentPlans)                              
+                               .Replace("{subsidio}", TelefonicaHelper.FormatCultureDouble(devicePayment))
                                .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureDouble((double)monthyFee))
                                .Replace("{devicePayment}", TelefonicaHelper.FormatCultureDouble(devicePayment));
 
-                writer = new StreamWriter(secondHtmlsourcePath);
+                StreamWriter writer = new StreamWriter(firstHtmlsourcePath);
                 writer.Write(content);
                 writer.Close();
             }
@@ -129,6 +128,52 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 throw ex;
             }
         }
+
+
+        private void GenerateHtmlMobiles(string directoryUrl, List<DevicePymes> mobileDevices)
+        {
+            try
+            {
+                var movilPdfList = GroupedMovilList(mobileDevices);
+                int mobilesCount = movilPdfList.Count;                
+                var mobileHtml = string.Empty;
+                var contentMoviles = string.Empty;
+                string content = string.Empty;
+
+                for (int i = 0; i < mobilesPages; i++)
+                {
+                    int j = i + 1;
+                    mobileHtml = Path.Combine(directoryUrl, "mobiles" + i.ToString() + ".html");
+
+
+                    StreamReader objReader = new StreamReader(mobileHtml);
+                    content = objReader.ReadToEnd();
+                    objReader.Close();                   
+
+                    int from = i * 10 + i;  // 0, 11 , 22
+                    int to = j * 10 + i;  // 10, 21 , 32
+
+                    if (to > mobilesCount)
+                    {
+                        to = mobilesCount;
+                    }
+
+                    contentMoviles = GetContentMoviles(mobileDevices, from, to);
+
+                    content = Regex.Replace(content, "{devices}", contentMoviles);
+
+                    StreamWriter writer = new StreamWriter(mobileHtml);
+                    writer.Write(content);
+                    writer.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
+        }
+
+
 
         private decimal GetMothlyFee(List<OfertPlan> planList)
         {
@@ -154,14 +199,20 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             return devicesCost;
         }
 
-        private string GetContentMoviles(List<DevicePymes> mobileDevices)
+        private string GetContentMoviles(List<DevicePymes> mobileDevices, int from, int to)
         {
             var movilPdfList = GroupedMovilList(mobileDevices);
             string content = string.Empty;
 
-            foreach (var movil in movilPdfList)
+            if (mobileDevices.Count() == 0)
             {
-                content += "<tr><td>" + movil.Marca + "</td><td>" + movil.Modelo + "</td><td>" + movil.Cantidad + "</td></tr>";
+                content += "<tr><td colspan='3'>No se han agregado equipos</td><td>";
+            }
+
+            for (int i = from; i < to; i++)
+            {
+                content += "<tr><td>" + movilPdfList[i].Marca + "</td><td>" + movilPdfList[i].Modelo + "</td><td>" + movilPdfList[i].Cantidad + "</td></tr>";
+
             }
             return content;
         }
@@ -233,7 +284,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 return movilPdfList;
             }
             catch (Exception ex)
-            {               
+            {
                 throw ex;
             }
         }
@@ -304,11 +355,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
                 var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
-                string[] lstFiles = new string[3];
+                int totalFiles = mobilesPages + 2;
+                string[] lstFiles = new string[totalFiles];
                 lstFiles[0] = mainPdf;
-                lstFiles[1] = Path.Combine(directoryPath, "pagina2.pdf");
-                lstFiles[2] = Path.Combine(directoryPath, "pagina1.pdf");
-                
+                lstFiles[1] = Path.Combine(directoryPath, "Subsidy.pdf");
+
+                int index = 0;
+                for (int i = 2; i < totalFiles; i++)
+                {
+                    lstFiles[i] = Path.Combine(directoryPath, "mobiles" + index.ToString() + ".pdf");
+                    index++;
+                }            
 
                 PdfReader reader = null;
                 Document sourceDocument = null;
@@ -322,18 +379,31 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 //Open the output file
                 sourceDocument.Open();
 
-                for (int j = 1; j <= lstFiles.Length; j++)                    
+                foreach (var item in lstFiles)
                 {
-                    document.LoadFromFile(lstFiles[j]);
+                    document.LoadFromFile(item);
                     int pages = document.Pages.Count;
 
-                    reader = new PdfReader(lstFiles[j]);
-                    //Add pages of current file
-                    for (int i = 1; i <= pages; i++)
+                    reader = new PdfReader(item);
+                    FileInfo info = new FileInfo(item);
+                    var fileName = info.Name.Split(".")[0];
+                    fileName = fileName.Substring(0, 6); // me quedo solo con la palabra "mobile";
+
+                    if (fileName.Equals("mobile"))
                     {
-                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
-                        pdfCopyProvider.AddPage(importedPage);    
+                        importedPage = pdfCopyProvider.GetImportedPage(reader, 1);
+                        pdfCopyProvider.AddPage(importedPage);
                     }
+                    else 
+                    {
+                        //Add pages of current file
+                        for (int i = 1; i <= pages; i++)
+                        {
+                            importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                            pdfCopyProvider.AddPage(importedPage);
+                        }
+                    }                    
+
                     reader.Close();
                 }
 
@@ -342,7 +412,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 document.Dispose();
                 fs.Close();
                 string pdfFilePath = outputPdfPath;
-                byte[] bytes =  File.ReadAllBytes(pdfFilePath);
+                byte[] bytes = File.ReadAllBytes(pdfFilePath);
 
                 //elimino el directorio temporal
                 DeleteDirectory(directoryPath);
@@ -355,17 +425,29 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 DeleteDirectory(directoryPath);
                 throw ex;
             }
-
         }
 
-        private void DeleteDirectory(string directoryPath) 
+        private void DeleteDirectory(string directoryPath)
         {
             bool exist = Directory.Exists(directoryPath);
-            if (exist) 
+            if (exist)
             {
                 //elimino el directorio temporal
                 Directory.Delete(directoryPath, true);
             }
+        }
+
+        private int CalculatePages(int count)
+        {
+            int pages = count;
+            int cant = 1;
+            while (pages > 10)
+            {
+                pages -= 10;
+                cant++;
+            }
+
+            return cant;
         }
     }
 }

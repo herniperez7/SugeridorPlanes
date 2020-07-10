@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
+
     <script>
         $(document).ready(function () {
             $(function () {
@@ -137,18 +138,18 @@
                                         {
                                             @foreach (var Proposal in Model)
                                             {
-                                            <tr>
-                                                <td>@Proposal.NombreUsuario</td>
-                                                <td>@Proposal.ClientName</td>
-                                                <td>@Proposal.Lineas.Count</td>
-                                                <td>@Proposal.Equipos.Count</td>
-                                                <td>$ @Proposal.Subsidio</td>
-                                                <td>@Proposal.Payback</td>
-                                                <td>$ @Proposal.DevicePayment</td>
-                                                <td> @Proposal.CreatedDate</td>
-                                                <td>@Proposal.Estado</td>
-                                                <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
-                                            </tr>
+                                                <tr>
+                                                    <td>@Proposal.NombreUsuario</td>
+                                                    <td>@Proposal.ClientName</td>
+                                                    <td>@Proposal.Lineas.Count</td>
+                                                    <td>@Proposal.Equipos.Count</td>
+                                                    <td data-toggle="tooltip" data-placement="top" title="$ @FormatCultureNumber((decimal)Proposal.Subsidio)">$ @Proposal.Subsidio</td>
+                                                    <td>@Proposal.Payback</td>
+                                                    <td>$ @Proposal.DevicePayment</td>
+                                                    <td> @Proposal.CreatedDate</td>
+                                                    <td>@Proposal.Estado</td>
+                                                    <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                                </tr>
                                             }
                                         }
 
@@ -178,7 +179,7 @@
                                                     <td>@Proposal.ClientName</td>
                                                     <td>@Proposal.Lineas.Count</td>
                                                     <td>@Proposal.Equipos.Count</td>
-                                                    <td>$ @Proposal.Subsidio</td>
+                                                    <td data-toggle="tooltip" data-placement="top" title="$ @FormatCultureNumber((decimal)Proposal.Subsidio)">$ @Proposal.Subsidio</td>
                                                     <td>@Proposal.Payback</td>
                                                     <td>$ @Proposal.DevicePayment</td>
                                                     <td> @Proposal.CreatedDate</td>

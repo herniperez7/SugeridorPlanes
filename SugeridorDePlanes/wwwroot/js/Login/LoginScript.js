@@ -1,20 +1,45 @@
 
-(function ($) {
-    "use strict";
+//$(document).ready(function () {
 
+
+
+
+
+//});
+
+
+
+
+(function ($) {
+  
+    $("#userNameTxt").addClass('has-val');
+    $("#userPassTxt").addClass('has-val');
+ 
+    //$(document).on("keyup", "#userNameTxt", function (event) {
+    //    console.log($(this).val());
+    //    $(this).val("key");
+
+    //    $(this).addClass('has-val');
+    //    console.log("has1");
+    //});
+
+    //$(document).on("keyup", "#userPassTxt", function (event) {
+    //   // $("#userPassTxt").addClass('has-val');
+    //});
+  
 
     /*==================================================================
     [ Focus input ]*/
-    $('.input100').each(function(){
-        $(this).on('blur', function(){
-            if($(this).val().trim() !== "") {
+    $('.input100').each(function () {
+        $(this).on('blur', function () {
+            if ($(this).val().trim() !== "") {
                 $(this).addClass('has-val');
             }
             else {
                 $(this).removeClass('has-val');
             }
-        })    
-    })
+        });
+    });
   
   
     /*==================================================================
@@ -54,9 +79,8 @@
         }
     }
 
-    function showValidate(input) {
+    function showValidate(input) {        
         var thisAlert = $(input).parent();
-
         $(thisAlert).addClass('alert-validate');
     }
 

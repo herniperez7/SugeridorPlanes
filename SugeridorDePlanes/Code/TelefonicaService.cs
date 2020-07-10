@@ -61,6 +61,12 @@ namespace Telefonica.SugeridorDePlanes.Code
             try
             {
                 var plans = await _client.GetActualPlansAsync();
+
+               /* foreach (var plan in plans)
+                {
+                    plan.Bono_ /= 1024;
+                }*/
+
                 _ofertPlanList = _mapper.Map<List<OfertActualPlanModel>>(plans);
                 return true;
             }
@@ -221,7 +227,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 if (plan.RecomendadorId == updatePlan.PlanToEdit)
                 {
                     plan.Plan = ofertPlan.Plan;
-                    plan.Bono = ofertPlan.Bono_;
+                    plan.Bono = ofertPlan.Bono_ / 1024;
                     plan.Roaming = ofertPlan.Roaming;
                     plan.TMM_s_iva = ofertPlan.TMM_s_iva;
                     plan.TmmString = TelefonicaHelper.FormatCultureNumber(ofertPlan.TMM_s_iva);
@@ -614,6 +620,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         public void EmptyEquipoPymesCurrentList()
         {
             _currentEquiposPymes = new List<DevicePymesModel>();
+            _confirmedEquiposPymes = new List<DevicePymesModel>();
         }
 
         /// <summary>

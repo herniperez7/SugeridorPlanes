@@ -273,6 +273,32 @@ th {
     margin: 2px 10px;
 }
 
+/*Tabla mobiles generada automaticamente*/
+.hasTooltipMobile span {
+    display: none;
+    max-width: 200px;
+    padding: 0.25rem 0.5rem;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.hasTooltipMobile:hover span {
+    display: block;
+    position: inherit;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+}
+
+
+
+
 
 /********/
 
@@ -313,3 +339,5 @@ th {
     white-space: normal;
     padding: 4px 20px 4px 4px;
 }
+
+
