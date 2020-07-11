@@ -22,7 +22,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
         {
             try
             {
-                return await _context.User.Where(x => x.Email == userEmail).FirstOrDefaultAsync();       
+                var client = await _context.User.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
+                return client;
             }
             catch (Exception ex)
             {

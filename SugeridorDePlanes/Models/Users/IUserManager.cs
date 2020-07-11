@@ -7,7 +7,6 @@ namespace Telefonica.SugeridorDePlanes.Models.Users
 {
     public interface IUserManager
     {
-
-        User AuthenticateUser(string userName, string password);
+        bool AuthenticateUser(string userName, string password);
     }
 }

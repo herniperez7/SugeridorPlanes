@@ -18,7 +18,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     {
         private readonly IEmailSenderLogic _emailSender;
         private readonly IPdfLogic _pdfLogic;
-        public IConfiguration _configuration { get; }
+        private IConfiguration _configuration { get; }
         public UtilitiesController(IEmailSenderLogic emailSender, IConfiguration configuration, IPdfLogic pdfLogic)
         {
             _emailSender = emailSender;

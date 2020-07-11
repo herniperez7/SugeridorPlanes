@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
+using Telefonica.SugeridorDePlanes.Dto.Dto;
 using Telefonica.SugeridorDePlanes.Resources.helpers;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
@@ -18,10 +19,14 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
     public class PdfLogic : IPdfLogic
     {
         private readonly IWebHostEnvironment _env;
+        private ILogLogic _logLogic;
         private int mobilesPages;
-        public PdfLogic(IWebHostEnvironment env)
+
+        public PdfLogic(IWebHostEnvironment env, ILogLogic logLogic)
         {
             _env = env;
+            _logLogic = logLogic;
+           
         }
 
         public byte[] GeneratePdfFromHtml(List<DevicePymes> movilDevices, List<OfertPlan> planList, string companyName, double devicePayment)
@@ -39,6 +44,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
+               _logLogic.InsertLog(new LogDto() {CreatedDate = DateTime.Today, Messsage = ex.Message, Reference = "generar pdf" });
                 DeleteDirectory(tempDirectory);
                 throw ex;
             }
@@ -354,7 +360,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             {
                 Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
+                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial1.pdf");
                 int totalFiles = mobilesPages + 2;
                 string[] lstFiles = new string[totalFiles];
                 lstFiles[0] = mainPdf;

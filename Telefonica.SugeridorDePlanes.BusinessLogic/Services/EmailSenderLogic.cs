@@ -6,15 +6,18 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
+using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
 {
     public class EmailSenderLogic : IEmailSenderLogic
     {
-        private readonly IWebHostEnvironment _env; 
-        public EmailSenderLogic(IWebHostEnvironment env)
+        private readonly IWebHostEnvironment _env;
+        private ILogLogic _logLogic;
+        public EmailSenderLogic(IWebHostEnvironment env, ILogLogic logLogic)
         {
-            _env = env;          
+            _env = env;
+            _logLogic = logLogic;
         }
 
         public async Task SendEmailAsync(Email emailData, SmtpConfig config)
@@ -62,6 +65,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
+                _logLogic.InsertLog(new LogDto() { CreatedDate = DateTime.Today, Messsage = ex.Message, Reference = "enviar email" });
                 throw ex;
             }
         }

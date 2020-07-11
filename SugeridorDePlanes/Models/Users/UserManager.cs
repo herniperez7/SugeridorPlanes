@@ -6,47 +6,52 @@ using System.DirectoryServices;
 using System.Data.SqlClient;
 using System.Web;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Telefonica.SugeridorDePlanes.Models.Users
 {
     public class UserManager : IUserManager
-    { 
-        public UserManager()
+    {
+        private IConfiguration _configuration { get; }
+        public UserManager(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
-        public User AuthenticateUser(string userName, string password)
+        public bool AuthenticateUser(string userName, string password)
         {
-            if(!String.IsNullOrEmpty(userName) && !String.IsNullOrEmpty(password))
+            try
             {
-                try
-                {
-                    DirectoryEntry dE = new DirectoryEntry(GetCurrentDomainPath(), userName, password);
-                    DirectorySearcher dSearch = new DirectorySearcher(dE);
-                    dSearch.Filter = "sAMAccountName" + userName + "";
-                    SearchResult results = null;
-                    results = dSearch.FindOne();
+                var serviceLDAP = _configuration.GetSection("ActiveDirectoryConfig").GetSection("servicioLDAP").Value;
+                var userPrefix = _configuration.GetSection("ActiveDirectoryConfig").GetSection("UserPrefix").Value;
+                var directoryUserName = $@"{userPrefix}\{userPrefix}";
+                DirectoryEntry dE = new DirectoryEntry(serviceLDAP, directoryUserName, password);
+                DirectorySearcher dSearch = new DirectorySearcher(dE);               
+                SearchResult results = null;
+                results = dSearch.FindOne();
+                //string NTuserName = results.GetDirectoryEntry().Properties["SAMAccountName"].Value.ToString();
+                //User usuarioLogueado = new User() { NombreCompleto = userName };
 
-                    string NTuserName = results.GetDirectoryEntry().Properties["SAMAccountName"].Value.ToString();
-                    User usuarioLogueado = new User() { NombreCompleto = userName};
-                    
-                    return usuarioLogueado;
-
-                }
-                catch (Exception ex)
+                if (results != null)
                 {
-                    return null;
+                    return true;
                 }
+                else 
+                {
+                    return false;
+                }                
             }
-            else
+            catch(Exception ex) 
             {
-                return null;
+                //return false;
+                throw ex;
             }
-            
         }
 
         private string GetCurrentDomainPath()
         {
-            try{
+            try
+            {
+
                 DirectoryEntry dE = new DirectoryEntry("LDAP://RootDSE");
                 return "LDAP://" + dE.Properties["defaultNamingContext"][0].ToString();
             }
@@ -54,7 +59,7 @@ namespace Telefonica.SugeridorDePlanes.Models.Users
             {
                 return string.Empty;
             }
-            
+
         }
     }
 }

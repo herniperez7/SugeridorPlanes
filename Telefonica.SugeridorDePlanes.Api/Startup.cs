@@ -55,12 +55,14 @@ namespace Telefonica.SugeridorDePlanes.Api
             services.AddScoped<IPdfLogic, PdfLogic>();
             services.AddScoped<IProposalLogic, ProposalLogic>();
             services.AddScoped<IUserLogic, UserLogic>();
+            services.AddScoped<ILogLogic, LogLogic>();
 
             //Repositories
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISuggestorRepository, SuggestorRepository>();
             services.AddScoped<IProposalRepository, ProposalRepository>();
+            services.AddScoped<ILogRepository, LogRepository>();
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

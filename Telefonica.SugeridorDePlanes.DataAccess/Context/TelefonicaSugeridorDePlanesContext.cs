@@ -16,16 +16,18 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
             : base(options)
         {
         }
-
+        public virtual DbSet<LogDto> Logs { get; set; }
         public virtual DbSet<SuggestorB2bDTO> SuggestorB2b { get; set; }
         public virtual DbSet<SuggestorClientDTO> SuggestorClient { get; set; }
         public virtual DbSet<OfertActualPlanDTO> OfertPlanActual { get; set; }
         public virtual DbSet<DevicePymesDTO> EquipoPymes { get; set; }
-
         public virtual DbSet<ProposalDTO> Proposal { get; set; }
         public virtual DbSet<ProposalDeviceDTO> ProposalDevice { get; set; }
         public virtual DbSet<ProposalLineDTO> ProposalLine { get; set; }
         public virtual DbSet<UserDTO> User { get; set; }
+
+
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SuggestorB2bDTO>(entity =>
@@ -384,6 +386,17 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
 
             });
 
+
+            modelBuilder.Entity<LogDto>(entity => {
+                entity.HasKey(e => e.Id);
+                entity.ToTable("Logs");
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("CreatedDate");
+                entity.Property(e => e.Messsage)
+                    .HasColumnName("LogMessage");
+                entity.Property(e => e.Reference)
+                    .HasColumnName("Reference");                
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }
