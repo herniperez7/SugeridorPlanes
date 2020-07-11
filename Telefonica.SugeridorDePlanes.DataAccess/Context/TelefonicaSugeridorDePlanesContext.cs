@@ -395,7 +395,9 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                 entity.Property(e => e.Messsage)
                     .HasColumnName("LogMessage");
                 entity.Property(e => e.Reference)
-                    .HasColumnName("Reference");                
+                    .HasColumnName("Reference");
+                entity.Property(e => e.ExtraData)
+                    .HasColumnName("ExtraData");                
             });
 
             OnModelCreatingPartial(modelBuilder);

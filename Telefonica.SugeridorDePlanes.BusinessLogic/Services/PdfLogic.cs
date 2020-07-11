@@ -44,7 +44,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-               _logLogic.InsertLog(new LogDto() {CreatedDate = DateTime.Today, Messsage = ex.Message, Reference = "generar pdf" });
+                var extraData = new { directory = tempDirectory, step = "first" };                
+               _logLogic.InsertLog(new Log("generar pdf", ex.Message, extraData));
                 DeleteDirectory(tempDirectory);
                 throw ex;
             }

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Email;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
@@ -64,8 +65,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }
             catch (Exception ex)
-            {
-                _logLogic.InsertLog(new LogDto() { CreatedDate = DateTime.Today, Messsage = ex.Message, Reference = "enviar email" });
+            {                
+                var extraData = new { smtpConfig = config, dataEmail = emailData };
+                _logLogic.InsertLog(new Log("Enviar email", ex.Message, extraData));
                 throw ex;
             }
         }

@@ -10,5 +10,6 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
         public DateTime CreatedDate { get; set; }
         public string Reference { get; set; }
         public string Messsage { get; set; }
+        public string ExtraData { get; set; }        
     }
 }

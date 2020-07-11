@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
@@ -13,11 +15,25 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
            _logRepository = logRepository;
         }
 
-        public void InsertLog(LogDto log)
+        public void InsertLog(Log log)
         {
             try
             {
-                _logRepository.InsertLog(log);
+                var extraDataObj = string.Empty;
+                if (log.ExtraData != null)
+                {
+                    extraDataObj = JsonConvert.SerializeObject(log.ExtraData);
+                }
+
+                var logDto = new LogDto()
+                {
+                    CreatedDate = DateTime.Now,
+                    ExtraData = extraDataObj,
+                    Reference = log.Reference,
+                    Messsage = log.Messsage
+                };             
+
+                _logRepository.InsertLog(logDto);
             }
             catch (Exception ex)
             {
