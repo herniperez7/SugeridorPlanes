@@ -33,19 +33,9 @@
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
 
-    <script>
-        $(document).ready(function () {
-            $(function () {
-                $("#tableProposalList").tablesorter();
-            });
-        });
-
-        function openProposal(val)
-        {
-            window.location.href = "@Url.Action("OpenProposal", "UserProposal")" + '?proposaId=' + val;
-        }
-
-
+    <script>       
+        var openProposalUrl = "@Url.Action("OpenProposal", "UserProposal")";
+        var deleteProposalUrl = "@Url.Action("DeleteProposal", "UserProposal")";
     </script>
 </head>
 <body>
@@ -131,6 +121,7 @@
                                             <th>Estado</th>
                                             <th>Fecha</th>
                                             <th>Abrir</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -149,6 +140,7 @@
                                                     <td> @Proposal.CreatedDate</td>
                                                     <td>@Proposal.Estado</td>
                                                     <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                                    <td style="text-align:center;cursor:pointer" data-toggle="modal" href="#deleteProposalModal" onclick="setProposalId(@Proposal.Id)"><i class="fa fa-trash" aria-hidden="true"></i></td>
                                                 </tr>
                                             }
                                         }
@@ -205,7 +197,36 @@
     </div>
 
 
+    <div class="modal fade" id="deleteProposalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info modal-dialog-centered" role="document">
 
+            <div class="modal-content text-center">
 
+                <div class="modal-header d-flex justify-content-center" style="background-color:#FFEF00">
+                    <h2 style="color:white;text-shadow: 2px 2px #FBCE00">Elimnar Propuesta</h2>
+
+                </div>
+                <div class="modal-body">
+
+                    @*<img src="@Url.Content("~/img/icons/ExclamationIcon100x.png")" />*@
+
+                    
+                    
+                    <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true" style="color:#FFEF00"></i>
+
+                    <h4 id="saveProposaltext">Seguro desea eliminar la propuesta?</h4>
+
+                </div>
+
+                <div class="modal-footer flex-center">
+                    <button type="button" class="btn btn-outline-success" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-outline-success" data-dismiss="modal" onclick="deleteProposal()">aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/UserProposal/ProposalScript.js"></script>
 </body>
 </html>

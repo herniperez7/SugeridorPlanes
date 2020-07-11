@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
@@ -23,7 +24,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         {
             try
             {                 
-                return await _proposalRepository.GetProposals();
+                var allProposals = await _proposalRepository.GetProposals();
+                allProposals = allProposals.Where(x => x.Activa == true).ToList(); //traigo solo las que estan activas (no eliminadas)
+                return allProposals;
             }
             catch (Exception ex)
             {
@@ -35,7 +38,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         {
             try
             {
-                return await _proposalRepository.GetProposalsUsuario(idUsuario);
+                var allProposals = await _proposalRepository.GetProposalsUsuario(idUsuario);
+                allProposals = allProposals.Where(x => x.Activa == true).ToList();
+                return allProposals;
             }
             catch (Exception ex)
             {

@@ -152,6 +152,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
+        [HttpPost("deleteProposal")]
         public IActionResult DeleteProposal(int proposalId) 
         {
             try

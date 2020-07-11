@@ -725,5 +725,17 @@ namespace Telefonica.SugeridorDePlanes.Code
             return planDefinitveList;
         }
 
+        public async Task<bool> DeleteProposal(int proposalId)
+        {
+            try
+            {
+                await _client.DeleteProposalAsync(proposalId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

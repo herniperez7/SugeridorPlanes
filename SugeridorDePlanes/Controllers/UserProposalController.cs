@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -103,9 +104,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return View("ProposalDetails", proposal);
         }
 
-        public async Task<IActionResult> OpenProposal(string proposaId)
+        public async Task<IActionResult> OpenProposal(string proposalId)
         {
-            var proposal = await _telefonicaApi.GetProposalById(proposaId);
+            var proposal = await _telefonicaApi.GetProposalById(proposalId);
             _telefonicaApi.SetCurrentProposal(proposal);
 
             if(proposal.Estado == "Finalizada")
@@ -119,6 +120,38 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
             return View();
 
+        }
+
+        public async Task<IActionResult> DeleteProposal(string proposalId) 
+        {
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (!string.IsNullOrEmpty(proposalId))
+                {
+                    int id = int.Parse(proposalId);
+                    await _telefonicaApi.DeleteProposal(id);        
+                }
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                if (userRole == "Administrador")
+                {
+                    var proposals = await _telefonicaApi.GetProposals();
+                    return View("../UserProposal/ProposalList", proposals);
+                }
+                else
+                {
+                    var proposals = await _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
+                    return View("../UserProposal/ProposalList", proposals);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        
         }
 
 

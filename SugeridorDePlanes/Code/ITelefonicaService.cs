@@ -50,5 +50,6 @@ namespace Telefonica.SugeridorDePlanes.Code
         User GetUserByEmail(string userEmail);
         User GetUserById(string userId);
         Task<bool> PopulateData();
+        Task<bool> DeleteProposal(int proposalId);
     }
 }
