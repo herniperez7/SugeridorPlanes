@@ -331,7 +331,9 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Context
                 entity.Property(e => e.Subsidio)
                    .HasColumnName("Subsidio");
                   entity.Property(e => e.CreatedDate)
-                   .HasColumnName("FechaCreacion");             
+                   .HasColumnName("FechaCreacion");
+                entity.Property(e => e.Activa)
+                   .HasColumnName("Activa");
 
             });
 

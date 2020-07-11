@@ -130,5 +130,16 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
+        public void DeleteProposal(int proposalId)
+        {
+            try
+            {
+                _proposalRepository.DeleteProposal(proposalId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

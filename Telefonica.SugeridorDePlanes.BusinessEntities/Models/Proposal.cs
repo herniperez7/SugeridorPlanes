@@ -19,5 +19,6 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
         public string IdUsuario { get; set; }
         public string NombreUsuario { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool Activa { get; set; }
     }
 }

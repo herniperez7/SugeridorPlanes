@@ -16,5 +16,6 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
         public double Subsidio { get; set; }
         public double Payback { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool Activa { get; set; }
     }
 }

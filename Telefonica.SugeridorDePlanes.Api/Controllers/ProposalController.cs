@@ -122,7 +122,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     Subsidio = proposal.Subsidio,
                     Estado = transactionProposalDto.Proposal.Estado,
                     CreatedDate = transactionProposalDto.Proposal.CreatedDate,
-                    IdUsuario = proposal.IdUsuario.ToString()
+                    IdUsuario = proposal.IdUsuario.ToString(),
+                    Activa = true
                 };
 
                 return proposalRequest;
@@ -149,6 +150,20 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        public IActionResult DeleteProposal(int proposalId) 
+        {
+            try
+            {
+                _ProposalLogic.DeleteProposal(proposalId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }        
         }
 
         private async Task<List<Proposal>> getProposalWithData(List<ProposalDTO> ProposalsDTO)
@@ -241,7 +256,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 Subsidio = proposal.Subsidio,
                 CreatedDate = DateTime.Now,
                 Estado = "Pendiente",
-                IdUsuario = proposal.IdUsuario
+                IdUsuario = proposal.IdUsuario,
+                Activa = proposal.Activa
             };
 
 

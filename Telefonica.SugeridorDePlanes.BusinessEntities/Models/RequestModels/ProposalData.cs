@@ -17,5 +17,6 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels
         public double Payback { get; set; }
         public bool Finalizada { get; set; }
         public int IdUsuario { get; set; }
+        public bool Activa { get; set; }
     }
 }

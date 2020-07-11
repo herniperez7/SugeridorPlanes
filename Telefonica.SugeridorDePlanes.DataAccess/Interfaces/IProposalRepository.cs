@@ -16,9 +16,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Interfaces
         Task<bool> UpdatePropsal(ProposalDTO proposal);
         Task<bool> UpdateTotalProposal(TransactionProposalDTO transactionProposal);
         Task<List<ProposalDeviceDTO>> GetEquiposProposal(int idPropuesta);
-
         Task<List<ProposalLineDTO>> GetLineasProposal(int proposalId);
-
+        void DeleteProposal(int proposalId);
     }
 }
 

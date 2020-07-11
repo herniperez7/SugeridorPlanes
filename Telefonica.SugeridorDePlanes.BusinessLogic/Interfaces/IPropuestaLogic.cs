@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
 namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
@@ -18,5 +15,6 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
         Task<List<ProposalDeviceDTO>> GetEquiposProposal(int idPropuesta);
         void UpdateProposal(ProposalDTO proposal);
         Task<bool> UpdateTotalProposal(TransactionProposalDTO transactionProposal);
+        void DeleteProposal(int proposalId);
     }
 }

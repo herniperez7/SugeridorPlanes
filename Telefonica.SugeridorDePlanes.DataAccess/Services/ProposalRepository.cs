@@ -271,5 +271,19 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
+        public void DeleteProposal(int proposalId)
+        {
+            try
+            {
+                var proposal = new ProposalDTO() { Id = proposalId, Activa = false };
+                _context.Proposal.Attach(proposal);
+                _context.Entry(proposal).Property(x => x.Activa).IsModified = true;
+                _context.SaveChanges();                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
