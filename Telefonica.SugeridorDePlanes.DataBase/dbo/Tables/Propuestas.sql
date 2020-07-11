@@ -7,6 +7,9 @@
     [Estado]        NVARCHAR (10) NULL,
     [IdUsuario]     INT           NULL,
     [FechaCreacion] DATETIME      NULL,
+    [Activa]        BIT           NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
