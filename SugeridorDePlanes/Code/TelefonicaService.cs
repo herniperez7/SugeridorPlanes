@@ -672,6 +672,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 MobileDevicesList = mobileDevicesList,
                 Finalizada = isCreated,
                 IdUsuario = idUsuario,
+                Activa = true
             };
 
             return proposalData;

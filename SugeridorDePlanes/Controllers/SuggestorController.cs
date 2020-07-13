@@ -210,8 +210,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             try
             {
                 var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
-                var porposalData = _telefonicaApi.GetProposalData(devicePayment, true, loggedUser.Id);
-                Proposal requestResult = await _telefonicaApi.AddProposal(porposalData);
+                var proposalData = _telefonicaApi.GetProposalData(devicePayment, true, loggedUser.Id);
+               
+                Proposal requestResult = await _telefonicaApi.AddProposal(proposalData);
                 _telefonicaApi.EmptyEquipoPymesCurrentList();
                 return true;
             }
