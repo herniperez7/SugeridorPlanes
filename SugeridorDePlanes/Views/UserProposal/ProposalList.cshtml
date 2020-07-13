@@ -39,13 +39,73 @@
     </script>
 </head>
 <body>
-    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:60px">
+
+    @*MOBILE MENU*@
+    <!--Navbar-->
+    <nav class="navbar navbar-default light-blue lighten-4 d-lg-none" id="navBar-mobile">
+        <div class="container justify-content-end pr-0">
+            <!-- Collapse button -->
+            <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
+                    aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="mobile-nav-text">
+                    <i class="fas fa-bars fa-2x"></i>
+                </span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+
+                <!-- Links -->
+                <ul class="navbar-nav mr-auto text-center">
+                    <li>
+                        <a href="@Url.Action("Index", "Suggestor")">
+                            <span class="nav-text">
+                                Sugeridor
+                            </span>
+                        </a>
+
+                    </li>
+                    <li class="has-subnav">
+                        <a href="@Url.Action("Index", "UserProposal")">
+                            <span class="nav-text">
+                                Lista de propuestas
+                            </span>
+                        </a>
+
+                    </li>
+                    @if (userRole.Equals("Administrador"))
+                    {
+                        <li class="has-subnav">
+                            <a href="#">
+                                <span class="nav-text">
+                                    Crear usuario
+                                </span>
+                            </a>
+
+                        </li>
+                    }
+                    <li>
+                        <a href="@Url.Action("Logout", "Login")">
+                            <span class="nav-text">
+                                Cerrar sesion
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Links -->
+
+            </div>
+            <!-- Collapsible content -->
+        </div>
+    </nav>
+
+    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:60px" id="navMobile-Margin">
         <div class="viewTitle" style="margin-left:20px">
             <h2>Lista de Propuestas</h2>
         </div>
 
     </nav>
-    <nav class="main-menu" id="sideNav">
+    <nav class="main-menu d-none d-lg-block" id="sideNav">
         <ul>
             <li>
                 <a href="@Url.Action("Index", "Suggestor")">
@@ -213,8 +273,8 @@
 
                     @*<img src="@Url.Content("~/img/icons/ExclamationIcon100x.png")" />*@
 
-                    
-                    
+
+
                     <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true" style="color:#FFEF00"></i>
 
                     <h4 id="saveProposaltext">Seguro desea eliminar la propuesta?</h4>

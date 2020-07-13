@@ -77,6 +77,66 @@
 
     </script>
 
+    @*MOBILE MENU*@
+
+    <!--Navbar-->
+    <nav class="navbar navbar-default light-blue lighten-4 d-lg-none" id="navBar-mobile">
+        <div class="container justify-content-end pr-0">
+            <!-- Collapse button -->
+            <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
+                    aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="mobile-nav-text">
+                    <i class="fas fa-bars fa-2x"></i>
+                </span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+
+                <!-- Links -->
+                <ul class="navbar-nav mr-auto text-center">
+                    <li>
+                        <a href="@Url.Action("Index", "Suggestor")">
+                            <span class="nav-text">
+                                Sugeridor
+                            </span>
+                        </a>
+
+                    </li>
+                    <li class="has-subnav">
+                        <a href="@Url.Action("Index", "UserProposal")">
+                            <span class="nav-text">
+                                Lista de propuestas
+                            </span>
+                        </a>
+
+                    </li>
+                    @if (userRole.Equals("Administrador"))
+                    {
+                        <li class="has-subnav">
+                            <a href="#">
+                                <span class="nav-text">
+                                    Crear usuario
+                                </span>
+                            </a>
+
+                        </li>
+                    }
+                    <li>
+                        <a href="@Url.Action("Logout", "Login")">
+                            <span class="nav-text">
+                                Cerrar sesion
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Links -->
+
+            </div>
+            <!-- Collapsible content -->
+        </div>
+    </nav>
+
     <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3" style="margin-left:60px">
 
 
@@ -104,7 +164,7 @@
 
     </nav>
 
-    <nav class="d-block d-md-none navbar-light bg-light">
+    <nav class="d-block d-md-none navbar-light bg-light" id="navMobile-Margin">
 
         <form class="form-inline input-group mb-0">
             <div class="input-group-prepend">
@@ -126,7 +186,8 @@
         </form>
     </nav>
 
-    <nav class="main-menu" id="sideNav">
+    @*DESKTOP MENU*@
+    <nav class="main-menu d-none d-lg-block" id="sideNav">
         <ul>
             <li>
                 <a href="@Url.Action("Index", "Suggestor")">
@@ -180,6 +241,9 @@
             </li>
         </ul>
     </nav>
+
+
+    <!--/.Navbar-->
     <div class="area">
 
         <div id="loaderDiv" style="display:none">
@@ -535,7 +599,7 @@
                                                         <td id=@tdId onclick="AddDevice(@mobile.Id, false)"><i class='fa fa-times fa-lg' aria-hidden='true'></i></td>
                                                     </tr>
                                                 }
-                                                <tr >
+                                                <tr>
                                                     <td class='total-column'>@deviceCount</td>
                                                     <td class='total-column'>$ @totalAmount</td>
                                                     <td class='total-column'></td>
@@ -586,7 +650,7 @@
                             </div>
 
 
-                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center factDiv">
 
 
                                 <div id="divbillingStatus">
@@ -659,7 +723,7 @@
 
 
 
-                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center" id="generarDiv">
 
                                 <div style="display: table-cell;vertical-align: middle;text-align: center;">
                                     @if (Model != null && Model.Count > 0)
@@ -738,7 +802,7 @@
                             </div>
 
 
-                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center factDiv">
 
 
                                 <div id="divClaculatedBillingStatus">
@@ -766,7 +830,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 align-items-center dis-grid justify-content-center">
+                            <div class="col-lg-4 align-items-center dis-grid justify-content-center generarDiv">
 
                                 <div style="display: table-cell;vertical-align: middle;text-align: center;">
                                     <button class="btn btn-outline-success generateButtons my-2 my-sm-0 p-3" type="submit" id="importValuesBtn" onclick="importValues()">Importar valores</button>

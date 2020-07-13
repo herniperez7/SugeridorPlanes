@@ -440,3 +440,23 @@ iframe {
   transform: translateY(-50%);
   left: 0;
 }
+
+/*** MEDIA QUERIES***/
+
+@media (max-width: 576px) {
+}
+
+@media (max-width: 768px) {
+	.container-login100 {
+		padding: 50px;
+	}
+	#navMobile-Margin{
+		margin-top:70px;
+	}
+}
+
+@media (max-width: 992px) {
+}
+
+@media (max-width: 1200px) {
+}

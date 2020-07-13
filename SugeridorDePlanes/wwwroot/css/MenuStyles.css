@@ -115,3 +115,42 @@
         background-color: #5fa2db;
     }
 
+/**MOBILE MENU**/
+
+.fa-1x {
+    font-size: 1.5rem;
+}
+
+.navbar-toggler.toggler-example {
+    cursor: pointer;
+}
+
+.mobile-nav-text {
+    color: #00a9e0 !important;
+}
+
+#navBar-mobile {
+    overflow: hidden;
+    z-index: 99999;
+    background-color: #fff;
+    position: fixed !important; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+}
+
+
+/*** MEDIA QUERIES***/
+@media (max-width: 576px) {
+}
+
+@media (max-width: 768px) {
+    #navMobile-Margin{
+        margin-top:70px;
+    }
+}
+
+@media (max-width: 992px) {
+}
+
+@media (max-width: 1200px) {
+}
