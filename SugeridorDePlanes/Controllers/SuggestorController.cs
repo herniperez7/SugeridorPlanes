@@ -91,7 +91,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public JsonResult CalculatePayback(string devicePayment)
         {
-            int deveicePaymentInt = int.Parse(devicePayment);
+            /*int deveicePaymentInt = int.Parse(devicePayment);
             var mobileList = _telefonicaApi.GetConfirmedEquiposPymes();
             var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
             decimal payback = 0;
@@ -111,7 +111,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
 
             payback = subsidio / totalTmm;
-            payback = decimal.Round(payback);
+            payback = decimal.Round(payback);*/
+
+            var payback = _telefonicaApi.GetPayback(devicePayment);
 
             var data = new { status = "ok", result = payback };
             return Json(data);

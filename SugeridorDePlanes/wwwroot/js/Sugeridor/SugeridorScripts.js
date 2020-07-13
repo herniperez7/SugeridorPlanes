@@ -45,7 +45,7 @@ $(document).ready(function () {
     }
 
     $("#pagoEquiposTxt").keypress(function (e) {
-        console.log(e);
+        
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code === 13) {
             calculatePayBack();
@@ -120,7 +120,7 @@ function confirmSelectPlan() {
 }
 
 function establisPlanToEdit(planToEdit) {
-    console.log("establish");
+    
     gbPlanToEdit = planToEdit;
    // gbPlanToEditRut = rut.toString();
 }

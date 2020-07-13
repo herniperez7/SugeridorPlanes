@@ -111,7 +111,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 decimal devicesCost = GetDevicesCost(mobileDevices);
                 var contentPlans = GetContentPlans(planList);
                 var monthyFee = GetMothlyFee(planList);
-                var subsidio = (double)devicesCost - devicePayment;
+                double subsidio = (double)devicesCost;
                 StreamReader objReader = new StreamReader(firstHtmlsourcePath);
                 content = objReader.ReadToEnd();
                 objReader.Close();
@@ -121,7 +121,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 content = Regex.Replace(content, "{date}", formatDate)
                                .Replace("{company}", companyName)
                                .Replace("{plans}", contentPlans)                              
-                               .Replace("{subsidio}", TelefonicaHelper.FormatCultureDouble(devicePayment))
+                               .Replace("{subsidio}", TelefonicaHelper.FormatCultureDouble(subsidio))
                                .Replace("{monthlyFee}", TelefonicaHelper.FormatCultureDouble((double)monthyFee))
                                .Replace("{devicePayment}", TelefonicaHelper.FormatCultureDouble(devicePayment));
 
@@ -157,8 +157,8 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                     content = objReader.ReadToEnd();
                     objReader.Close();                   
 
-                    int from = i * 10 + i;  // 0, 11 , 22
-                    int to = j * 10 + i;  // 10, 21 , 32
+                    int from = i * 9 + i; 
+                    int to = j * 9 + i;  
 
                     if (to > mobilesCount)
                     {
@@ -361,7 +361,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             {
                 Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
                 var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
-                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial1.pdf");
+                var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
                 int totalFiles = mobilesPages + 2;
                 string[] lstFiles = new string[totalFiles];
                 lstFiles[0] = mainPdf;

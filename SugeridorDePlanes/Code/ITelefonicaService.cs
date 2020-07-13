@@ -34,7 +34,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         Task<List<Proposal>> GetProposals();
         Task<Proposal> GetProposalById(string idProposal);
         decimal GetSubsidy();
-        decimal GetPayback();
+        decimal GetPayback(string devicePayment);
         IndexModel CalculateIndexes();
         void SetCurrentEquiposPymesList(List<DevicePymesModel> mobileList);
         void EmptyEquipoPymesCurrentList();

@@ -99,10 +99,11 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList)
         {
-            foreach (var m in currentList)
-            {
-                _confirmedEquiposPymes.Add(m);
-            }
+            //foreach (var m in currentList)
+            //{
+            //    _confirmedEquiposPymes.Add(m);
+            //}
+            _confirmedEquiposPymes = currentList;
         }
 
         public Proposal GetCurrentProposal()
@@ -495,9 +496,14 @@ namespace Telefonica.SugeridorDePlanes.Code
             return subsidy;
         }
 
-        public decimal GetPayback()
+        public decimal GetPayback(string devicePayment)
         {
+
+            devicePayment = !string.IsNullOrEmpty(devicePayment) ? devicePayment : "0";
+            var devicePaymentNumber = int.Parse(devicePayment);
             decimal subsidy = GetSubsidy();
+            subsidy -= devicePaymentNumber;
+
             decimal income = 0;
             decimal payback = 0;
 
@@ -645,7 +651,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             var planesDefList = GetCurrentDefinitivePlans();
             var mobileList = GetConfirmedEquiposPymes();
             var subsidy = GetSubsidy();
-            var payback = GetPayback();
+            var payback = GetPayback(devicePayment);
             var clientModel = GetCurrentClient();
             var client = _mapper.Map<SuggestorClient>(clientModel);
             var suggestorList = GetCurrentPlans();

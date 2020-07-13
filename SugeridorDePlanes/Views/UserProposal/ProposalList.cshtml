@@ -160,6 +160,7 @@
                                             <th>Estado</th>
                                             <th>Fecha</th>
                                             <th>Abrir</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -177,6 +178,7 @@
                                                     <td> @Proposal.CreatedDate</td>
                                                     <td>@Proposal.Estado</td>
                                                     <td class="editRow " onclick="openProposal(@Proposal.Id)"><a class="btn btn-outline-success my-2 my-sm-0">Abrir</a></td>
+                                                    <td style="text-align:center;cursor:pointer" data-toggle="modal" href="#deleteProposalModal" onclick="setProposalId(@Proposal.Id)"><i class="fa fa-trash" aria-hidden="true"></i></td>
                                                 </tr>
                                             }
                                         }
