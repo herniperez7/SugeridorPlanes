@@ -47,15 +47,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     // isValid = UserManager.AuthenticateUser(userName, password);
 
                     if (isValid)
-                    {
-                        //seteo las cookies que permiten no ingresar a las demas funcionalidades si no esta logueado
-                        SetLoginCookies();
-
+                    {                       
                         var user = _telefonicaService.GetUserByEmail(userName);
                         HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
                         HttpContext.Session.SetString("UserRole", user.RolString);
-                        await _telefonicaService.PopulateData();
 
+                        //seteo las cookies que permiten no ingresar a las demas funcionalidades si no esta logueado
+                        SetLoginCookies(user.RolString);
+                        await _telefonicaService.PopulateData();
                         return this.RedirectToAction("Index", "Suggestor");
                     }
                     else
@@ -82,9 +81,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             return this.RedirectToAction("Index", "Login");
         }
 
-        private async void SetLoginCookies()
+        private async void SetLoginCookies(string role)
         {
-            var claims = new List<Claim>{ new Claim(ClaimTypes.Name, Guid.NewGuid().ToString())};
+            var claims = new List<Claim>{ 
+                new Claim(ClaimTypes.Name, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role),
+            };
             var claimsIdentity = new ClaimsIdentity(
               claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties();

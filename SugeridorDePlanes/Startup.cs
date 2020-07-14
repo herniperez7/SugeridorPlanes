@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,8 +59,9 @@ namespace Telefonica.SugeridorDePlanes
                   options.Cookie.Name = "SugeridorCookies";
                   options.LoginPath = new PathString("/Login");
                   options.LogoutPath = new PathString("/Login");
-
+                  options.AccessDeniedPath = new PathString("/Login");  
                });
+
 
             services.Configure<CookiePolicyOptions>(options =>
             {

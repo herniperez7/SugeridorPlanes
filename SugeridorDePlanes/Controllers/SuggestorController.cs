@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
+    //[Authorize(Roles = "Administrador")]
     [Authorize]
     public class SuggestorController : Controller
     {
