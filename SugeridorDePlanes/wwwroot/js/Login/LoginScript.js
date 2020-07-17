@@ -15,19 +15,6 @@
     $("#userNameTxt").addClass('has-val');
     $("#userPassTxt").addClass('has-val');
  
-    //$(document).on("keyup", "#userNameTxt", function (event) {
-    //    console.log($(this).val());
-    //    $(this).val("key");
-
-    //    $(this).addClass('has-val');
-    //    console.log("has1");
-    //});
-
-    //$(document).on("keyup", "#userPassTxt", function (event) {
-    //   // $("#userPassTxt").addClass('has-val');
-    //});
-  
-
     /*==================================================================
     [ Focus input ]*/
     $('.input100').each(function () {
@@ -57,6 +44,14 @@
         }
 
         return check;
+    });
+
+    $(document).keypress(function (e) {
+
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code === 13) {
+            $("#loginForm").submit();            
+        }
     });
 
 

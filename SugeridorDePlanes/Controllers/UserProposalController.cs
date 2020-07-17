@@ -10,9 +10,11 @@ using Newtonsoft.Json;
 using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
 using Microsoft.AspNetCore.Http;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
+    [Authorize]
     public class UserProposalController : Controller
     {
         private IUserManager UserManager;

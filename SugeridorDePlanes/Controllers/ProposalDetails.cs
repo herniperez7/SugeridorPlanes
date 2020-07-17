@@ -7,9 +7,11 @@ using Telefonica.SugeridorDePlanes.Code;
 using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
+    [Authorize]
     public class ProposalDetails : Controller
     {
         private IUserManager UserManager;

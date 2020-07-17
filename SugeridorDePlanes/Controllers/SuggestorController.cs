@@ -11,9 +11,12 @@ using Telefonica.SugeridorDePlanes.Models.Data;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using TelefonicaModel = Telefonica.SugeridorDePlanes.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
+    //[Authorize(Roles = "Administrador")]
+    [Authorize]
     public class SuggestorController : Controller
     {
         private IUserManager UserManager;
@@ -29,12 +32,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         }
 
+        
         public async Task<IActionResult> Index()
         {
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             _telefonicaApi.EmptyEquipoPymesCurrentList();
             var clientList = _telefonicaApi.GetCurrentClients();
-            ViewData["loggedUser"] = loggedUser;
+             ViewData["loggedUser"] = loggedUser;
+
             ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
             var planesOfertList = _telefonicaApi.GetActualPlans();         
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
@@ -61,6 +66,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> ShowPlans(string rut)
         {
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
