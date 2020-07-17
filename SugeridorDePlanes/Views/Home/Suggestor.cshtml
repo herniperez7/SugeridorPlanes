@@ -172,13 +172,13 @@
 
     <nav class="d-block d-md-none navbar-light bg-light" id="navMobile-Margin">
 
-        <form class="form-inline input-group mb-0">
+        <form class="form-inline input-group mb-0" action="/Suggestor/ShowPlans" method="post">
             <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Razon social</label>
             </div>
             @if (recomendadorOptions != null)
             {
-                @Html.DropDownList("DropdownOptions", recomendadorOptions, new { @class = "custom-select" })
+                @Html.DropDownList("rut", recomendadorOptions, new {onChange = "this.form.submit()", @class = "custom-select" })
             }
 
         </form>
