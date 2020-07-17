@@ -69,5 +69,6 @@
     <Build Include="dbo\Tables\EquipoPropuestas.sql" />
     <Build Include="dbo\Tables\Usuarios.sql" />
     <Build Include="dbo\Tables\Logs.sql" />
+    <Build Include="dbo\Tables\SugeridorRol.sql" />
   </ItemGroup>
 </Project>
