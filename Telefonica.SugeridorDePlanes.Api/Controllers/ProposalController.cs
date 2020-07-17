@@ -262,7 +262,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             };
 
 
-
             if (proposal.Finalizada) propuestaDTO.Estado = "Finalizada";
 
             var lineasDTO = new List<ProposalLineDTO>();

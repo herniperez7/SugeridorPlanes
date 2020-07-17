@@ -13,6 +13,9 @@
     }
 
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
+    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
 }
 
 
@@ -76,7 +79,7 @@
                         </a>
 
                     </li>
-                    @if (userRole.Equals("Administrador"))
+                    @if (userRole.Equals(adminRole))
                     {
                         <li class="has-subnav">
                             <a href="#">
@@ -128,7 +131,7 @@
                 </a>
 
             </li>
-            @if (userRole.Equals("Administrador"))
+            @if (userRole.Equals(adminRole))
             {
                 <li class="has-subnav">
                     <a href="#">
@@ -170,7 +173,7 @@
                         <legend>Mis propuestas</legend>
                         <div class="tableFixHead">
                             <table class="table table-bordered table-striped mb-0 tablesorter" id="tableProposalList" style="border: 1px solid #ddd !important;">
-                                @if (userRole.Equals("Administrador"))
+                                @if (userRole.Equals(adminRole))
                                 {
                                     <thead class="thead-dark">
                                         <tr style="text-align:center">
@@ -273,10 +276,6 @@
 
                 </div>
                 <div class="modal-body">
-
-                    @*<img src="@Url.Content("~/img/icons/ExclamationIcon100x.png")" />*@
-
-
 
                     <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true" style="color:#FFEF00"></i>
 

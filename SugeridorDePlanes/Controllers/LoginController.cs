@@ -30,15 +30,21 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         
-        public ViewResult Index()
+        public async Task<ViewResult> Index()
         {
-            
+            var value = Request.Cookies.ContainsKey("SugeridorCookies");
+
+            if (value)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            }
+
             return View("../Login/Login");
         }
 
         [HttpPost]
         public async Task<ActionResult> Login(string userName, string password)
-        {
+        {           
             try
             {          
                 if (userName != string.Empty && password != string.Empty)
@@ -77,7 +83,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<ActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Session.Clear();
+            HttpContext.Session.Clear();            
             return this.RedirectToAction("Index", "Login");
         }
 

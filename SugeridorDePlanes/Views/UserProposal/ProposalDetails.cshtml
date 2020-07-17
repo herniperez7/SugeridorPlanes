@@ -31,6 +31,8 @@
 
     }
     
+    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
+    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
 
 }
 
@@ -90,7 +92,7 @@
                         </a>
 
                     </li>
-                    @if (userRole.Equals("Administrador"))
+                    @if (userRole.Equals(adminRole))
                     {
                         <li class="has-subnav">
                             <a href="#">
@@ -143,7 +145,7 @@
                 </a>
 
             </li>
-            @if (userRole.Equals("Administrador"))
+            @if (userRole.Equals(adminRole))
             {
                 <li class="has-subnav">
                     <a href="#">

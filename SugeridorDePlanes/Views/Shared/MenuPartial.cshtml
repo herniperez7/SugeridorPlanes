@@ -1,5 +1,13 @@
 ﻿@using Telefonica.SugeridorDePlanes.Models.Users;
 @using Telefonica.SugeridorDePlanes.Models.Users.UsersRole;
+
+
+@{ 
+    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
+    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
+}
+
+
 @model User;
     <nav class="main-menu" id="sideNav">
         <ul>
@@ -21,7 +29,7 @@
                 </a>
 
             </li>
-            @if (Model.Rol.Equals("Administrador"))
+            @if (Model.Rol.Equals(adminRole))
             {
                 <li class="has-subnav">
                     <a href="#">

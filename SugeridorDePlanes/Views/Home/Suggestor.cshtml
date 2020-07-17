@@ -46,6 +46,9 @@
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
 
+    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
+    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
+
 }
 
 @model List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorB2bModel>;
@@ -114,7 +117,7 @@
                         </a>
 
                     </li>
-                    @if (userRole.Equals("Administrador"))
+                    @if (userRole.Equals(adminRole))
                     {
                         <li class="has-subnav">
                             <a href="#">
@@ -210,7 +213,7 @@
                 </a>
 
             </li>
-            @if (userRole.Equals("Administrador"))
+            @if (userRole.Equals(adminRole))
             {
                 <li class="has-subnav">
                     <a href="#">

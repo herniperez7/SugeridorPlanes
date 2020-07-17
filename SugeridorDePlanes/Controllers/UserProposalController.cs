@@ -32,13 +32,12 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             var userRole = HttpContext.Session.GetString("UserRole");
             ViewData["loggedUser"] = loggedUser;
             ViewData["userRole"] = userRole;
             _telefonicaApi.SetCurrentProposal(null);
-            if(userRole == "Administrador")
+            if(userRole.Equals(Enum.GetName(typeof(Dto.Dto.UserRole), Dto.Dto.UserRole.Administrator)))
             {
                 var proposals = await _telefonicaApi.GetProposals();
                 return View("../UserProposal/ProposalList", proposals);
@@ -47,8 +46,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             {
                 var proposals = await _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
                 return View("../UserProposal/ProposalList", proposals);
-            }
-            
+            }            
         }
 
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 
@@ -126,6 +124,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> DeleteProposal(string proposalId) 
         {
+
+            
+
             try
             {
                 var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
@@ -137,7 +138,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 }
                 ViewData["loggedUser"] = loggedUser;
                 ViewData["userRole"] = userRole;
-                if (userRole == "Administrador")
+                if (userRole.Equals(Enum.GetName(typeof(Dto.Dto.UserRole), Dto.Dto.UserRole.Administrator)))               
                 {
                     var proposals = await _telefonicaApi.GetProposals();
                     return View("../UserProposal/ProposalList", proposals);
@@ -155,7 +156,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
         
         }
-
+        
 
         private List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal)
         {
