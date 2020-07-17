@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -21,12 +21,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     {
         private TelefonicaModel.IUserManager UserManager;
         private ITelefonicaService _telefonicaService;
+      
         private IConfiguration _configuration { get; }        
 
         public LoginController(TelefonicaModel.IUserManager userManager, ITelefonicaService telefonaService)
         {
             UserManager = userManager;
-            _telefonicaService = telefonaService;   
+            _telefonicaService = telefonaService;
+           
         }
 
         
@@ -50,7 +52,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 if (userName != string.Empty && password != string.Empty)
                 {
                     bool isValid = true;
-                    isValid = UserManager.AuthenticateUser(userName, password);
+                    isValid = UserManager.AuthenticateUser(userName, password);                  
 
                     if (isValid)
                     {                       
@@ -75,6 +77,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { directory = "ex", step = "first" };               
+                var log = new Log() 
+                {
+                 Reference = "login",
+                 Messsage = ex.Message,
+                 ExtraData = extraData
+                };            
+
+                _telefonicaService.InsertLog(log);
                 throw ex;
             }
         }

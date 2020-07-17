@@ -16,6 +16,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ISuggestorLogic _suggestorService;
+
         public SuggestorController(IMapper mapper, ISuggestorLogic suggestorService)
         {
             _mapper = mapper;
