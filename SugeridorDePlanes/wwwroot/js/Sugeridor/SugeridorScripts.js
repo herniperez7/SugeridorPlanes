@@ -119,10 +119,8 @@ function confirmSelectPlan() {
     }
 }
 
-function establisPlanToEdit(planToEdit) {
-    
+function establisPlanToEdit(planToEdit) {    
     gbPlanToEdit = planToEdit;
-   // gbPlanToEditRut = rut.toString();
 }
 
 function loadDefinitivePlans(planList) {

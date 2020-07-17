@@ -32,13 +32,13 @@ namespace Telefonica.SugeridorDePlanes.Code
         public TelefonicaService(IClient client, IMapper mapper)
         {
             _client = client;
-            _currentPlans = new List<SuggestorB2b>();
+           // _currentPlans = new List<SuggestorB2b>();
             _mapper = mapper;
 
             if (_confirmedEquiposPymes == null) 
             {
                 _confirmedEquiposPymes = new List<DevicePymesModel>();
-            }
+            }            
         }
 
         public async Task<bool> PopulateData() 
@@ -99,10 +99,6 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList)
         {
-            //foreach (var m in currentList)
-            //{
-            //    _confirmedEquiposPymes.Add(m);
-            //}
             _confirmedEquiposPymes = currentList;
         }
 
@@ -116,13 +112,13 @@ namespace Telefonica.SugeridorDePlanes.Code
             _CurrentProposal = proposal;
         }     
 
-        //cambia
+        
         public List<SuggestorClientModel> GetCurrentClients()
         {
             return _currentClients;
         }
 
-        //cambia
+        
         public SuggestorClientModel GetCurrentClient()
         {
             return _currentClient;
@@ -151,7 +147,6 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
-        //se cambia
         public List<OfertActualPlanModel> GetActualPlans()
         {
             return _ofertPlanList;
@@ -583,10 +578,8 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 try
                 {
-
-                    return _client.GetUserByEmailAsync(userEmail).Result;
-
-
+                    var user = _client.GetUserByEmailAsync(userEmail).Result;
+                    return user;
                 }
                 catch (Exception ex)
                 {

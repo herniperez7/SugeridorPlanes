@@ -39,6 +39,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                     Port = int.Parse(_configuration.GetSection("EmailConfiguration").GetSection("Port").Value)
                 };
 
+                emailData.FromEmailAddress = _configuration.GetSection("EmailConfiguration").GetSection("UserName").Value;
+
                 await _emailSender.SendEmailAsync(emailData, smtpConfig);
                 return Ok();
             }

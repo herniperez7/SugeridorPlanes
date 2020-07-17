@@ -38,10 +38,10 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 { 
                     switch (userDTO.Rol)
                         {
-                            case "Ejecutivo":
+                            case Dto.Dto.UserRole.Executive:
                                 user.Rol = new Executive();
                                 break;
-                            case "Administrador":
+                            case Dto.Dto.UserRole.Administrator:
                                 user.Rol = new Administrative();
                                 break;
                         }

@@ -90,31 +90,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         public JsonResult CalculatePayback(string devicePayment)
-        {
-            /*int deveicePaymentInt = int.Parse(devicePayment);
-            var mobileList = _telefonicaApi.GetConfirmedEquiposPymes();
-            var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
-            decimal payback = 0;
-            decimal totalTmm = 0;
-            decimal subsidio = 0;
-
-            foreach (var movil in mobileList)
-            {
-                subsidio += movil.PrecioSinIva;
-            }
-
-            subsidio -= deveicePaymentInt;
-
-            foreach (var plan in defPlansList)
-            {
-                totalTmm += plan.TMM_s_iva;
-            }
-
-            payback = subsidio / totalTmm;
-            payback = decimal.Round(payback);*/
-
+        {     
             var payback = _telefonicaApi.GetPayback(devicePayment);
-
             var data = new { status = "ok", result = payback };
             return Json(data);
         }
@@ -266,9 +243,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var byteArray = GenerateByteArrayPdf(devicePayment);
                 var email = new Email
                 {
-                    FromDisplayName = "Gonzalo",
-                    FromEmailAddress = "gjulean1991@hotmail.com",
-                    // ToName = "",
+                    FromDisplayName = "Usuario nombre",
+                    FromEmailAddress = "",
+                    ToName = "",
                     ToEmailAddress = to,
                     Subject = subject,
                     Message = bodytext,
