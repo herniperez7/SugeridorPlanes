@@ -50,7 +50,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 if (userName != string.Empty && password != string.Empty)
                 {
                     bool isValid = true;
-                    // isValid = UserManager.AuthenticateUser(userName, password);
+                    isValid = UserManager.AuthenticateUser(userName, password);
 
                     if (isValid)
                     {                       
