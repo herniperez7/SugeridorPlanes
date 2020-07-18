@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
@@ -107,11 +112,13 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
+
+       // [Authorize]
         [HttpGet("getActualPlans")]
         public async Task<ActionResult<List<OfertPlan>>> GetActualPlans()
         {
             try
-            {
+            {                
                 var plansList = new List<OfertPlan>();
                 var plansDto = await _suggestorService.GetActualPlans();
 
@@ -147,11 +154,12 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
+       // [Authorize]
         [HttpGet("getMobileDevices")]
         public async Task<ActionResult<List<DevicePymes>>> GetEquiposPymes()
         {
             try
-            {
+            {             
                 var mobileDevicesDto = await _suggestorService.GetEquiposPymes();
 
                 var mobileDevicesModel = _mapper.Map<List<DevicePymes>>(mobileDevicesDto);
@@ -163,6 +171,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 throw ex;
             }
-        }
+        }      
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -731,6 +732,39 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 await _client.DeleteProposalAsync(proposalId);
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool AuthenticationUser(string userName, string password)
+        {
+            try
+            {
+                var token =  _client.AuthenticationUserAsync(userName, password).Result;
+
+                if (token.IsValid)
+                {
+                    BarerService.SetToken(token.Jwt_token);
+                }
+
+                return token.IsValid;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public User GetUserByUserName(string userName)
+        {
+            try
+            {
+                var user = _client.GetUserByUserNameAsync(userName).Result;
+
+                return user;
             }
             catch (Exception ex)
             {

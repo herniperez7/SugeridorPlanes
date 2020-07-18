@@ -22,8 +22,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
         {
             try
             {
-                var client = await _context.User.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
-                return client;
+                var user = await _context.User.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
+                return user;
             }
             catch (Exception ex)
             {
@@ -37,6 +37,19 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             {
                 int id = int.Parse(userId);
                 return await _context.User.Where(x => x.Id == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserDTO> GetUserByUserName(string userName)
+        {
+            try
+            {
+                var user = await _context.User.Where(x => x.NombreUsuario == userName).FirstOrDefaultAsync();
+                return user;
             }
             catch (Exception ex)
             {

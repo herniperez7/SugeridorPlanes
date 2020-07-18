@@ -48,8 +48,10 @@ namespace Telefonica.SugeridorDePlanes.Code
         void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList);
         List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal);
         User GetUserByEmail(string userEmail);
+        User GetUserByUserName(string userName);
         User GetUserById(string userId);
         Task<bool> PopulateData();
         Task<bool> DeleteProposal(int proposalId);
+        bool AuthenticationUser(string user, string password);
     }
 }

@@ -10,5 +10,6 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Interfaces
     {
         Task<UserDTO> GetUserById(string userId);
         Task<UserDTO> GetUserByEmail(string userEmail);
+        Task<UserDTO> GetUserByUserName(string userName);
     }
 }

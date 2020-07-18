@@ -46,5 +46,17 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 throw ex;
             }
         }
+
+        public async Task<UserDTO> GetUserByUserName(string userName)
+        {
+            try
+            {
+                return await _userRepository.GetUserByUserName(userName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

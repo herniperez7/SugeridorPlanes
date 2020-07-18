@@ -55,6 +55,35 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
+        [HttpGet("getUserByUserName")]
+        public async Task<ActionResult<User>> GetUserByUserName(string userName)
+        {
+            try
+            {
+
+                var userDTO = await _userLogic.GetUserByUserName(userName);
+                var user = _mapper.Map<User>(userDTO);
+                if (userDTO != null)
+                {
+                    switch (userDTO.Rol)
+                    {
+                        case Dto.Dto.UserRole.Executive:
+                            user.Rol = new Executive();
+                            break;
+                        case Dto.Dto.UserRole.Administrator:
+                            user.Rol = new Administrative();
+                            break;
+                    }
+                }
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
 
         [HttpGet("getUserById")]
         public async Task<ActionResult<User>> GetUserById(string userId)

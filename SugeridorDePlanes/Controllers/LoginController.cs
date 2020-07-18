@@ -20,8 +20,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     public class LoginController : Controller
     {
         private TelefonicaModel.IUserManager UserManager;
-        private ITelefonicaService _telefonicaService;
-        private IConfiguration _configuration { get; }        
+        private ITelefonicaService _telefonicaService;       
 
         public LoginController(TelefonicaModel.IUserManager userManager, ITelefonicaService telefonaService)
         {
@@ -53,8 +52,10 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     // isValid = UserManager.AuthenticateUser(userName, password);
 
                     if (isValid)
-                    {                       
-                        var user = _telefonicaService.GetUserByEmail(userName);
+                    {
+                        var token = _telefonicaService.AuthenticationUser(userName, password);                        
+
+                        var user = _telefonicaService.GetUserByUserName(userName);
                         HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
                         HttpContext.Session.SetString("UserRole", user.RolString);
 
