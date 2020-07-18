@@ -772,5 +772,17 @@ namespace Telefonica.SugeridorDePlanes.Code
                 throw ex;
             }
         }
+
+        public async void InsertLog(Log log)
+        {
+            try
+            {
+               await _client.InsertLogAsync(log);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
