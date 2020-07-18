@@ -46,26 +46,25 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {           
             try
             {          
-                if (userName != string.Empty && password != string.Empty)
+                if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
                 {
                     bool isValid = true;
-                    // isValid = UserManager.AuthenticateUser(userName, password);
 
-                    if (isValid)
-                    {
-                        var token = _telefonicaService.AuthenticationUser(userName, password);                        
-
-                        var user = _telefonicaService.GetUserByUserName(userName);
+                    isValid = _telefonicaService.AuthenticationUser(userName, password);
+                    var user = _telefonicaService.GetUserByUserName(userName);
+                    if (isValid && user != null)
+                    {                        
                         HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
                         HttpContext.Session.SetString("UserRole", user.RolString);
 
-                        //seteo las cookies que permiten no ingresar a las demas funcionalidades si no esta logueado
+                        //seteo las cookies que no permiten ingresar a las demas funcionalidades si no esta logueado
                         SetLoginCookies(user.RolString);
                         await _telefonicaService.PopulateData();
                         return this.RedirectToAction("Index", "Suggestor");
                     }
                     else
                     {
+                        ViewData["userError"] = "El usuario o la clave son incorrectos";
                         return View();
                     }
                 }
@@ -84,6 +83,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<ActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            BarerService.ClearToken();
             HttpContext.Session.Clear();            
             return this.RedirectToAction("Index", "Login");
         }

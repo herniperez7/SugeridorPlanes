@@ -745,6 +745,7 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 var token =  _client.AuthenticationUserAsync(userName, password).Result;
 
+                //si existe el usuario, se setea el token que devuelve la api
                 if (token.IsValid)
                 {
                     BarerService.SetToken(token.Jwt_token);

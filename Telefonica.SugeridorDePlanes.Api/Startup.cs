@@ -20,6 +20,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Telefonica.SugeridorDePlanes.Api
 {
@@ -38,12 +39,7 @@ namespace Telefonica.SugeridorDePlanes.Api
             services.AddCors();
             services.AddControllers();
 
-            // configure strongly typed settings objects
-            //  var appSettingsSection = Configuration.GetSection("AppSettings");
-            // services.Configure<AppSettings>(appSettingsSection);
-
-
-            var key = Encoding.ASCII.GetBytes("appsetingsSecretKey");
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings").GetSection("Secret").Value);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,28 +95,7 @@ namespace Telefonica.SugeridorDePlanes.Api
             {
                 config.SwaggerDoc("V1", new OpenApiInfo { Title = "Telefonica Web Api", Version = "V1" });
 
-                config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "Bearer" + key,
-                    Name = "Bearer",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
-
-                config.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                   {
-                     {
-                        new OpenApiSecurityScheme
-                        {
-                        Reference = new OpenApiReference{ Type = ReferenceType.SecurityScheme,Id = "Bearer" },
-                        Scheme = "oauth2",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header,
-                        },
-                     new List<string>()
-                     }                  
-                });
+               
 
             });
 

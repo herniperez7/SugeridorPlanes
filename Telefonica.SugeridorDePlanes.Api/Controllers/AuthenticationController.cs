@@ -52,9 +52,13 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
-        private string GenerateJwtToken()
+        /// <summary>
+        /// Metodo que devuelve un token para hacer consultas a la web api
+        /// </summary>
+        /// <param name="role"></param> se puede pasar como parametro opcional para setear el rol
+        /// <returns></returns>
+        private string GenerateJwtToken(string role = null)
         {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             
             var apyKey = _configuration.GetSection("AppSettings").GetSection("Secret").Value;
@@ -63,11 +67,17 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, "123")
+                    new Claim(ClaimTypes.Name, Guid.NewGuid().ToString()),                    
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
+            if (role != null)
+            {
+                tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var handler = tokenHandler.WriteToken(token);
 
@@ -75,6 +85,12 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
 
+        /// <summary>
+        /// Metodo para autenticar active directory
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         private bool AuthenticateUserAD(string userName, string password)
         {
             try
@@ -85,9 +101,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 DirectoryEntry dE = new DirectoryEntry(serviceLDAP, directoryUserName, password);
                 DirectorySearcher dSearch = new DirectorySearcher(dE);
                 SearchResult results = null;
-                results = dSearch.FindOne();
-                //string NTuserName = results.GetDirectoryEntry().Properties["SAMAccountName"].Value.ToString();
-                //User usuarioLogueado = new User() { NombreCompleto = userName };
+                results = dSearch.FindOne();    
 
                 if (results != null)
                 {
