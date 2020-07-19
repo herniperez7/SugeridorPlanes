@@ -46,8 +46,8 @@
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
 
-    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
-    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
+    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole), @Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
+    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole), @Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
 
 }
 
@@ -75,10 +75,14 @@
         var gbSendMail = "@Url.Action("SendMail", "Suggestor")";
         var gbGenerateProposal = "@Url.Action("GenerateProposal", "Suggestor")";
         var gbSaveProposal = "@Url.Action("SaveProposal", "Suggestor")";
-        var gbCurrentClient = @ViewData["currentClient"];
+        var gbCurrentClient = "@ViewData["currentClient"]";
         var gbUserProposals = "@Url.Action("Index", "UserProposal")";
 
     </script>
+
+    @*@{
+        Html.RenderPartial("ModalError");
+    }*@
 
     @*MOBILE MENU*@
 
@@ -117,17 +121,17 @@
                         </a>
 
                     </li>
-                    @if (userRole.Equals(adminRole))
-                    {
-                        <li class="has-subnav">
-                            <a href="#">
-                                <span class="nav-text">
-                                    Crear usuario
-                                </span>
-                            </a>
+                    @*@if (userRole.Equals(adminRole))
+                        {
+                            <li class="has-subnav">
+                                <a href="#">
+                                    <span class="nav-text">
+                                        Crear usuario
+                                    </span>
+                                </a>
 
-                        </li>
-                    }
+                            </li>
+                        }*@
                     <li>
                         <a href="@Url.Action("Logout", "Login")">
                             <span class="nav-text">
@@ -154,6 +158,7 @@
             {
                 @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
             }
+
         </form>
 
 
@@ -178,7 +183,7 @@
             </div>
             @if (recomendadorOptions != null)
             {
-                @Html.DropDownList("rut", recomendadorOptions, new {onChange = "this.form.submit()", @class = "custom-select" })
+                @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select" })
             }
 
         </form>
@@ -213,18 +218,18 @@
                 </a>
 
             </li>
-            @if (userRole.Equals(adminRole))
-            {
-                <li class="has-subnav">
-                    <a href="#">
-                        <i class="fa fa-laptop fa-2x"></i>
-                        <span class="nav-text">
-                            Crear usuario
-                        </span>
-                    </a>
+            @*@if (userRole.Equals(adminRole))
+                {
+                    <li class="has-subnav">
+                        <a href="#">
+                            <i class="fa fa-laptop fa-2x"></i>
+                            <span class="nav-text">
+                                Crear usuario
+                            </span>
+                        </a>
 
-                </li>
-            }
+                    </li>
+                }*@
 
         </ul>
 
@@ -930,14 +935,14 @@
 
                         <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
                             <h5 for="toTxt">Para</h5>
-                            <input type="email" class="form-control" id="toTxt" placeholder="nombre@dominio.com">
-                            <span style="display:none" class="text-danger">Email requerido</span>
+                            <input type="email" class="form-control inputMail" id="toTxt" placeholder="nombre@dominio.com">
+                            <span style="color:#AAAAAA; font-size:13px">*campo obligatorio</span>
                         </div>
 
                         <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
                             <h5 for="subjectTxt">Asunto</h5>
-                            <input type="email" class="form-control" id="subjectTxt">
-                            <span style="display:none" class="text-danger">Asunto requerido</span>
+                            <input type="email" class="form-control inputMail" id="subjectTxt">
+                            <span style="color:#AAAAAA; font-size:13px">*campo obligatorio</span>
                         </div>
 
                         <div class="form-group" style="padding:10px">
@@ -946,7 +951,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal">Enviar</button>
+                            <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal" id="sendMailBtn">Enviar</button>
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -21,19 +21,20 @@ namespace Telefonica.SugeridorDePlanes.Controllers
     {
         private TelefonicaModel.IUserManager UserManager;
         private ITelefonicaService _telefonicaService;
+      
         private IConfiguration _configuration { get; }        
 
         public LoginController(TelefonicaModel.IUserManager userManager, ITelefonicaService telefonaService)
         {
             UserManager = userManager;
-            _telefonicaService = telefonaService;   
+            _telefonicaService = telefonaService;           
         }
-
         
         public async Task<ViewResult> Index()
         {
             var value = Request.Cookies.ContainsKey("SugeridorCookies");
-
+            
+            //si existe la cookie de login, la borro
             if (value)
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -47,38 +48,45 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             try
             {          
-                if (userName != string.Empty && password != string.Empty)
+                if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
                 {
-                    bool isValid = true;
-                    // isValid = UserManager.AuthenticateUser(userName, password);
-
-                    if (isValid)
-                    {                       
-                        var user = _telefonicaService.GetUserByEmail(userName);
+                    bool isValid = true;      
+                    isValid = _telefonicaService.AuthenticationUser(userName, password);
+                    var user = _telefonicaService.GetUserByUserName(userName);
+                    if (isValid && user != null)
+                    {                        
                         HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
                         HttpContext.Session.SetString("UserRole", user.RolString);
 
-                        //seteo las cookies que permiten no ingresar a las demas funcionalidades si no esta logueado
+                        //seteo las cookies que no permiten ingresar a las demas funcionalidades si no esta logueado
                         SetLoginCookies(user.RolString);
                         await _telefonicaService.PopulateData();
                         return this.RedirectToAction("Index", "Suggestor");
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Email no regristrado";
+                        ViewBag.ErrorMessage = "El usuario o la constraseña son incorrectos";
                         return View();
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "El email y la contraseña son mandatorios";
+                    ViewBag.ErrorMessage = "El usuario y la contraseña son mandatorios";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Error de sistema";
-                return View();
+                var extraData = new { step = "ex", from = "UI" };               
+                var log = new Log() 
+                {
+                 Reference = "login",
+                 Messsage = ex.Message,
+                 ExtraData = extraData
+                };            
+
+                _telefonicaService.InsertLog(log);
+                throw ex;
             }
         }
 
@@ -86,6 +94,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<ActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            BarerService.ClearToken();
             HttpContext.Session.Clear();            
             return this.RedirectToAction("Index", "Login");
         }
@@ -104,8 +113,5 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             new ClaimsPrincipal(claimsIdentity),
             authProperties);
         }
-
-
-
     }
 }

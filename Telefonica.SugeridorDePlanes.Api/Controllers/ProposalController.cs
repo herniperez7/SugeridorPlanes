@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
@@ -14,6 +15,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProposalController : ControllerBase
     {
         private readonly IProposalLogic _ProposalLogic;

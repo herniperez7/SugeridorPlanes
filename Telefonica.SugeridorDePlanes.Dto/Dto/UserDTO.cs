@@ -8,6 +8,7 @@ namespace Telefonica.SugeridorDePlanes.Dto.Dto
     {
         public int Id { get; set; }
         public string NombreCompleto { get; set; }
+        public string NombreUsuario { get; set; }
         public string Email { get; set; }
         public UserRole Rol { get; set; }
     }

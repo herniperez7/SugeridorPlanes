@@ -76,6 +76,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["devicePayment"] = proposal.DevicePayment;
             ViewData["subsidy"] = proposal.Subsidio;
             ViewData["payback"] = proposal.Payback;
+
+           // ViewBag.Client = proposal.RutCliente;
             ViewData["currentClient"] = proposal.RutCliente;
 
             _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
@@ -124,9 +126,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> DeleteProposal(string proposalId) 
         {
-
-            
-
             try
             {
                 var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));

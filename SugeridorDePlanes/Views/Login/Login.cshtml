@@ -14,15 +14,17 @@
                     <img src="~/img/Movistar-azul-vertical.jpg" style="width: 70%;" alt="Logo movistar" class="img-fluid">
                 </div>
                 <form class="login100-form validate-form" action="/Login/Login" method="post" id="loginForm">
-                    <div class="wrap-input100 validate-input m-t-30 m-b-35" data-validate="Ingrese su email">
+                    <div class="wrap-input100 validate-input m-t-30 m-b-35" data-validate="Ingrese su usuario">
                         <input class="input100" type="text" name="username" id="userNameTxt">
-                        <span class="focus-input100" data-placeholder="Email"></span>
+                        <span class="focus-input100" data-placeholder="Nombre de usuario"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input m-b-50" data-validate="Ingrese contraseña">
                         <input class="input100" type="password" name="password" id="userPassTxt">
                         <span class="focus-input100" data-placeholder="Contraseña"></span>
+                        @*<span style="color:red;text-align:center">@ViewData["userError"]</span>*@
                     </div>
+                    
 
                     <div class="container-login100-form-btn">
                         <input class="login100-form-btn" value="Login" type="submit" id="loginBtn">
@@ -33,7 +35,6 @@
         </div>
     </div>    
     
-    <script src="~/js/Login/LoginScript.js"></script>
-    <div id="touchDiv"></div>
+    <script src="~/js/Login/LoginScript.js"></script>  
 </body>
 </html>

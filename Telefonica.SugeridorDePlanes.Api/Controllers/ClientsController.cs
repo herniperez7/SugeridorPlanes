@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic;
@@ -14,6 +15,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "Administrator")]
+    [Authorize]
     public class ClientsController : ControllerBase
     {
         private readonly IClientLogic _clientService;
@@ -25,6 +28,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             _mapper = mapper;
         }
 
+        
         [HttpGet("getClients")]
         public async Task<ActionResult<List<SuggestorClient>>> GetClients()
         {

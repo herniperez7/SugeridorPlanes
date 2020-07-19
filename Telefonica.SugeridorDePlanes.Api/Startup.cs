@@ -16,6 +16,11 @@ using Telefonica.SugeridorDePlanes.BusinessLogic.Services;
 using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.DataAccess.Services;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Telefonica.SugeridorDePlanes.Api
 {
@@ -31,7 +36,27 @@ namespace Telefonica.SugeridorDePlanes.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
+
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings").GetSection("Secret").Value);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
 
             services.AddAutoMapper(configuration =>
@@ -66,8 +91,12 @@ namespace Telefonica.SugeridorDePlanes.Api
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            services.AddSwaggerGen(config => {
+            services.AddSwaggerGen(config =>
+            {
                 config.SwaggerDoc("V1", new OpenApiInfo { Title = "Telefonica Web Api", Version = "V1" });
+
+               
+
             });
 
 
@@ -92,6 +121,12 @@ namespace Telefonica.SugeridorDePlanes.Api
 
             app.UseRouting();
 
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

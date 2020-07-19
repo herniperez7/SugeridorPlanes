@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
@@ -16,6 +17,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserLogic _userLogic;
@@ -52,6 +54,35 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             catch (Exception ex)
             {
                 return BadRequest();               
+            }
+        }
+
+        [HttpGet("getUserByUserName")]
+        public async Task<ActionResult<User>> GetUserByUserName(string userName)
+        {
+            try
+            {
+
+                var userDTO = await _userLogic.GetUserByUserName(userName);
+                var user = _mapper.Map<User>(userDTO);
+                if (userDTO != null)
+                {
+                    switch (userDTO.Rol)
+                    {
+                        case Dto.Dto.UserRole.Executive:
+                            user.Rol = new Executive();
+                            break;
+                        case Dto.Dto.UserRole.Administrator:
+                            user.Rol = new Administrative();
+                            break;
+                    }
+                }
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
             }
         }
 

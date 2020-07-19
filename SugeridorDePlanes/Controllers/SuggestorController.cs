@@ -351,11 +351,19 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(to) || string.IsNullOrEmpty(subject))
+                {
+                    var dataError = new { status = "error" , desctription = "campos obligatorios"};
+                    return new JsonResult(dataError);
+                }
+
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+
                 var byteArray = GenerateByteArrayPdf(devicePayment);
                 var email = new Email
                 {
-                    FromDisplayName = "Usuario nombre",
-                    FromEmailAddress = "",
+                    FromDisplayName = loggedUser.Email,
+                    FromEmailAddress = loggedUser.Email,
                     ToName = "",
                     ToEmailAddress = to,
                     Subject = subject,
