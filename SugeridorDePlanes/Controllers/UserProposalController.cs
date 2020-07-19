@@ -76,6 +76,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["devicePayment"] = proposal.DevicePayment;
             ViewData["subsidy"] = proposal.Subsidio;
             ViewData["payback"] = proposal.Payback;
+
+           // ViewBag.Client = proposal.RutCliente;
             ViewData["currentClient"] = proposal.RutCliente;
 
             _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);

@@ -46,8 +46,8 @@
     decimal incomeAmount = 0;
     decimal billingAmount = 0;
 
-    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
-    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole),@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
+    var adminRole = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole), @Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Administrator);
+    var executiveRol = Enum.GetName(typeof(@Telefonica.SugeridorDePlanes.Dto.Dto.UserRole), @Telefonica.SugeridorDePlanes.Dto.Dto.UserRole.Executive);
 
 }
 
@@ -75,7 +75,7 @@
         var gbSendMail = "@Url.Action("SendMail", "Suggestor")";
         var gbGenerateProposal = "@Url.Action("GenerateProposal", "Suggestor")";
         var gbSaveProposal = "@Url.Action("SaveProposal", "Suggestor")";
-        var gbCurrentClient = @ViewData["currentClient"];
+        var gbCurrentClient = "@ViewData["currentClient"]";
         var gbUserProposals = "@Url.Action("Index", "UserProposal")";
 
     </script>
@@ -154,6 +154,16 @@
             {
                 @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
             }
+
+            @*<select id="clientSelect" class="custom-select" onchange="this.form.submit()">
+
+
+                    @foreach (var item in clientList)
+                    {
+                        <option value="@item.Documento">@item.Titular</option>
+                    }
+
+                </select>*@
         </form>
 
 
@@ -178,7 +188,7 @@
             </div>
             @if (recomendadorOptions != null)
             {
-                @Html.DropDownList("rut", recomendadorOptions, new {onChange = "this.form.submit()", @class = "custom-select" })
+                @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select" })
             }
 
         </form>

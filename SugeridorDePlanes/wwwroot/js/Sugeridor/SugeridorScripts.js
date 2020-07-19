@@ -40,7 +40,8 @@ $(document).ready(function () {
         selectMobile(this);
     });
 
-    if (gbCurrentClient !== null) {
+
+    if (gbCurrentClient !== 'null') {
         $("#clientSelect").val(gbCurrentClient);
     }
 

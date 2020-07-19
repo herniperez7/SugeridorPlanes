@@ -20,7 +20,8 @@ namespace Telefonica.SugeridorDePlanes.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseUrls("https://localhost:44310");
+                    //webBuilder.UseStartup<Startup>().UseUrls("https://localhost:44310");
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
