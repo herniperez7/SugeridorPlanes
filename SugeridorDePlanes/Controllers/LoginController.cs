@@ -27,15 +27,14 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public LoginController(TelefonicaModel.IUserManager userManager, ITelefonicaService telefonaService)
         {
             UserManager = userManager;
-            _telefonicaService = telefonaService;
-           
+            _telefonicaService = telefonaService;           
         }
-
         
         public async Task<ViewResult> Index()
         {
             var value = Request.Cookies.ContainsKey("SugeridorCookies");
-
+            
+            //si existe la cookie de login, la borro
             if (value)
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

@@ -39,12 +39,21 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpGet]
         public JsonResult GeneratePdf()
         {
-            var currentProposal = _telefonicaApi.GetCurrentProposal();
-            var devicePayment = currentProposal.DevicePayment.ToString();
-            var pdfByteArray = GenerateByteArrayPdf(devicePayment);
-            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
-            var data = new { status = "ok", result = base64String };
-            return new JsonResult(data);
+            try
+            {
+                var currentProposal = _telefonicaApi.GetCurrentProposal();
+                var devicePayment = currentProposal.DevicePayment.ToString();
+                var pdfByteArray = GenerateByteArrayPdf(devicePayment);
+                string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+                var data = new { status = "ok", result = base64String };
+                return new JsonResult(data);
+            }
+            catch (Exception ex)
+            {
+                var dataError = new { status = "error", result = 404 };
+                return new JsonResult(dataError);
+            }
+            
         }
 
         private byte[] GenerateByteArrayPdf(string devicePayment)
@@ -94,8 +103,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
-                var data = new { status = "error" };
-                return new JsonResult(data);
+                var dataError = new { status = "error", result = 404 };
+                return new JsonResult(dataError);
             }
         }
 

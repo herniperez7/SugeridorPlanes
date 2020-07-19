@@ -174,10 +174,19 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpGet]
         public JsonResult GeneratePdf(string devicePayment)
         {
-            var pdfByteArray = GenerateByteArrayPdf(devicePayment);
-            string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
-            var data = new { status = "ok", result = base64String };
-            return new JsonResult(data);
+            try
+            {
+                var pdfByteArray = GenerateByteArrayPdf(devicePayment);
+                string base64String = Convert.ToBase64String(pdfByteArray, 0, pdfByteArray.Length);
+                var data = new { status = "ok", result = base64String };
+                return new JsonResult(data);
+            }
+            catch (Exception ex)
+            {
+                var dataError = new { status = "error", result = 404 };
+                return new JsonResult(dataError);
+            }
+           
         }
 
         [HttpPost]
@@ -223,7 +232,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                var dataError = new { status = "error", result = 404 };
+                return new JsonResult(dataError);
             }
         }       
 
@@ -273,8 +283,8 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
-                var data = new { status = "error" };
-                return new JsonResult(data);
+                var dataError = new { status = "error", result = 404 };
+                return new JsonResult(dataError);
             }
         }
     }

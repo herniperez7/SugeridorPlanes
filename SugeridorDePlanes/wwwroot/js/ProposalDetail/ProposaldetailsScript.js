@@ -29,6 +29,9 @@ function exportPdf() {
                 var pdfBase64 = base64ToArrayBuffer(data.result);
                 saveByteArray("presupuesto-" + companyName, pdfBase64);
                 $("#loaderDiv").hide();
+            } else {
+                $("#loaderDiv").hide();
+                $('#errorModal').modal('show');
             }
         }
     });
@@ -72,8 +75,11 @@ function sendMail() {
         type: "POST",
         url: gbSendMail + '?to=' + toText + '&subject=' + subjectText + '&bodytext=' + bodyText,
         success: function (data) {
-            if (data.status === "ok") {                
+            if (data.status === "ok") {
                 $("#loaderDiv").hide();
+            } else {
+                $("#loaderDiv").hide();
+                $('#errorModal').modal('show');
             }
         }
     });

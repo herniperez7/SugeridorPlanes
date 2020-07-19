@@ -1,15 +1,4 @@
 
-//$(document).ready(function () {
-
-
-
-
-
-//});
-
-
-
-
 (function ($) {
   
     $("#userNameTxt").addClass('has-val');

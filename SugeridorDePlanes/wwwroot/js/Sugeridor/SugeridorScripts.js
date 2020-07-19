@@ -583,6 +583,11 @@ function exportPdf() {
                 $("#generarProposalBtn").html(exportText);
                 $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
+            } else {
+                $("#generarProposalBtn").html(exportText);
+                $("#generarProposalBtn").prop("disabled", false);
+                $("#loaderDiv").hide();
+                $('#errorModal').modal('show');
             }
         }
     });
@@ -607,8 +612,8 @@ function generarProposal() {
 function sendMail() {
 
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
-    $("#generarPropuestaBtn").html(loading);
-    $("#generarPropuestaBtn").prop("disabled", true);
+    $("#generarProposalBtn").html(loading);
+    $("#generarProposalBtn").prop("disabled", true);
     var buttontext = "Generar propuesta";
 
     var toText = $("#toTxt").val();
@@ -622,9 +627,14 @@ function sendMail() {
         url: gbSendMail + '?to=' + toText + '&subject=' + subjectText + '&bodytext=' + bodyText + '&devicePayment=' + devicePayment,
         success: function (data) {
             if (data.status === "ok") {
-                $("#generarPropuestaBtn").html(buttontext);
-                $("#generarPropuestaBtn").prop("disabled", false);
+                $("#generarProposalBtn").html(buttontext);
+                $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
+            } else {
+                $("#generarProposalBtn").html(buttontext);
+                $("#generarProposalBtn").prop("disabled", false);
+                $("#loaderDiv").hide();
+                $('#errorModal').modal('show');
             }
 
         }
@@ -660,6 +670,10 @@ function saveProposal() {
     var devicePayment = $("#pagoEquiposTxt").val();
     if (devicePayment === "") devicePayment = "0";
     $("#loaderDiv").show();
+    var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
+    $("#generarProposalBtn").html(loading);
+    $("#generarProposalBtn").prop("disabled", true);
+    var buttontext = "Generar propuesta";
 
     $.ajax({
         type: "POST",
@@ -669,6 +683,11 @@ function saveProposal() {
                 $("#loaderDiv").hide();
                 $("#saveProposaltext").html(data.result);
                 $('#modalPush').modal('show');
+            } else {
+                $("#generarProposalBtn").html(buttontext);
+                $("#generarProposalBtn").prop("disabled", false);
+                $("#loaderDiv").hide();
+                $('#errorModal').modal('show');
             }
         }
     });
@@ -685,4 +704,3 @@ function proposalMenu() {
 function openMobileModal() {
     $('#mobilesModal').modal('show');
 }
-
