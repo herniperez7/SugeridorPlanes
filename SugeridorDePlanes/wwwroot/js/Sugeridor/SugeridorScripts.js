@@ -571,6 +571,10 @@ function exportPdf() {
                 $("#generarProposalBtn").html(exportText);
                 $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
+            } else if (data.status === "error"){
+                {
+                    showToastError(data.message);
+                }
             }
         }
     });
@@ -585,8 +589,16 @@ function generarProposal() {
         type: "POST",
         url: gbGenerateProposal + '?devicePayment=' + devicePayment,
         success: function (data) {
-            $("#loaderDiv").hide();
-            window.location.href = gbUserProposals;
+            if (data.status === "ok") {
+                $("#loaderDiv").hide();
+                window.location.href = gbUserProposals;
+            }
+            else {
+                data.status === "error"{
+                    showToastError(data.message);
+                }
+            }
+            
 
         }
     });

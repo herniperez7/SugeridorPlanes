@@ -3,6 +3,7 @@
     top:3px;
     right:10px;
     width:200px;
+    display:none;
 }
 .toast-header {
     background: #f44336;
