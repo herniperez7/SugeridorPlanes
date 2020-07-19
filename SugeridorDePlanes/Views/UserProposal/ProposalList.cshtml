@@ -79,7 +79,7 @@
                         </a>
 
                     </li>
-                    @if (userRole.Equals(adminRole))
+                    @*@if (userRole.Equals(adminRole))
                     {
                         <li class="has-subnav">
                             <a href="#">
@@ -89,7 +89,7 @@
                             </a>
 
                         </li>
-                    }
+                    }*@
                     <li>
                         <a href="@Url.Action("Logout", "Login")">
                             <span class="nav-text">
@@ -131,7 +131,7 @@
                 </a>
 
             </li>
-            @if (userRole.Equals(adminRole))
+            @*@if (userRole.Equals(adminRole))
             {
                 <li class="has-subnav">
                     <a href="#">
@@ -142,7 +142,7 @@
                     </a>
 
                 </li>
-            }
+            }*@
 
         </ul>
 

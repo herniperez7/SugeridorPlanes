@@ -838,6 +838,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
                     request_.Method = new System.Net.Http.HttpMethod("POST");
     
@@ -1564,6 +1565,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;

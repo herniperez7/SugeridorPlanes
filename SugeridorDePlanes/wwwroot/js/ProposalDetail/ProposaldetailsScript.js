@@ -1,4 +1,14 @@
-﻿
+﻿$(document).ready(function () {
+
+    $("#sendMailBtn").prop('disabled', true);
+    $('.inputMail').keyup(function () {
+        if ($("#subjectTxt").val().length !== 0 && $("#toTxt").val().length !== 0)
+            $("#sendMailBtn").prop('disabled', false);
+        else
+            $("#sendMailBtn").prop('disabled', true);
+    });
+
+});
 
 
 function proposalMenu() {
@@ -6,17 +16,17 @@ function proposalMenu() {
 }
 
 
-function exportPdf() {    
-    
+function exportPdf() {
+
     $("#loaderDiv").show();
 
-   var companyName = $("#companyNameTitle").text();
+    var companyName = $("#companyNameTitle").text();
     $.ajax({
         type: "GET",
         url: gbExportPdf,
         success: function (data) {
-            if (data.status === "ok") {             
-                var pdfBase64 = base64ToArrayBuffer(data.result);             
+            if (data.status === "ok") {
+                var pdfBase64 = base64ToArrayBuffer(data.result);
                 saveByteArray("presupuesto-" + companyName, pdfBase64);
                 $("#loaderDiv").hide();
             }
@@ -24,6 +34,10 @@ function exportPdf() {
     });
 }
 
+
+function openEmailModal() {
+    $('#emailModal').modal('show');
+}
 
 
 function base64ToArrayBuffer(base64) {
@@ -45,3 +59,24 @@ function saveByteArray(reportName, byte) {
     link.download = fileName;
     link.click();
 }
+
+
+function sendMail() {  
+
+    var toText = $("#toTxt").val();
+    var subjectText = $("#subjectTxt").val();
+    var bodyText = $("#bodytxt").val();    
+    $("#loaderDiv").show();
+
+    $.ajax({
+        type: "POST",
+        url: gbSendMail + '?to=' + toText + '&subject=' + subjectText + '&bodytext=' + bodyText,
+        success: function (data) {
+            if (data.status === "ok") {                
+                $("#loaderDiv").hide();
+            }
+        }
+    });
+}
+
+

@@ -117,7 +117,7 @@
                         </a>
 
                     </li>
-                    @if (userRole.Equals(adminRole))
+                    @*@if (userRole.Equals(adminRole))
                     {
                         <li class="has-subnav">
                             <a href="#">
@@ -127,7 +127,7 @@
                             </a>
 
                         </li>
-                    }
+                    }*@
                     <li>
                         <a href="@Url.Action("Logout", "Login")">
                             <span class="nav-text">
@@ -155,15 +155,6 @@
                 @Html.DropDownList("rut", recomendadorOptions, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
             }
 
-            @*<select id="clientSelect" class="custom-select" onchange="this.form.submit()">
-
-
-                    @foreach (var item in clientList)
-                    {
-                        <option value="@item.Documento">@item.Titular</option>
-                    }
-
-                </select>*@
         </form>
 
 
@@ -223,7 +214,7 @@
                 </a>
 
             </li>
-            @if (userRole.Equals(adminRole))
+            @*@if (userRole.Equals(adminRole))
             {
                 <li class="has-subnav">
                     <a href="#">
@@ -234,7 +225,7 @@
                     </a>
 
                 </li>
-            }
+            }*@
 
         </ul>
 
@@ -940,14 +931,14 @@
 
                         <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
                             <h5 for="toTxt">Para</h5>
-                            <input type="email" class="form-control" id="toTxt" placeholder="nombre@dominio.com">
-                            <span style="display:none" class="text-danger">Email requerido</span>
+                            <input type="email" class="form-control inputMail" id="toTxt" placeholder="nombre@dominio.com">
+                            <span style="color:#AAAAAA; font-size:13px">*campo obligatorio</span>
                         </div>
 
                         <div class="form-group" style="padding:0 10px 0 10px; width: 50%">
                             <h5 for="subjectTxt">Asunto</h5>
-                            <input type="email" class="form-control" id="subjectTxt">
-                            <span style="display:none" class="text-danger">Asunto requerido</span>
+                            <input type="email" class="form-control inputMail" id="subjectTxt">
+                            <span style="color:#AAAAAA; font-size:13px">*campo obligatorio</span>
                         </div>
 
                         <div class="form-group" style="padding:10px">
@@ -956,7 +947,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal">Enviar</button>
+                            <button type="button" class="btn btn-outline-success" onclick="sendMail()" data-dismiss="modal" id="sendMailBtn">Enviar</button>
                         </div>
                     </div>
                 </div>

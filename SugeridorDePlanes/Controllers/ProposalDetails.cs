@@ -8,6 +8,8 @@ using AutoMapper;
 using Telefonica.SugeridorDePlanes.Models.ApiModels;
 using Telefonica.SugeridorDePlanes.Models.Users;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
@@ -59,16 +61,26 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
         }
 
-        public async Task<JsonResult> SendMail(string to, string subject, string bodytext, string devicePayment)
+        public async Task<JsonResult> SendMail(string to, string subject, string bodytext)
         {
             try
             {
+                if (string.IsNullOrEmpty(to) || string.IsNullOrEmpty(subject))
+                {
+                    var dataError = new { status = "error", desctription = "campos obligatorios" };
+                    return new JsonResult(dataError);
+                }
+
+                var loggedUser = JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("LoggedUser"));
+                var currentProposal = _telefonicaApi.GetCurrentProposal();
+                var devicePayment = currentProposal.DevicePayment.ToString();
+
                 var byteArray = GenerateByteArrayPdf(devicePayment);
                 var email = new Email
                 {
-                    FromDisplayName = "Gonzalo",
-                    FromEmailAddress = "gjulean1991@hotmail.com",
-                    // ToName = "",
+                    FromDisplayName = loggedUser.Email,
+                    FromEmailAddress = loggedUser.Email,
+                    ToName = "",
                     ToEmailAddress = to,
                     Subject = subject,
                     Message = bodytext,

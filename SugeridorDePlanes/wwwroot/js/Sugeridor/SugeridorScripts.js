@@ -64,6 +64,17 @@ $(document).ready(function () {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
+
+
+    $("#sendMailBtn").prop('disabled', true);   
+    $('.inputMail').keyup(function () {
+        if ($("#subjectTxt").val().length !== 0 && $("#toTxt").val().length !== 0)
+            $("#sendMailBtn").prop('disabled', false);
+        else
+            $("#sendMailBtn").prop('disabled', true);
+    });
+
+
 });
 
 function selectPlan(selectedPlan) {
@@ -618,7 +629,6 @@ function sendMail() {
 
         }
     });
-
 }
 
 

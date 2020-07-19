@@ -126,9 +126,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> DeleteProposal(string proposalId) 
         {
-
-            
-
             try
             {
                 var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));

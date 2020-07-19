@@ -33,7 +33,6 @@ namespace Telefonica.SugeridorDePlanes.Code
         public TelefonicaService(IClient client, IMapper mapper)
         {
             _client = client;
-           // _currentPlans = new List<SuggestorB2b>();
             _mapper = mapper;
 
             if (_confirmedEquiposPymes == null) 
@@ -42,6 +41,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             }            
         }
 
+        /// <summary>
+        /// Metodo para cargar en memoria las listas que no se modifican
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> PopulateData() 
         {
             try
@@ -57,17 +60,15 @@ namespace Telefonica.SugeridorDePlanes.Code
             }        
         }
 
+        /// <summary>
+        /// Metodo para cargar en memoria los planes ofertados
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> PopulateOfertPlanList()
         {
             try
             {
                 var plans = await _client.GetActualPlansAsync();
-
-               /* foreach (var plan in plans)
-                {
-                    plan.Bono_ /= 1024;
-                }*/
-
                 _ofertPlanList = _mapper.Map<List<OfertActualPlanModel>>(plans);
                 return true;
             }
@@ -77,6 +78,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             }            
         }
 
+        /// <summary>
+        /// Carga en memoria la lista de clientes
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> PopulateClientList()
         {
             try
@@ -92,45 +97,78 @@ namespace Telefonica.SugeridorDePlanes.Code
             }            
         }
 
+
+        /// <summary>
+        /// obtiene los equipos confirmados de la propuesta en memoria
+        /// </summary>
+        /// <returns></returns>
         public List<DevicePymesModel> GetConfirmedEquiposPymes()
         {
             var equiposPymes = _confirmedEquiposPymes;
             return equiposPymes;
         }
 
+        /// <summary>
+        /// Setea los equipos confirmados de la propuesta con los que se van agregando a la lista de equipos
+        /// </summary>
+        /// <param name="currentList"></param>
         public void SetConfirmedEquiposPymes(List<DevicePymesModel> currentList)
         {
             _confirmedEquiposPymes = currentList;
         }
 
+
+        /// <summary>
+        /// Obtiene la propuesta actual. La propuesta actual se carga cuando: se guarda la propuesta o se carga
+        /// una propuesta finalizada o pendiente
+        /// </summary>
+        /// <returns></returns>
         public Proposal GetCurrentProposal()
         {
             return _CurrentProposal;
         }
 
+        /// <summary>
+        /// Setea la propuesta actual
+        /// </summary>
+        /// <param name="proposal"></param>
         public void SetCurrentProposal(Proposal proposal)
         {
             _CurrentProposal = proposal;
         }     
 
-        
+        /// <summary>
+        /// Obtiene la lista de clientes 
+        /// </summary>
+        /// <returns></returns>
         public List<SuggestorClientModel> GetCurrentClients()
         {
             return _currentClients;
         }
 
-        
+        /// <summary>
+        /// Obtiene el cliente actual
+        /// </summary>
+        /// <returns></returns>
         public SuggestorClientModel GetCurrentClient()
         {
             return _currentClient;
         }
 
+        /// <summary>
+        /// Actualiza el cliente actual
+        /// </summary>
+        /// <param name="document"></param>
         public void UpdateCurrentClient(string document)
         {
             var currentClient = _currentClients.Where(x => x.Documento == document).FirstOrDefault();
             _currentClient = currentClient;
         }
 
+        /// <summary>
+        /// Obtiene la lista de planes sugeridos
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<SuggestorB2b>> GetSuggestedPlans()
         {
             try
@@ -148,11 +186,20 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        /// <summary>
+        /// Obtiene la lista de planes ofertados de memoria
+        /// </summary>
+        /// <returns></returns>
         public List<OfertActualPlanModel> GetActualPlans()
         {
             return _ofertPlanList;
         }
 
+        /// <summary>
+        /// Obtiene la lista planes sugeridos por numero de cliente
+        /// </summary>
+        /// <param name="clientNumber"></param>
+        /// <returns></returns>
         public async Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber)
         {
             try
@@ -168,6 +215,11 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        /// <summary>
+        /// Obtiene la lista planes sugeridos por rut
+        /// </summary>
+        /// <param name="clientNumber"></param>
+        /// <returns></returns>
         public async Task<List<SuggestorB2b>> GetSuggestedPlansByRut(string rut)
         {
             try
@@ -185,6 +237,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        /// <summary>
+        /// Obtiene los planes que se agregan a la lista de planes definitivos de la propuesta actual
+        /// </summary>
+        /// <returns></returns>
         public List<SuggestorB2b> GetCurrentPlans()
         {
             return _currentPlans;
@@ -594,16 +650,18 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        /// <summary>
+        /// Obtiene un usario por el Id de usuario
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public User GetUserById(string userId)
         {
             if (userId != String.Empty)
             {
                 try
                 {
-
                     return _client.GetUserByIdAsync(userId).Result;
-
-
                 }
                 catch (Exception ex)
                 {
@@ -614,9 +672,11 @@ namespace Telefonica.SugeridorDePlanes.Code
             {
                 return null;
             }
-
         }
 
+        /// <summary>
+        /// Vacia las listas de equipos confirmados y equipos que se agregan a la lista en memoria
+        /// </summary>
         public void EmptyEquipoPymesCurrentList()
         {
             _currentEquiposPymes = new List<DevicePymesModel>();
@@ -639,7 +699,13 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
-
+        /// <summary>
+        /// Obtiene los datos de la propuesta actual.
+        /// </summary>
+        /// <param name="devicePayment"></param>
+        /// <param name="isCreated"></param>
+        /// <param name="idUsuario"></param>
+        /// <returns></returns>
         public ProposalData GetProposalData(string devicePayment, bool isCreated, int idUsuario)
         {
             var planesDefList = GetCurrentDefinitivePlans();
@@ -672,6 +738,13 @@ namespace Telefonica.SugeridorDePlanes.Code
             return proposalData;
         }
 
+        /// <summary>
+        /// Guarda la propuesta, si la misma nunca fue guardada, crea una nueva.
+        /// </summary>
+        /// <param name="devicePayment"></param>
+        /// <param name="isFinalized"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<bool> SaveProposal(string devicePayment, bool isFinalized, int userId)
         {
             try
@@ -704,6 +777,11 @@ namespace Telefonica.SugeridorDePlanes.Code
 
         }
 
+        /// <summary>
+        /// Carga la lista de planes definitivos
+        /// </summary>
+        /// <param name="proposal"></param>
+        /// <returns></returns>
         public List<DefinitivePlanModel> PopulateDefinitivePlanList(Proposal proposal)
         {
             List<DefinitivePlanModel> planDefinitveList = new List<DefinitivePlanModel>();
@@ -726,6 +804,11 @@ namespace Telefonica.SugeridorDePlanes.Code
             return planDefinitveList;
         }
 
+        /// <summary>
+        /// Borrado de propuesta
+        /// </summary>
+        /// <param name="proposalId"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteProposal(int proposalId)
         {
             try
@@ -739,6 +822,13 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        /// <summary>
+        /// Metodo para autenticar el usuario, si el mismo existe, se carga el token necesario para 
+        /// realizar consultas a la web api
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public bool AuthenticationUser(string userName, string password)
         {
             try
@@ -759,6 +849,11 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        /// <summary>
+        /// Obtiene el usaurio por el nombre de usuario de la base de datos
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public User GetUserByUserName(string userName)
         {
             try
@@ -773,6 +868,10 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        /// <summary>
+        /// Inserta un log en Base de datos
+        /// </summary>
+        /// <param name="log"></param>
         public async void InsertLog(Log log)
         {
             try
