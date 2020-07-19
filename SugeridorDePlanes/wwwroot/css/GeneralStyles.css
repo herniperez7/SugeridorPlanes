@@ -1,0 +1,32 @@
+﻿#errorToast{
+    position:absolute;
+    top:3px;
+    right:10px;
+    width:200px;
+}
+.toast-header {
+    background: #f44336;
+    color:#fff;
+}
+
+.toast-header span{
+    color: #fff;
+}
+
+/*** MEDIA QUERIES***/
+@media (max-width: 576px) {
+    #errorToast {
+        width: 100px;
+    }
+
+}
+
+@media (max-width: 768px) {
+}
+
+@media (min-width: 992px) {
+
+}
+
+@media (max-width: 1200px) {
+}
