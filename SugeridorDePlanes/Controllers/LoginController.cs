@@ -51,9 +51,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             {          
                 if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
                 {
-                    bool isValid = true;
-                    //isValid = UserManager.AuthenticateUser(userName, password);                  
-
+                    bool isValid = true;      
                     isValid = _telefonicaService.AuthenticationUser(userName, password);
                     var user = _telefonicaService.GetUserByUserName(userName);
                     if (isValid && user != null)
@@ -68,19 +66,19 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Email no regristrado";
+                        ViewBag.ErrorMessage = "El usuario o la constraseña son incorrectos";
                         return View();
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "El email y la contraseña son mandatorios";
+                    ViewBag.ErrorMessage = "El usuario y la contraseña son mandatorios";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                var extraData = new { directory = "ex", step = "first" };               
+                var extraData = new { step = "ex", from = "UI" };               
                 var log = new Log() 
                 {
                  Reference = "login",
@@ -116,8 +114,5 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             new ClaimsPrincipal(claimsIdentity),
             authProperties);
         }
-
-
-
     }
 }
