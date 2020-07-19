@@ -38,13 +38,13 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             }
-
+            
             return View("../Login/Login");
         }
 
         [HttpPost]
         public async Task<ActionResult> Login(string userName, string password)
-        {           
+        {
             try
             {          
                 if (userName != string.Empty && password != string.Empty)
@@ -65,17 +65,20 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     }
                     else
                     {
+                        ViewBag.ErrorMessage = "Email no regristrado";
                         return View();
                     }
                 }
                 else
                 {
+                    ViewBag.ErrorMessage = "El email y la contraseña son mandatorios";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                ViewBag.ErrorMessage = "Error de sistema";
+                return View();
             }
         }
 
