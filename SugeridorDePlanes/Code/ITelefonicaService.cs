@@ -53,5 +53,6 @@ namespace Telefonica.SugeridorDePlanes.Code
         Task<bool> PopulateData();
         Task<bool> DeleteProposal(int proposalId);
         bool AuthenticationUser(string user, string password);
+        void InsertLog(Log log);
     }
 }

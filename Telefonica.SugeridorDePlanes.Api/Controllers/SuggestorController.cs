@@ -17,6 +17,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SuggestorController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -56,7 +57,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         [HttpGet("getPlansByRut")]
         public async Task<ActionResult<List<SuggestorB2b>>> GetSuggestedPlansByRut(string rut)
         {
-            /*test*/
+           
             try
             {
                 if (string.IsNullOrEmpty(rut))

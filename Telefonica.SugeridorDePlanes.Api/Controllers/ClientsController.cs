@@ -15,8 +15,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Administrator")]
-    //[Authorize]
+    //[Authorize(Roles = "Administrator")]
+    [Authorize]
     public class ClientsController : ControllerBase
     {
         private readonly IClientLogic _clientService;

@@ -52,7 +52,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
                 {
                     bool isValid = true;
-                    isValid = UserManager.AuthenticateUser(userName, password);                  
+                    //isValid = UserManager.AuthenticateUser(userName, password);                  
 
                     isValid = _telefonicaService.AuthenticationUser(userName, password);
                     var user = _telefonicaService.GetUserByUserName(userName);

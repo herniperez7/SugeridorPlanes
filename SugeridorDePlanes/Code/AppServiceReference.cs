@@ -471,6 +471,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -545,6 +546,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -619,6 +621,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -688,6 +691,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;
@@ -760,6 +764,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;
@@ -899,6 +904,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -973,6 +979,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1047,6 +1054,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1116,6 +1124,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1190,6 +1199,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1259,6 +1269,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1333,6 +1344,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1407,6 +1419,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1481,6 +1494,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
     
@@ -1563,6 +1577,7 @@ namespace Telefonica.SugeridorDePlanes
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
+                        BarerService.SetBarerToken(client_);
                         var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
                         if (response_.Content != null && response_.Content.Headers != null)
                         {
@@ -1618,6 +1633,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    BarerService.SetBarerToken(client_);
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;
