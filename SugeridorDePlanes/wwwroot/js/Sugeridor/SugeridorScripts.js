@@ -565,7 +565,7 @@ function calculateStatus(val) {
 function exportPdf() {
 
     var loading = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" ></span>';
-    var exportText = "Exportar Proposal";
+    var exportText = "Generar Propuesta";
     $("#generarProposalBtn").html(loading);
     $("#generarProposalBtn").prop("disabled", true);
     var devicePayment = $("#pagoEquiposTxt").val();
@@ -682,6 +682,8 @@ function saveProposal() {
             if (data.status === "ok") {
                 $("#loaderDiv").hide();
                 $("#saveProposaltext").html(data.result);
+                $("#generarProposalBtn").html(buttontext);
+                $("#generarProposalBtn").prop("disabled", false);
                 $('#modalPush').modal('show');
             } else {
                 $("#generarProposalBtn").html(buttontext);
