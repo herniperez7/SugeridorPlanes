@@ -202,6 +202,8 @@ function confirmDevices() {
                 var inputValue = "$ " + formatNumberStr(total);
                 $("#subsidioTxt").val(inputValue);
                 calculatePayBack();
+            } else {
+                showToastError(data.message);  
             }
         }
     });
@@ -232,6 +234,8 @@ function movileChange() {
                     $("#landedValue").html("");
                     //$("#stockValue").html("");
                 }
+            } else {
+                showToastError(data.message);  
             }
         }
     });
@@ -276,7 +280,7 @@ function AddDevice(val, add, isModal = false) {
                     devicesCount++;
                     var precio = formatNumberStr(value.precioSinIva);
                     var trashIcon = "<i class='fa fa-times fa-lg' aria-hidden='true'></i>";
-                    var tr = "<tr id='row" + value.id + "' ><td data-toggle='tooltip' data-placement='top' title='" + labelName +"'>" + mobileName + "</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + "," + false + ")'>" + trashIcon + "</td></tr>";
+                    var tr = "<tr id='row" + value.id + "' ><td data-toggle='tooltip' data-placement='top' title='" + labelName + "'>" + mobileName + "</td><td>$" + precio + "</td><td id='deleteTd" + value.id + "' onclick='AddDevice(" + value.id + "," + false + ")'>" + trashIcon + "</td></tr>";
                     $("#movilTableBody").append(tr);
 
                     devicesAmount += value.precioSinIva;
@@ -286,6 +290,8 @@ function AddDevice(val, add, isModal = false) {
                 var totalRow = "<tr id='totalRow'><td class='total-column'>" + devicesCount + "<td class='total-column'>$ " + formatNumberStr(devicesAmount) + "<td class='total-column'></td> </tr>";
                 $("#movilTableBody").append(totalRow);
 
+            } else {
+                showToastError(data.message);  
             }
         }
     });
@@ -316,6 +322,8 @@ function deleteRow(val) {
                         $("#movilTableBody tr").remove();
                     }
                 }
+            } else {
+                showToastError(data.message);  
             }
         }
     });
@@ -334,6 +342,8 @@ function calculatePayBack() {
         success: function (data) {
             if (data.status === "ok") {
                 $("#paybackTxt").val(data.result);
+            } else {
+                showToastError(data.message);  
             }
         }
     });
@@ -608,12 +618,12 @@ function generarProposal() {
                 $("#loaderDiv").hide();
                 window.location.href = gbUserProposals;
             }
-            else {
-                data.status === "error"{
-                    showToastError(data.message);
-                }
+            else if (data.status === "error")
+            {
+                $("#loaderDiv").hide();
+                showToastError(data.message);  
+                   
             }
-            
 
         }
     });
@@ -640,11 +650,11 @@ function sendMail() {
                 $("#generarProposalBtn").html(buttontext);
                 $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
-            } else {
+            } else if (data.status === "error"){
                 $("#generarProposalBtn").html(buttontext);
                 $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
-                $('#errorModal').modal('show');
+                showToastError(data.message);  
             }
 
         }
@@ -697,7 +707,7 @@ function saveProposal() {
                 $("#generarProposalBtn").html(buttontext);
                 $("#generarProposalBtn").prop("disabled", false);
                 $("#loaderDiv").hide();
-                $('#errorModal').modal('show');
+                showToastError(data.message);  
             }
         }
     });

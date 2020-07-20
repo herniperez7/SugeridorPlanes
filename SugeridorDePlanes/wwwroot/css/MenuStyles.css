@@ -137,7 +137,7 @@ body {
 
 #navBar-mobile {
     overflow: hidden;
-    z-index: 99999;
+    z-index: 999;
     background-color: #fff;
     position: fixed !important; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
@@ -150,8 +150,10 @@ body {
 }
 
 @media (max-width: 768px) {
-    #navMobile-Margin{
-        margin-top:90px;
+    #navMobile-Margin {
+        margin-top: 90px;
+        margin-bottom: 10px;
+        width: 100%;
     }
 }
 

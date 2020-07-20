@@ -42,6 +42,8 @@
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/GeneralStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
     <script src="~/js/ProposalDetail/ProposaldetailsScript.js"></script>
 </head>
 <body>
@@ -67,7 +69,7 @@
             <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
                     aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="mobile-nav-text">
-                    <i class="fas fa-bars fa-2x"></i>
+                    <img src="~/img/menu.png" alt="menu icon" style="width:30px">
                 </span>
             </button>
 
@@ -119,13 +121,13 @@
     </nav>
 
 
-    <nav class="d-none d-md-flex navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 titleMargin">
+    <nav class="navbar-light bg-light justify-content-between pt-2 pb-2 mr-3 titleMargin" id="navMobile-Margin">
         <div class="viewTitle" style="margin-left:20px">
             <h2>Detalles propuesta de: <span id="companyNameTitle">@companyName</span></h2>
         </div>
 
     </nav>
-    <nav class="main-menu" id="sideNav">
+    <nav class="main-menu d-none d-lg-block" id="sideNav">
         <ul>
             <li>
                 <a href="@Url.Action("Index", "Suggestor")">
@@ -192,8 +194,6 @@
                 <h5>Aguarde...</h5>
             </div>
         </div>
-
-
 
         <div class="pl-md-5 pr-md-5 pt-md-3 areaMargin">
             <div class="row">
@@ -470,10 +470,29 @@
                 <div class="col-lg-7" style="display:block" id="IndexesDiv">
                     <fieldset>
                         <legend>Resumen oficial</legend>
-                        <div class="row" style="height: 60px">
+                        <div class="row d-none d-md-block" style="height: 60px">
 
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 ">
                                 <div class="ml-3" style="display:inline-flex;" id="IndexesValue">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="subsidioInput">Subsidio</span>
+                                    </div>
+                                    <input type="text" id="subsidioTxt" disabled value="$ @FormatCultureNumber((decimal)Model.Subsidio)" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="payBackInput">Payback</span>
+                                    </div>
+                                    <input type="text" id="paybackTxt" class="form-control" disabled value="@Model.Payback" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="pagoEquiposInput">Pago de equipos</span>
+                                    </div>
+                                    <input type="text" id="pagoEquiposTxt" class="form-control" disabled value="$ @FormatCultureNumber((decimal)Model.DevicePayment)" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row d-block d-md-block">
+                            <div class="col-lg-12">
+                                <div class="ml-3" id="IndexesValue">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="subsidioInput">Subsidio</span>
                                     </div>

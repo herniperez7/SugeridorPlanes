@@ -59,7 +59,11 @@
                 $('#errorToast').on('hidden.bs.toast', function () {
                     $("#errorToast").css("display", "none");
                 });
-                function showToastError(message) {
+            </script>
+        }
+
+        <script>
+            function showToastError(message) {
                     if (message != undefined) {
                         $("#errorMessage").html(message);
                     }
@@ -67,10 +71,7 @@
                     $("#errorToast").toast("show");
                    
                 }
-                
-            </script>
-        }
-
+        </script>
 
     </body>
 

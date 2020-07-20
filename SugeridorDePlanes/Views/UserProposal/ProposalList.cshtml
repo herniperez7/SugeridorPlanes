@@ -33,10 +33,12 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/GeneralStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
 
-    <script>       
+    <script>
+
         var openProposalUrl = "@Url.Action("OpenProposal", "UserProposal")";
         var deleteProposalUrl = "@Url.Action("DeleteProposal", "UserProposal")";
     </script>
@@ -54,7 +56,7 @@
             <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
                     aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="mobile-nav-text">
-                    <i class="fas fa-bars fa-2x"></i>
+                    <img src="~/img/menu.png" alt="menu icon" style="width:30px">
                 </span>
             </button>
 

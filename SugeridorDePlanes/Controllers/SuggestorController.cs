@@ -40,7 +40,6 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 _telefonicaApi.EmptyEquipoPymesCurrentList();
                 var clientList = _telefonicaApi.GetCurrentClients();
                 ViewData["loggedUser"] = loggedUser;
-
                 ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
                 var planesOfertList = _telefonicaApi.GetActualPlans();
                 ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
@@ -83,8 +82,9 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 _telefonicaApi.EmptyEquipoPymesCurrentList();
                 var clientList = _telefonicaApi.GetCurrentClients();
                 _telefonicaApi.UpdateCurrentClient(rut);
-                ViewData["selectedRut"] = rut;
                 ViewData["loggedUser"] = loggedUser;
+                ViewData["selectedRut"] = rut;
+                ViewData["clientList"] = clientList;
                 if (_telefonicaApi.GetCurrentClient() != null)
                 {
                     var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
@@ -140,7 +140,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception)
             {
-                var data = new { status = "ok", message = "Error al calcular el payback" };
+                var data = new { status = "error", message = "Error al calcular el payback" };
                 return Json(data);
             }
             
@@ -179,7 +179,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception)
             {
-                var data = new { status = "ok", message = "Error al obtener lista de equipos" };
+                var data = new { status = "error", message = "Error al obtener lista de equipos" };
                 return Json(data);
             }
             
@@ -276,17 +276,18 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateProposal(string devicePayment)
+        public async Task<JsonResult> GenerateProposal(string devicePayment)
         {
             var resultProposal = await GenerateProposalData(devicePayment);
             if (resultProposal)
             {
-                return RedirectToAction("Index", "UserProposal");
+                var data = new { status = "ok"};
+                return new JsonResult(data);
             }
             else
             {
-                ViewBag.ErrorMessage = "Error al generar propuesta";
-                return View();
+                var data = new { status = "error", message = "Error al generar propuesta" };
+                return new JsonResult(data);
             }
             
         }
