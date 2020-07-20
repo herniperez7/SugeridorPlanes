@@ -56,13 +56,14 @@
                 $(document).ready(function () {
                     showToastError(undefined);
                 });
-                $('#errorToast').on('hidden.bs.toast', function () {
-                    $("#errorToast").css("display", "none");
-                });
+                
             </script>
         }
 
         <script>
+            $('#errorToast').on('hidden.bs.toast', function () {
+                    $("#errorToast").css("display", "none");
+                });
             function showToastError(message) {
                     if (message != undefined) {
                         $("#errorMessage").html(message);
