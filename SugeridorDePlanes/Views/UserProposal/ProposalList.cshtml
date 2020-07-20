@@ -11,6 +11,19 @@
         emptyPlans = false;
 
     }
+    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorClientModel>;
+    SelectList clientSelect = null;
+    if (clientList != null && clientList.Count > 0)
+    {
+        clientSelect = new SelectList(clientList, "Documento", "Titular");
+    }
+
+    var userList = ViewData["userList"] as List<Telefonica.SugeridorDePlanes.User>;
+    SelectList userSelect = null;
+    if (userList != null && userList.Count > 0)
+    {
+        userSelect = new SelectList(userList, "Id", "NombreCompleto");
+    }
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -38,7 +51,6 @@
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
 
     <script>
-
         var openProposalUrl = "@Url.Action("OpenProposal", "UserProposal")";
         var deleteProposalUrl = "@Url.Action("DeleteProposal", "UserProposal")";
     </script>
@@ -111,6 +123,47 @@
         <div class="viewTitle" style="margin-left:20px">
             <h2>Lista de Propuestas</h2>
         </div>
+        <div class="d-flex justify-content-between">
+            @if (userRole.Equals(adminRole))
+            {
+                <form class="form-inline input-group mb-0 w-auto" action="/UserProposal/FilterProposalsByUser" method="post" style="margin-left:20px">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Nombre usuario</label>
+                    </div>
+                    @if (userSelect != null)
+                    {
+                        @Html.DropDownList("userId", userSelect, new { onChange = "this.form.submit()", @class = "custom-select", id = "userSelect" })
+                    }
+
+                </form>
+                <form class="form-inline mb-0" action="/UserProposal/FilterProposalsByUserName" method="post">
+                    <div class="d-inline-flex align-items-center w-100">
+                        <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por usuario" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <form class="form-inline input-group mb-0 w-auto" action="/UserProposal/FilterProposalsByClient" method="post" style="margin-left:20px">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
+                    </div>
+                    @if (clientSelect != null)
+                    {
+                        @Html.DropDownList("document", clientSelect, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
+                    }
+
+                </form>
+                <form class="form-inline mb-0" action="/UserProposal/FilterProposalsByClient" method="post">
+                    <div class="d-inline-flex align-items-center w-100">
+                        <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por cliente" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
+                    </div>
+                </form>
+            }
+        </div>
+        
 
     </nav>
     <nav class="main-menu d-none d-lg-block" id="sideNav">

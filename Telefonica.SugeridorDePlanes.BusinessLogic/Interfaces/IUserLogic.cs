@@ -9,6 +9,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
 {
     public interface IUserLogic
     {
+        Task<List<UserDTO>> GetUsers();
         Task<UserDTO> GetUserById(string userId);
         Task<UserDTO> GetUserByEmail(string userEmail);
         Task<UserDTO> GetUserByUserName(string userName);

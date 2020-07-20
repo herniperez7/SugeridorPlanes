@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading.Tasks;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
-using Telefonica.SugeridorDePlanes.DataAccess;
 using Telefonica.SugeridorDePlanes.DataAccess.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
@@ -18,6 +14,19 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
         public UserLogic(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            try
+            {
+                return await _userRepository.GetUsers();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
@@ -58,5 +67,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 throw ex;
             }
         }
+
+       
     }
 }

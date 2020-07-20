@@ -32,11 +32,11 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
-        public async Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario)
+        public async Task<List<ProposalDTO>> GetProposalsByUserId(string userId)
         {
             try
             {
-                int id = int.Parse(idUsuario);
+                int id = int.Parse(userId);
                 var Proposals = await _context.Proposal.Where(x => x.IdUsuario == id).ToListAsync();
 
                 return Proposals;
@@ -47,6 +47,34 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
+        public async Task<List<ProposalDTO>> GetProposalsByUserName(string userName)
+        {
+            try
+            {
+                var user = await _context.User.Where(x => x.NombreCompleto == userName).FirstOrDefaultAsync();
+                var Proposals = await _context.Proposal.Where(x => x.IdUsuario == user.Id).ToListAsync();
+
+                return Proposals;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<ProposalDTO>> GetProposalsClient(string document)
+        {
+            try
+            {
+                var Proposals = await _context.Proposal.Where(x => x.Documento == document).ToListAsync();
+
+                return Proposals;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task<ProposalDTO> GetProposal(string idProposal)
         {
             try
@@ -179,6 +207,8 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
             }
         }
 
+
+
         public async Task<List<ProposalLineDTO>> GetLineasProposal(int proposalId) 
         {
             try
@@ -285,5 +315,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
                 throw ex;
             }
         }
+
+     
     }
 }

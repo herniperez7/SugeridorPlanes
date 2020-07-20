@@ -485,6 +485,46 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        public async Task<List<Proposal>> GetProposalsByUserName(string userName)
+        {
+            try
+            {
+                if (userName != null && userName != String.Empty)
+                {
+                    var Proposals = await _client.GetProposalsByUserNameAsync(userName);
+                    var ProposalsList = Proposals.ToList();
+
+                    return ProposalsList;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<Proposal>> GetProposalsByClient(string document, string userId)
+        {
+            try
+            {
+                if (document != null && document != String.Empty)
+                {
+                    var Proposals = await _client.GetProposalsClientAsync(document);
+                    var ProposalsList = Proposals.ToList();
+
+                    return ProposalsList.Where(x => x.IdUsuario == userId).ToList();
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<Proposal> GetProposalsById(string idProposal)
         {
             try
@@ -653,6 +693,25 @@ namespace Telefonica.SugeridorDePlanes.Code
                 return null;
             }
 
+        }
+        /// <summary>
+        /// Obtiene un usario por el Id de usuario
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<User>> GetUsers()
+        {
+            
+            try
+            {
+                var users = await _client.GetUsersAsync();
+                var usersList = users.ToList();
+                return usersList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         /// <summary>
@@ -888,5 +947,7 @@ namespace Telefonica.SugeridorDePlanes.Code
                 throw ex;
             }
         }
+
+       
     }
 }

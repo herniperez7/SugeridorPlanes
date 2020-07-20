@@ -34,11 +34,39 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
             }
         }
 
-        public async Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario)
+        public async Task<List<ProposalDTO>> GetProposalsByUserId(string idUsuario)
         {
             try
             {
-                var allProposals = await _proposalRepository.GetProposalsUsuario(idUsuario);
+                var allProposals = await _proposalRepository.GetProposalsByUserId(idUsuario);
+                allProposals = allProposals.Where(x => x.Activa == true).ToList();
+                return allProposals;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<ProposalDTO>> GetProposalsByUserName(string userName)
+        {
+            try
+            {
+                var allProposals = await _proposalRepository.GetProposalsByUserName(userName);
+                allProposals = allProposals.Where(x => x.Activa == true).ToList();
+                return allProposals;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<ProposalDTO>> GetProposalsClient(string document)
+        {
+            try
+            {
+                var allProposals = await _proposalRepository.GetProposalsClient(document);
                 allProposals = allProposals.Where(x => x.Activa == true).ToList();
                 return allProposals;
             }
@@ -146,5 +174,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic
                 throw ex;
             }
         }
+
+        
     }
 }

@@ -56,5 +56,18 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Services
                 throw ex;
             }
         }
+
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            try
+            {
+                var user = await _context.User.ToListAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

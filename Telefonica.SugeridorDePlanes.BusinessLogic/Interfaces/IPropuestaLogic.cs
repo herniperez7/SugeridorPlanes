@@ -8,7 +8,9 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces
     {
         Task<List<ProposalDTO>> GetProposals();
         Task<ProposalDTO> GetProposalByDoc(string doc);
-        Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario);
+        Task<List<ProposalDTO>> GetProposalsByUserId(string idUsuario);
+        Task<List<ProposalDTO>> GetProposalsByUserName(string idUsuario);
+        Task<List<ProposalDTO>> GetProposalsClient(string document);
         Task<ProposalDTO> GetProposal(string id);  
         Task<int> InsertProposal(TransactionProposalDTO proposaTransaction);
         Task<List<ProposalLineDTO>> GetLineasProposal(int idPropuesta);

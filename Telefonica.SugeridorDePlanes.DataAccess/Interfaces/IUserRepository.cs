@@ -8,6 +8,7 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Interfaces
 {
     public interface IUserRepository
     {
+        Task<List<UserDTO>> GetUsers();
         Task<UserDTO> GetUserById(string userId);
         Task<UserDTO> GetUserByEmail(string userEmail);
         Task<UserDTO> GetUserByUserName(string userName);

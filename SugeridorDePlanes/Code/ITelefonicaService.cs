@@ -17,6 +17,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         Task<List<SuggestorB2b>> GetSuggestedPlansByClientNumber(string clientNumber);
         List<OfertActualPlanModel> GetActualPlans();        
         List<SuggestorB2b> GetCurrentPlans();
+        Task<List<User>> GetUsers();
         List<DefinitivePlanModel> UpdateDefinitivePlanList(List<SuggestorB2b> planList);
         List<DefinitivePlanModel> GetCurrentDefinitivePlans();
         void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan);
@@ -31,6 +32,8 @@ namespace Telefonica.SugeridorDePlanes.Code
         byte[] GeneratePdfFromHtml(string devicePayment);
         Task<Proposal> AddProposal(ProposalData proposal);
         Task<List<Proposal>> GetProposalsByUser(string idUsuario);
+        Task<List<Proposal>> GetProposalsByUserName(string userName);
+        Task<List<Proposal>> GetProposalsByClient(string document, string userId);
         Task<List<Proposal>> GetProposals();
         Task<Proposal> GetProposalById(string idProposal);
         decimal GetSubsidy();

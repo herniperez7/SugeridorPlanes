@@ -36,6 +36,10 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var userRole = HttpContext.Session.GetString("UserRole");
             ViewData["loggedUser"] = loggedUser;
             ViewData["userRole"] = userRole;
+            var clientList = _telefonicaApi.GetCurrentClients();
+            ViewData["clientList"] = clientList;
+            var userList = await _telefonicaApi.GetUsers();
+            ViewData["userList"] = userList;
             _telefonicaApi.SetCurrentProposal(null);
             if(userRole.Equals(Enum.GetName(typeof(Dto.Dto.UserRole), Dto.Dto.UserRole.Administrator)))
             {
@@ -48,6 +52,54 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 return View("../UserProposal/ProposalList", proposals);
             }            
         }
+        [HttpPost]
+        public async Task<IActionResult> FilterProposalsByUser(string userId)
+        {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = userRole;
+            var clientList = _telefonicaApi.GetCurrentClients();
+            ViewData["clientList"] = clientList;
+            var userList = await _telefonicaApi.GetUsers();
+            ViewData["userList"] = userList;
+            _telefonicaApi.SetCurrentProposal(null);
+            var proposals = await _telefonicaApi.GetProposalsByUser(userId);
+            return View("../UserProposal/ProposalList", proposals);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterProposalsByUserName(string userName)
+        {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = userRole;
+            var clientList = _telefonicaApi.GetCurrentClients();
+            ViewData["clientList"] = clientList;
+            var userList = await _telefonicaApi.GetUsers();
+            ViewData["userList"] = userList;
+            _telefonicaApi.SetCurrentProposal(null);
+            var proposals = await _telefonicaApi.GetProposalsByUserName(userName);
+            return View("../UserProposal/ProposalList", proposals);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterProposalsByClient(string document)
+        {
+            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["loggedUser"] = loggedUser;
+            ViewData["userRole"] = userRole;
+            var clientList = _telefonicaApi.GetCurrentClients();
+            ViewData["clientList"] = clientList;
+            var userList = await _telefonicaApi.GetUsers();
+            ViewData["userList"] = userList;
+            _telefonicaApi.SetCurrentProposal(null);
+            var proposals = await _telefonicaApi.GetProposalsByClient(document, loggedUser.Id.ToString());
+            return View("../UserProposal/ProposalList", proposals);
+        }
+
 
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 
         {
