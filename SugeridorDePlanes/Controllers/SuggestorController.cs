@@ -81,11 +81,11 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
                 _telefonicaApi.EmptyEquipoPymesCurrentList();
                 var clientList = _telefonicaApi.GetCurrentClients();
-                _telefonicaApi.UpdateCurrentClient(rut);
+                var updated = _telefonicaApi.UpdateCurrentClient(rut);
                 ViewData["loggedUser"] = loggedUser;
                 ViewData["selectedRut"] = rut;
                 ViewData["clientList"] = clientList;
-                if (_telefonicaApi.GetCurrentClient() != null)
+                if (updated)
                 {
                     var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
                     var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);

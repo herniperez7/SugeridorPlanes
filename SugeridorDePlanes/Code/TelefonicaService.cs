@@ -159,10 +159,15 @@ namespace Telefonica.SugeridorDePlanes.Code
         /// Actualiza el cliente actual
         /// </summary>
         /// <param name="document"></param>
-        public void UpdateCurrentClient(string document)
+        public bool UpdateCurrentClient(string document)
         {
             var currentClient = _currentClients.Where(x => x.Documento == document).FirstOrDefault();
-            _currentClient = currentClient;
+            if (currentClient != null)
+            {
+                _currentClient = currentClient;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

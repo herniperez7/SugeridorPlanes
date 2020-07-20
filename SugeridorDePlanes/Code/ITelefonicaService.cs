@@ -21,7 +21,7 @@ namespace Telefonica.SugeridorDePlanes.Code
         List<DefinitivePlanModel> GetCurrentDefinitivePlans();
         void UpdateCurrentDefinitivePlans(UpdateSuggestedPlanModel updatePlan);
         Task SendMail(Email emailData);
-        void UpdateCurrentClient(string document);
+        bool UpdateCurrentClient(string document);
         decimal GetDefinitivePlansIncome();
         SuggestorClientModel GetCurrentClient();
         List<SuggestorClientModel> GetCurrentClients();
