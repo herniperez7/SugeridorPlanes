@@ -32,7 +32,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {
                 bool isValid = true;
 
-               // isValid = AuthenticateUserAD(userName, password);
+                isValid = AuthenticateUserAD(userName, password);
 
                 var token = string.Empty;
 
@@ -114,6 +114,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+
+
                 //return false;
                 throw ex;
             }
