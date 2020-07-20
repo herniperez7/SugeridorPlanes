@@ -115,7 +115,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
 
-       // [Authorize]
         [HttpGet("getActualPlans")]
         public async Task<ActionResult<List<OfertPlan>>> GetActualPlans()
         {
@@ -156,7 +155,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
         }
 
-       // [Authorize]
         [HttpGet("getMobileDevices")]
         public async Task<ActionResult<List<DevicePymes>>> GetEquiposPymes()
         {

@@ -47,21 +47,24 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<ActionResult> Login(string userName, string password)
         {
             try
-            {          
+            {
                 if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
                 {
                     bool isValid = true;      
                     isValid = _telefonicaService.AuthenticationUser(userName, password);
                     var user = _telefonicaService.GetUserByUserName(userName);
+
                     if (isValid && user != null)
-                    {                        
+                    {
+
                         HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
                         HttpContext.Session.SetString("UserRole", user.RolString);
 
                         //seteo las cookies que no permiten ingresar a las demas funcionalidades si no esta logueado
                         SetLoginCookies(user.RolString);
                         await _telefonicaService.PopulateData();
-                        return this.RedirectToAction("Index", "Suggestor");
+
+                        return RedirectToAction("Index", "Suggestor");
                     }
                     else
                     {
