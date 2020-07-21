@@ -157,6 +157,12 @@ body {
     }
 }
 
+@media (min-width: 767px) and (max-width:992px) {
+    #navBar-mobile img{
+        width: 50%;
+    }
+}
+
 @media (min-width: 992px) {
     .titleMargin{
         margin-left:60px;

@@ -120,27 +120,31 @@
     </nav>
 
     <nav class="navbar-light bg-light justify-content-between pt-2 pb-2 titleMargin" id="navMobile-Margin">
-        <div class="viewTitle" style="margin-left:20px">
-            <h2>Lista de Propuestas</h2>
-        </div>
-        <div class="d-flex justify-content-between">
+        <div class="d-md-flex justify-content-between">
+            <div class="viewTitle" style="margin-left:20px">
+                <h2>Lista de Propuestas</h2>
+            </div>
             @if (userRole.Equals(adminRole))
             {
                 <form class="form-inline input-group mb-0 w-auto" action="/UserProposal/FilterProposalsByUser" method="post" style="margin-left:20px">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Nombre usuario</label>
+                        <label class="input-group-text" for="inputGroupSelect01">Filtro por usuario</label>
                     </div>
                     @if (userSelect != null)
                     {
+                        @*<select id="userList" class="custom-select" onchange="this.form.submit()">
+
+                            <option> </option>
+                            @foreach (var item in userList)
+                            {
+                                <option value="@item.Id">@item.NombreCompleto</option>
+                            }
+
+                        </select>*@
+
                         @Html.DropDownList("userId", userSelect, new { onChange = "this.form.submit()", @class = "custom-select", id = "userSelect" })
                     }
 
-                </form>
-                <form class="form-inline mb-0" action="/UserProposal/FilterProposalsByUserName" method="post">
-                    <div class="d-inline-flex align-items-center w-100">
-                        <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por usuario" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
-                    </div>
                 </form>
             }
             else
@@ -155,15 +159,9 @@
                     }
 
                 </form>
-                <form class="form-inline mb-0" action="/UserProposal/FilterProposalsByClient" method="post">
-                    <div class="d-inline-flex align-items-center w-100">
-                        <input class="form-control mr-2" type="text" name="rut" id="clientRutTxt1" placeholder="Buscar por cliente" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" id="clientRutBtn" type="submit">Buscar</button>
-                    </div>
-                </form>
             }
         </div>
-        
+
 
     </nav>
     <nav class="main-menu d-none d-lg-block" id="sideNav">
