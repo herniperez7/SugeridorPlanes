@@ -244,7 +244,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model != null)
+                                        @if (Model != null && Model.Count > 0)
                                         {
                                             @foreach (var Proposal in Model)
                                             {
@@ -262,6 +262,15 @@
                                                     <td style="text-align:center;cursor:pointer" data-toggle="modal" href="#deleteProposalModal" onclick="setProposalId(@Proposal.Id)"><i class="fa fa-trash" aria-hidden="true"></i></td>
                                                 </tr>
                                             }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td class="total-column text-sm-left text-md-center" colspan="10">
+                                                    No hay propuestas para listar
+                                                </td>
+
+                                            </tr>
                                         }
 
                                     </tbody>
@@ -283,7 +292,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model != null)
+                                        @if (Model != null && Model.Count > 0)
                                         {
                                             @foreach (var Proposal in Model)
                                             {
@@ -300,6 +309,15 @@
                                                     <td style="text-align:center;cursor:pointer" data-toggle="modal" href="#deleteProposalModal" onclick="setProposalId(@Proposal.Id)"><i class="fa fa-trash" aria-hidden="true"></i></td>
                                                 </tr>
                                             }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td class="total-column text-sm-left text-md-center" colspan="10">
+                                                    No hay propuestas para listar
+                                                </td>
+
+                                            </tr>
                                         }
 
                                     </tbody>

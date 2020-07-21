@@ -24,8 +24,11 @@
 }
 
 @media (max-width: 768px) {
-    fieldset{
-        margin:10px 15px!important;
+    .text-sm-left{
+        text-align:left!important;
+    }
+    fieldset {
+        margin: 10px 15px !important;
     }
 }
 
