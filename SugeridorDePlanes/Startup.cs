@@ -54,7 +54,7 @@ namespace Telefonica.SugeridorDePlanes
                {
                   options.Cookie.HttpOnly = true;
                   //options.ExpireTimeSpan = TimeSpan.FromHours(12);  este valor permite que se eliminen las cookies de login despues de 12 horas
-                  options.Cookie.SecurePolicy = _env.IsDevelopment() ? CookieSecurePolicy.None : CookieSecurePolicy.Always;
+                  options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                   options.Cookie.SameSite = SameSiteMode.Lax;
                   options.Cookie.Name = "SugeridorCookies";
                   options.LoginPath = new PathString("/Login");
@@ -67,8 +67,7 @@ namespace Telefonica.SugeridorDePlanes
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
                 options.HttpOnly = HttpOnlyPolicy.None;
-                options.Secure = _env.IsDevelopment()
-                  ? CookieSecurePolicy.None : CookieSecurePolicy.Always;
+                options.Secure = CookieSecurePolicy.None;
             });
 
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
