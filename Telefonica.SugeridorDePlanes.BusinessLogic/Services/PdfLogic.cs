@@ -322,6 +322,12 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
                 WebKitConverterSettings settings = new WebKitConverterSettings();
                 settings.WebKitPath = Path.Combine(mainUrl, "QtBinariesWindows");
                 converter.ConverterSettings = settings;
+
+                //test
+                settings.TempPath = Path.Combine(mainUrl, "QtBinariesWindows", "temp");                
+                //
+
+
                 string[] filePaths = Directory.GetFiles(directoryPath);
 
                 foreach (string file in filePaths)
