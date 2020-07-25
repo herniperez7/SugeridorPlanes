@@ -28,12 +28,20 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         public async Task<IActionResult> Index(Proposal proposal)
-        {    
-            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
-            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-            ViewData["suggestorLine"] = planMapped;
-
-            return View("../UserProposal/ProposalDetails", proposal);
+        {
+            try
+            {
+                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+                var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                ViewData["suggestorLine"] = planMapped;
+                return View("../UserProposal/ProposalDetails", proposal);
+            }
+            catch
+            {
+                ViewBag.ErrorMessage = "Error al cargar los detalles de la propuesta";
+                return View();
+            }
+            
         }
 
         [HttpGet]

@@ -37,32 +37,41 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
             if (loggedUser != null)
             {
-                _telefonicaApi.EmptyEquipoPymesCurrentList();
-                var clientList = _telefonicaApi.GetCurrentClients();
-                ViewData["loggedUser"] = loggedUser;
-                ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
-                var planesOfertList = _telefonicaApi.GetActualPlans();
-                ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
-                ViewData["planOfertList"] = planesOfertList;
-                var planMapped = new List<SuggestorB2bModel>();
-                if (clientList != null && clientList.Count > 0)
+                try
                 {
-                    ViewData["clientList"] = clientList;
-                    List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientList[0].Documento);
-                    planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-                    _telefonicaApi.UpdateCurrentClient(clientList[0].Documento);
-                    var indexes = _telefonicaApi.CalculateIndexes();
-                    ViewData["Indexes"] = indexes;
-                }
-                ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-                ViewData["mobileList"] = new List<DevicePymesModel>();
-                ViewData["devicePayment"] = 0;
-                ViewData["subsidy"] = 0;
-                ViewData["payback"] = 0;
-                ViewData["currentClient"] = "null";
-                _telefonicaApi.SetCurrentProposal(null);
+                    _telefonicaApi.EmptyEquipoPymesCurrentList();
+                    var clientList = _telefonicaApi.GetCurrentClients();
+                    ViewData["loggedUser"] = loggedUser;
+                    ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
+                    var planesOfertList = _telefonicaApi.GetActualPlans();
+                    ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
+                    ViewData["planOfertList"] = planesOfertList;
+                    var planMapped = new List<SuggestorB2bModel>();
+                    if (clientList != null && clientList.Count > 0)
+                    {
+                        ViewData["clientList"] = clientList;
+                        List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientList[0].Documento);
+                        planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                        _telefonicaApi.UpdateCurrentClient(clientList[0].Documento);
+                        var indexes = _telefonicaApi.CalculateIndexes();
+                        ViewData["Indexes"] = indexes;
+                    }
+                    ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
+                    ViewData["mobileList"] = new List<DevicePymesModel>();
+                    ViewData["devicePayment"] = 0;
+                    ViewData["subsidy"] = 0;
+                    ViewData["payback"] = 0;
+                    ViewData["currentClient"] = "null";
+                    _telefonicaApi.SetCurrentProposal(null);
 
-                return View("../Home/Suggestor", planMapped);
+                    return View("../Home/Suggestor", planMapped);
+                }
+                catch{
+                    ViewBag.ErrorMessage = "Error al cargar los elemenos";
+                    var planMapped = new List<SuggestorB2bModel>();
+                    return View("../Home/Suggestor", planMapped);
+                }
+                
             }
             else
             {
@@ -190,13 +199,22 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         {            
             if (!string.IsNullOrEmpty(code))
             {
-                _telefonicaApi.UpdateCurrentEquiposPymesList(code, false);
-                var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
-                return Json(data);
+                try
+                {
+                    _telefonicaApi.UpdateCurrentEquiposPymesList(code, false);
+                    var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
+                    return Json(data);
+                }
+                catch
+                {
+                    var data = new { status = "error", message = "Error al cargar equipo" };
+                    return Json(data);
+                }
+                
             }
             else
             {
-                var data = new { status = "error", message = "Error al agregar equipo"};
+                var data = new { status = "error", message = "El codigo del equipo se encuentra vacio"};
                 return Json(data);
             }
         }

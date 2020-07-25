@@ -93,10 +93,18 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         [HttpGet("Logout")]
         public async Task<ActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            BarerService.ClearToken();
-            HttpContext.Session.Clear();            
-            return this.RedirectToAction("Index", "Login");
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                BarerService.ClearToken();
+                HttpContext.Session.Clear();
+                return this.RedirectToAction("Index", "Login");
+            }
+            catch{
+                ViewBag.ErrorMessage = "No se ha podido cerrar sesion";
+                return View();
+            }           
+            
         }
 
         private async void SetLoginCookies(string role)
