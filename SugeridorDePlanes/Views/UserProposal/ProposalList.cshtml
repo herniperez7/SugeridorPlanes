@@ -126,7 +126,7 @@
             </div>
             @if (userRole.Equals(adminRole))
             {
-                <form class="form-inline input-group mb-0 w-auto" action="/UserProposal/FilterProposalsByUser" method="post" style="margin-left:20px">
+                <form class="form-inline input-group mb-0 w-auto" action="~/UserProposal/FilterProposalsByUser" method="post" style="margin-left:20px">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">Filtro por usuario</label>
                     </div>
@@ -149,7 +149,7 @@
             }
             else
             {
-                <form class="form-inline input-group mb-0 w-auto" action="/UserProposal/FilterProposalsByClient" method="post" style="margin-left:20px">
+                <form class="form-inline input-group mb-0 w-auto" action="~/UserProposal/FilterProposalsByClient" method="post" style="margin-left:20px">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
                     </div>
