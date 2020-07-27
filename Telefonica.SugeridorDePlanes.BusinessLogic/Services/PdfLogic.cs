@@ -366,7 +366,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessLogic.Services
             try
             {
                 Spire.Pdf.PdfDocument document = new Spire.Pdf.PdfDocument();
-                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwroot");
+                var mainUrl = Path.Combine(_env.ContentRootPath, "wwwrootr");
                 var mainPdf = Path.Combine(mainUrl, "pdf", "PropuestaComercial.pdf");
                 int totalFiles = mobilesPages + 2;
                 string[] lstFiles = new string[totalFiles];

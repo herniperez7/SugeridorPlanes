@@ -10,7 +10,7 @@ namespace Telefonica.SugeridorDePlanes.BusinessEntities.Models
         public string Messsage { get; set; }
         public object ExtraData { get; set; }
 
-        public Log(string reference, string messsage, object extraData)
+        public Log(string reference, string messsage, object extraData = null)
         {
             Reference = reference;
             Messsage = messsage;

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models;
 using Telefonica.SugeridorDePlanes.BusinessEntities.Models.RequestModels;
-using Telefonica.SugeridorDePlanes.BusinessEntities.Models.Users;
 using Telefonica.SugeridorDePlanes.BusinessLogic.Interfaces;
 using Telefonica.SugeridorDePlanes.Dto.Dto;
 
@@ -23,14 +22,17 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         private readonly IClientLogic _clientLogic;
         private readonly IUserLogic _userLogic;
         private readonly IMapper _mapper;
+        private ILogLogic _logLogic;
 
-        public ProposalController(ISuggestorLogic suggestorLogic, IProposalLogic ProposalLogic, IMapper mapper, IClientLogic clientLogic, IUserLogic userLogic)
+        public ProposalController(ISuggestorLogic suggestorLogic, IProposalLogic ProposalLogic,
+            IMapper mapper, IClientLogic clientLogic, IUserLogic userLogic, ILogLogic logLogic)
         {
             _ProposalLogic = ProposalLogic;
             _suggestorLogic = suggestorLogic;
             _mapper = mapper;
             _clientLogic = clientLogic;
             _userLogic = userLogic;
+            _logLogic = logLogic;
         }
 
         [HttpGet("getProposals")]
@@ -44,6 +46,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+                _logLogic.InsertLog(new Log("/api/getProposals", ex.Message));
                 throw ex;
             }
 
@@ -62,6 +65,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { user = userId };
+                _logLogic.InsertLog(new Log("/api/getProposalsUsuario", ex.Message, extraData));
                 throw ex;
             }
         }
@@ -79,6 +84,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { nombreUsuario = userName };
+                _logLogic.InsertLog(new Log("/api/getProposalsByUserName", ex.Message, extraData));
                 throw ex;
             }
         }
@@ -96,6 +103,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { documentoCliente = document };
+                _logLogic.InsertLog(new Log("/api/getProposalsClient", ex.Message, extraData));
                 throw ex;
             }
         }
@@ -123,6 +132,8 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { propuestaId = idProposal };
+                _logLogic.InsertLog(new Log("/api/getProposal", ex.Message, extraData));
                 throw ex;
             }
         }

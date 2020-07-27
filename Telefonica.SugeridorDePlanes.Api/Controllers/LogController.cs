@@ -26,14 +26,6 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             {      
                 _logLogic.InsertLog(log);
 
-                using (StreamWriter w = System.IO.File.AppendText("Log.txt"))
-                {
-                    w.Write("\r\nLog Entry : ");
-                    w.WriteLine($"{DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}");
-                    w.WriteLine($" Referencia :{log.Reference}");
-                    w.WriteLine($" Mensaje :{log.Messsage}");
-                    w.WriteLine("-------------------------------");
-                }
                 return Ok();
             }
             catch (Exception ex)

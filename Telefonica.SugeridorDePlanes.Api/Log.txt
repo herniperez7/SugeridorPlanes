@@ -1,1 +1,19 @@
 ﻿
+
+Log Entry : 9:36:43 AM Monday, July 27, 2020
+ Referencia :generar pdf
+ Mensaje :The process cannot access the file 'Presupuesto.pdf' because it is being used by another process.
+-------------------------------------------------------------------------
+
+Log Entry : 9:36:48 AM Monday, July 27, 2020
+ Referencia :GeneratePdfSuggestor
+ Mensaje :One or more errors occurred. (The HTTP status code of the response was not expected (500).
+
+Status: 500
+Response: 
+System.IO.IOException: The process cannot access the file 'Presupuesto.pdf' because it is being used by another process.
+   at Telefonica.SugeridorDePlanes.Api.Controllers.UtilitiesController.GeneratePdfFromHtml(ProposalPdf proposalPdf) in C:\GIT\ORT\Telefonica.SugeridorDePlanes.Api\Controllers\UtilitiesController.cs:line 67
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)
+   at Microsoft.AspNetCore.Mvc)
+-------------------------------------------------------------------------

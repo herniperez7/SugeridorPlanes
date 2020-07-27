@@ -21,11 +21,13 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
     {
         private readonly IClientLogic _clientService;
         private readonly IMapper _mapper;
+        private ILogLogic _logLogic;
 
-        public ClientsController(IClientLogic clientService, IMapper mapper)
+        public ClientsController(IClientLogic clientService, IMapper mapper, ILogLogic logLogic)
         {
             _clientService = clientService;
             _mapper = mapper;
+            _logLogic = logLogic;
         }
 
         
@@ -47,6 +49,7 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
             }
             catch (Exception ex)
             {
+                _logLogic.InsertLog(new Log("/api/getClients", ex.Message));
                 throw ex; 
             }           
 
