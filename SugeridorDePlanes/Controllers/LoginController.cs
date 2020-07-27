@@ -86,20 +86,44 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                  Reference = "login",
                  Messsage = ex.Message,
                  ExtraData = extraData
-                };            
+                };
 
-                _telefonicaService.InsertLog(log);
-                throw ex;
+                var logged = await _telefonicaService.InsertLog(log);
+
+                if(logged)
+                ViewBag.ErrorMessage = "Error al iniciar sesion";
+                else
+                    ViewBag.ErrorMessage = "-Error al iniciar sesion - Problemas en el log de errores";
+
+                return View();
             }
         }
 
         [HttpGet("Logout")]
         public async Task<ActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            BarerService.ClearToken();
-            HttpContext.Session.Clear();            
-            return this.RedirectToAction("Index", "Login");
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                BarerService.ClearToken();
+                HttpContext.Session.Clear();
+                return this.RedirectToAction("Index", "Login");
+            }
+            catch (Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "logout",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                var logged = await _telefonicaService.InsertLog(log);
+                ViewBag.ErrorMessage = "No se ha podido cerrar sesion";
+                return View();
+            }           
+            
         }
 
         private async void SetLoginCookies(string role)

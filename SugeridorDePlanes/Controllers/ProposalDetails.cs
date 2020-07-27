@@ -28,16 +28,33 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         public async Task<IActionResult> Index(Proposal proposal)
-        {    
-            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
-            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-            ViewData["suggestorLine"] = planMapped;
+        {
+            try
+            {
+                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+                var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                ViewData["suggestorLine"] = planMapped;
+                return View("../UserProposal/ProposalDetails", proposal);
+            }
+            catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "proDetailsIndex",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
 
-            return View("../UserProposal/ProposalDetails", proposal);
+                var logged = await _telefonicaApi.InsertLog(log);
+                ViewBag.ErrorMessage = "Error al cargar los detalles de la propuesta";
+                return View();
+            }
+            
         }
 
         [HttpGet]
-        public JsonResult GeneratePdf()
+        public async Task<JsonResult>  GeneratePdf()
         {
             try
             {
@@ -50,6 +67,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "PDFGenerator",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+
                 var dataError = new { status = "error", result = 404 };
                 return new JsonResult(dataError);
             }
@@ -103,6 +130,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "sendMail",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var dataError = new { status = "error", result = 404 };
                 return new JsonResult(dataError);
             }

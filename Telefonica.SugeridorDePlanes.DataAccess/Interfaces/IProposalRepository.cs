@@ -9,7 +9,9 @@ namespace Telefonica.SugeridorDePlanes.DataAccess.Interfaces
     public interface IProposalRepository
     {
         Task<List<ProposalDTO>> GetProposals();        
-        Task<List<ProposalDTO>> GetProposalsUsuario(string idUsuario);
+        Task<List<ProposalDTO>> GetProposalsByUserId(string userId);
+        Task<List<ProposalDTO>> GetProposalsByUserName(string userName);
+        Task<List<ProposalDTO>> GetProposalsClient(string document);
         Task<ProposalDTO> GetProposalByDoc(string titular);
         Task<ProposalDTO> GetProposal(string idProposal);
         Task<int> InsertProposal(TransactionProposalDTO proposaTransaction);

@@ -15,8 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Telefonica.SugeridorDePlanes.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
-   // [Authorize]
+    [Authorize]
     public class SuggestorController : Controller
     {
         private IUserManager UserManager;
@@ -36,55 +35,119 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         public async Task<IActionResult> Index()
         {
             var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
-            _telefonicaApi.EmptyEquipoPymesCurrentList();
-            var clientList = _telefonicaApi.GetCurrentClients();
-             ViewData["loggedUser"] = loggedUser;
+            if (loggedUser != null)
+            {
+                try
+                {
+                    _telefonicaApi.EmptyEquipoPymesCurrentList();
+                    var clientList = _telefonicaApi.GetCurrentClients();
+                    ViewData["loggedUser"] = loggedUser;
+                    ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
+                    var planesOfertList = _telefonicaApi.GetActualPlans();
+                    ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
+                    ViewData["planOfertList"] = planesOfertList;
+                    var planMapped = new List<SuggestorB2bModel>();
+                    if (clientList != null && clientList.Count > 0)
+                    {
+                        ViewData["clientList"] = clientList;
+                        List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientList[0].Documento);
+                        planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                        _telefonicaApi.UpdateCurrentClient(clientList[0].Documento);
+                        var indexes = _telefonicaApi.CalculateIndexes();
+                        ViewData["Indexes"] = indexes;
+                    }
+                    ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
+                    ViewData["mobileList"] = new List<DevicePymesModel>();
+                    ViewData["devicePayment"] = 0;
+                    ViewData["subsidy"] = 0;
+                    ViewData["payback"] = 0;
+                    ViewData["currentClient"] = "null";
+                    _telefonicaApi.SetCurrentProposal(null);
 
-            ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
-            var planesOfertList = _telefonicaApi.GetActualPlans();         
-            ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
-            ViewData["planOfertList"] = planesOfertList;
-            var planMapped = new List<SuggestorB2bModel>();
-            if (clientList != null && clientList.Count > 0)
-            {                
-                ViewData["clientList"] = clientList;
-                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(clientList[0].Documento);
-                planMapped =_mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-                _telefonicaApi.UpdateCurrentClient(clientList[0].Documento);
-                var indexes = _telefonicaApi.CalculateIndexes();
-                ViewData["Indexes"] = indexes;
+                    return View("../Home/Suggestor", planMapped);
+                }
+                catch(Exception ex){
+                    var extraData = new { step = "ex", from = "UI" };
+                    var log = new Log()
+                    {
+                        Reference = "suggestorIndex",
+                        Messsage = ex.Message,
+                        ExtraData = extraData
+                    };
+
+                    await _telefonicaApi.InsertLog(log);
+                    ViewBag.ErrorMessage = "Error al cargar los elemenos";
+                    var planMapped = new List<SuggestorB2bModel>();
+                    return View("../Home/Suggestor", planMapped);
+                }
+                
             }
-            ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-            ViewData["mobileList"] = new List<DevicePymesModel>();
-            ViewData["devicePayment"] = 0;
-            ViewData["subsidy"] = 0;
-            ViewData["payback"] = 0;
-            ViewData["currentClient"] = "null";
-            _telefonicaApi.SetCurrentProposal(null);
-
-            return View("../Home/Suggestor", planMapped);
+            else
+            {
+                ViewBag.ErrorMessage = "No se encuentra logueado";
+                return View("../Login/Login");
+            }
+            
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> ShowPlans(string rut)
         {
-            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
-            _telefonicaApi.EmptyEquipoPymesCurrentList();
-            var clientList = _telefonicaApi.GetCurrentClients();
-            _telefonicaApi.UpdateCurrentClient(rut);
-            var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                _telefonicaApi.EmptyEquipoPymesCurrentList();
+                var clientList = _telefonicaApi.GetCurrentClients();
+                var updated = _telefonicaApi.UpdateCurrentClient(rut);
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["selectedRut"] = rut;
+                ViewData["clientList"] = clientList;
+                if (updated)
+                {
+                    var plansList = await _telefonicaApi.GetSuggestedPlansByRut(rut);
+                    var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                    LoadPlansInfo();
+                    return View("../Home/Suggestor", planMapped);
+                }
+                else
+                {
+                    var plansList = _telefonicaApi.GetCurrentPlans();
+                    var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                    LoadPlansInfo();
+                    ViewBag.ErrorMessage = "El cliente no se encuentra";
+
+                    return View("../Home/Suggestor", planMapped);
+                }
+
+                
+            }
+            catch (Exception ex)
+            { 
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "showPlans",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                ViewBag.ErrorMessage = "Error al cargar planes";
+                return View("../Home/Suggestor", new List<SuggestorB2bModel>());
+            }
+            
+        }
+
+        private void LoadPlansInfo()
+        {
             var planesOfertList = _telefonicaApi.GetActualPlans();
-            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
             var indexes = _telefonicaApi.CalculateIndexes();
             ViewData["planDefList"] = _telefonicaApi.GetCurrentDefinitivePlans();
-            ViewData["selectedRut"] = rut;
             ViewData["planOfertList"] = planesOfertList;
             ViewData["Indexes"] = indexes;
-            ViewData["clientList"] = clientList;
             ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
             ViewData["mobileList"] = new List<DevicePymesModel>();
-            ViewData["loggedUser"] = loggedUser;
             ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
             ViewData["devicePayment"] = 0;
             ViewData["subsidy"] = 0;
@@ -92,22 +155,57 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             ViewData["currentClient"] = "null";
             _telefonicaApi.SetCurrentProposal(null);
 
-            return View("../Home/Suggestor", planMapped);
         }
 
-        public JsonResult CalculatePayback(string devicePayment)
-        {     
-            var payback = _telefonicaApi.GetPayback(devicePayment);
-            var data = new { status = "ok", result = payback };
-            return Json(data);
-        }
-
-        public JsonResult GetMovilInfo(string code)
+        public async Task<JsonResult> CalculatePayback(string devicePayment)
         {
-            var mobileList = _telefonicaApi.GetEquiposPymesList();
-            var mobile = mobileList.Where(x => x.Id == code).FirstOrDefault();
-            var data = new { status = "ok", result = mobile };
-            return Json(data);
+            try
+            {
+                var payback = _telefonicaApi.GetPayback(devicePayment);
+                var data = new { status = "ok", result = payback };
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "calculatePayback",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al calcular el payback" };
+                return Json(data);
+            }
+            
+        }
+
+        public async Task<JsonResult> GetMovilInfo(string code)
+        {
+            try
+            {
+                var mobileList = _telefonicaApi.GetEquiposPymesList();
+                var mobile = mobileList.Where(x => x.Id == code).FirstOrDefault();
+                var data = new { status = "ok", result = mobile };
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GetMovilInfo",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al obtener informacion del equipo" };
+                return Json(data);
+            }
+
         }
 
 
@@ -115,64 +213,151 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         /// Metodo para obtener la lista de moviles agregados a la Proposal
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetMovilList()
+        public async Task<JsonResult> GetMovilList()
         {
-            var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
-            _telefonicaApi.SetConfirmedEquiposPymes(mobileList); // se setean los equipos que van para la propuesta
-            var data = new { status = "ok", result = mobileList };
-            return Json(data);
+            try
+            {
+                var mobileList = _telefonicaApi.GetCurrentEquiposPymesList();
+                _telefonicaApi.SetConfirmedEquiposPymes(mobileList); // se setean los equipos que van para la propuesta
+                var data = new { status = "ok", result = mobileList };
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GetMovilList",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al obtener lista de equipos" };
+                return Json(data);
+            }
+            
         }
 
         [HttpPost]
-        public JsonResult AddMovilDevice(string code)
+        public async Task<JsonResult> AddMovilDevice(string code)
         {            
             if (!string.IsNullOrEmpty(code))
             {
-                _telefonicaApi.UpdateCurrentEquiposPymesList(code, false);
-                var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
-                return Json(data);
+                try
+                {
+                    _telefonicaApi.UpdateCurrentEquiposPymesList(code, false);
+                    var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
+                    return Json(data);
+                }
+                catch(Exception ex)
+                {
+                    var extraData = new { step = "ex", from = "UI" };
+                    var log = new Log()
+                    {
+                        Reference = "AddMovileDevice",
+                        Messsage = ex.Message,
+                        ExtraData = extraData
+                    };
+
+                    await _telefonicaApi.InsertLog(log);
+                    var data = new { status = "error", message = "Error al cargar equipo" };
+                    return Json(data);
+                }
+                
             }
             else
             {
-                var data = new { status = "error", result = 404 };
+                var data = new { status = "error", message = "El codigo del equipo se encuentra vacio"};
                 return Json(data);
             }
         }
 
         [HttpPost]
-        public JsonResult DeleteMovilFromList(string code)
+        public async Task<JsonResult> DeleteMovilFromList(string code)
         {          
             if (!string.IsNullOrEmpty(code))
             {
-                _telefonicaApi.UpdateCurrentEquiposPymesList(code, true);
-                var currentMobileList = _telefonicaApi.GetCurrentEquiposPymesList();
-                var data = new { status = "ok", result = currentMobileList };
-                return Json(data);
+                try
+                {
+                    _telefonicaApi.UpdateCurrentEquiposPymesList(code, true);
+                    var currentMobileList = _telefonicaApi.GetCurrentEquiposPymesList();
+                    var data = new { status = "ok", result = currentMobileList };
+                    return Json(data);
+                }catch (Exception ex)
+                {
+                    var extraData = new { step = "ex", from = "UI" };
+                    var log = new Log()
+                    {
+                        Reference = "DeleteMovilFromList",
+                        Messsage = ex.Message,
+                        ExtraData = extraData
+                    };
+
+                    await _telefonicaApi.InsertLog(log);
+                    var data = new { status = "ok", message = "Error al borrar equipo" };
+                    return Json(data);
+                }
+                
             }
             else
             {
-                var data = new { status = "error", result = 404 };
+                var data = new { status = "error", message = "El codigo del equipo no es correcto" };
                 return Json(data);
             }
         }
 
         [HttpPost]
-        public JsonResult UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
-        {            
-            _telefonicaApi.UpdateCurrentDefinitivePlans(updatePlan);
-            var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
-            return new JsonResult(defPlansList);
+        public async Task<JsonResult> UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
+        {
+            try
+            {
+                _telefonicaApi.UpdateCurrentDefinitivePlans(updatePlan);
+                var defPlansList = _telefonicaApi.GetCurrentDefinitivePlans();
+                return new JsonResult(defPlansList);
+            }catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "UpdateDefinitivePlan",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al actualizar plan definitivo" };
+                return Json(data);
+            }
+            
         }
 
-        public JsonResult CalculateIndexesResult(string rut)
+        public async Task<JsonResult> CalculateIndexesResult(string rut)
         {
-            var gapModel = _telefonicaApi.CalculateIndexes();
-            var data = new { status = "ok", result = gapModel };
-            return new JsonResult(data);
+            try
+            {
+                var gapModel = _telefonicaApi.CalculateIndexes();
+                var data = new { status = "ok", result = gapModel };
+                return new JsonResult(data);
+            }catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "CalculateIndexesResult",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al calcular indexes" };
+                return new JsonResult(data);
+            }
+           
         }
 
         [HttpGet]
-        public JsonResult GeneratePdf(string devicePayment)
+        public async Task<JsonResult> GeneratePdf(string devicePayment)
         {
             try
             {
@@ -181,19 +366,37 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var data = new { status = "ok", result = base64String };
                 return new JsonResult(data);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                var dataError = new { status = "error", result = 404 };
-                return new JsonResult(dataError);
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GeneratePdfSuggestor",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al generar el pdf" };
+                return new JsonResult(data);
             }
-           
+            
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateProposal(string devicePayment)
+        public async Task<JsonResult> GenerateProposal(string devicePayment)
         {
             var resultProposal = await GenerateProposalData(devicePayment);
-            return RedirectToAction("Index", "UserProposal");
+            if (resultProposal)
+            {
+                var data = new { status = "ok"};
+                return new JsonResult(data);
+            }
+            else
+            {
+                var data = new { status = "error", message = "Error al generar propuesta" };
+                return new JsonResult(data);
+            }
             
         }
 
@@ -210,6 +413,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GenerateProposalSuggestor",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 return false;
             }
         }
@@ -232,8 +444,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
-                var dataError = new { status = "error", result = 404 };
-                return new JsonResult(dataError);
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "SaveProposal",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message = "Error al actualizar propuesta" };
+                return new JsonResult(data);
             }
         }       
 
@@ -283,8 +504,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
-                var dataError = new { status = "error", result = 404 };
-                return new JsonResult(dataError);
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "SendMailSug",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var data = new { status = "error", message= "Error al enviar email" };
+                return new JsonResult(data);
             }
         }
     }

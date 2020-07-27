@@ -3,6 +3,8 @@
     top:3px;
     right:10px;
     width:200px;
+    display:none;
+    z-index:9999999;
 }
 .toast-header {
     background: #f44336;
@@ -22,6 +24,12 @@
 }
 
 @media (max-width: 768px) {
+    .text-sm-left{
+        text-align:left!important;
+    }
+    fieldset {
+        margin: 10px 15px !important;
+    }
 }
 
 @media (min-width: 992px) {

@@ -3,9 +3,7 @@
 //     Generated using the NSwag toolchain v13.2.2.0 (NJsonSchema v10.1.4.0 (Newtonsoft.Json v12.0.0.0)) (http://NSwag.org)
 // </auto-generated>
 //----------------------
-
 using Telefonica.SugeridorDePlanes.Code;
-
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
 #pragma warning disable 472 // Disable "CS0472 The result of the expression is always 'false' since a value of type 'Int32' is never equal to 'null' of type 'Int32?'
@@ -15,231 +13,258 @@ using Telefonica.SugeridorDePlanes.Code;
 namespace Telefonica.SugeridorDePlanes
 {
     using System = global::System;
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.2.0 (NJsonSchema v10.1.4.0 (Newtonsoft.Json v12.0.0.0))")]
     public partial interface IClient
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<LoginResult> AuthenticationUserAsync(string userName, string password);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<LoginResult> AuthenticationUserAsync(string userName, string password, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorClient>> GetClientsAsync();
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorClient>> GetClientsAsync(System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task InsertLogAsync(Log body);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task InsertLogAsync(Log body, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsAsync();
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsAsync(System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string idProposal);
-    
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string userId);
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string idProposal, System.Threading.CancellationToken cancellationToken);
-    
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string userId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsByUserNameAsync(string userName);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsByUserNameAsync(string userName, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsClientAsync(string document);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsClientAsync(string document, System.Threading.CancellationToken cancellationToken);
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Proposal> GetProposalAsync(string idProposal);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Proposal> GetProposalAsync(string idProposal, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Proposal> AddProposalAsync(ProposalData body);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Proposal> AddProposalAsync(ProposalData body, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task UpdateTotalProposalAsync(ProposalData body);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task UpdateTotalProposalAsync(ProposalData body, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task DeleteProposalAsync(int? proposalId);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task DeleteProposalAsync(int? proposalId, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansAsync();
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansAsync(System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansByRutAsync(string rut);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansByRutAsync(string rut, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansByClientNumberAsync(string clientNumber);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansByClientNumberAsync(string clientNumber, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OfertPlan>> GetActualPlansAsync();
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OfertPlan>> GetActualPlansAsync(System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<OfertPlan> GetPlanByCodeAsync(string planCode);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<OfertPlan> GetPlanByCodeAsync(string planCode, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DevicePymes>> GetMobileDevicesAsync();
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DevicePymes>> GetMobileDevicesAsync(System.Threading.CancellationToken cancellationToken);
-    
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetUsersAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetUsersAsync(System.Threading.CancellationToken cancellationToken);
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<User> GetUserByEmailAsync(string userEmail);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<User> GetUserByEmailAsync(string userEmail, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<User> GetUserByUserNameAsync(string userName);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<User> GetUserByUserNameAsync(string userName, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<User> GetUserByIdAsync(string userId);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<User> GetUserByIdAsync(string userId, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task SendMailAsync(Email body);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task SendMailAsync(Email body, System.Threading.CancellationToken cancellationToken);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<byte[]> GeneratePdfAsync(ProposalPdf body);
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<byte[]> GeneratePdfAsync(ProposalPdf body, System.Threading.CancellationToken cancellationToken);
-    
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.2.0 (NJsonSchema v10.1.4.0 (Newtonsoft.Json v12.0.0.0))")]
     public partial class Client : IClient
     {
         private string _baseUrl = "";
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
-    
+
         public Client(string baseUrl)
         {
-            BaseUrl = baseUrl; 
+            BaseUrl = baseUrl;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
         }
-    
+
         private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
         {
             var settings = new Newtonsoft.Json.JsonSerializerSettings();
             UpdateJsonSerializerSettings(settings);
             return settings;
         }
-    
-        public string BaseUrl 
+
+        public string BaseUrl
         {
             get { return _baseUrl; }
             set { _baseUrl = value; }
         }
-    
+
         protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
-    
+
         partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<LoginResult> AuthenticationUserAsync(string userName, string password)
         {
             return AuthenticationUserAsync(userName, password, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -247,16 +272,16 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authentication/authenticationUser?");
-            if (userName != null) 
+            if (userName != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("userName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (password != null) 
+            if (password != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("password") + "=").Append(System.Uri.EscapeDataString(ConvertToString(password, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -265,12 +290,12 @@ namespace Telefonica.SugeridorDePlanes
                     request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "text/plain");
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -280,11 +305,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<LoginResult>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -292,10 +317,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(LoginResult);
                     }
                     finally
@@ -311,14 +336,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorClient>> GetClientsAsync()
         {
             return GetClientsAsync(System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -326,22 +351,21 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Clients/getClients");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     BarerService.SetBarerToken(client_);
-
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -351,11 +375,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<SuggestorClient>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -363,10 +387,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<SuggestorClient>);
                     }
                     finally
@@ -382,14 +406,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task InsertLogAsync(Log body)
         {
             return InsertLogAsync(body, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -397,7 +421,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Log/insertLog");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -407,12 +431,12 @@ namespace Telefonica.SugeridorDePlanes
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -422,18 +446,18 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             return;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
                     }
@@ -450,14 +474,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsAsync()
         {
             return GetProposalsAsync(System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -465,7 +489,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/getProposals");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -474,12 +498,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -489,11 +513,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Proposal>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -501,10 +525,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<Proposal>);
                     }
                     finally
@@ -520,27 +544,27 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string idProposal)
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string userId)
         {
-            return GetProposalsUsuarioAsync(idProposal, System.Threading.CancellationToken.None);
+            return GetProposalsUsuarioAsync(userId, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string idProposal, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsUsuarioAsync(string userId, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/getProposalsUsuario?");
-            if (idProposal != null) 
+            if (userId != null)
             {
-                urlBuilder_.Append(System.Uri.EscapeDataString("idProposal") + "=").Append(System.Uri.EscapeDataString(ConvertToString(idProposal, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -549,12 +573,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -564,11 +588,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Proposal>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -576,10 +600,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<Proposal>);
                     }
                     finally
@@ -595,14 +619,164 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsByUserNameAsync(string userName)
+        {
+            return GetProposalsByUserNameAsync(userName, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsByUserNameAsync(string userName, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/getProposalsByUserName?");
+            if (userName != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("userName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
+
+            var client_ = new System.Net.Http.HttpClient();
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    BarerService.SetBarerToken(client_);
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = ((int)response_.StatusCode).ToString();
+                        if (status_ == "200")
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Proposal>>(response_, headers_).ConfigureAwait(false);
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ != "200" && status_ != "204")
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
+                        }
+
+                        return default(System.Collections.Generic.ICollection<Proposal>);
+                    }
+                    finally
+                    {
+                        if (response_ != null)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (client_ != null)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsClientAsync(string document)
+        {
+            return GetProposalsClientAsync(document, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Proposal>> GetProposalsClientAsync(string document, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/getProposalsClient?");
+            if (document != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("document") + "=").Append(System.Uri.EscapeDataString(ConvertToString(document, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
+
+            var client_ = new System.Net.Http.HttpClient();
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    BarerService.SetBarerToken(client_);
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = ((int)response_.StatusCode).ToString();
+                        if (status_ == "200")
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Proposal>>(response_, headers_).ConfigureAwait(false);
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ != "200" && status_ != "204")
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
+                        }
+
+                        return default(System.Collections.Generic.ICollection<Proposal>);
+                    }
+                    finally
+                    {
+                        if (response_ != null)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (client_ != null)
+                    client_.Dispose();
+            }
+        }
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<Proposal> GetProposalAsync(string idProposal)
         {
             return GetProposalAsync(idProposal, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -610,12 +784,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/getProposal?");
-            if (idProposal != null) 
+            if (idProposal != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("idProposal") + "=").Append(System.Uri.EscapeDataString(ConvertToString(idProposal, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -624,12 +798,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -639,11 +813,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Proposal>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -651,10 +825,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(Proposal);
                     }
                     finally
@@ -670,14 +844,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<Proposal> AddProposalAsync(ProposalData body)
         {
             return AddProposalAsync(body, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -685,7 +859,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/addProposal");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -697,12 +871,12 @@ namespace Telefonica.SugeridorDePlanes
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -712,11 +886,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Proposal>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -724,10 +898,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(Proposal);
                     }
                     finally
@@ -743,14 +917,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task UpdateTotalProposalAsync(ProposalData body)
         {
             return UpdateTotalProposalAsync(body, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -758,7 +932,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/updateTotalProposal");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -769,12 +943,12 @@ namespace Telefonica.SugeridorDePlanes
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -784,18 +958,18 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             return;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
                     }
@@ -812,14 +986,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task DeleteProposalAsync(int? proposalId)
         {
             return DeleteProposalAsync(proposalId, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -827,12 +1001,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Proposal/deleteProposal?");
-            if (proposalId != null) 
+            if (proposalId != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("proposalId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(proposalId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -841,12 +1015,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -856,18 +1030,18 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             return;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
                     }
@@ -884,14 +1058,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansAsync()
         {
             return GetPlansAsync(System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -899,7 +1073,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getPlans");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -908,12 +1082,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -923,11 +1097,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<SuggestorB2b>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -935,10 +1109,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<SuggestorB2b>);
                     }
                     finally
@@ -954,14 +1128,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansByRutAsync(string rut)
         {
             return GetPlansByRutAsync(rut, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -969,12 +1143,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getPlansByRut?");
-            if (rut != null) 
+            if (rut != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("rut") + "=").Append(System.Uri.EscapeDataString(ConvertToString(rut, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -983,12 +1157,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -998,11 +1172,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<SuggestorB2b>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1010,10 +1184,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<SuggestorB2b>);
                     }
                     finally
@@ -1029,14 +1203,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<SuggestorB2b>> GetPlansByClientNumberAsync(string clientNumber)
         {
             return GetPlansByClientNumberAsync(clientNumber, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1044,12 +1218,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getPlansByClientNumber?");
-            if (clientNumber != null) 
+            if (clientNumber != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("clientNumber") + "=").Append(System.Uri.EscapeDataString(ConvertToString(clientNumber, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1058,12 +1232,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1073,11 +1247,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<SuggestorB2b>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1085,10 +1259,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<SuggestorB2b>);
                     }
                     finally
@@ -1104,14 +1278,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OfertPlan>> GetActualPlansAsync()
         {
             return GetActualPlansAsync(System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1119,7 +1293,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getActualPlans");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1128,12 +1302,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1143,11 +1317,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<OfertPlan>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1155,10 +1329,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<OfertPlan>);
                     }
                     finally
@@ -1174,14 +1348,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<OfertPlan> GetPlanByCodeAsync(string planCode)
         {
             return GetPlanByCodeAsync(planCode, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1189,12 +1363,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getPlanByCode?");
-            if (planCode != null) 
+            if (planCode != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("planCode") + "=").Append(System.Uri.EscapeDataString(ConvertToString(planCode, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1203,12 +1377,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1218,11 +1392,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<OfertPlan>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1230,10 +1404,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(OfertPlan);
                     }
                     finally
@@ -1249,14 +1423,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DevicePymes>> GetMobileDevicesAsync()
         {
             return GetMobileDevicesAsync(System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1264,7 +1438,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Suggestor/getMobileDevices");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1273,12 +1447,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1288,11 +1462,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<DevicePymes>>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1300,10 +1474,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(System.Collections.Generic.ICollection<DevicePymes>);
                     }
                     finally
@@ -1319,14 +1493,84 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetUsersAsync()
+        {
+            return GetUsersAsync(System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetUsersAsync(System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/getUsers");
+
+            var client_ = new System.Net.Http.HttpClient();
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    BarerService.SetBarerToken(client_);
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = ((int)response_.StatusCode).ToString();
+                        if (status_ == "200")
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<User>>(response_, headers_).ConfigureAwait(false);
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ != "200" && status_ != "204")
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
+                        }
+
+                        return default(System.Collections.Generic.ICollection<User>);
+                    }
+                    finally
+                    {
+                        if (response_ != null)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (client_ != null)
+                    client_.Dispose();
+            }
+        }
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<User> GetUserByEmailAsync(string userEmail)
         {
             return GetUserByEmailAsync(userEmail, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1334,12 +1578,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/getUserByEmail?");
-            if (userEmail != null) 
+            if (userEmail != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("userEmail") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userEmail, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1348,12 +1592,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1363,11 +1607,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<User>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1375,10 +1619,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(User);
                     }
                     finally
@@ -1394,14 +1638,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<User> GetUserByUserNameAsync(string userName)
         {
             return GetUserByUserNameAsync(userName, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1409,12 +1653,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/getUserByUserName?");
-            if (userName != null) 
+            if (userName != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("userName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1423,12 +1667,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1438,11 +1682,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<User>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1450,10 +1694,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(User);
                     }
                     finally
@@ -1469,14 +1713,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<User> GetUserByIdAsync(string userId)
         {
             return GetUserByIdAsync(userId, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1484,12 +1728,12 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/getUserById?");
-            if (userId != null) 
+            if (userId != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1498,12 +1742,12 @@ namespace Telefonica.SugeridorDePlanes
                     BarerService.SetBarerToken(client_);
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1513,11 +1757,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<User>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1525,10 +1769,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(User);
                     }
                     finally
@@ -1544,14 +1788,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task SendMailAsync(Email body)
         {
             return SendMailAsync(body, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1559,7 +1803,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Utilities/sendMail");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1570,12 +1814,12 @@ namespace Telefonica.SugeridorDePlanes
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1586,18 +1830,18 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             return;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
                     }
@@ -1614,14 +1858,14 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<byte[]> GeneratePdfAsync(ProposalPdf body)
         {
             return GeneratePdfAsync(body, System.Threading.CancellationToken.None);
         }
-    
+
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1629,7 +1873,7 @@ namespace Telefonica.SugeridorDePlanes
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Utilities/generatePdf");
-    
+
             var client_ = new System.Net.Http.HttpClient();
             try
             {
@@ -1641,12 +1885,12 @@ namespace Telefonica.SugeridorDePlanes
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-    
+
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
                     PrepareRequest(client_, request_, url_);
-    
+
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     try
                     {
@@ -1656,11 +1900,11 @@ namespace Telefonica.SugeridorDePlanes
                             foreach (var item_ in response_.Content.Headers)
                                 headers_[item_.Key] = item_.Value;
                         }
-    
+
                         ProcessResponse(client_, response_);
-    
+
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200") 
+                        if (status_ == "200")
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<byte[]>(response_, headers_).ConfigureAwait(false);
                             return objectResponse_.Object;
@@ -1668,10 +1912,10 @@ namespace Telefonica.SugeridorDePlanes
                         else
                         if (status_ != "200" && status_ != "204")
                         {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
-            
+
                         return default(byte[]);
                     }
                     finally
@@ -1687,7 +1931,7 @@ namespace Telefonica.SugeridorDePlanes
                     client_.Dispose();
             }
         }
-    
+
         protected struct ObjectResponseResult<T>
         {
             public ObjectResponseResult(T responseObject, string responseText)
@@ -1695,21 +1939,21 @@ namespace Telefonica.SugeridorDePlanes
                 this.Object = responseObject;
                 this.Text = responseText;
             }
-    
+
             public T Object { get; }
-    
+
             public string Text { get; }
         }
-    
+
         public bool ReadResponseAsString { get; set; }
-        
+
         protected virtual async System.Threading.Tasks.Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(System.Net.Http.HttpResponseMessage response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers)
         {
             if (response == null || response.Content == null)
             {
                 return new ObjectResponseResult<T>(default(T), string.Empty);
             }
-        
+
             if (ReadResponseAsString)
             {
                 var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -1744,7 +1988,7 @@ namespace Telefonica.SugeridorDePlanes
                 }
             }
         }
-    
+
         private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value is System.Enum)
@@ -1755,7 +1999,7 @@ namespace Telefonica.SugeridorDePlanes
                     var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
                     if (field != null)
                     {
-                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
+                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute))
                             as System.Runtime.Serialization.EnumMemberAttribute;
                         if (attribute != null)
                         {
@@ -1764,561 +2008,562 @@ namespace Telefonica.SugeridorDePlanes
                     }
                 }
             }
-            else if (value is bool) {
+            else if (value is bool)
+            {
                 return System.Convert.ToString(value, cultureInfo).ToLowerInvariant();
             }
             else if (value is byte[])
             {
-                return System.Convert.ToBase64String((byte[]) value);
+                return System.Convert.ToBase64String((byte[])value);
             }
             else if (value != null && value.GetType().IsArray)
             {
-                var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
+                var array = System.Linq.Enumerable.OfType<object>((System.Array)value);
                 return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
             }
-        
+
             return System.Convert.ToString(value, cultureInfo);
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class LoginResult 
+    public partial class LoginResult
     {
         [Newtonsoft.Json.JsonProperty("isValid", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsValid { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("jwt_token", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Jwt_token { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class SuggestorClient 
+    public partial class SuggestorClient
     {
         [Newtonsoft.Json.JsonProperty("custAcctNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CustAcctNumber { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("titular", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Titular { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("documento", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Documento { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tipoDocumento", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string TipoDocumento { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class Log 
+    public partial class Log
     {
         [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Reference { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("messsage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Messsage { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("extraData", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public object ExtraData { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class OfertPlan 
+    public partial class OfertPlan
     {
         [Newtonsoft.Json.JsonProperty("plan", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Plan { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bono", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long Bono { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("min_off", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Min_off { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("min_on", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Min_on { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("wapP_gratis", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string WapP_gratis { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("roaming", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Roaming { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bono_", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long Bono_ { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bono_r", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long Bono_r { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmM_iva_inc", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double TmM_iva_inc { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmM_s_iva", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double TmM_s_iva { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class ProposalLine 
+    public partial class ProposalLine
     {
         [Newtonsoft.Json.JsonProperty("numero", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Numero { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("plan", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public OfertPlan Plan { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class DevicePymes 
+    public partial class DevicePymes
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Id { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("codigoEquipo", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CodigoEquipo { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("marca", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Marca { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("nombre", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Nombre { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("precioSinIva", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double PrecioSinIva { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("stock", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int Stock { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class Proposal 
+    public partial class Proposal
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int Id { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("rutCliente", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RutCliente { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("clientName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ClientName { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("lineas", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<ProposalLine> Lineas { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("equipos", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<DevicePymes> Equipos { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("devicePayment", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double DevicePayment { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("payback", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Payback { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("subsidio", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Subsidio { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("estado", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Estado { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("idUsuario", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string IdUsuario { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("nombreUsuario", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string NombreUsuario { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("createdDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTime CreatedDate { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("activa", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool Activa { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class SuggestorB2b 
+    public partial class SuggestorB2b
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int Id { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("rut", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Rut { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("caNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CaNumber { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("qLineasRut", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? QLineasRut { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("movil", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? Movil { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("codPlan", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CodPlan { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? Tmm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmmSinIva", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? TmmSinIva { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("excedentesLocal", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ExcedentesLocal { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("cantidadPasaportes", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? CantidadPasaportes { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("prestacion1", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Prestacion1 { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("precioPrestacion1SinIva", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? PrecioPrestacion1SinIva { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("ivaPrestacion1", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? IvaPrestacion1 { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("prestacion2", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Prestacion2 { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("precioPrestacion2SinIva", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? PrecioPrestacion2SinIva { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("ivaPrestacion2", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? IvaPrestacion2 { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmmPrestacionSinIva", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? TmmPrestacionSinIva { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmmPrestacionIvaInc", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? TmmPrestacionIvaInc { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmmPrestacion", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? TmmPrestacion { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bonoPrestacionCantidad", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long? BonoPrestacionCantidad { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bonoPlanCantidad", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long? BonoPlanCantidad { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bonoDatosTotal", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long? BonoDatosTotal { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bonoDatosTotalProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long? BonoDatosTotalProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("minutosVozOffProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? MinutosVozOffProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("mbTotal", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? MbTotal { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("mbTotalProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? MbTotalProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("excedentesRoamingDatos", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ExcedentesRoamingDatos { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("excedentesRoamingSms", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ExcedentesRoamingSms { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("excedentesRoamingVoz", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ExcedentesRoamingVoz { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("excedentesRoaming", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ExcedentesRoaming { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("roamer", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Roamer { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("costoPasaportes", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? CostoPasaportes { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("montoDentroCreditoProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? MontoDentroCreditoProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("arpuProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ArpuProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("arpuMax", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ArpuMax { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("fechaArpuMax", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FechaArpuMax { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("arpuRutMax", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ArpuRutMax { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("fechaArpuRutMax", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FechaArpuRutMax { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("arpuRoamerProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? ArpuRoamerProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("roamerProm", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RoamerProm { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("planSugerido", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string PlanSugerido { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("planSugeridoRetencion", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string PlanSugeridoRetencion { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bonoPlanSugerido", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? BonoPlanSugerido { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmmPlanSugerido", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? TmmPlanSugerido { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("bonoPlanRetencion", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? BonoPlanRetencion { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("tmmPlanRetencion", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double? TmmPlanRetencion { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("roamingPlanSugerido", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RoamingPlanSugerido { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("roamingPlanRetencion", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RoamingPlanRetencion { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class ProposalData 
+    public partial class ProposalData
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int Id { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("mobileDevicesList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<DevicePymes> MobileDevicesList { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("client", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public SuggestorClient Client { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("suggestorList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<SuggestorB2b> SuggestorList { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("planesDefList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<OfertPlan> PlanesDefList { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("devicePayment", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double DevicePayment { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("subsidio", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Subsidio { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("payback", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Payback { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("finalizada", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool Finalizada { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("idUsuario", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int IdUsuario { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("activa", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool Activa { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class UserRole 
+    public partial class UserRole
     {
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class User 
+    public partial class User
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Id { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("nombreCompleto", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string NombreCompleto { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Email { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("rolString", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RolString { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("rol", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public UserRole Rol { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class Email 
+    public partial class Email
     {
         [Newtonsoft.Json.JsonProperty("fromDisplayName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FromDisplayName { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("fromEmailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FromEmailAddress { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("toName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ToName { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("toEmailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ToEmailAddress { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("subject", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Subject { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Message { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("array", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public byte[] Array { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class ProposalPdf 
+    public partial class ProposalPdf
     {
         [Newtonsoft.Json.JsonProperty("mobileList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<DevicePymes> MobileList { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("planList", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<OfertPlan> PlanList { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("companyName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CompanyName { get; set; }
-    
+
         [Newtonsoft.Json.JsonProperty("devicePayment", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double DevicePayment { get; set; }
-    
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
+
         [Newtonsoft.Json.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
             set { _additionalProperties = value; }
         }
-    
-    
+
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.2.0 (NJsonSchema v10.1.4.0 (Newtonsoft.Json v12.0.0.0))")]
@@ -2330,11 +2575,11 @@ namespace Telefonica.SugeridorDePlanes
 
         public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException) 
+        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
             : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + response.Substring(0, response.Length >= 512 ? 512 : response.Length), innerException)
         {
             StatusCode = statusCode;
-            Response = response; 
+            Response = response;
             Headers = headers;
         }
 
@@ -2349,7 +2594,7 @@ namespace Telefonica.SugeridorDePlanes
     {
         public TResult Result { get; private set; }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException) 
+        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;
@@ -2360,6 +2605,6 @@ namespace Telefonica.SugeridorDePlanes
 
 #pragma warning restore 1591
 #pragma warning restore 1573
-#pragma warning restore  472
-#pragma warning restore  114
-#pragma warning restore  108
+#pragma warning restore 472
+#pragma warning restore 114
+#pragma warning restore 108

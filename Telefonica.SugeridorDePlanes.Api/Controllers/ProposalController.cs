@@ -50,11 +50,11 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
         }
 
         [HttpGet("getProposalsUsuario")]
-        public async Task<ActionResult<List<Proposal>>> GetProposalsUsuario(string idProposal)
+        public async Task<ActionResult<List<Proposal>>> GetProposalsUser(string userId)
         {
             try
             {
-                var ProposalsDTO = await _ProposalLogic.GetProposalsUsuario(idProposal);
+                var ProposalsDTO = await _ProposalLogic.GetProposalsByUserId(userId);
                 List<Proposal> Proposals = await getProposalWithData(ProposalsDTO);
 
 
@@ -65,6 +65,42 @@ namespace Telefonica.SugeridorDePlanes.Api.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet("getProposalsByUserName")]
+        public async Task<ActionResult<List<Proposal>>> GetProposalsByUserName(string userName)
+        {
+            try
+            {
+                var ProposalsDTO = await _ProposalLogic.GetProposalsByUserName(userName);
+                List<Proposal> Proposals = await getProposalWithData(ProposalsDTO);
+
+
+                return Proposals;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("getProposalsClient")]
+        public async Task<ActionResult<List<Proposal>>> GetProposalsClient(string document)
+        {
+            try
+            {
+                var ProposalsDTO = await _ProposalLogic.GetProposalsClient(document);
+                List<Proposal> Proposals = await getProposalWithData(ProposalsDTO);
+
+
+                return Proposals;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+       
 
         [HttpGet("getProposal")]
         public async Task<ActionResult<Proposal>> GetProposal(string idProposal)

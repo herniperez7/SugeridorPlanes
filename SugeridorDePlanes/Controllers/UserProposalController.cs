@@ -32,95 +32,274 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
-            var userRole = HttpContext.Session.GetString("UserRole");
-            ViewData["loggedUser"] = loggedUser;
-            ViewData["userRole"] = userRole;
-            _telefonicaApi.SetCurrentProposal(null);
-            if(userRole.Equals(Enum.GetName(typeof(Dto.Dto.UserRole), Dto.Dto.UserRole.Administrator)))
+            try
             {
-                var proposals = await _telefonicaApi.GetProposals();
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                var clientList = _telefonicaApi.GetCurrentClients();
+                ViewData["clientList"] = clientList;
+                var userList = await _telefonicaApi.GetUsers();
+                ViewData["userList"] = userList;
+                _telefonicaApi.SetCurrentProposal(null);
+                if (userRole.Equals(Enum.GetName(typeof(Dto.Dto.UserRole), Dto.Dto.UserRole.Administrator)))
+                {
+                    var proposals = await _telefonicaApi.GetProposals();
+                    return View("../UserProposal/ProposalList", proposals);
+                }
+                else
+                {
+                    var proposals = await _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
+                    return View("../UserProposal/ProposalList", proposals);
+                }
+            }catch(Exception ex){
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "UserIndex",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var proposals = new List<Proposal>();
+                ViewBag.ErrorMessage = "Error al cargar lista de propuestas";
                 return View("../UserProposal/ProposalList", proposals);
             }
-            else
-            {
-                var proposals = await _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
-                return View("../UserProposal/ProposalList", proposals);
-            }            
+            
         }
+        [HttpPost]
+        public async Task<IActionResult> FilterProposalsByUser(string userId)
+        {
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                var clientList = _telefonicaApi.GetCurrentClients();
+                ViewData["clientList"] = clientList;
+                var userList = await _telefonicaApi.GetUsers();
+                ViewData["userList"] = userList;
+                _telefonicaApi.SetCurrentProposal(null);
+                var proposals = await _telefonicaApi.GetProposalsByUser(userId);
+                return View("../UserProposal/ProposalList", proposals);
+            }
+             catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "FilterProposalsByUser",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var proposals = new List<Proposal>();
+                ViewBag.ErrorMessage = "Error filtrando lista de propuestas";
+                return View("../UserProposal/ProposalList", proposals);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterProposalsByUserName(string userName)
+        {
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                var clientList = _telefonicaApi.GetCurrentClients();
+                ViewData["clientList"] = clientList;
+                var userList = await _telefonicaApi.GetUsers();
+                ViewData["userList"] = userList;
+                _telefonicaApi.SetCurrentProposal(null);
+                var proposals = await _telefonicaApi.GetProposalsByUserName(userName);
+                return View("../UserProposal/ProposalList", proposals);
+            }
+            catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "FilterProposalsByUserName",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var proposals = new List<Proposal>();
+                ViewBag.ErrorMessage = "Error filtrando lista de propuestas";
+                return View("../UserProposal/ProposalList", proposals);
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterProposalsByClient(string document)
+        {
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                var clientList = _telefonicaApi.GetCurrentClients();
+                ViewData["clientList"] = clientList;
+                var userList = await _telefonicaApi.GetUsers();
+                ViewData["userList"] = userList;
+                _telefonicaApi.SetCurrentProposal(null);
+                var proposals = await _telefonicaApi.GetProposalsByClient(document, loggedUser.Id.ToString());
+                return View("../UserProposal/ProposalList", proposals);
+            }
+            catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "FilterProposalsByClient",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var proposals = new List<Proposal>();
+                ViewBag.ErrorMessage = "Error filtrando lista de propuestas";
+                return View("../UserProposal/ProposalList", proposals);
+            }
+
+        }
+
 
         public async Task<IActionResult> OpenProposalToEdit(Proposal proposal) 
         {
-            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
-            var userRole = HttpContext.Session.GetString("UserRole");
-            ViewData["loggedUser"] = loggedUser;
-            ViewData["userRole"] = userRole;
-            var clientList = _telefonicaApi.GetCurrentClients();            
-            ViewData["clientList"] = clientList;
-            var planesOfertList = _telefonicaApi.GetActualPlans();
-            ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
-     
-            ViewData["planOfertList"] = planesOfertList;
-            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
-            _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
-            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-            var planDefList = PopulateDefinitivePlanList(proposal);
-            ViewData["loggedUser"] = loggedUser;
-            ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
-            _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
-            ViewData["planDefList"] = planDefList;
-            var indexes = _telefonicaApi.CalculateIndexes();
-            ViewData["Indexes"] = indexes;
-            var mobilePymesList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);            
-            ViewData["mobileList"] = mobilePymesList;
-            ViewData["devicePayment"] = proposal.DevicePayment;
-            ViewData["subsidy"] = proposal.Subsidio;
-            ViewData["payback"] = proposal.Payback;
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                var clientList = _telefonicaApi.GetCurrentClients();
+                ViewData["clientList"] = clientList;
+                var planesOfertList = _telefonicaApi.GetActualPlans();
+                ViewData["movileDevices"] = _telefonicaApi.GetEquiposPymesList();
 
-           // ViewBag.Client = proposal.RutCliente;
-            ViewData["currentClient"] = proposal.RutCliente;
+                ViewData["planOfertList"] = planesOfertList;
+                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+                _telefonicaApi.UpdateCurrentClient(proposal.RutCliente);
+                var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                var planDefList = PopulateDefinitivePlanList(proposal);
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = HttpContext.Session.GetString("UserRole");
+                _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
+                ViewData["planDefList"] = planDefList;
+                var indexes = _telefonicaApi.CalculateIndexes();
+                ViewData["Indexes"] = indexes;
+                var mobilePymesList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);
+                ViewData["mobileList"] = mobilePymesList;
+                ViewData["devicePayment"] = proposal.DevicePayment;
+                ViewData["subsidy"] = proposal.Subsidio;
+                ViewData["payback"] = proposal.Payback;
 
-            _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
-            _telefonicaApi.SetConfirmedEquiposPymes(mobilePymesList);
+                // ViewBag.Client = proposal.RutCliente;
+                ViewData["currentClient"] = proposal.RutCliente;
 
-            return View("../Home/Suggestor", planMapped);           
+                _telefonicaApi.SetCurrentEquiposPymesList(mobilePymesList);
+                _telefonicaApi.SetConfirmedEquiposPymes(mobilePymesList);
+
+                return View("../Home/Suggestor", planMapped);
+            }
+            catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "SendMailSug",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var planMapped = new List<SuggestorB2bModel>();
+                ViewBag.ErrorMessage = "Error al cargar detalles de la propuesta";
+                return View("../Home/Suggestor", planMapped);
+            }
+                      
         }
 
 
         public async Task<IActionResult> OpenProposalFinished(Proposal proposal)
         {
-            var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
-            var userRole = HttpContext.Session.GetString("UserRole");
-            ViewData["loggedUser"] = loggedUser;
-            ViewData["userRole"] = userRole;
-            var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
-            _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
-            var mobileList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);
-            _telefonicaApi.SetConfirmedEquiposPymes(mobileList);
-            ViewData["planDefList"] = planDefList;
-            List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
-            var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
-            ViewData["suggestorLines"] = planMapped;
-            ViewData["companyName"] = proposal.ClientName;
+            try
+            {
+                var loggedUser = JsonConvert.DeserializeObject<TelefonicaModel.User>(HttpContext.Session.GetString("LoggedUser"));
+                var userRole = HttpContext.Session.GetString("UserRole");
+                ViewData["loggedUser"] = loggedUser;
+                ViewData["userRole"] = userRole;
+                var planDefList = _telefonicaApi.PopulateDefinitivePlanList(proposal);
+                _telefonicaApi.SetCurrentDefinitivePlans(planDefList);
+                var mobileList = _mapper.Map<List<DevicePymesModel>>(proposal.Equipos);
+                _telefonicaApi.SetConfirmedEquiposPymes(mobileList);
+                ViewData["planDefList"] = planDefList;
+                List<SuggestorB2b> plansList = await _telefonicaApi.GetSuggestedPlansByRut(proposal.RutCliente);
+                var planMapped = _mapper.Map<List<SuggestorB2b>, List<SuggestorB2bModel>>(plansList);
+                ViewData["suggestorLines"] = planMapped;
+                ViewData["companyName"] = proposal.ClientName;
 
-            return View("ProposalDetails", proposal);
+                return View("ProposalDetails", proposal);
+            }
+            catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "OpenProposalFinished",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                var proposals = new List<Proposal>();
+                ViewBag.ErrorMessage = "Error al cargar los detalles de la propuesta";
+                return View("ProposalDetails", proposals);
+            }
         }
+
 
         public async Task<IActionResult> OpenProposal(string proposalId)
         {
-            var proposal = await _telefonicaApi.GetProposalById(proposalId);
-            _telefonicaApi.SetCurrentProposal(proposal);
-
-            if(proposal.Estado == "Finalizada")
+            try
             {
-                return await OpenProposalFinished(proposal);
-            }
-            else if(proposal.Estado == "Pendiente")
-            {
-                return await OpenProposalToEdit(proposal);
-            }
+                var proposal = await _telefonicaApi.GetProposalById(proposalId);
+                _telefonicaApi.SetCurrentProposal(proposal);
 
-            return View();
+                if (proposal.Estado == "Finalizada")
+                {
+                    return await OpenProposalFinished(proposal);
+                }
+                else if (proposal.Estado == "Pendiente")
+                {
+                    return await OpenProposalToEdit(proposal);
+                }
+                return View();
+            }
+            catch(Exception ex)
+            {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "OpenProposal",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                ViewBag.ErrorMessage = "Error al abrir propuesta";
+                return View();
+            }          
 
         }
 
@@ -151,7 +330,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "DeleteProposal",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+                ViewBag.ErrorMessage = "Error al borrar propuesta";
+                return View();
             }
         
         }

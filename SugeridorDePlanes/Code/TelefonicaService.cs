@@ -159,10 +159,15 @@ namespace Telefonica.SugeridorDePlanes.Code
         /// Actualiza el cliente actual
         /// </summary>
         /// <param name="document"></param>
-        public void UpdateCurrentClient(string document)
+        public bool UpdateCurrentClient(string document)
         {
             var currentClient = _currentClients.Where(x => x.Documento == document).FirstOrDefault();
-            _currentClient = currentClient;
+            if (currentClient != null)
+            {
+                _currentClient = currentClient;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -480,6 +485,46 @@ namespace Telefonica.SugeridorDePlanes.Code
             }
         }
 
+        public async Task<List<Proposal>> GetProposalsByUserName(string userName)
+        {
+            try
+            {
+                if (userName != null && userName != String.Empty)
+                {
+                    var Proposals = await _client.GetProposalsByUserNameAsync(userName);
+                    var ProposalsList = Proposals.ToList();
+
+                    return ProposalsList;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<Proposal>> GetProposalsByClient(string document, string userId)
+        {
+            try
+            {
+                if (document != null && document != String.Empty)
+                {
+                    var Proposals = await _client.GetProposalsClientAsync(document);
+                    var ProposalsList = Proposals.ToList();
+
+                    return ProposalsList.Where(x => x.IdUsuario == userId).ToList();
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<Proposal> GetProposalsById(string idProposal)
         {
             try
@@ -648,6 +693,25 @@ namespace Telefonica.SugeridorDePlanes.Code
                 return null;
             }
 
+        }
+        /// <summary>
+        /// Obtiene un usario por el Id de usuario
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<User>> GetUsers()
+        {
+            
+            try
+            {
+                var users = await _client.GetUsersAsync();
+                var usersList = users.ToList();
+                return usersList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         /// <summary>
@@ -872,16 +936,18 @@ namespace Telefonica.SugeridorDePlanes.Code
         /// Inserta un log en Base de datos
         /// </summary>
         /// <param name="log"></param>
-        public async void InsertLog(Log log)
+        public async Task<bool> InsertLog(Log log)
         {
             try
             {
                await _client.InsertLogAsync(log);
+               return true;
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
         }
+       
     }
 }

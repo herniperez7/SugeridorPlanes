@@ -11,6 +11,19 @@
         emptyPlans = false;
 
     }
+    var clientList = ViewData["clientList"] as List<Telefonica.SugeridorDePlanes.Models.ApiModels.SuggestorClientModel>;
+    SelectList clientSelect = null;
+    if (clientList != null && clientList.Count > 0)
+    {
+        clientSelect = new SelectList(clientList, "Documento", "Titular");
+    }
+
+    var userList = ViewData["userList"] as List<Telefonica.SugeridorDePlanes.User>;
+    SelectList userSelect = null;
+    if (userList != null && userList.Count > 0)
+    {
+        userSelect = new SelectList(userList, "Id", "NombreCompleto");
+    }
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -33,10 +46,11 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/Home/HomeStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/GeneralStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/UserProposal/UserProposalStyles.css" />
     <link rel="stylesheet" type="text/css" href="~/css/MenuStyles.css" />
 
-    <script>       
+    <script>
         var openProposalUrl = "@Url.Action("OpenProposal", "UserProposal")";
         var deleteProposalUrl = "@Url.Action("DeleteProposal", "UserProposal")";
     </script>
@@ -54,7 +68,7 @@
             <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
                     aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="mobile-nav-text">
-                    <i class="fas fa-bars fa-2x"></i>
+                    <img src="~/img/menu.png" alt="menu icon" style="width:30px">
                 </span>
             </button>
 
@@ -106,9 +120,48 @@
     </nav>
 
     <nav class="navbar-light bg-light justify-content-between pt-2 pb-2 titleMargin" id="navMobile-Margin">
-        <div class="viewTitle" style="margin-left:20px">
-            <h2>Lista de Propuestas</h2>
+        <div class="d-md-flex justify-content-between">
+            <div class="viewTitle" style="margin-left:20px">
+                <h2>Lista de Propuestas</h2>
+            </div>
+            @if (userRole.Equals(adminRole))
+            {
+                <form class="form-inline input-group mb-0 w-auto" action="~/UserProposal/FilterProposalsByUser" method="post" style="margin-left:20px">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Filtro por usuario</label>
+                    </div>
+                    @if (userSelect != null)
+                    {
+                        @*<select id="userList" class="custom-select" onchange="this.form.submit()">
+
+                            <option> </option>
+                            @foreach (var item in userList)
+                            {
+                                <option value="@item.Id">@item.NombreCompleto</option>
+                            }
+
+                        </select>*@
+
+                        @Html.DropDownList("userId", userSelect, new { onChange = "this.form.submit()", @class = "custom-select", id = "userSelect" })
+                    }
+
+                </form>
+            }
+            else
+            {
+                <form class="form-inline input-group mb-0 w-auto" action="~/UserProposal/FilterProposalsByClient" method="post" style="margin-left:20px">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Razon Social</label>
+                    </div>
+                    @if (clientSelect != null)
+                    {
+                        @Html.DropDownList("document", clientSelect, new { onChange = "this.form.submit()", @class = "custom-select", id = "clientSelect" })
+                    }
+
+                </form>
+            }
         </div>
+
 
     </nav>
     <nav class="main-menu d-none d-lg-block" id="sideNav">
@@ -191,7 +244,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model != null)
+                                        @if (Model != null && Model.Count > 0)
                                         {
                                             @foreach (var Proposal in Model)
                                             {
@@ -209,6 +262,15 @@
                                                     <td style="text-align:center;cursor:pointer" data-toggle="modal" href="#deleteProposalModal" onclick="setProposalId(@Proposal.Id)"><i class="fa fa-trash" aria-hidden="true"></i></td>
                                                 </tr>
                                             }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td class="total-column text-sm-left text-md-center" colspan="10">
+                                                    No hay propuestas para listar
+                                                </td>
+
+                                            </tr>
                                         }
 
                                     </tbody>
@@ -230,7 +292,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model != null)
+                                        @if (Model != null && Model.Count > 0)
                                         {
                                             @foreach (var Proposal in Model)
                                             {
@@ -247,6 +309,15 @@
                                                     <td style="text-align:center;cursor:pointer" data-toggle="modal" href="#deleteProposalModal" onclick="setProposalId(@Proposal.Id)"><i class="fa fa-trash" aria-hidden="true"></i></td>
                                                 </tr>
                                             }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td class="total-column text-sm-left text-md-center" colspan="10">
+                                                    No hay propuestas para listar
+                                                </td>
+
+                                            </tr>
                                         }
 
                                     </tbody>

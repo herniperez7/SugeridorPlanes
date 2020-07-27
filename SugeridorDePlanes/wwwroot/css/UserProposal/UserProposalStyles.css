@@ -3,3 +3,30 @@
     top: 0;
      height: auto;
 }
+
+#userSelect ,#clientSelect{
+    height:100%;
+    margin-right:10px
+}
+
+
+/*** MEDIA QUERIES***/
+@media (max-width: 576px) {
+}
+
+@media (max-width: 768px) {
+    #IndexesValue input{
+        width: 50%;
+        margin-bottom: 8px;
+    }
+}
+
+
+@media (min-width: 992px) {
+    #userSelect, #clientSelect {
+        margin-right: 10px
+    }
+}
+
+@media (max-width: 1200px) {
+}
