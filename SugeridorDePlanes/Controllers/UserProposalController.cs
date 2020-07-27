@@ -53,7 +53,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     var proposals = await _telefonicaApi.GetProposalsByUser(loggedUser.Id.ToString());
                     return View("../UserProposal/ProposalList", proposals);
                 }
-            }catch{
+            }catch(Exception ex){
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "UserIndex",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var proposals = new List<Proposal>();
                 ViewBag.ErrorMessage = "Error al cargar lista de propuestas";
                 return View("../UserProposal/ProposalList", proposals);
@@ -77,8 +86,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var proposals = await _telefonicaApi.GetProposalsByUser(userId);
                 return View("../UserProposal/ProposalList", proposals);
             }
-             catch
+             catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "FilterProposalsByUser",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var proposals = new List<Proposal>();
                 ViewBag.ErrorMessage = "Error filtrando lista de propuestas";
                 return View("../UserProposal/ProposalList", proposals);
@@ -102,8 +120,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var proposals = await _telefonicaApi.GetProposalsByUserName(userName);
                 return View("../UserProposal/ProposalList", proposals);
             }
-            catch
+            catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "FilterProposalsByUserName",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var proposals = new List<Proposal>();
                 ViewBag.ErrorMessage = "Error filtrando lista de propuestas";
                 return View("../UserProposal/ProposalList", proposals);
@@ -128,8 +155,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var proposals = await _telefonicaApi.GetProposalsByClient(document, loggedUser.Id.ToString());
                 return View("../UserProposal/ProposalList", proposals);
             }
-            catch
+            catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "FilterProposalsByClient",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var proposals = new List<Proposal>();
                 ViewBag.ErrorMessage = "Error filtrando lista de propuestas";
                 return View("../UserProposal/ProposalList", proposals);
@@ -176,8 +212,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
                 return View("../Home/Suggestor", planMapped);
             }
-            catch
+            catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "SendMailSug",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var planMapped = new List<SuggestorB2bModel>();
                 ViewBag.ErrorMessage = "Error al cargar detalles de la propuesta";
                 return View("../Home/Suggestor", planMapped);
@@ -206,8 +251,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
                 return View("ProposalDetails", proposal);
             }
-            catch
+            catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "OpenProposalFinished",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var proposals = new List<Proposal>();
                 ViewBag.ErrorMessage = "Error al cargar los detalles de la propuesta";
                 return View("ProposalDetails", proposals);
@@ -232,8 +286,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 }
                 return View();
             }
-            catch
+            catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "OpenProposal",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 ViewBag.ErrorMessage = "Error al abrir propuesta";
                 return View();
             }          
@@ -267,6 +330,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "DeleteProposal",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 ViewBag.ErrorMessage = "Error al borrar propuesta";
                 return View();
             }

@@ -936,18 +936,18 @@ namespace Telefonica.SugeridorDePlanes.Code
         /// Inserta un log en Base de datos
         /// </summary>
         /// <param name="log"></param>
-        public async void InsertLog(Log log)
+        public async Task<bool> InsertLog(Log log)
         {
             try
             {
                await _client.InsertLogAsync(log);
+               return true;
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
         }
-
        
     }
 }

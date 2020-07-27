@@ -66,7 +66,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
                     return View("../Home/Suggestor", planMapped);
                 }
-                catch{
+                catch(Exception ex){
+                    var extraData = new { step = "ex", from = "UI" };
+                    var log = new Log()
+                    {
+                        Reference = "suggestorIndex",
+                        Messsage = ex.Message,
+                        ExtraData = extraData
+                    };
+
+                    await _telefonicaApi.InsertLog(log);
                     ViewBag.ErrorMessage = "Error al cargar los elemenos";
                     var planMapped = new List<SuggestorB2bModel>();
                     return View("../Home/Suggestor", planMapped);
@@ -113,8 +122,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
                 
             }
-            catch (Exception)
-            {
+            catch (Exception ex)
+            { 
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "showPlans",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 ViewBag.ErrorMessage = "Error al cargar planes";
                 return View("../Home/Suggestor", new List<SuggestorB2bModel>());
             }
@@ -139,7 +157,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
 
         }
 
-        public JsonResult CalculatePayback(string devicePayment)
+        public async Task<JsonResult> CalculatePayback(string devicePayment)
         {
             try
             {
@@ -147,15 +165,24 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var data = new { status = "ok", result = payback };
                 return Json(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "calculatePayback",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al calcular el payback" };
                 return Json(data);
             }
             
         }
 
-        public JsonResult GetMovilInfo(string code)
+        public async Task<JsonResult> GetMovilInfo(string code)
         {
             try
             {
@@ -164,8 +191,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var data = new { status = "ok", result = mobile };
                 return Json(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GetMovilInfo",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al obtener informacion del equipo" };
                 return Json(data);
             }
@@ -177,7 +213,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         /// Metodo para obtener la lista de moviles agregados a la Proposal
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetMovilList()
+        public async Task<JsonResult> GetMovilList()
         {
             try
             {
@@ -186,8 +222,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 var data = new { status = "ok", result = mobileList };
                 return Json(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GetMovilList",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al obtener lista de equipos" };
                 return Json(data);
             }
@@ -195,7 +240,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddMovilDevice(string code)
+        public async Task<JsonResult> AddMovilDevice(string code)
         {            
             if (!string.IsNullOrEmpty(code))
             {
@@ -205,8 +250,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     var data = new { status = "ok", result = _telefonicaApi.GetCurrentEquiposPymesList() };
                     return Json(data);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    var extraData = new { step = "ex", from = "UI" };
+                    var log = new Log()
+                    {
+                        Reference = "AddMovileDevice",
+                        Messsage = ex.Message,
+                        ExtraData = extraData
+                    };
+
+                    await _telefonicaApi.InsertLog(log);
                     var data = new { status = "error", message = "Error al cargar equipo" };
                     return Json(data);
                 }
@@ -220,7 +274,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
-        public JsonResult DeleteMovilFromList(string code)
+        public async Task<JsonResult> DeleteMovilFromList(string code)
         {          
             if (!string.IsNullOrEmpty(code))
             {
@@ -232,6 +286,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                     return Json(data);
                 }catch (Exception ex)
                 {
+                    var extraData = new { step = "ex", from = "UI" };
+                    var log = new Log()
+                    {
+                        Reference = "DeleteMovilFromList",
+                        Messsage = ex.Message,
+                        ExtraData = extraData
+                    };
+
+                    await _telefonicaApi.InsertLog(log);
                     var data = new { status = "ok", message = "Error al borrar equipo" };
                     return Json(data);
                 }
@@ -245,7 +308,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpPost]
-        public JsonResult UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
+        public async Task<JsonResult> UpdateDefinitivePlan([FromBody]UpdateSuggestedPlanModel updatePlan)
         {
             try
             {
@@ -254,13 +317,22 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 return new JsonResult(defPlansList);
             }catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "UpdateDefinitivePlan",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al actualizar plan definitivo" };
                 return Json(data);
             }
             
         }
 
-        public JsonResult CalculateIndexesResult(string rut)
+        public async Task<JsonResult> CalculateIndexesResult(string rut)
         {
             try
             {
@@ -269,6 +341,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 return new JsonResult(data);
             }catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "CalculateIndexesResult",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al calcular indexes" };
                 return new JsonResult(data);
             }
@@ -276,7 +357,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpGet]
-        public JsonResult GeneratePdf(string devicePayment)
+        public async Task<JsonResult> GeneratePdf(string devicePayment)
         {
             try
             {
@@ -287,6 +368,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GeneratePdfSuggestor",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al generar el pdf" };
                 return new JsonResult(data);
             }
@@ -323,7 +413,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "GenerateProposalSuggestor",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
 
+                await _telefonicaApi.InsertLog(log);
                 return false;
             }
         }
@@ -346,6 +444,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "SaveProposal",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message = "Error al actualizar propuesta" };
                 return new JsonResult(data);
             }
@@ -397,6 +504,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "SendMailSug",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var data = new { status = "error", message= "Error al enviar email" };
                 return new JsonResult(data);
             }

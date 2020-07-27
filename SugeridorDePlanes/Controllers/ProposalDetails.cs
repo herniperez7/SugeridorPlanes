@@ -36,8 +36,17 @@ namespace Telefonica.SugeridorDePlanes.Controllers
                 ViewData["suggestorLine"] = planMapped;
                 return View("../UserProposal/ProposalDetails", proposal);
             }
-            catch
+            catch(Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "proDetailsIndex",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                var logged = await _telefonicaApi.InsertLog(log);
                 ViewBag.ErrorMessage = "Error al cargar los detalles de la propuesta";
                 return View();
             }
@@ -45,7 +54,7 @@ namespace Telefonica.SugeridorDePlanes.Controllers
         }
 
         [HttpGet]
-        public JsonResult GeneratePdf()
+        public async Task<JsonResult>  GeneratePdf()
         {
             try
             {
@@ -58,6 +67,16 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "PDFGenerator",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
+
                 var dataError = new { status = "error", result = 404 };
                 return new JsonResult(dataError);
             }
@@ -111,6 +130,15 @@ namespace Telefonica.SugeridorDePlanes.Controllers
             }
             catch (Exception ex)
             {
+                var extraData = new { step = "ex", from = "UI" };
+                var log = new Log()
+                {
+                    Reference = "sendMail",
+                    Messsage = ex.Message,
+                    ExtraData = extraData
+                };
+
+                await _telefonicaApi.InsertLog(log);
                 var dataError = new { status = "error", result = 404 };
                 return new JsonResult(dataError);
             }
